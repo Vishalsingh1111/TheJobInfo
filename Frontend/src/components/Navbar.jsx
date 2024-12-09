@@ -40,23 +40,24 @@ const Navbar = () => {
             <li>
                 <details>
                     <summary>DSA SHEET</summary>
-                    <ul className="bg-base-100 w-[200px] rounded-t-none rounded-md py-5 dark:bg-slate-900 dark:text-white">
-                        <li><a href='/NewUpdatedSheet'>NEW UPDATED SHEET</a></li>
-                        <li><a href='/CompanyWiseSheet'>COMPANY WISE SHEET</a></li>
+                    <ul className="bg-base-100 w-[220px] rounded-t-none rounded-md py-5 dark:bg-slate-900 dark:text-white">
+                        <li><a href='/New-Updated-Sheet'>NEW UPDATED SHEET</a></li>
+                        <li><a href='/Company-Wise-Sheet'>COMPANY WISE SHEET</a></li>
+                        <li><a href='/Top-100'>TOP 100 DSA PROBLEMS</a></li>
 
                     </ul>
                 </details>
             </li>
 
-            <li><a href='/CSPage'>CS FUNDAMENTAL</a></li>
+            <li><a href='/CS-Fundamental'>CS FUNDAMENTAL</a></li>
             <li><a href='/Languages'>RIVISION NOTE</a></li>
             <li>
                 <details>
                     <summary>MORE</summary>
                     <ul className="bg-base-100 w-48 rounded-t-none rounded-md p-2 dark:bg-slate-900 dark:text-white">
-                        <li><a href='/Technicalblog'>TECH BLOG</a></li>
+                        <li><a href='/Technical-Blog'>TECH BLOG</a></li>
                         <li><a href='/Project'>PROJECT IDEAS</a></li>
-                        <li><a href='/ContestSolution'>CONTEST SOLUTION</a></li>
+                        <li><a href='/Contest-Solution'>CONTEST SOLUTION</a></li>
                     </ul>
                 </details>
             </li>

@@ -21,7 +21,7 @@ const resources = [
         description: "Dive Deep into Tech Innovation with Our Engaging Blogs.",
         buttonText: "Try it free",
         icon: "fa-blog",
-        link: "/Technicalblog",
+        link: "/Technical-Blog",
     },
     {
         title: "Project's Basket",
@@ -35,14 +35,14 @@ const resources = [
         description: "Demystify CS topics with our easy-to-understand guides.",
         buttonText: "Try it free",
         icon: "fa-book",
-        link: "/CSPage",
+        link: "/CS-Fundamental",
     },
     {
         title: "Contests Solution",
         description: "Level up your coding with participating in Contests.",
         buttonText: "Try it free",
         icon: "fa-pencil-alt",
-        link: "/ContestSolution",
+        link: "/Contest-Solution",
     },
 ];
 

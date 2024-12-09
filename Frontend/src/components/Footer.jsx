@@ -40,9 +40,9 @@ function Footer() {
                 <nav>
                     <h6 className="font-semibold text-lg text-gray-100">SERVICES</h6>
                     <a href='/Sheet' className="link link-hover">SDE Sheet</a>
-                    <a href='/CSPage' className="link link-hover">CS Fundamental</a>
+                    <a href='/CS-Fundametal' className="link link-hover">CS Fundamental</a>
                     <a href='/Project' className="link link-hover">Project Idea</a>
-                    <a href='/Technicalblog' className="link link-hover">Tech Blogs</a>
+                    <a href='/Technical-Blog' className="link link-hover">Tech Blogs</a>
                 </nav>
                 <nav>
                     <h6 className="font-semibold text-lg text-gray-100">WEBSITE</h6>

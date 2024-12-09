@@ -36,6 +36,7 @@ import Ai from './components/Aipage';
 import ResultDetailPage from './components/ResultDetailPage';
 import NewUpdatedSheet from '../src/Content/Sheet';
 import CompanyWiseSheet from './components/CompanyWise/CompanyMain';
+import Top100dsaProb from './components/Top100dsaProb/Top100Sheetcard';
 import Contributeblog from './components/TechBlogs/UserContribution';
 
 
@@ -63,12 +64,13 @@ const App = () => {
           <Route path="/AddAdmin" element={<AddAdmin />}></Route>
           <Route path="/Forgetpassword" element={<Forgetpassword />}></Route>
           <Route path='/Pagenotfound' element={<Pagenotfound />}></Route>
-          <Route path='/Technicalblog' element={<Technicalblog />}></Route>
-          <Route path='/ContestSolution' element={authUser ? <ContestSol /> : <Navigate to="/Signup" />}></Route>
-          <Route path='/CSPage' element={<CSPage />}></Route>
+          <Route path='/Technical-Blog' element={<Technicalblog />}></Route>
+          <Route path='/Contest-Solution' element={authUser ? <ContestSol /> : <Navigate to="/Signup" />}></Route>
+          <Route path='/CS-Fundamental' element={<CSPage />}></Route>
           <Route path='/DSA' element={authUser ? <DSA /> : <Navigate to="/Signup" />}></Route>
-          <Route path='/NewUpdatedSheet' element={<NewUpdatedSheet />}></Route>
-          <Route path='/CompanyWiseSheet' element={<CompanyWiseSheet />}></Route>
+          <Route path='/New-Updated-Sheet' element={<NewUpdatedSheet />}></Route>
+          <Route path='/Company-Wise-Sheet' element={<CompanyWiseSheet />}></Route>
+          <Route path='/Top-100' element={<Top100dsaProb />}></Route>
           <Route path='/Python' element={<Python />}></Route>
           <Route path='/Dbms' element={authUser ? <Dbms /> : <Navigate to="/Signup" />}></Route>
           <Route path='/Java' element={<Java />}></Route>

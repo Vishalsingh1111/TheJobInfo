@@ -13,6 +13,10 @@ const FormElementInput = () => {
         header: "",
         code: "",
         explanation: "",
+        code2: "",
+        explanation2: "",
+        code3: "",
+        explanation3: "",
         image: "",
         category: ""
     });
@@ -55,11 +59,15 @@ const FormElementInput = () => {
                 header: "",
                 code: "",
                 explanation: "",
+                code2: "",
+                explanation2: "",
+                code3: "",
+                explanation3: "",
                 image: "",
                 category: ""
             });
             setValidationErrors({});
-            navigate("/Technicalblog");
+            navigate("/Technical-Blog");
         } catch (error) {
             console.error("Error submitting content:", error);
             toast.error("Error: " + err.response.data.message);
@@ -122,6 +130,35 @@ const FormElementInput = () => {
                                 error={validationErrors.explanation}
                             />
                         </DefaultColumn>
+                        <DefaultColumn>
+                            <DefaultInput7
+                                value={formData.code2}
+                                onChange={handleChange}
+                                error={validationErrors.code2}
+                            />
+                        </DefaultColumn>
+                        <DefaultColumn>
+                            <DefaultInput8
+                                value={formData.explanation2}
+                                onChange={handleChange}
+                                error={validationErrors.explanation2}
+                            />
+                        </DefaultColumn>
+                        <DefaultColumn>
+                            <DefaultInput9
+                                value={formData.code3}
+                                onChange={handleChange}
+                                error={validationErrors.code3}
+                            />
+                        </DefaultColumn>
+                        <DefaultColumn>
+                            <DefaultInput10
+                                value={formData.explanation3}
+                                onChange={handleChange}
+                                error={validationErrors.explanation3}
+                            />
+                        </DefaultColumn>
+
 
 
                         <div className="w-full px-4 text-center">
@@ -236,7 +273,7 @@ const DefaultInput3 = ({ value, onChange, error }) => {
                 name="code"
                 value={value}
                 onChange={onChange}
-                placeholder="Write code"
+                placeholder="Brute Force"
                 rows={4}
                 className={`w-full bg-white dark:bg-gray-700 rounded-md border border-gray-300 dark:border-gray-600 py-3 px-4 text-gray-700 dark:text-gray-300 outline-none transition duration-150 ease-in-out focus:border-red-500 dark:focus:border-red-400 focus:ring focus:ring-red-200 dark:focus:ring-red-900 resize-none ${error ? 'border-red-500' : ''}`}
             />
@@ -260,10 +297,91 @@ const DefaultInput4 = ({ value, onChange, error }) => {
                 className={`w-full bg-white dark:bg-gray-700 rounded-md border border-gray-300 dark:border-gray-600 py-3 px-4 text-gray-700 dark:text-gray-300 outline-none transition duration-150 ease-in-out focus:border-red-500 dark:focus:border-red-400 focus:ring focus:ring-red-200 dark:focus:ring-red-900 resize-none ${error ? 'border-red-500' : ''}`}
             />
             {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+
+
         </>
     );
 };
 
+const DefaultInput7 = ({ value, onChange, error }) => {
+    return (
+        <>
+            <label className="block text-base font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Code
+            </label>
+            <textarea
+                name="code2"
+                value={value}
+                onChange={onChange}
+                placeholder="Better Approach"
+                rows={4}
+                className={`w-full bg-white dark:bg-gray-700 rounded-md border border-gray-300 dark:border-gray-600 py-3 px-4 text-gray-700 dark:text-gray-300 outline-none transition duration-150 ease-in-out focus:border-red-500 dark:focus:border-red-400 focus:ring focus:ring-red-200 dark:focus:ring-red-900 resize-none ${error ? 'border-red-500' : ''}`}
+            />
+            {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+        </>
+    );
+};
+
+const DefaultInput8 = ({ value, onChange, error }) => {
+    return (
+        <>
+            <label className="block text-base font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Enter Explanation
+            </label>
+            <textarea
+                name="explanation2"
+                value={value}
+                onChange={onChange}
+                placeholder="Enter explanation"
+                rows={4}
+                className={`w-full bg-white dark:bg-gray-700 rounded-md border border-gray-300 dark:border-gray-600 py-3 px-4 text-gray-700 dark:text-gray-300 outline-none transition duration-150 ease-in-out focus:border-red-500 dark:focus:border-red-400 focus:ring focus:ring-red-200 dark:focus:ring-red-900 resize-none ${error ? 'border-red-500' : ''}`}
+            />
+            {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+
+
+        </>
+    );
+};
+
+const DefaultInput9 = ({ value, onChange, error }) => {
+    return (
+        <>
+            <label className="block text-base font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Code
+            </label>
+            <textarea
+                name="code3"
+                value={value}
+                onChange={onChange}
+                placeholder="Best Approach"
+                rows={4}
+                className={`w-full bg-white dark:bg-gray-700 rounded-md border border-gray-300 dark:border-gray-600 py-3 px-4 text-gray-700 dark:text-gray-300 outline-none transition duration-150 ease-in-out focus:border-red-500 dark:focus:border-red-400 focus:ring focus:ring-red-200 dark:focus:ring-red-900 resize-none ${error ? 'border-red-500' : ''}`}
+            />
+            {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+        </>
+    );
+};
+
+const DefaultInput10 = ({ value, onChange, error }) => {
+    return (
+        <>
+            <label className="block text-base font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Enter Explanation
+            </label>
+            <textarea
+                name="explanation3"
+                value={value}
+                onChange={onChange}
+                placeholder="Enter explanation"
+                rows={4}
+                className={`w-full bg-white dark:bg-gray-700 rounded-md border border-gray-300 dark:border-gray-600 py-3 px-4 text-gray-700 dark:text-gray-300 outline-none transition duration-150 ease-in-out focus:border-red-500 dark:focus:border-red-400 focus:ring focus:ring-red-200 dark:focus:ring-red-900 resize-none ${error ? 'border-red-500' : ''}`}
+            />
+            {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+
+
+        </>
+    );
+};
 
 
 export default FormElementInput;

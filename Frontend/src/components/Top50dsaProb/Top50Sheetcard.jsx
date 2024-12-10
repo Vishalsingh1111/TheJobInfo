@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import { baseUrl } from "../../Baseurl";
-import notesvg from '../../../public/note.svg';
+import notesvg from '/note.svg';
 import NoteModal from '../Sriversdecomponents/Keepnote';
 import Sheetheading from "../Sriversdecomponents/Sheetheading";
 import Skeleton1 from "../Skeleton";
@@ -132,7 +132,7 @@ const Top100dsaProb = () => {
 
             <div className='flex flex-col sm:flex-row lg:flex-row justify-between text-2xl font-semibold dark:bg-slate-900 dark:text-white text-gray-700 mb-5 pt-5 pb-5 pl-5 lg:pl-20 dark:from-slate-800'>
                 <div className='flex flex-col space-y-4'>
-                    <span>TOP 100 DSA INTERVIEW QUESTIONS.</span>
+                    <span>TOP 50 DSA INTERVIEW QUESTIONS</span>
                     <span className='text-sm'>Last Updated: December 8, 2024</span>
                 </div>
                 <div className='lg:w-[580px] mr-2'>

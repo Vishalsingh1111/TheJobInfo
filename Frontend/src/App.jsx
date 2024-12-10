@@ -36,7 +36,7 @@ import Ai from './components/Aipage';
 import ResultDetailPage from './components/ResultDetailPage';
 import NewUpdatedSheet from '../src/Content/Sheet';
 import CompanyWiseSheet from './components/CompanyWise/CompanyMain';
-import Top100dsaProb from './components/Top100dsaProb/Top100Sheetcard';
+import Top50dsaProb from './components/Top50dsaProb/Top50Sheetcard';
 import Contributeblog from './components/TechBlogs/UserContribution';
 
 
@@ -70,7 +70,7 @@ const App = () => {
           <Route path='/DSA' element={authUser ? <DSA /> : <Navigate to="/Signup" />}></Route>
           <Route path='/New-Updated-Sheet' element={<NewUpdatedSheet />}></Route>
           <Route path='/Company-Wise-Sheet' element={<CompanyWiseSheet />}></Route>
-          <Route path='/Top-100' element={<Top100dsaProb />}></Route>
+          <Route path='/Top-50' element={<Top50dsaProb />}></Route>
           <Route path='/Python' element={<Python />}></Route>
           <Route path='/Dbms' element={authUser ? <Dbms /> : <Navigate to="/Signup" />}></Route>
           <Route path='/Java' element={<Java />}></Route>

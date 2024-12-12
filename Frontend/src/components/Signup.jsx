@@ -1,8 +1,9 @@
+
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import toast, { Toaster } from 'react-hot-toast';
-import { FaEye, FaEyeSlash } from 'react-icons/fa'; // Import eye icons
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { EyeSlashIcon } from '@heroicons/react/24/outline';
 import { baseUrl } from '../Baseurl';
 
@@ -22,11 +23,35 @@ const SignupPage = () => {
         navigate('/');
     };
 
+    const validateInputs = () => {
+        if (!firstName.trim()) {
+            toast.error('First name is required');
+            return false;
+        }
+        if (!email.trim()) {
+            toast.error('Email is required');
+            return false;
+        }
+        const phoneRegex = /^[0-9]{10}$/;
+        if (!phone.trim() || !phoneRegex.test(phone)) {
+            toast.error('Enter correct phone number');
+            return false;
+        }
+        if (!password.trim()) {
+            toast.error('Password is required');
+            return false;
+        }
+        if (password !== confirmPassword) {
+            toast.error('Passwords do not match');
+            return false;
+        }
+        return true;
+    };
+
     const handleRegister = async (e) => {
         e.preventDefault();
 
-        if (password !== confirmPassword) {
-            toast.error('Passwords do not match');
+        if (!validateInputs()) {
             return;
         }
 
@@ -55,6 +80,7 @@ const SignupPage = () => {
             }
         }
     };
+
     const handleGoogleLogin = () => {
         window.location.href = `${baseUrl}/auth/google`;
     };
@@ -89,7 +115,7 @@ const SignupPage = () => {
                                 value={lastName}
                                 onChange={(e) => setLastName(e.target.value)}
                                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                required
+
                             />
                         </div>
                     </div>

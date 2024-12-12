@@ -35,10 +35,10 @@ export const signup = async (req, res) => {
                 _id: createdUser._id,
                 firstName: createdUser.firstName,
                 lastName: createdUser.lastName,
-                email: createdUser.email,
-                phone: createdUser.phone,
-                password: createdUser.password,
-                googleId: createdUser.googleId,
+                // email: createdUser.email,
+                // phone: createdUser.phone,
+                // password: createdUser.password,
+                // googleId: createdUser.googleId,
                 photo: createdUser.photo
             }
         });
@@ -65,8 +65,8 @@ export const login = async (req, res) => {
             message: "Login Successful",
             user: {
                 _id: user._id,
-                // firstName: user.firstName,
-                // lastName: user.lastName,
+                firstName: user.firstName,
+                lastName: user.lastName,
                 // email: user.email,
                 // phone: user.phone,
                 // password: user.password,

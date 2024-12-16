@@ -1,24 +1,48 @@
+// import express from 'express';
+// import { signup, verifyOtp, sendEmail, login, userdetails, deleteUser } from '../Controller/User.controller.js';
+// const router = express.Router()
+
+// //signup 
+// router.post("/signup", signup);
+
+// //verify otp
+// router.post('/verify-otp', verifyOtp);
+
+// //send otp
+// router.post('/send-otp', sendEmail);
+
+// //login
+// router.post("/login", login);
+
+// // get all user
+// router.get("/", userdetails);
+
+// //deleteUser
+// router.delete("/:id", deleteUser);
+
+
+// export default router;
+
 import express from 'express';
-import { signup, verifyOtp, sendEmail, login, userdetails, deleteUser } from '../Controller/User.controller.js';
+import { signup, verifyOtp, sendOtp, login, userdetails, deleteUser } from '../controllers/User.controller.js';
 const router = express.Router()
 
-//signup 
+// Signup
 router.post("/signup", signup);
 
-//verify otp
+// Verify OTP
 router.post('/verify-otp', verifyOtp);
 
-//send otp
-router.post('/send-otp', sendEmail);
+// Send OTP
+router.post('/send-otp', sendOtp);
 
-//login
+// Login
 router.post("/login", login);
 
-// get all user
+// Get all users
 router.get("/", userdetails);
 
-//deleteUser
+// Delete user
 router.delete("/:id", deleteUser);
-
 
 export default router;

@@ -283,15 +283,7 @@ const SignupPage = () => {
         return true;
     };
 
-    const handleSendOtp = async (e) => {
-        e.preventDefault();
-
-        if (!validateInputs()) {
-            return;
-        }
-
-        const userInfo = { firstName, lastName, email, phone, password };
-
+    const sendOtp = async (email) => {
         try {
             const res = await axios.post(`${baseUrl}/user/send-otp`, { email });
             if (res.data.success) {
@@ -303,6 +295,16 @@ const SignupPage = () => {
         } catch (err) {
             toast.error(err.response?.data?.message || 'Error sending OTP');
         }
+    };
+
+    const handleSendOtp = async (e) => {
+        e.preventDefault();
+
+        if (!validateInputs()) {
+            return;
+        }
+
+        sendOtp(email);
     };
 
     const handleVerifyOtp = async (e) => {
@@ -484,17 +486,6 @@ const SignupPage = () => {
                         </div>
                     )}
                 </form>
-                <div className="mt-4 flex justify-between">
-                    <a
-                        className="inline-block align-baseline text-sm text-red-500 hover:underline"
-                        href="/"
-                    >
-                        Cancel
-                    </a>
-                    <a className="inline-block align-baseline text-sm text-blue-500 hover:underline" href="/Login">
-                        Already a user? Login
-                    </a>
-                </div>
             </div>
         </div>
     );

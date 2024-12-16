@@ -1,8 +1,83 @@
-import User from '../Modal/User.modal.js';
-import bcryptjs from 'bcryptjs';
-import { sendEmail } from './Otp.controller.js';
-import crypto from 'crypto';
+// import User from '../Modal/User.modal.js';
+// import bcryptjs from 'bcryptjs';
+// import { sendEmail } from './Otp.controller.js';
+// import crypto from 'crypto';
 
+
+
+
+
+// export const signup = async (req, res) => {
+//     try {
+//         const { firstName, lastName, email, phone, password } = req.body;
+
+//         const userByEmail = await User.findOne({ email });
+//         if (userByEmail) {
+//             return res.status(400).json({ message: "User already exists" });
+//         }
+
+//         const userByPhone = await User.findOne({ phone });
+//         if (userByPhone) {
+//             return res.status(400).json({ message: "User already exists" });
+//         }
+
+//         // Generate OTP
+//         const otp = crypto.randomInt(100000, 999999);
+
+//         // Save hashed password
+//         const hashpassword = await bcryptjs.hash(password, 10);
+
+//         const createdUser = new User({
+//             firstName: firstName || "null",
+//             lastName: lastName || "null",
+//             email,
+//             phone: phone || "null",
+//             password: hashpassword,
+//             otp,
+//             otpVerified: false,
+//             googleId: "null",
+//             photo: "null",
+//         });
+
+//         await createdUser.save();
+
+//         // Send OTP via email
+//         await sendEmail(email, "Your OTP for Registration", `Your OTP is: ${otp}`);
+
+//         res.status(201).json({
+//             message: "User registered successfully. Please verify OTP sent to your email.",
+//             userId: createdUser._id,
+//         });
+//     } catch (error) {
+//         console.error("Error during signup:", error.message);
+//         res.status(500).json({ message: "Internal server error" });
+//     }
+// };
+
+// export const verifyOtp = async (req, res) => {
+//     const { userId, otp } = req.body;
+
+//     try {
+//         const user = await User.findById(userId);
+
+//         if (!user) {
+//             return res.status(404).json({ message: "User not found" });
+//         }
+
+//         if (user.otp !== otp) {
+//             return res.status(400).json({ message: "Invalid OTP" });
+//         }
+
+//         user.otpVerified = true;
+//         user.otp = null; // Clear OTP after verification
+//         await user.save();
+
+//         res.status(200).json({ message: "OTP verified successfully" });
+//     } catch (error) {
+//         console.error("Error verifying OTP:", error.message);
+//         res.status(500).json({ message: "Internal server error" });
+//     }
+// };
 
 // Signup Function
 // export const signup = async (req, res) => {
@@ -52,15 +127,57 @@ import crypto from 'crypto';
 // };
 
 
+// Login Function
+
+
+
+import User from '../Modal/User.modal.js';
+import bcryptjs from 'bcryptjs';
+import crypto from 'crypto';
+import nodemailer from 'nodemailer';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+// Email Configuration
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: process.env.EMAIL, // Your email address
+        pass: process.env.EMAIL_PASSWORD, // App-specific password
+    },
+});
+
+// Utility to send emails
+const sendEmail = async (to, subject, text) => {
+    const mailOptions = {
+        from: process.env.EMAIL,
+        to,
+        subject,
+        text,
+    };
+
+    try {
+        await transporter.sendMail(mailOptions);
+        console.log("OTP sent successfully.");
+    } catch (error) {
+        console.error("Error sending OTP:", error.message);
+        throw error;
+    }
+};
+
+// Signup Function
 export const signup = async (req, res) => {
     try {
         const { firstName, lastName, email, phone, password } = req.body;
 
+        // Check for existing user by email
         const userByEmail = await User.findOne({ email });
         if (userByEmail) {
             return res.status(400).json({ message: "User already exists" });
         }
 
+        // Check for existing user by phone
         const userByPhone = await User.findOne({ phone });
         if (userByPhone) {
             return res.status(400).json({ message: "User already exists" });
@@ -69,16 +186,17 @@ export const signup = async (req, res) => {
         // Generate OTP
         const otp = crypto.randomInt(100000, 999999);
 
-        // Save hashed password
-        const hashpassword = await bcryptjs.hash(password, 10);
+        // Hash the password
+        const hashPassword = await bcryptjs.hash(password, 10);
 
+        // Create new user
         const createdUser = new User({
             firstName: firstName || "null",
             lastName: lastName || "null",
             email,
             phone: phone || "null",
-            password: hashpassword,
-            otp,
+            password: hashPassword,
+            otp: otp, // Store plain OTP for demonstration; ideally, hash it for security
             otpVerified: false,
             googleId: "null",
             photo: "null",
@@ -99,6 +217,7 @@ export const signup = async (req, res) => {
     }
 };
 
+// OTP Verification Function
 export const verifyOtp = async (req, res) => {
     const { userId, otp } = req.body;
 
@@ -109,10 +228,12 @@ export const verifyOtp = async (req, res) => {
             return res.status(404).json({ message: "User not found" });
         }
 
+        // Check if OTP matches
         if (user.otp !== otp) {
             return res.status(400).json({ message: "Invalid OTP" });
         }
 
+        // Mark OTP as verified and clear the OTP
         user.otpVerified = true;
         user.otp = null; // Clear OTP after verification
         await user.save();
@@ -127,7 +248,7 @@ export const verifyOtp = async (req, res) => {
 
 
 
-// Login Function
+
 export const login = async (req, res) => {
     try {
         const { email, phone, password } = req.body;

@@ -24,7 +24,7 @@
 // export default router;
 
 import express from 'express';
-import { signup, verifyOtp, sendOtp, login, userdetails, deleteUser } from '../controllers/User.controller.js';
+import { signup, verifyOtp, sendOtp, login, userdetails, deleteUser } from '../Controller/User.controller.js';
 const router = express.Router()
 
 // Signup

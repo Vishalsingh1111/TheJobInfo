@@ -246,7 +246,7 @@
 // };
 
 
-import User from '../models/User.model.js';
+import User from '../Modal/User.modal.js';
 import bcryptjs from 'bcryptjs';
 import crypto from 'crypto';
 import nodemailer from 'nodemailer';

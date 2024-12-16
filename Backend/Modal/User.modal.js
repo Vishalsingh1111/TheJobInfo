@@ -7,7 +7,9 @@ const userSchema = new mongoose.Schema({
     phone: { type: String, required: false, default: "null" },
     password: { type: String, required: false, default: "null" },
     googleId: { type: String, required: false, unique: false, default: "null" },
-    photo: { type: String, required: false, default: "null" }
+    photo: { type: String, required: false, default: "null" },
+    otp: { type: Number, required: false },
+    otpVerified: { type: Boolean, default: false }
 });
 
 const User = mongoose.model('User', userSchema);

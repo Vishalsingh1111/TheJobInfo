@@ -495,6 +495,83 @@
 
 
 
+// import React, { useState } from 'react';
+// import axios from 'axios';
+// import toast, { Toaster } from 'react-hot-toast';
+// import { useNavigate } from 'react-router-dom';
+// import { baseUrl } from '../Baseurl';
+
+// const SignupPage = () => {
+//     const [formData, setFormData] = useState({ firstName: '', lastName: '', email: '', phone: '', password: '', confirmPassword: '' });
+//     const [otp, setOtp] = useState('');
+//     const [otpSent, setOtpSent] = useState(false);
+//     const [userId, setUserId] = useState('');
+//     const navigate = useNavigate();
+
+//     const handleChange = (e) => {
+//         setFormData({ ...formData, [e.target.name]: e.target.value });
+//     };
+
+//     const sendOtp = async (e) => {
+//         e.preventDefault();
+
+//         if (formData.password !== formData.confirmPassword) return toast.error("Passwords don't match!");
+
+//         try {
+//             const res = await axios.post(`${baseUrl}/user/signup`, formData);
+//             setOtpSent(true);
+//             setUserId(res.data.userId);
+//             toast.success(res.data.message);
+//         } catch (err) {
+//             toast.error(err.response?.data?.message || "Failed to send OTP");
+//         }
+//     };
+
+//     const verifyOtp = async (e) => {
+//         e.preventDefault();
+
+//         try {
+//             const res = await axios.post(`${baseUrl}/user/verify-otp`, { userId, otp });
+//             toast.success(res.data.message);
+//             navigate('/login'); // Redirect to login or dashboard
+//         } catch (err) {
+//             toast.error(err.response?.data?.message || "Invalid OTP");
+//         }
+//     };
+
+//     return (
+//         <div className="container">
+//             <Toaster />
+//             <h2>{otpSent ? "Verify OTP" : "Signup"}</h2>
+//             <form onSubmit={otpSent ? verifyOtp : sendOtp}>
+//                 {!otpSent ? (
+//                     <>
+//                         <input name="firstName" placeholder="First Name" onChange={handleChange} required />
+//                         <input name="lastName" placeholder="Last Name" onChange={handleChange} />
+//                         <input name="email" placeholder="Email" onChange={handleChange} required />
+//                         <input name="phone" placeholder="Phone" onChange={handleChange} required />
+//                         <input name="password" type="password" placeholder="Password" onChange={handleChange} required />
+//                         <input name="confirmPassword" type="password" placeholder="Confirm Password" onChange={handleChange} required />
+//                         <button type="submit">Send OTP</button>
+//                     </>
+//                 ) : (
+//                     <>
+//                         <input placeholder="Enter OTP" value={otp} onChange={(e) => setOtp(e.target.value)} required />
+//                         <button type="submit">Verify OTP</button>
+//                     </>
+//                 )}
+//             </form>
+//         </div>
+//     );
+// };
+
+// export default SignupPage;
+
+
+
+
+
+
 import React, { useState } from 'react';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
@@ -502,7 +579,14 @@ import { useNavigate } from 'react-router-dom';
 import { baseUrl } from '../Baseurl';
 
 const SignupPage = () => {
-    const [formData, setFormData] = useState({ firstName: '', lastName: '', email: '', phone: '', password: '', confirmPassword: '' });
+    const [formData, setFormData] = useState({
+        firstName: '',
+        lastName: '',
+        email: '',
+        phone: '',
+        password: '',
+        confirmPassword: '',
+    });
     const [otp, setOtp] = useState('');
     const [otpSent, setOtpSent] = useState(false);
     const [userId, setUserId] = useState('');
@@ -515,7 +599,9 @@ const SignupPage = () => {
     const sendOtp = async (e) => {
         e.preventDefault();
 
-        if (formData.password !== formData.confirmPassword) return toast.error("Passwords don't match!");
+        if (formData.password !== formData.confirmPassword) {
+            return toast.error("Passwords don't match!");
+        }
 
         try {
             const res = await axios.post(`${baseUrl}/user/signup`, formData);
@@ -531,9 +617,9 @@ const SignupPage = () => {
         e.preventDefault();
 
         try {
-            const res = await axios.post(`${baseUrl}/user/verify-otp`, { userId, otp });
+            const res = await axios.post(`${baseUrl}/user/verify-otp`, { userId, otp: otp.toString() });
             toast.success(res.data.message);
-            navigate('/login'); // Redirect to login or dashboard
+            navigate('/login'); // Redirect to login
         } catch (err) {
             toast.error(err.response?.data?.message || "Invalid OTP");
         }

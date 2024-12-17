@@ -26,7 +26,7 @@ const userSchema = new mongoose.Schema({
     password: { type: String, required: false, default: "null" },
     googleId: { type: String, required: false, unique: false, default: "null" },
     photo: { type: String, required: false, default: "null" },
-    otp: { type: Number, required: false },
+    otp: { type: String },
     otpVerified: { type: Boolean, default: false }
 });
 

@@ -339,9 +339,9 @@ export const verifyOtp = async (req, res) => {
     try {
         const user = await User.findById(userId);
 
-        if (!user) {
-            return res.status(404).json({ message: "User not found" });
-        }
+        // if (!user) {
+        //     return res.status(404).json({ message: "User not found" });
+        // }
 
         // Check if OTP matches
         if (user.otp !== otp) {
@@ -366,9 +366,9 @@ export const sendOtp = async (req, res) => {
         const { email } = req.body;
         const user = await User.findOne({ email });
 
-        if (!user) {
-            return res.status(404).json({ message: "User not found" });
-        }
+        // if (user) {
+        //     return res.status(404).json({ message: "User not found" });
+        // }
 
         // Generate OTP
         const otp = crypto.randomInt(100000, 999999);

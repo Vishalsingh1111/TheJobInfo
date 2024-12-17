@@ -582,7 +582,7 @@
 
 
 
-import User from '../Modal/User.model.js';
+import User from '../Modal/User.modal.js';
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
 import nodemailer from 'nodemailer';

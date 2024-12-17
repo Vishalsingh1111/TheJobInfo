@@ -182,20 +182,15 @@ const SignupPage = () => {
                             >
                                 Verify OTP
                             </button>
-                            <div>
-                                <a
-                                    className="inline-block align-baseline text-sm text-red-500 hover:underline"
-                                    href="/"
-                                    onClick={handleClose}
-                                >
-                                    Cancel
-                                </a>
-                            </div>
                         </>
                     )}
                 </form>
 
-                <div className="my-4 text-center">OR</div>
+                <div className="my-4 flex items-center justify-center">
+                    <hr className="flex-grow border-blue-900" />
+                    <span className="px-2 text-blue-900">OR</span>
+                    <hr className="flex-grow border-blue-900" />
+                </div>
                 <button
                     onClick={handleGoogleLogin}
                     className="w-full bg-gray-100 border border-gray-300 py-2 rounded flex justify-center items-center"
@@ -203,30 +198,30 @@ const SignupPage = () => {
                     <img src="./images/google.png" alt="Google" className="h-5 w-5 mr-2" />
                     Login with Google
                 </button>
-            </div>
 
-            <div className="mt-4 flex justify-between">
-                <div>
-                    <a
-                        className="inline-block align-baseline text-sm text-red-500 hover:underline"
-                        href="/"
-                        onClick={handleClose}
-                    >
-                        Cancel
-                    </a>
+                <div className="mt-4 flex justify-between">
+                    <div>
+                        <a
+                            className="inline-block align-baseline text-sm text-red-500 hover:underline"
+                            href="/"
+                            onClick={handleClose}
+                        >
+                            Cancel
+                        </a>
+                    </div>
+                    <div className='flex space-x-5'>
+                        <a className="inline-block align-baseline text-sm text-blue-500 hover:underline" href="/Adminlogin">
+                            Admin Login
+                        </a>
+                        <a className="inline-block align-baseline text-sm text-blue-500 hover:underline" href="/Login">
+                            Already have account
+                        </a>
+                    </div>
+
                 </div>
-                <div className='flex space-x-5'>
-                    <a className="inline-block align-baseline text-sm text-blue-500 hover:underline" href="/Adminlogin">
-                        Admin Login
-                    </a>
-                    <a className="inline-block align-baseline text-sm text-blue-500 hover:underline" href="/Login">
-                        Already Have an Account !! Login
-                    </a>
-                </div>
+
 
             </div>
-
-
         </div>
     );
 };

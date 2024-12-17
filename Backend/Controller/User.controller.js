@@ -235,7 +235,7 @@ export const signup = async (req, res) => {
         });
 
         await user.save();
-        await sendEmail(email, "Verify Your OTP", `Your OTP is: ${otp}`);
+        await sendEmail(email, "Verify Your OTP", `Thank You For Registering on DCODER, Your OTP is: ${otp}`);
 
         res.status(201).json({ message: "OTP sent successfully. Verify to complete registration.", userId: user._id });
     } catch (err) {
@@ -324,10 +324,6 @@ export const login = async (req, res) => {
             return res.status(400).json({ message: "Invalid password" });
         }
 
-        // // Check if OTP was verified
-        // if (!user.otpVerified) {
-        //     return res.status(400).json({ message: "Please verify your account via OTP before logging in." });
-        // }
 
         res.status(200).json({
             message: "Login successful",

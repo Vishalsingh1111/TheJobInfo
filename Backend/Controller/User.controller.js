@@ -324,10 +324,10 @@ export const login = async (req, res) => {
             return res.status(400).json({ message: "Invalid password" });
         }
 
-        // Check if OTP was verified
-        if (!user.otpVerified) {
-            return res.status(400).json({ message: "Please verify your account via OTP before logging in." });
-        }
+        // // Check if OTP was verified
+        // if (!user.otpVerified) {
+        //     return res.status(400).json({ message: "Please verify your account via OTP before logging in." });
+        // }
 
         res.status(200).json({
             message: "Login successful",

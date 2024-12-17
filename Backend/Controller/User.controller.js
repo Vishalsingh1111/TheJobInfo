@@ -611,97 +611,90 @@ const sendEmail = async (to, subject, text) => {
     await transporter.sendMail(mailOptions);
 };
 
-// All Controllers in a Single File
-const userController = {
-    // Signup and Send OTP
-    signup: async (req, res) => {
-        try {
-            const { firstName, lastName, email, phone, password } = req.body;
+// Signup Controller
+export const signup = async (req, res) => {
+    try {
+        const { firstName, lastName, email, phone, password } = req.body;
 
-            // Check if the user already exists
-            const existingUser = await User.findOne({ email });
-            if (existingUser) {
-                return res.status(400).json({ message: "User already exists" });
-            }
-
-            // Generate OTP
-            const otp = crypto.randomInt(100000, 999999).toString();
-            const hashedPassword = await bcrypt.hash(password, 10);
-            const hashedOtp = await bcrypt.hash(otp, 10);
-
-            // Create a new user
-            const user = new User({
-                firstName,
-                lastName,
-                email,
-                phone,
-                password: hashedPassword,
-                otp: hashedOtp,
-            });
-
-            await user.save();
-            await sendEmail(email, "Verify Your OTP", `Your OTP is: ${otp}`);
-
-            res.status(201).json({ message: "OTP sent successfully. Verify to complete registration.", userId: user._id });
-        } catch (err) {
-            res.status(500).json({ message: err.message });
+        // Check if the user already exists
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            return res.status(400).json({ message: "User already exists" });
         }
-    },
 
-    // Verify OTP
-    verifyOtp: async (req, res) => {
-        try {
-            const { userId, otp } = req.body;
+        // Generate OTP
+        const otp = crypto.randomInt(100000, 999999).toString();
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const hashedOtp = await bcrypt.hash(otp, 10);
 
-            // Find user by ID
-            const user = await User.findById(userId);
-            if (!user) {
-                return res.status(404).json({ message: "User not found" });
-            }
+        // Create user
+        const user = new User({
+            firstName,
+            lastName,
+            email,
+            phone,
+            password: hashedPassword,
+            otp: hashedOtp,
+        });
 
-            // Compare the OTP
-            const isMatch = await bcrypt.compare(otp, user.otp);
-            if (!isMatch) {
-                return res.status(400).json({ message: "Invalid OTP" });
-            }
+        await user.save();
+        await sendEmail(email, "Verify Your OTP", `Your OTP is: ${otp}`);
 
-            // Update OTP verification status
-            user.otpVerified = true;
-            user.otp = null; // Clear the OTP after verification
-            await user.save();
-
-            res.status(200).json({ message: "OTP verified successfully" });
-        } catch (err) {
-            res.status(500).json({ message: err.message });
-        }
-    },
-
-    // Resend OTP
-    resendOtp: async (req, res) => {
-        try {
-            const { email } = req.body;
-
-            // Find user by email
-            const user = await User.findOne({ email });
-            if (!user) {
-                return res.status(404).json({ message: "User not found" });
-            }
-
-            // Generate new OTP
-            const otp = crypto.randomInt(100000, 999999).toString();
-            const hashedOtp = await bcrypt.hash(otp, 10);
-
-            // Update OTP in the database
-            user.otp = hashedOtp;
-            await user.save();
-
-            // Send the new OTP
-            await sendEmail(email, "Your OTP", `Your new OTP is: ${otp}`);
-            res.status(200).json({ message: "OTP sent successfully" });
-        } catch (err) {
-            res.status(500).json({ message: err.message });
-        }
-    },
+        res.status(201).json({ message: "OTP sent successfully. Verify to complete registration.", userId: user._id });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
 };
 
-export default userController;
+// Verify OTP Controller
+export const verifyOtp = async (req, res) => {
+    try {
+        const { userId, otp } = req.body;
+
+        // Find user by ID
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        // Compare OTP
+        const isMatch = await bcrypt.compare(otp, user.otp);
+        if (!isMatch) {
+            return res.status(400).json({ message: "Invalid OTP" });
+        }
+
+        // Update OTP verification status
+        user.otpVerified = true;
+        user.otp = null; // Clear OTP after verification
+        await user.save();
+
+        res.status(200).json({ message: "OTP verified successfully" });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
+// Resend OTP Controller
+export const resendOtp = async (req, res) => {
+    try {
+        const { email } = req.body;
+
+        // Find user by email
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        // Generate new OTP
+        const otp = crypto.randomInt(100000, 999999).toString();
+        const hashedOtp = await bcrypt.hash(otp, 10);
+
+        user.otp = hashedOtp;
+        await user.save();
+
+        await sendEmail(email, "Your OTP", `Your OTP is: ${otp}`);
+        res.status(200).json({ message: "OTP sent successfully" });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};

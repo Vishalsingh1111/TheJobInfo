@@ -24,7 +24,7 @@
 // export default router;
 
 import express from 'express';
-import { signup, verifyOtp, resendOtp, login, userdetails, deleteUser } from '../Controller/User.controller.js';
+import { signup, verifyOtp, resendOtp } from '../Controller/User.controller.js';
 const router = express.Router()
 
 // Signup
@@ -37,12 +37,13 @@ router.post('/verify-otp', verifyOtp);
 router.post('/resend-otp', resendOtp);
 
 // Login
-router.post("/login", login);
+// router.post("/login", login);
+// , login, userdetails, deleteUser 
 
-// Get all users
-router.get("/", userdetails);
+// // Get all users
+// router.get("/", userdetails);
 
-// Delete user
-router.delete("/:id", deleteUser);
+// // Delete user
+// router.delete("/:id", deleteUser);
 
 export default router;

@@ -237,7 +237,7 @@ export const signup = async (req, res) => {
         await user.save();
         await sendEmail(email, "Verify Your OTP", `Thank You For Registering on DCODER, Your OTP is: ${otp}`);
 
-        res.status(201).json({ message: "OTP sent successfully. Verify to complete registration.", userId: user._id });
+        res.status(201).json({ message: "OTP sent successfully. Verify to complete registration. Kindly Check in Spam folder also ", userId: user._id });
     } catch (err) {
         res.status(500).json({ message: err.message });
     }

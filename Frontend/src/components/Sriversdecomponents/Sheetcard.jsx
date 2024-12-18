@@ -64,14 +64,14 @@ function Sheetcard({ item }) {
             </div>
 
             {isOpen && (
-                <div className={`w-full dark:bg-slate-800 dark:text-white dark:border-none sm:px-0 pb-5 md:px-4`}>
-                    <div className='lg:mt-[-58px] lg:ml-[30%] lg:absolute lg:p-0 px-2 justify-center space-x-2'>
+                <div className={`w-full dark:bg-slate-800 bg-white rounded dark:text-white dark:border-none sm:px-0 py-5 md:px-4`}>
+                    <div className='lg:mt-[-60px] lg:ml-[30%] lg:absolute lg:p-0 px-2 pb-2 justify-center space-x-2'>
                         <button className="bg-gray-500 shadow-lg hover:shadow-gray-500/30 shadow-black/30 text-white dark:bg-slate-800 dark:text-white px-2 py-1 border-2 rounded-lg border-gray-500" onClick={() => handleLevelClick('Random')}>Random</button>
                         <button className="bg-green-500 shadow-lg hover:shadow-green-500/30 shadow-black/30 text-white dark:bg-slate-800 dark:text-white px-2 py-1 border-2 rounded-lg border-green-500" onClick={() => handleLevelClick('Easy')}>Easy</button>
                         <button className="bg-yellow-500 shadow-lg hover:shadow-yellow-500/30 shadow-black/30 text-white dark:bg-slate-800 dark:text-white px-2 py-1 border-2 rounded-lg border-yellow-500" onClick={() => handleLevelClick('Medium')}>Medium</button>
                         <button className="bg-red-500 shadow-lg hover:shadow-red-500/30 shadow-black/30 text-white dark:bg-slate-800 dark:text-white px-2 py-1 border-2 rounded-lg border-red-500" onClick={() => handleLevelClick('Hard')}>Hard</button>
                     </div>
-                    <div className='lg:mx-4 mx-2 mt-3 dark:bg-slate-900 dark:text-white dark:border border-2 border-gray-400 rounded-lg overflow-auto'>
+                    <div className='lg:mx-4 mx-2  dark:bg-slate-900 dark:text-white dark:border border-2 border-gray-400 rounded-lg overflow-auto'>
                         <table className="table bg-[rgb(255,255,255)] dark:bg-slate-900 dark:text-white dark:border">
                             <thead className='font-semibold text-gray-600 shadow dark:bg-slate-800 dark:text-white'>
                                 <Sheetheading />

@@ -54,9 +54,9 @@
 //         });
 
 //         await user.save();
-//         await sendEmail(email, "Verify Your OTP", `Your OTP is: ${otp}`);
+//         await sendEmail(email, "Verify Your OTP", `Thank You For Registering on DCODER, Your OTP is: ${otp}`);
 
-//         res.status(201).json({ message: "OTP sent successfully. Verify to complete registration.", userId: user._id });
+//         res.status(201).json({ message: "OTP sent successfully. Verify to complete registration. Kindly Check in Spam folder also ", userId: user._id });
 //     } catch (err) {
 //         res.status(500).json({ message: err.message });
 //     }
@@ -115,67 +115,7 @@
 //     }
 // };
 
-// export const login = async (req, res) => {
-//     try {
-//         const { email, phone, password } = req.body;
 
-//         const user = await User.findOne({
-//             $or: [{ email }, { phone }]
-//         });
-
-//         if (!user || !(await bcryptjs.compare(password, user.password))) {
-//             return res.status(400).json({ message: "Invalid username or password" });
-//         }
-
-//         res.status(200).json({
-//             message: "Login Successful",
-//             user: {
-//                 _id: user._id,
-//                 firstName: user.firstName,
-//                 lastName: user.lastName,
-//                 email: user.email,
-//                 phone: user.phone,
-//                 // password: user.password,
-//                 // googleId: user.googleId,
-//                 photo: user.photo
-//             }
-//         });
-
-//     } catch (error) {
-//         console.error("Error: " + error.message);
-//         res.status(500).json({ message: "Internal server error" });
-//     }
-// };
-
-
-// // Get user details
-// export const userdetails = async (req, res) => {
-//     try {
-//         const users = await User.find();
-//         res.status(200).json(users);
-//     } catch (error) {
-//         console.error("Error fetching users:", error);
-//         res.status(500).json({ error: "Error fetching users" });
-//     }
-// };
-
-// // Delete a user
-// export const deleteUser = async (req, res) => {
-//     const { id } = req.params;
-
-//     try {
-//         const deletedUser = await User.findByIdAndDelete(id);
-
-//         if (!deletedUser) {
-//             return res.status(404).json({ error: "User not found" });
-//         }
-
-//         res.status(200).json({ message: "Deleted successfully" });
-//     } catch (error) {
-//         console.error("Error deleting User:", error);
-//         res.status(500).json({ error: "Error deleting User" });
-//     }
-// };
 
 
 
@@ -195,6 +135,9 @@ const transporter = nodemailer.createTransport({
         pass: process.env.EMAIL_PASSWORD,
     },
 });
+
+// Temporary store for pending verifications
+const pendingVerifications = new Map();
 
 // Utility to send email
 const sendEmail = async (to, subject, text) => {
@@ -224,8 +167,8 @@ export const signup = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
         const hashedOtp = await bcrypt.hash(otp, 10);
 
-        // Create user
-        const user = new User({
+        // Temporarily store user details with OTP
+        pendingVerifications.set(email, {
             firstName,
             lastName,
             email,
@@ -234,10 +177,8 @@ export const signup = async (req, res) => {
             otp: hashedOtp,
         });
 
-        await user.save();
         await sendEmail(email, "Verify Your OTP", `Thank You For Registering on DCODER, Your OTP is: ${otp}`);
-
-        res.status(201).json({ message: "OTP sent successfully. Verify to complete registration. Kindly Check in Spam folder also ", userId: user._id });
+        res.status(201).json({ message: "OTP sent successfully. Verify to complete registration. Kindly check in spam folder also." });
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
@@ -246,26 +187,34 @@ export const signup = async (req, res) => {
 // Verify OTP Controller
 export const verifyOtp = async (req, res) => {
     try {
-        const { userId, otp } = req.body;
+        const { email, otp } = req.body;
 
-        // Find user by ID
-        const user = await User.findById(userId);
-        if (!user) {
-            return res.status(404).json({ message: "User not found" });
+        // Check if email exists in pending verifications
+        const pendingUser = pendingVerifications.get(email);
+        if (!pendingUser) {
+            return res.status(404).json({ message: "User not found or already verified." });
         }
 
         // Compare OTP
-        const isMatch = await bcrypt.compare(otp, user.otp);
+        const isMatch = await bcrypt.compare(otp, pendingUser.otp);
         if (!isMatch) {
             return res.status(400).json({ message: "Invalid OTP" });
         }
 
-        // Update OTP verification status
-        user.otpVerified = true;
-        user.otp = null; // Clear OTP after verification
+        // Move user from pending verifications to main User collection
+        const user = new User({
+            firstName: pendingUser.firstName,
+            lastName: pendingUser.lastName,
+            email: pendingUser.email,
+            phone: pendingUser.phone,
+            password: pendingUser.password,
+        });
         await user.save();
 
-        res.status(200).json({ message: "OTP verified successfully" });
+        // Remove from pending verifications
+        pendingVerifications.delete(email);
+
+        res.status(200).json({ message: "OTP verified and registration completed successfully." });
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
@@ -276,18 +225,19 @@ export const resendOtp = async (req, res) => {
     try {
         const { email } = req.body;
 
-        // Find user by email
-        const user = await User.findOne({ email });
-        if (!user) {
-            return res.status(404).json({ message: "User not found" });
+        // Check if email exists in pending verifications
+        const pendingUser = pendingVerifications.get(email);
+        if (!pendingUser) {
+            return res.status(404).json({ message: "User not found or already verified." });
         }
 
         // Generate new OTP
         const otp = crypto.randomInt(100000, 999999).toString();
         const hashedOtp = await bcrypt.hash(otp, 10);
 
-        user.otp = hashedOtp;
-        await user.save();
+        // Update OTP in pending verifications
+        pendingUser.otp = hashedOtp;
+        pendingVerifications.set(email, pendingUser);
 
         await sendEmail(email, "Your OTP", `Your OTP is: ${otp}`);
         res.status(200).json({ message: "OTP sent successfully" });
@@ -295,6 +245,10 @@ export const resendOtp = async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 };
+
+
+
+
 
 // Login Controller
 export const login = async (req, res) => {

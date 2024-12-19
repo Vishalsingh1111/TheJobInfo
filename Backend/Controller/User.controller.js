@@ -191,9 +191,9 @@ export const verifyOtp = async (req, res) => {
 
         // Check if email exists in pending verifications
         const pendingUser = pendingVerifications.get(email);
-        if (!pendingUser) {
-            return res.status(404).json({ message: "User not found or already verified." });
-        }
+        // if (!pendingUser) {
+        //     return res.status(404).json({ message: "User not found or already verified." });
+        // }
 
         // Compare OTP
         const isMatch = await bcrypt.compare(otp, pendingUser.otp);
@@ -227,9 +227,9 @@ export const resendOtp = async (req, res) => {
 
         // Check if email exists in pending verifications
         const pendingUser = pendingVerifications.get(email);
-        if (!pendingUser) {
-            return res.status(404).json({ message: "User not found or already verified." });
-        }
+        // if (!pendingUser) {
+        //     return res.status(404).json({ message: "User not found or already verified." });
+        // }
 
         // Generate new OTP
         const otp = crypto.randomInt(100000, 999999).toString();

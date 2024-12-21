@@ -245,14 +245,15 @@ export const signup = async (req, res) => {
             otp: hashedOtp,
         };
 
-        // Store temporary user data in an in-memory store (or use Redis for production)
+        // Store temporary user data in an in-memory store (global.tempUsers)
         global.tempUsers = global.tempUsers || {};
         global.tempUsers[email] = tempUser;
 
-        await sendEmail(email, "Verify Your OTP", `Thank You For Registering on DCODER. Your OTP is: ${otp}`);
-        res.status(201).json({ message: "OTP sent successfully. Verify to complete registration. Kindly check in Spam folder also." });
+        await sendEmail(email, "Verify Your OTP", `Your OTP is: ${otp}`);
+        res.status(201).json({ message: "OTP sent successfully. Verify to complete registration." });
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        console.error("Signup Error:", err.message);
+        res.status(500).json({ message: "Internal server error" });
     }
 };
 
@@ -261,11 +262,12 @@ export const verifyOtp = async (req, res) => {
     try {
         const { email, otp } = req.body;
 
-        // Find temporary user data
-        const tempUser = global.tempUsers?.[email];
-        // if (!tempUser) {
-        //     return res.status(404).json({ message: "User not found or OTP expired" });
-        // }
+        // Ensure global.tempUsers is defined
+        if (!global.tempUsers || !global.tempUsers[email]) {
+            return res.status(404).json({ message: "OTP expired or user not found" });
+        }
+
+        const tempUser = global.tempUsers[email];
 
         // Compare OTP
         const isMatch = await bcrypt.compare(otp, tempUser.otp);
@@ -290,7 +292,8 @@ export const verifyOtp = async (req, res) => {
 
         res.status(200).json({ message: "OTP verified and user registered successfully" });
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        console.error("Error verifying OTP:", err.message);
+        res.status(500).json({ message: "Internal server error" });
     }
 };
 
@@ -299,70 +302,49 @@ export const resendOtp = async (req, res) => {
     try {
         const { email } = req.body;
 
-        // Find temporary user data
-        const tempUser = global.tempUsers?.[email];
-        if (!tempUser) {
+        // Ensure temporary user exists
+        if (!global.tempUsers || !global.tempUsers[email]) {
             return res.status(404).json({ message: "User not found or OTP expired" });
         }
+
+        const tempUser = global.tempUsers[email];
 
         // Generate new OTP
         const otp = crypto.randomInt(100000, 999999).toString();
         const hashedOtp = await bcrypt.hash(otp, 10);
 
         tempUser.otp = hashedOtp;
-        global.tempUsers[email] = tempUser;
 
-        await sendEmail(email, "Your OTP", `Your OTP is: ${otp}`);
-        res.status(200).json({ message: "OTP sent successfully" });
+        await sendEmail(email, "Resend OTP", `Your OTP is: ${otp}`);
+        res.status(200).json({ message: "OTP resent successfully" });
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        console.error("Resend OTP Error:", err.message);
+        res.status(500).json({ message: "Internal server error" });
     }
 };
 
 // Login Controller
 export const login = async (req, res) => {
     try {
-        const { email, phone, password } = req.body;
+        const { email, password } = req.body;
 
-        // Validate input
-        if (!email && !phone) {
-            return res.status(400).json({ message: "Email or phone is required" });
-        }
-        if (!password) {
-            return res.status(400).json({ message: "Password is required" });
-        }
-
-        // Find user by email or phone
-        const user = await User.findOne({
-            $or: [{ email }, { phone }],
-        });
-
+        const user = await User.findOne({ email });
         if (!user) {
-            return res.status(400).json({ message: "User not found. Check credentials." });
+            return res.status(404).json({ message: "User not found" });
         }
 
-        // Check if password matches
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
-            return res.status(400).json({ message: "Invalid password" });
+            return res.status(400).json({ message: "Invalid credentials" });
         }
 
-        res.status(200).json({
-            message: "Login successful",
-            user: {
-                _id: user._id,
-                firstName: user.firstName,
-                lastName: user.lastName,
-                email: user.email,
-                phone: user.phone,
-                photo: user.photo,
-            },
-        });
+        res.status(200).json({ message: "Login successful", user });
     } catch (err) {
         console.error("Login Error:", err.message);
         res.status(500).json({ message: "Internal server error" });
     }
 };
+
 
 // Get all user details
 export const userdetails = async (req, res) => {

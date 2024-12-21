@@ -233,67 +233,65 @@ export const signup = async (req, res) => {
 
         // Generate OTP
         const otp = crypto.randomInt(100000, 999999).toString();
+        const hashedPassword = await bcrypt.hash(password, 10);
         const hashedOtp = await bcrypt.hash(otp, 10);
 
-        // Temporarily store user data with OTP
-        const tempUser = {
+        // Create user
+        const user = new User({
             firstName,
             lastName,
             email,
             phone,
-            password, // Save plain password temporarily for final hashing
+            password: hashedPassword,
             otp: hashedOtp,
-        };
+        });
 
-        // Store temporary user data in an in-memory store (global.tempUsers)
-        global.tempUsers = global.tempUsers || {};
-        global.tempUsers[email] = tempUser;
+        const savedUser = await user.save();
 
-        await sendEmail(email, "Verify Your OTP", `Your OTP is: ${otp}`);
-        res.status(201).json({ message: "OTP sent successfully. Verify to complete registration." });
+        // Start a timeout to delete the user if OTP is not verified
+        setTimeout(async () => {
+            const unverifiedUser = await User.findById(savedUser._id);
+            if (unverifiedUser && !unverifiedUser.otpVerified) {
+                await User.findByIdAndDelete(savedUser._id);
+                console.log(`Deleted unverified user with ID: ${savedUser._id}`);
+            }
+        }, 5 * 60 * 1000); // 5 minutes
+
+        await sendEmail(email, "Verify Your OTP", `Thank You For Registering on DCODER, Your OTP is: ${otp}`);
+
+        res.status(201).json({ message: "OTP sent successfully. Verify to complete registration. Kindly Check in Spam folder also", userId: user._id });
     } catch (err) {
         console.error("Signup Error:", err.message);
-        res.status(500).json({ message: "Internal server error" });
+        res.status(500).json({ message: err.message });
     }
 };
 
 // Verify OTP Controller
 export const verifyOtp = async (req, res) => {
     try {
-        const { email, otp } = req.body;
+        const { userId, otp } = req.body;
 
-        // Ensure global.tempUsers is defined
-        if (!global.tempUsers || !global.tempUsers[email]) {
-            return res.status(404).json({ message: "OTP expired or user not found" });
+        // Find user by ID
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
         }
 
-        const tempUser = global.tempUsers[email];
-
         // Compare OTP
-        const isMatch = await bcrypt.compare(otp, tempUser.otp);
+        const isMatch = await bcrypt.compare(otp, user.otp);
         if (!isMatch) {
             return res.status(400).json({ message: "Invalid OTP" });
         }
 
-        // Save verified user in the database
-        const hashedPassword = await bcrypt.hash(tempUser.password, 10);
-        const user = new User({
-            firstName: tempUser.firstName,
-            lastName: tempUser.lastName,
-            email: tempUser.email,
-            phone: tempUser.phone,
-            password: hashedPassword,
-        });
-
+        // Update OTP verification status
+        user.otpVerified = true;
+        user.otp = null; // Clear OTP after verification
         await user.save();
 
-        // Clean up temporary user data
-        delete global.tempUsers[email];
-
-        res.status(200).json({ message: "OTP verified and user registered successfully" });
+        res.status(200).json({ message: "OTP verified successfully" });
     } catch (err) {
-        console.error("Error verifying OTP:", err.message);
-        res.status(500).json({ message: "Internal server error" });
+        console.error("Verify OTP Error:", err.message);
+        res.status(500).json({ message: err.message });
     }
 };
 
@@ -302,51 +300,73 @@ export const resendOtp = async (req, res) => {
     try {
         const { email } = req.body;
 
-        // Ensure temporary user exists
-        if (!global.tempUsers || !global.tempUsers[email]) {
-            return res.status(404).json({ message: "User not found or OTP expired" });
+        // Find user by email
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
         }
-
-        const tempUser = global.tempUsers[email];
 
         // Generate new OTP
         const otp = crypto.randomInt(100000, 999999).toString();
         const hashedOtp = await bcrypt.hash(otp, 10);
 
-        tempUser.otp = hashedOtp;
+        user.otp = hashedOtp;
+        await user.save();
 
-        await sendEmail(email, "Resend OTP", `Your OTP is: ${otp}`);
-        res.status(200).json({ message: "OTP resent successfully" });
+        await sendEmail(email, "Your OTP", `Your OTP is: ${otp}`);
+        res.status(200).json({ message: "OTP sent successfully" });
     } catch (err) {
-        console.error("Resend OTP Error:", err.message);
-        res.status(500).json({ message: "Internal server error" });
+        res.status(500).json({ message: err.message });
     }
 };
 
 // Login Controller
 export const login = async (req, res) => {
     try {
-        const { email, password } = req.body;
+        const { email, phone, password } = req.body;
 
-        const user = await User.findOne({ email });
-        if (!user) {
-            return res.status(404).json({ message: "User not found" });
+        // Validate input
+        if (!email && !phone) {
+            return res.status(400).json({ message: "Email or phone is required" });
+        }
+        if (!password) {
+            return res.status(400).json({ message: "Password is required" });
         }
 
+        // Find user by email or phone
+        const user = await User.findOne({
+            $or: [{ email }, { phone }],
+        });
+
+        if (!user) {
+            return res.status(400).json({ message: "User not found. Check credentials." });
+        }
+
+        // Check if password matches
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
-            return res.status(400).json({ message: "Invalid credentials" });
+            return res.status(400).json({ message: "Invalid password" });
         }
 
-        res.status(200).json({ message: "Login successful", user });
+
+        res.status(200).json({
+            message: "Login successful",
+            user: {
+                _id: user._id,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email,
+                phone: user.phone,
+                photo: user.photo,
+            },
+        });
     } catch (err) {
         console.error("Login Error:", err.message);
         res.status(500).json({ message: "Internal server error" });
     }
 };
 
-
-// Get all user details
+// Get user details
 export const userdetails = async (req, res) => {
     try {
         const users = await User.find();

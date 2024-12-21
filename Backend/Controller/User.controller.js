@@ -263,9 +263,9 @@ export const verifyOtp = async (req, res) => {
 
         // Find temporary user data
         const tempUser = global.tempUsers?.[email];
-        if (!tempUser) {
-            return res.status(404).json({ message: "User not found or OTP expired" });
-        }
+        // if (!tempUser) {
+        //     return res.status(404).json({ message: "User not found or OTP expired" });
+        // }
 
         // Compare OTP
         const isMatch = await bcrypt.compare(otp, tempUser.otp);

@@ -255,11 +255,11 @@ export const signup = async (req, res) => {
                 await User.findByIdAndDelete(savedUser._id);
                 console.log(`Deleted unverified user with ID: ${savedUser._id}`);
             }
-        }, 5 * 60 * 1000); // 5 minutes
+        }, 1 * 60 * 1000); // 1 minutes
 
         await sendEmail(email, "Verify Your OTP", `Thank You For Registering on DCODER, Your OTP is: ${otp}`);
 
-        res.status(201).json({ message: "OTP sent successfully. Verify to complete registration. Kindly Check in Spam folder also", userId: user._id });
+        res.status(201).json({ message: "OTP sent successfully", userId: user._id });
     } catch (err) {
         console.error("Signup Error:", err.message);
         res.status(500).json({ message: err.message });
@@ -309,10 +309,10 @@ export const resendOtp = async (req, res) => {
         // Generate new OTP
         const otp = crypto.randomInt(100000, 999999).toString();
         const hashedOtp = await bcrypt.hash(otp, 10);
-
+        // Update user OTP
         user.otp = hashedOtp;
         await user.save();
-
+        // Resend OTP via email
         await sendEmail(email, "Your OTP", `Your OTP is: ${otp}`);
         res.status(200).json({ message: "OTP sent successfully" });
     } catch (err) {

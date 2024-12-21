@@ -51,6 +51,15 @@ const SignupPage = () => {
         }
     };
 
+    const resendOtp = async () => {
+        try {
+            const res = await axios.post(`${baseUrl}/user/resend-otp`, { userId });
+            toast.success(res.data.message || 'OTP resent successfully');
+        } catch (err) {
+            toast.error(err.response?.data?.message || 'Failed to resend OTP');
+        }
+    };
+
     const verifyOtp = async (e) => {
         e.preventDefault();
 
@@ -181,6 +190,13 @@ const SignupPage = () => {
                                 className="w-full bg-green-500 hover:bg-green-700 text-white py-2 rounded"
                             >
                                 Verify OTP
+                            </button>
+                            <button
+                                type="button"
+                                onClick={resendOtp}
+                                className="w-full mt-4 bg-red-500 hover:bg-red-700 text-white py-2 rounded"
+                            >
+                                Resend OTP
                             </button>
                         </>
                     )}

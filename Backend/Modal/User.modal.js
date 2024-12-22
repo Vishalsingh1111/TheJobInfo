@@ -9,7 +9,10 @@ const userSchema = new mongoose.Schema({
     googleId: { type: String, required: false, unique: false, default: "null" },
     photo: { type: String, required: false, default: "null" },
     otp: { type: String },
-    otpVerified: { type: Boolean, default: false }
+    otpExpiry: { type: Date },
+    otpVerified: { type: Boolean, default: false },
+    resetToken: { type: String, default: null },
+    resetTokenExpiry: { type: Date, default: null }
 });
 
 const User = mongoose.model('User', userSchema);

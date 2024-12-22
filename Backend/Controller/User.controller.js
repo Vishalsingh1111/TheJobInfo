@@ -203,3 +203,63 @@ export const deleteUser = async (req, res) => {
 };
 
 
+// Send OTP for Password Reset
+export const sendOtpForReset = async (req, res) => {
+    try {
+        const { email } = req.body;
+
+        // Check if the user exists
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        // Generate OTP
+        const otp = crypto.randomInt(100000, 999999).toString();
+        const hashedOtp = await bcrypt.hash(otp, 10);
+
+        // Save hashed OTP and expiry time
+        user.otp = hashedOtp;
+        user.otpExpiry = Date.now() + 2 * 60 * 1000; // 2 minutes expiry
+        await user.save();
+
+        // Send OTP via email
+        await sendEmail(email, "Password Reset OTP", `Your OTP for resetting the password is: ${otp}`);
+
+        res.status(200).json({ message: "OTP sent successfully" });
+    } catch (err) {
+        console.error("Error sending OTP:", err.message);
+        res.status(500).json({ message: "Error sending OTP" });
+    }
+};
+
+
+// Verify OTP and Reset Password
+export const resetPassword = async (req, res) => {
+    try {
+        const { email, otp, newPassword } = req.body;
+
+        // Find user by email
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        // Check if OTP matches and is within the expiry time
+        const isOtpValid = await bcrypt.compare(otp, user.otp);
+        if (!isOtpValid || user.otpExpiry < Date.now()) {
+            return res.status(400).json({ message: "Invalid or expired OTP" });
+        }
+
+        // Update the password
+        user.password = await bcrypt.hash(newPassword, 10);
+        user.otp = null; // Clear OTP after use
+        user.otpExpiry = null;
+        await user.save();
+
+        res.status(200).json({ message: "Password reset successfully" });
+    } catch (err) {
+        console.error("Error resetting password:", err.message);
+        res.status(500).json({ message: "Error resetting password" });
+    }
+};

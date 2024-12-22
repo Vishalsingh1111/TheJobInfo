@@ -62,7 +62,7 @@ export const signup = async (req, res) => {
                 await User.findByIdAndDelete(savedUser._id);
                 console.log(`Deleted unverified user with ID: ${savedUser._id}`);
             }
-        }, 1 * 60 * 1000); // 1 minutes
+        }, 2 * 60 * 1000); // 1 minutes
 
         await sendEmail(email, "Verify Your OTP", `Thank You For Registering on DCODER, Your OTP is: ${otp}`);
 

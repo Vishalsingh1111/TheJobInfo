@@ -51,14 +51,14 @@ const SignupPage = () => {
         }
     };
 
-    const resendOtp = async () => {
-        try {
-            const res = await axios.post(`${baseUrl}/user/resend-otp`, { userId });
-            toast.success(res.data.message || 'OTP resent successfully');
-        } catch (err) {
-            toast.error(err.response?.data?.message || 'Failed to resend OTP');
-        }
-    };
+    // const resendOtp = async () => {
+    //     try {
+    //         const res = await axios.post(`${baseUrl}/user/resend-otp`, { userId });
+    //         toast.success(res.data.message || 'OTP resent successfully');
+    //     } catch (err) {
+    //         toast.error(err.response?.data?.message || 'Failed to resend OTP');
+    //     }
+    // };
 
     const verifyOtp = async (e) => {
         e.preventDefault();
@@ -79,6 +79,7 @@ const SignupPage = () => {
 
     const handleGoogleLogin = () => {
         window.location.href = `${baseUrl}/auth/google`;
+        toast.success('Logging with google');
     };
 
     return (
@@ -191,13 +192,13 @@ const SignupPage = () => {
                             >
                                 Verify OTP
                             </button>
-                            <button
+                            {/* <button
                                 type="button"
                                 onClick={resendOtp}
                                 className="w-full mt-4 bg-red-500 hover:bg-red-700 text-white py-2 rounded"
                             >
                                 Resend OTP
-                            </button>
+                            </button> */}
                         </>
                     )}
                 </form>

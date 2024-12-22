@@ -7,7 +7,6 @@ import { baseUrl } from '../Baseurl';
 const ForgotPassword = () => {
     const [email, setEmail] = useState('');
     const [newPassword, setNewPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
@@ -52,7 +51,7 @@ const ForgotPassword = () => {
                     </div>
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="newPassword">
-                            New Password
+                            Enter New Password
                         </label>
                         <input
                             id="newPassword"
@@ -63,19 +62,7 @@ const ForgotPassword = () => {
                             required
                         />
                     </div>
-                    <div className="mb-4">
-                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="confirmPassword">
-                            Confirm New Password
-                        </label>
-                        <input
-                            id="confirmPassword"
-                            type="password"
-                            value={confirmPassword}
-                            onChange={(e) => setConfirmPassword(e.target.value)}
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            required
-                        />
-                    </div>
+
                     <button
                         type="submit"
                         className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600"

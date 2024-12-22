@@ -102,30 +102,30 @@ export const verifyOtp = async (req, res) => {
     }
 };
 
-// // Resend OTP Controller
-// export const resendOtp = async (req, res) => {
-//     try {
-//         const { email } = req.body;
+// Resend OTP Controller
+export const resendOtp = async (req, res) => {
+    try {
+        const { email } = req.body;
 
-//         // Find user by email
-//         const user = await User.findOne({ email });
-//         if (!user) {
-//             return res.status(404).json({ message: "User not found" });
-//         }
+        // Find user by email
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
 
-//         // Generate new OTP
-//         const otp = crypto.randomInt(100000, 999999).toString();
-//         const hashedOtp = await bcrypt.hash(otp, 10);
-//         // Update user OTP
-//         user.otp = hashedOtp;
-//         await user.save();
-//         // Resend OTP via email
-//         await sendEmail(email, "Your OTP", `Your OTP is: ${otp}`);
-//         res.status(200).json({ message: "OTP sent successfully" });
-//     } catch (err) {
-//         res.status(500).json({ message: err.message });
-//     }
-// };
+        // Generate new OTP
+        const otp = crypto.randomInt(100000, 999999).toString();
+        const hashedOtp = await bcrypt.hash(otp, 10);
+        // Update user OTP
+        user.otp = hashedOtp;
+        await user.save();
+        // Resend OTP via email
+        await sendEmail(email, "Your OTP", `Your OTP is: ${otp}`);
+        res.status(200).json({ message: "OTP sent successfully" });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
 
 // Login Controller
 export const login = async (req, res) => {

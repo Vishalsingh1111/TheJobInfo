@@ -172,8 +172,8 @@ const CompanyMain = () => {
                     <Searchbar />
                 </div>
                 <div className='mt-4 sm:mt-0 lg:mt-4 sm:mr-20 lg:mr-20'>
-                    <a href="path-to-your-file.pdf" download>
-                        <button className='bg-white text-sm text-red-500 border dark:bg-slate-900 border-red-500 px-5 py-3 rounded-md'>Download PDF</button>
+                    <a href="/AllDSA">
+                        <button className='bg-green-500 text-[2.3vmin] text-white border dark:bg-slate-900 border-green-500 px-3 py-1.5 rounded-md'>Explore More</button>
                     </a>
                 </div>
             </div>
@@ -194,7 +194,7 @@ const CompanyMain = () => {
                 </div>
             </div>
 
-            <section className="max-w-screen-2xl container mx-auto md:px-20 px-4 overflow-hidden dark:bg-slate-900 dark:text-white lg:pb-[90px] lg:pt-[10px] text-center">
+            <section className="max-w-screen-xl md:w-[1200px] container md:pl-20 px-4 overflow-hidden dark:bg-slate-900 dark:text-white lg:pb-[90px] lg:pt-[10px] text-center">
 
                 {/* Data Table */}
                 <div className="mx-auto text-left border-2 border-gray-400 dark:border-none dark:bg-slate-800 border-gray-200 rounded-lg">

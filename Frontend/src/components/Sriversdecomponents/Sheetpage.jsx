@@ -43,19 +43,19 @@ function Sheetpage() {
                     <Searchbar />
                 </div>
                 <div className='mt-4 sm:mt-0 lg:mt-4 sm:mr-20 lg:mr-20'>
-                    <a href="path-to-your-file.pdf" download>
-                        <button className='bg-white text-sm text-red-500 border dark:bg-slate-900  border-red-500 px-5 py-3 rounded-md'>Download PDF</button>
+                    <a href="/AllDSA">
+                        <button className='bg-green-500  text-lg font-300 text-white border dark:bg-slate-900 border-green-500 px-3 py-1.5 rounded-md'>Explore More</button>
                     </a>
                 </div>
             </div>
 
-            <div className='max-w-screen-2xl container mx-auto md:px-20 px-2 mb-10 lg:mb-10 sm:mb-3 dark:bg-slate-900 dark:text-white'>
-                <div className='flex justify-center '>
-                    <div className="w-full max-w-full bg-gray-200 md:p-5 p-2 mx-auto dark:bg-slate-900 dark:border-none rounded-lg">
+            <div className='max-w-screen-xl md:w-[1200px] container my-10 md:pl-20 px-2 mb-10 lg:mb-10 sm:mb-3 dark:bg-slate-900 dark:text-white'>
+                <div className='flex justify-left '>
+                    <div className="w-full max-w-full  md:px-5 mx-auto dark:bg-slate-900 dark:border-none rounded-lg">
                         {loading ? (
                             <Skeleton1 />
                         ) : (
-                            <div className='space-y-5'>
+                            <div className='space-y-3'>
                                 {sheet.map((item) => (
                                     <Sheetcard key={item.id} item={item} />
                                 ))}

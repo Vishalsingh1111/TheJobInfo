@@ -53,7 +53,7 @@ function Sheetcard({ item }) {
                 </div>
                 <div className='flex space-x-5'>
                     <div className='mt-2'>
-                        <span className="p-1 w-6 h-6 text-gray-600 rounded-md border border-gray-600 dark:bg-slate-700 dark:text-gray-300 px-2 py-1.5">{item.completedProblems}{item.Problems}</span>
+                        <span className="p-1 w-6 h-6 text-red-600 rounded-md border border-gray-600 dark:bg-slate-700 dark:text-gray-300 px-2 py-1.5"><span className='text-gray-600 dark:text-white hidden md:inline'>Total Problems : </span>{item.completedProblems}{item.Problems}</span>
                     </div>
                     <button className="p-1.5 border-2 bg-gray-600 border-gray-600 text-white rounded-md dark:bg-slate-700 dark:text-gray-300">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className={`w-6 h-6 transform transition-transform ${isOpen ? 'rotate-180' : ''}`}>

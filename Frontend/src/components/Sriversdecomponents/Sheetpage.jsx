@@ -51,7 +51,7 @@ function Sheetpage() {
 
             <div className='max-w-screen-xl md:w-[1200px] container my-10 md:pl-20 px-2 mb-10 lg:mb-10 sm:mb-3 dark:bg-slate-900 dark:text-white'>
                 <div className='flex justify-left '>
-                    <div className="w-full max-w-full  md:px-5 mx-auto dark:bg-slate-900 dark:border-none rounded-lg">
+                    <div className="w-full max-w-full mx-auto dark:bg-slate-900 dark:border-none rounded-lg">
                         {loading ? (
                             <Skeleton1 />
                         ) : (

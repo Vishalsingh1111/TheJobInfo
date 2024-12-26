@@ -167,7 +167,7 @@ const GetContent = ({ item }) => {
     };
 
     return (
-        <div className="dark:bg-slate-800 dark:text-white text-gray-700 my-8">
+        <div className="dark:bg-slate-900 dark:text-white text-gray-700 my-8">
             {/* Speak Button */}
             <div className="flex justify-between items-center mb-4">
                 <div className="font-[500]">

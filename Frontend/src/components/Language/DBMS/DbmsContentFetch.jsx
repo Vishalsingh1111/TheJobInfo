@@ -117,21 +117,21 @@ const DbmsContentFetch = () => {
 
     return (
         <>
-            <div className='flex flex-col sm:flex-row lg:flex-row justify-between    text-2xl font-semibold dark:bg-slate-900 dark:text-white text-gray-700 mb-5 pt-5 pb-5 pl-5 lg:pl-20 dark:from-slate-800'>
+            <div className='flex flex-col sm:flex-row lg:flex-row justify-between text-2xl font-semibold dark:bg-slate-900 dark:text-white text-gray-700 mb-5 pt-5 pb-5 pl-5 lg:pl-20 dark:from-slate-800'>
                 <div className='flex flex-col space-y-4'>
-                    <span>Basic Interview Questions – Database Management System (DBMS).</span>
-                    <span className='text-sm'>Last Updated: August 8, 2024</span>
+                    <span>Basic Interview Questions – Database Management System (DBMS)</span>
+                    <span className='text-sm'>Last Updated: October 18, 2024</span>
                 </div>
-                <div className='mt-4 sm:mt-0 lg:mt-4 sm:mr-20 lg:mr-20'>
+                <div className='mt-4 sm:mt-0 lg:mt-4 sm:mr-20 lg:mr-[100px]'>
                     <a href="path-to-your-file.pdf" download>
-                        <button className='bg-white text-sm dark:bg-slate-900  text-red-500 border border-red-500 px-5 py-3 rounded-md'>Download PDF</button>
+                        <button className='bg-white text-sm dark:bg-slate-900 text-red-500 border border-red-500 px-5 py-3 rounded-md'>Download PDF</button>
                     </a>
                 </div>
             </div>
 
-            <section className="max-w-screen-2xl container mx-auto pb-12 px-4 relative z-20 overflow-hidden dark:bg-slate-900 dark:text-white lg:pb-[90px] lg:pt-[10px] text-center">
-                <div className="mx-auto text-left">
-                    <div className="w-full p-3 sm:p-5 md:p-8 lg:p-10 max-w-[950px] mx-auto border-t md:shadow-sm md:shadow-black/30  rounded-xl bg-[rgb(255,255,255)] dark:bg-slate-800 dark:border-none mt-3">
+            <section className="max-w-screen-2xl container pb-5 md:pl-20 px-4  dark:bg-slate-900 dark:text-white lg:pb-[90px] text-center">
+                <div className="mx-auto flex text-left">
+                    <div className="w-full p-0 sm:p-6 md:pl-10  max-w-[900px]  md:shadow-black/30 rounded-xl  dark:bg-slate-900 dark:border-none">
                         {loading ? (
                             <Skeleton1 />
                         ) : (
@@ -140,8 +140,14 @@ const DbmsContentFetch = () => {
                             ))
                         )}
                     </div>
-                </div>
 
+                    {/* Poster */}
+                    <div className="w-[240px] h-full ml-32 pt-5 hidden md:inline sticky top-[80px] ">
+                        <a href="/Signup">
+                            <img src="./poster.png" alt="Poster" />
+                        </a>
+                    </div>
+                </div>
 
                 {/* Pagination Controls */}
                 <div className="mt-6 flex justify-center space-x-2">

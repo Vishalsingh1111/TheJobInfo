@@ -173,7 +173,7 @@ const CompanyMain = () => {
                 </div>
                 <div className='mt-4 sm:mt-0 lg:mt-4 sm:mr-20 lg:mr-20'>
                     <a href="/AllDSA">
-                        <button className='bg-green-500 text-[2.3vmin] text-white border dark:bg-slate-900 border-green-500 px-3 py-1.5 rounded-md'>Explore More</button>
+                        <button className='bg-green-500  text-lg font-300 text-white border dark:bg-slate-900 border-green-500 px-3 py-1.5 rounded-md'>Explore More</button>
                     </a>
                 </div>
             </div>
@@ -194,32 +194,56 @@ const CompanyMain = () => {
                 </div>
             </div>
 
-            <section className="max-w-screen-xl md:w-[1200px] container md:pl-20 px-4 overflow-hidden dark:bg-slate-900 dark:text-white lg:pb-[90px] lg:pt-[10px] text-center">
+            <section className="relative max-w-screen-2xl flex container md:pl-20 px-4 overflow-visible dark:bg-slate-900 dark:text-white lg:pb-[90px] lg:pt-[10px] text-center">
 
                 {/* Data Table */}
-                <div className="mx-auto text-left border-2 border-gray-400 dark:border-none dark:bg-slate-800 border-gray-200 rounded-lg">
+                <div className="w-full md:w-[1060px] text-left border-2 border-gray-400 dark:border-none dark:bg-slate-800 border-gray-200 rounded-lg">
 
                     {/* Level Buttons */}
-                    <div className='flex px-2 justify-center space-x-2 py-3 bg-gradient-to-t from-[#f5f4fb] to-[#ffffff] dark:from-slate-800 rounded-t-md'>
-                        <button className="bg-gray-500 shadow-lg hover:shadow-gray-500/30 shadow-black/30 text-white dark:bg-slate-800 dark:text-white px-2 py-1 border-2 rounded-lg border-gray-500" onClick={() => handleLevelClick('Random')}>Random</button>
-                        <button className="bg-green-500 shadow-lg hover:shadow-green-500/30 shadow-black/30 text-white dark:bg-slate-800 dark:text-white px-2 py-1 border-2 rounded-lg border-green-500" onClick={() => handleLevelClick('Easy')}>Easy</button>
-                        <button className="bg-yellow-500 shadow-lg hover:shadow-yellow-500/30 shadow-black/30 text-white dark:bg-slate-800 dark:text-white px-2 py-1 border-2 rounded-lg border-yellow-500" onClick={() => handleLevelClick('Medium')}>Medium</button>
-                        <button className="bg-red-500 shadow-lg hover:shadow-red-500/30 shadow-black/30 text-white dark:bg-slate-800 dark:text-white px-2 py-1 border-2 rounded-lg border-red-500" onClick={() => handleLevelClick('Hard')}>Hard</button>
+                    <div className="flex px-2 justify-center space-x-2 py-3 bg-gradient-to-t from-[#f5f4fb] to-[#ffffff] dark:from-slate-800 rounded-t-md">
+                        <button
+                            className="bg-gray-500 shadow-lg hover:shadow-gray-500/30 shadow-black/30 text-white dark:bg-slate-800 dark:text-white px-2 py-1 border-2 rounded-lg border-gray-500"
+                            onClick={() => handleLevelClick('Random')}
+                        >
+                            Random
+                        </button>
+                        <button
+                            className="bg-green-500 shadow-lg hover:shadow-green-500/30 shadow-black/30 text-white dark:bg-slate-800 dark:text-white px-2 py-1 border-2 rounded-lg border-green-500"
+                            onClick={() => handleLevelClick('Easy')}
+                        >
+                            Easy
+                        </button>
+                        <button
+                            className="bg-yellow-500 shadow-lg hover:shadow-yellow-500/30 shadow-black/30 text-white dark:bg-slate-800 dark:text-white px-2 py-1 border-2 rounded-lg border-yellow-500"
+                            onClick={() => handleLevelClick('Medium')}
+                        >
+                            Medium
+                        </button>
+                        <button
+                            className="bg-red-500 shadow-lg hover:shadow-red-500/30 shadow-black/30 text-white dark:bg-slate-800 dark:text-white px-2 py-1 border-2 rounded-lg border-red-500"
+                            onClick={() => handleLevelClick('Hard')}
+                        >
+                            Hard
+                        </button>
                     </div>
 
                     <div className="w-full p-0 sm:p-0 md:p-4 lg:p-4 max-w-full mx-auto bg-[#ffffff] dark:bg-slate-800 dark:border-none">
                         {loading ? (
                             <Skeleton1 />
                         ) : (
-                            <div className='lg:mx-4 mx-0 dark:bg-slate-900 dark:text-white dark:border border-2 border-gray-400 rounded-lg overflow-auto'>
+                            <div className="lg:mx-4 mx-0 dark:bg-slate-900 dark:text-white dark:border border-2 border-gray-400 rounded-lg overflow-auto">
                                 <table className="table dark:bg-slate-900 dark:text-white dark:border">
-                                    <thead className='font-semibold text-gray-600 shadow dark:bg-slate-900 dark:text-white'>
+                                    <thead className="font-semibold text-gray-600 shadow dark:bg-slate-900 dark:text-white">
                                         <Sheetheading />
                                     </thead>
                                     <tbody>
                                         {filteredSheetProblems.map((item, index) => (
-                                            <tr key={index} className={`dark:bg-slate-900 dark:text-white border-t-2 border-gray-400 ${checkboxes[item.id] ? 'bg-gray-300' : ''}`}>
-                                                <td className='text-center'>
+                                            <tr
+                                                key={index}
+                                                className={`dark:bg-slate-900 dark:text-white border-t-2 border-gray-400 ${checkboxes[item.id] ? 'bg-gray-300' : ''
+                                                    }`}
+                                            >
+                                                <td className="text-center">
                                                     <label>
                                                         <input
                                                             type="checkbox"
@@ -229,12 +253,18 @@ const CompanyMain = () => {
                                                         />
                                                     </label>
                                                 </td>
-                                                <td className='border-r-2 border-gray-400 border-l-2'><span>{item.name}</span></td>
-                                                <td className='border-r-2 border-gray-400 text-left'>
-                                                    <span className={`${getLevelClass(item.Level)} text-white px-2 py-1 w-16 rounded-lg`}>{item.Level}</span>
+                                                <td className="border-r-2 border-gray-400 border-l-2">
+                                                    <span>{item.name}</span>
                                                 </td>
-                                                <td className='border-r-2 border-gray-400 text-center'>Soon</td>
-                                                <td className='border-r-2 border-gray-400 border-l-2'>
+                                                <td className="border-r-2 border-gray-400 text-left">
+                                                    <span
+                                                        className={`${getLevelClass(item.Level)} text-white px-2 py-1 w-16 rounded-lg`}
+                                                    >
+                                                        {item.Level}
+                                                    </span>
+                                                </td>
+                                                <td className="border-r-2 border-gray-400 text-center">Soon</td>
+                                                <td className="border-r-2 border-gray-400 border-l-2">
                                                     {item.companies ? (
                                                         <button
                                                             className="bg-blue-500 text-white rounded px-2 py-1 ml-2"
@@ -246,20 +276,32 @@ const CompanyMain = () => {
                                                         <span></span>
                                                     )}
                                                 </td>
-                                                <td className='text-center'>
+                                                <td className="text-center">
                                                     <a href={item.link} className="text-red-500 hover:underline">
-                                                        <img src={'leetcode.svg'} alt="LeetCode" className="mx-auto w-[23px]" />
+                                                        <img
+                                                            src={'leetcode.svg'}
+                                                            alt="LeetCode"
+                                                            className="mx-auto w-[23px]"
+                                                        />
                                                     </a>
                                                 </td>
-                                                <td className='border-l-2 border-gray-400 text-center'>
+                                                <td className="border-l-2 border-gray-400 text-center">
                                                     <img
-                                                        src={starredProblems[item.id] ? '/fill-star.svg' : '/empty-start.svg'} alt="Revision" className='cursor-pointer w-[26px] mx-auto' onClick={() => handleStarClick(item.id)} />
+                                                        src={
+                                                            starredProblems[item.id]
+                                                                ? '/fill-star.svg'
+                                                                : '/empty-start.svg'
+                                                        }
+                                                        alt="Revision"
+                                                        className="cursor-pointer w-[26px] mx-auto"
+                                                        onClick={() => handleStarClick(item.id)}
+                                                    />
                                                 </td>
-                                                <td className='border-l-2 border-gray-400'>
+                                                <td className="border-l-2 border-gray-400">
                                                     <img
                                                         src={notesvg}
                                                         alt="Note"
-                                                        className='cursor-pointer w-[26px] mx-auto'
+                                                        className="cursor-pointer w-[26px] mx-auto"
                                                         onClick={() => openNoteModal(item.name)}
                                                     />
                                                 </td>
@@ -271,7 +313,15 @@ const CompanyMain = () => {
                         )}
                     </div>
                 </div>
+
+                {/* Poster */}
+                <div className="w-[250px] h-full pl-10 hidden md:inline sticky top-[100px]">
+                    <a href="/Signup">
+                        <img src="./poster.png" alt="Poster" />
+                    </a>
+                </div>
             </section>
+
 
             {/* Dialog for showing companies */}
             {isDialogOpen && (

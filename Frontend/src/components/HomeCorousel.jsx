@@ -43,23 +43,42 @@ const Carousel = () => {
 export default function App() {
     return (
         <>
+            <div className="relative flex flex-col justify-center items-center w-full dark:bg-slate-900">
+                {/* Description */}
+                <div className="text-center mt-5 px-4">
+                    <h1
+                        className="font-semibold dark:text-white text-4xl pb-2"
+                        id="homecontentcard"
+                    >
+                        Features Which are Available Here
+                    </h1>
+                    <p className="text-gray-600 dark:text-gray-300">
+                        Get all features which are available on this website for users
+                    </p>
+                </div>
 
-            <div className="text-center mt-10">
-                <h1
-                    className="font-semibold dark:text-white text-4xl pb-2"
-                    id="homecontentcard"
+                {/* Laptop Frame */}
+                <div
+                    className="relative w-[90%] max-w-[1024px] aspect-[16/9] bg-no-repeat bg-center mt-8"
+                    style={{
+                        backgroundImage: "url('/framework.png')",
+                        backgroundSize: "contain",
+                    }}
                 >
-                    Features Which are Available Here
-                </h1>
-                <p className="text-gray-600 dark:text-gray-300">
-                    Get all features which are available on this website for users
-                </p>
-            </div>
-            <div className="mx-5 md:mx-auto max-w-[1020px] mt-10 bg-white py-5 md:py-[60px] dark:bg-slate-800 dark:border-gray-600 bg-white dark:border shadow shadow-black/40 rounded-lg ">
-                <div className="mx-auto max-w-screen-lg px-5 md:px-20 flex items-center justify-center ">
-                    <Carousel />
+                    {/* Screen Area */}
+                    <div
+                        className="absolute inset-[8%] md:inset-[10%] overflow-hidden md:px-1 sm:px-5 pb-2 px-2"
+                        style={{
+                            width: "full",
+                            height: "full",
+                        }}
+                    >
+                        <Carousel />
+                    </div>
                 </div>
             </div>
+
+
         </>
     );
 }

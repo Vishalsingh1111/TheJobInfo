@@ -17,7 +17,7 @@ const resources = [
         link: "/Languages",
     },
     {
-        title: "Technical Blogs",
+        title: "Blogs",
         description: "Dive Deep into Tech Innovation with Our Engaging Blogs.",
         buttonText: "Try it free",
         icon: "fa-blog",

@@ -64,14 +64,13 @@ const Navbar = () => {
                 </details>
             </li>
 
-            <li><a href='/Contact'>CONTACT</a></li>
+            <li><a href='/Technical-Blog'>BLOGS</a></li>
 
 
             <li>
                 <details>
                     <summary>MORE</summary>
                     <ul className="bg-base-100 w-48 rounded-t-none rounded-md p-2 dark:bg-slate-900 dark:text-white">
-                        <li><a href='/Technical-Blog'>TECH BLOG</a></li>
                         <li><a href='/Project'>PROJECT IDEAS</a></li>
                         <li><a href='/Contest-Solution'>CONTEST SOLUTION</a></li>
                     </ul>

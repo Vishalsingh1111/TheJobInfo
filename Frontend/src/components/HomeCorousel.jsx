@@ -47,13 +47,13 @@ export default function App() {
                 {/* Description */}
                 <div className="text-center mt-5 px-4">
                     <h1
-                        className="font-semibold dark:text-white text-4xl pb-2"
+                        className="font-semibold text-3xl pb-2 bg-gradient-to-r from-red-600 via-yellow-600 to-green-500 bg-clip-text text-transparent"
                         id="homecontentcard"
                     >
-                        Features Which are Available Here
+                        Discover the Amazing Features Waiting for You !
                     </h1>
                     <p className="text-gray-600 dark:text-gray-300">
-                        Get all features which are available on this website for users
+                        Explore All the Incredible Features Designed Just for You
                     </p>
                 </div>
 

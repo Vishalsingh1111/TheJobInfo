@@ -3,8 +3,8 @@ import React from "react";
 
 export default function Skeleton1() {
     return (
-        <section className="flex items-center flex-col justify-center my-10 px-10 bg-white p-10">
-            <p className="text-[6vmin] mb-10 font-semibold bg-gradient-to-r from-black via-gray-600 to-gray-200 bg-clip-text text-transparent animate-pulse">
+        <section className="flex items-center flex-col justify-center my-10 px-10 dark:bg-slate-800 bg-white p-10">
+            <p className="text-[6vmin] mb-10 font-semibold bg-gradient-to-r from-red-500 via-red-400 to-yellow-500 bg-clip-text text-transparent animate-pulse">
                 LOADING ...
             </p>
             <div className="w-full max-w-[700px] space-y-6 ">

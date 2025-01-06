@@ -63,7 +63,7 @@ function SearchForm() {
 
     return (
         <div className="relative flex flex-col items-center max-w-2xl mx-auto bg-transparent">
-            <form onSubmit={handleSearch} className="w-full flex items-center my-3">
+            <form onSubmit={handleSearch} className="w-full flex items-center my-3 dark:border rounded-md dark:border-gray-600">
                 <label htmlFor="voice-search" className="sr-only">Search</label>
                 <div className="relative w-full">
                     <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">

@@ -75,7 +75,7 @@ function Footer() {
             </footer>
             <footer className='flex sm:flex-row flex-col justify-around py-5 text-gray-400 border-t border-gray-700 dark:border-gray-800 bg-[#222831] dark:bg-slate-900'>
                 <aside className='pt-3 px-20'>
-                    <p>Copyright © 2024 - DCODER</p>
+                    <p>Copyright © 2025 - DCODER</p>
                 </aside>
                 <nav>
                     <div className="grid grid-flow-col px-20 gap-2">

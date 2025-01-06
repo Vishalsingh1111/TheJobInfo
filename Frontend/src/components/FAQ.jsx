@@ -6,11 +6,11 @@ const Accordion = () => {
             <div className="container mx-auto mt-20">
                 <div className="-mx-4 flex flex-wrap justify-center">
                     <div className="w-full px-4">
-                        <div className="mx-auto mb-8 max-w-[520px] text-center lg:mb-8">
-                            <h2 className="mb-4 text-4xl font-[600] text-dark dark:text-white">
-                                Any Questions? Look Here
+                        <div className="mx-auto mb-8 max-w-auto text-center lg:mb-8">
+                            <h2 className="mb-4 text-3xl font-[600] bg-gradient-to-r from-red-600 via-yellow-600 to-green-500 bg-clip-text text-transparent">
+                                Got Questions? Find Your Answers Here !
                             </h2>
-                            <p>Most Frequent Asked Questions, Asked by most of users.</p>
+                            <p>Curated from What Our Users Ask the Most</p>
                         </div>
                     </div>
                 </div>

@@ -34,17 +34,17 @@ function Sheetpage() {
         <>
 
 
-            <div className='flex flex-col sm:flex-row lg:flex-row justify-between  text-2xl font-semibold dark:bg-slate-900 dark:text-white text-gray-700 mb-5 pt-5 pb-5 pl-5 lg:pl-20 dark:from-slate-800'>
+            <div className='flex flex-col sm:flex-row lg:flex-row justify-between  text-2xl font-semibold dark:bg-slate-900 dark:text-white text-gray-700 mb-5 pt-5 pb-5 pl-5 lg:pl-20 dark:from-slate-800 bg-gradient-to-l to-[#F6F7FC] via-green-100 from-green-200 '>
                 <div className='flex flex-col space-y-4'>
-                    <span>SDE SHEET Most Asked Problems.</span>
-                    <span className='text-sm'>Last Updated: August 8, 2024</span>
+                    <span className="bg-gradient-to-r from-red-600 via-yellow-600 to-green-600 bg-clip-text text-transparent">SDE SHEET MOST ASKED IN INTERVIEW</span>
+                    <span className='text-sm text-gray-700 dark:text-gray-300 '><span className="text-red-500">Last Updated : </span> August 28, 2024</span>
                 </div>
                 <div className='lg:w-[580px] mr-2'>
                     <Searchbar />
                 </div>
                 <div className='mt-4 sm:mt-0 lg:mt-4 sm:mr-20 lg:mr-20'>
                     <a href="/AllDSA">
-                        <button className='bg-green-500  text-lg font-300 text-white border dark:bg-slate-900 border-green-500 px-3 py-1.5 rounded-md'>Explore More</button>
+                        <button className='bg-green-500  text-lg font-300 text-white border dark:bg-slate-900 hover:bg-green-600 border-green-600 px-3 py-1.5 rounded-md'>Explore More</button>
                     </a>
                 </div>
             </div>

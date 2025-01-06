@@ -131,10 +131,10 @@ const CScontentfetch = () => {
 
     return (
         <>
-            <div className='flex flex-col sm:flex-row justify-between text-2xl font-semibold dark:bg-slate-900 dark:text-white text-gray-700 mb-5 pt-5 pb-5 px-5 lg:px-20'>
+            <div className='flex flex-col sm:flex-row lg:flex-row justify-between text-2xl font-semibold dark:bg-slate-900 dark:text-white text-gray-700 mb-5 pt-5 pb-5 pl-5 lg:pl-20 dark:from-slate-800 bg-gradient-to-l to-[#F6F7FC] via-blue-100 from-blue-200'>
                 <div className='flex flex-col space-y-2'>
-                    <span>Basic Interview Questions.</span>
-                    <span className='text-sm'>Last Updated: August 8, 2024</span>
+                    <span className="bg-gradient-to-r from-red-600 via-yellow-600 to-green-500 bg-clip-text text-transparent">Basic Interview Questions.</span>
+                    <span className='text-sm text-gray-700 dark:text-gray-300'><span className="text-red-500">Last Updated : </span> August 8, 2024</span>
                 </div>
 
                 <div className="flex justify-center items-center mb-4 w-full md:w-[500px] md:mt-0 mt-5">
@@ -187,9 +187,9 @@ const CScontentfetch = () => {
                     </div>
                 </div>
 
-                <div className='mb-4 sm:mt-0 lg:mt-4 sm:mr-20 lg:mr-[20px]'>
+                <div className='mb-4 sm:mt-0 lg:mt-4 sm:mr-20 lg:ml-[40px]'>
                     <a href="path-to-your-file.pdf" download>
-                        <button className='bg-white text-sm dark:bg-slate-900 text-red-500 border border-red-500 px-5 py-3 rounded-md'>Download PDF</button>
+                        <button className='bg-blue-500 text-sm dark:bg-slate-900 text-white border dark:text-white border-blue-500 px-5 py-3 rounded-md'>Download PDF</button>
                     </a>
                 </div>
 

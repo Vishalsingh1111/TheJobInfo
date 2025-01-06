@@ -39,13 +39,13 @@ function HomeVideo() {
         <div className="relative mt-10 lg:mt-20 px-4 mb-20 justify-center items-center">
             <div className="pb-10 text-center">
                 <h1
-                    className="font-semibold dark:text-white text-4xl pb-2"
+                    className="font-semibold bg-gradient-to-r from-red-600 via-yellow-600 to-green-500 bg-clip-text text-transparent text-3xl pb-2"
                     id="homecontentcard"
                 >
-                    Get Free Youtube Tutorial Video
+                    Enjoy Free YouTube Tutorial Videos, AnyTime !
                 </h1>
                 <p className="text-gray-600 dark:text-gray-300">
-                    Get free YouTube video tutorials of Codes and Problems
+                    Learn Coding and Solve Problems with Ease
                 </p>
             </div>
 

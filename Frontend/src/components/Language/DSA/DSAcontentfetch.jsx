@@ -3,6 +3,7 @@ import axios from 'axios';
 import { baseUrl } from "../../../Baseurl";
 import GetContent from "../GetContent";
 import Skeleton1 from "../../Skeleton";
+import Breadcrumb from "../../Breadcrumb"
 
 const QUESTIONS_PER_PAGE = 10;
 
@@ -117,18 +118,20 @@ const DsaContentFetch = () => {
 
     return (
         <>
-            <div className='flex flex-col sm:flex-row lg:flex-row justify-between text-2xl font-semibold dark:bg-slate-900 dark:text-white text-gray-700 mb-5 pt-5 pb-5 pl-5 lg:pl-20 dark:from-slate-800 bg-gradient-to-l to-[#F6F7FC] via-red-100 from-red-200'>
-                <div className='flex flex-col space-y-4'>
-                    <span className="bg-gradient-to-r from-red-600 via-yellow-600 to-green-500 bg-clip-text text-transparent">Basic Interview Questions – Data Structure & Algorithm</span>
-                    <span className='text-sm text-gray-700 dark:text-gray-300'><span className="text-red-500">Last Updated : </span> August 8, 2024</span>
-                </div>
-                <div className='mt-4 sm:mt-0 lg:mt-4 sm:mr-20 lg:mr-[100px]'>
-                    <a href="path-to-your-file.pdf" download>
-                        <button className='bg-red-500 hover:bg-red-600 text-sm dark:bg-slate-900 text-white border border-red-500 px-5 py-3 rounded-md'>Download PDF</button>
-                    </a>
+            <div className="dark:to-bg-slate-900 dark:from-slate-800 bg-gradient-to-l dark:bg-gradient-to-t to-[#F6F7FC] via-red-100 from-[#F6F7FC] ">
+                <Breadcrumb />
+                <div className='flex flex-col sm:flex-row lg:flex-row justify-between text-2xl font-semibold dark:text-white text-gray-700 mb-5 pt-5 pb-5 pl-5 lg:pl-20 '>
+                    <div className='flex flex-col space-y-4'>
+                        <span className="bg-gradient-to-r from-red-600 via-yellow-600 to-green-500 bg-clip-text text-transparent">Basic Interview Questions – Data Structure & Algorithm</span>
+                        <span className='text-sm text-gray-700 dark:text-gray-300'><span className="text-red-500">Last Updated : </span> August 8, 2024</span>
+                    </div>
+                    <div className='mt-4 sm:mt-0 lg:mt-4 sm:mr-20 lg:mr-[100px]'>
+                        <a href="path-to-your-file.pdf" download>
+                            <button className='bg-red-500 hover:bg-red-600 text-sm dark:bg-slate-900 text-white border border-red-500 px-5 py-3 rounded-md'>Download PDF</button>
+                        </a>
+                    </div>
                 </div>
             </div>
-
 
             <section className="max-w-screen-2xl container pb-5 md:pl-20 px-4  dark:bg-slate-900 dark:text-white lg:pb-[90px] text-center">
                 <div className="mx-auto flex text-left">

@@ -3,6 +3,7 @@ import axios from 'axios';
 import { baseUrl } from "../../../Baseurl";
 import GetContent from "../GetContent";
 import Skeleton1 from "../../Skeleton";
+import Breadcrumb from "../../Breadcrumb";
 
 const QUESTIONS_PER_PAGE = 10;
 
@@ -118,17 +119,19 @@ const CcontentFetch = () => {
     return (
         <>
 
-            <div className='flex flex-col sm:flex-row lg:flex-row justify-between text-2xl font-semibold dark:bg-slate-900 dark:text-white text-gray-700 mb-5 pt-5 pb-5 pl-5 lg:pl-20 dark:from-slate-800 bg-gradient-to-l to-[#F6F7FC] via-red-100 from-red-200'>
-                <div className='flex flex-col space-y-4'>
-                    <span className="bg-gradient-to-r from-red-600 via-yellow-600 to-green-500 bg-clip-text text-transparent">Basic Interview Questions – C Programming</span>
-                    <span className='text-sm text-gray-700 dark:text-gray-300'><span className="text-red-500">Last Updated : </span> July 20, 2024</span>
-                </div>
-                <div className='mt-4 sm:mt-0 lg:mt-4 sm:mr-20 lg:mr-[100px]'>
-                    <a href="path-to-your-file.pdf" download>
-                        <button className='bg-red-500 hover:bg-red-600 text-sm dark:bg-slate-900 text-white border border-red-500 px-5 py-3 rounded-md'>Download PDF</button>
-                    </a>
-                </div>
-            </div>
+            <div className="dark:to-bg-slate-900 dark:from-slate-800 bg-gradient-to-l dark:bg-gradient-to-t to-[#F6F7FC] via-red-100 from-[#F6F7FC] ">
+                <Breadcrumb />
+                <div className='flex flex-col sm:flex-row lg:flex-row justify-between text-2xl font-semibold dark:text-white text-gray-700 mb-5 pt-5 pb-5 pl-5 lg:pl-20 '>
+                    <div className='flex flex-col space-y-4'>
+                        <span className="bg-gradient-to-r from-red-600 via-yellow-600 to-green-500 bg-clip-text text-transparent">Basic Interview Questions – C Programming</span>
+                        <span className='text-sm text-gray-700 dark:text-gray-300'><span className="text-red-500">Last Updated : </span> July 20, 2024</span>
+                    </div>
+                    <div className='mt-4 sm:mt-0 lg:mt-4 sm:mr-20 lg:mr-[100px]'>
+                        <a href="path-to-your-file.pdf" download>
+                            <button className='bg-red-500 hover:bg-red-600 text-sm dark:bg-slate-900 text-white border border-red-500 px-5 py-3 rounded-md'>Download PDF</button>
+                        </a>
+                    </div>
+                </div></div>
 
             {/* <div className="relative mx-auto w-[350px] md:w-[600px] lg:w-[600px] hidden md:block">
                 <span className="absolute rounded-full top-0 left-0 h-0.5 w-full bg-gradient-to-r from-blue-500 via-yellow-500 to-red-500"></span>

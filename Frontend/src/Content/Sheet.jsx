@@ -14,7 +14,6 @@ function Sheet() {
     return (
         <>
             <Navbar />
-            <Breadcrumb />
             <Sheetpage />
             <Footer />
         </>

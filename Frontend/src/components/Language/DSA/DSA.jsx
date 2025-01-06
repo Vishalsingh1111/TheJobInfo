@@ -8,7 +8,6 @@ function DSA() {
     return (
         <>
             <Navbar />
-            <Breadcrumb />
             <DSAcontentfetch />
             <Footer />
         </>

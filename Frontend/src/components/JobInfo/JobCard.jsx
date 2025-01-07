@@ -16,7 +16,6 @@ const Jobcard = ({ item, onClick }) => {
                     <div className='flex flex-grow flex-col bg-gradient-to-t from-[#ffffff] to-[#ffffff] p-6 pt-2 rounded-md space-y-3 dark:from-slate-800'>
                         <h3 className="mt-2 text-xl">{truncateText(item.header, 40)}</h3>
                         <p className="text-gray-600 dark:text-gray-400">{truncateText(item.text, 60)}</p>
-                        <p className='text-red-500'>Read More ..</p>
                     </div>
                 </div>
             </div>

@@ -50,7 +50,7 @@ const Navbar = () => {
             </li>
 
 
-            <li><a href='/'>JOB INFO</a></li>
+            <li><a href='/JobPage'>JOB INFO</a></li>
 
 
             <li>

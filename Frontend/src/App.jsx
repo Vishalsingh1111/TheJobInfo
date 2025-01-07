@@ -38,6 +38,8 @@ import NewUpdatedSheet from '../src/Content/Sheet';
 import CompanyWiseSheet from './components/CompanyWise/CompanyMain';
 import Top50dsaProb from './components/Top50dsaProb/Top50Sheetcard';
 import Contributeblog from './components/TechBlogs/UserContribution';
+import JobPage from './components/JobInfo/JobPage';
+import JobDetail from './components/JobInfo/JobDetail';
 
 
 const App = () => {
@@ -80,6 +82,8 @@ const App = () => {
           <Route path='/Contibuteblog' element={authUser ? <Contributeblog /> : <Navigate to="/Signup" />}></Route>
           <Route path='/detail/:id' element={<BlogDetail />}></Route>
           <Route path='/Projectpage' element={<Projectpage />}></Route>
+          <Route path='/JobPage' element={<JobPage />}></Route>
+          <Route path='/jobdetail/:id' element={<JobDetail />}></Route>
           <Route path='/projectdetail/:id' element={<Projectdetail />}></Route>
           <Route path='/contestdetail/:id' element={<ContestSoldetail />}></Route>
           <Route path='/Dashboard' element={authAdmin ? <DashBoard /> : <Navigate to="/Adminlogin" />}></Route>

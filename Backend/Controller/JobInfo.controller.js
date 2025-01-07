@@ -1,4 +1,4 @@
-import JobInfo from "../Modal/JobInfo.modal";
+import JobInfo from "../Modal/JobInfo.modal.js";
 
 export const getJobInfo = async (req, res) => {
     try {

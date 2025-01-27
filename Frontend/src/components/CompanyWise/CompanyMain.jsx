@@ -161,22 +161,16 @@ const CompanyMain = () => {
     return (
         <>
             <Navbar />
-
             <div className="dark:to-bg-slate-900 dark:from-slate-800 bg-gradient-to-l dark:bg-gradient-to-t to-[#F6F7FC] via-blue-100 from-[#F6F7FC] ">
                 <Breadcrumb />
-                <div className='flex flex-col sm:flex-row lg:flex-row justify-between text-2xl font-semibold dark:text-white text-gray-700 mb-5 pt-5 pb-5 pl-5 lg:pl-20 '>
+                <div className='flex flex-col sm:flex-row lg:flex-row justify-left text-2xl font-semibold dark:text-white text-gray-700 mb-5 pt-5 pb-5 pl-5 lg:pl-20 '>
                     <div className='flex flex-col space-y-2'>
 
                         <span className="bg-gradient-to-r from-red-600 via-yellow-600 to-green-600 bg-clip-text text-transparent">Sde Sheet Based On Company</span>
                         <span className='text-sm text-gray-700 dark:text-gray-300'><span className="text-red-500">Last Updated : </span> August 18, 2024</span>
                     </div>
-                    <div className='lg:w-[580px] mr-2'>
+                    <div className='lg:w-[680px] md:ml-32 mr-2'>
                         <Searchbar />
-                    </div>
-                    <div className='mt-4 sm:mt-0 lg:mt-4 sm:mr-20 lg:mr-20'>
-                        <a href="/AllDSA">
-                            <button className='bg-blue-500  text-lg font-300 text-white border dark:bg-slate-900 border-blue-600 hover:bg-blue-600 px-3 py-1.5 rounded-md'>Explore More</button>
-                        </a>
                     </div>
                 </div>
             </div>

@@ -34,7 +34,7 @@ function Sheetpage() {
 
     return (
         <>
-            <div className="dark:to-bg-slate-900 dark:from-slate-800 bg-gradient-to-l dark:bg-gradient-to-t to-[#F6F7FC] via-green-100 from-[#F6F7FC] ">
+            <div className="dark:to-bg-slate-900 dark:from-slate-800 bg-gradient-to-l dark:bg-gradient-to-t to-[#F6F7FC] via-blue-100 from-[#F6F7FC] ">
                 <Breadcrumb />
                 <div className='flex flex-col sm:flex-row lg:flex-row justify-between text-2xl font-semibold dark:text-white text-gray-700 mb-5 pt-5 pb-5 pl-5 lg:pl-20 '>
                     <div className='flex flex-col space-y-2'>
@@ -46,7 +46,7 @@ function Sheetpage() {
                     </div>
                     <div className='mt-4 sm:mt-0 lg:mt-4 sm:mr-20 lg:mr-20'>
                         <a href="/AllDSA">
-                            <button className='bg-green-500  text-lg font-300 text-white border dark:bg-slate-900 border-green-600 hover:bg-green-600 px-3 py-1.5 rounded-md'>Explore More</button>
+                            <button className='bg-blue-500  text-lg font-300 text-white border dark:bg-slate-900 border-blue-600 hover:bg-blue-600 px-3 py-1.5 rounded-md'>Explore More</button>
                         </a>
                     </div>
                 </div>

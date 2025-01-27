@@ -36,7 +36,7 @@ function HomeVideo() {
     };
 
     return (
-        <div className="relative mt-10 lg:mt-20 px-4 mb-20 justify-center items-center">
+        <div className="relative mt-10 lg:mt-20 px-4 justify-center items-center">
             <div className="pb-10 text-center">
                 <h1
                     className="font-semibold bg-gradient-to-r from-red-600 via-yellow-600 to-green-500 bg-clip-text text-transparent text-3xl pb-2"

@@ -127,7 +127,7 @@ const DbmsContentFetch = () => {
                         <span className='text-sm text-gray-700 dark:text-gray-300'><span className="text-red-500">Last Updated : </span> October 18, 2024</span>
                     </div>
                     <div className='mt-4 sm:mt-0 lg:mt-4 sm:mr-20 lg:mr-[100px]'>
-                        <a href="path-to-your-file.pdf" download>
+                        <a href="/SQL.pdf" download>
                             <button className='bg-red-500 hover:bg-red-600 text-sm dark:bg-slate-900 text-white border border-red-500 px-5 py-3 rounded-md'>Download PDF</button>
                         </a>
                     </div>

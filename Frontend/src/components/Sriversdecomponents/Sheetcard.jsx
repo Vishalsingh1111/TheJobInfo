@@ -45,15 +45,15 @@ function Sheetcard({ item }) {
     };
 
     return (
-        <div className={`lg:mt-5 rounded-lg shadow-sm shadow-black/20 dark:bg-slate-900 dark:text-white`}>
+        <div className={`lg:mt-5 rounded-lg border border-gray-400 dark:bg-slate-900 dark:text-white`}>
             <div className="bg-gray-600 h-1 rounded-t-full" style={{ width: `${(item.completedProblems / item.Problems) * 100}%` }}></div>
-            <div className={`flex rounded items-center dark:from-slate-800 justify-between py-2 lg:px-10 px-5 cursor-pointer bg-gradient-to-t from-[#f5f4fb] to-[#ffffff]`} onClick={toggleAccordion}>
+            <div className={`flex rounded items-center dark:from-slate-800 justify-between py-2 lg:px-10 px-5 cursor-pointer dark:bg-slate-800 bg-[#f5f4fb]`} onClick={toggleAccordion}>
                 <div className="flex flex-col">
-                    <h3 className="md:text-xl text-md text-gray-600 text-red-600 dark:text-white"><span className='text-gray-600 text-xl mr-5'>👉 </span> {item.name} <span className='text-gray-600 dark:text-white'>Problems </span></h3>
+                    <h3 className="md:text-xl text-md text-gray-600 text-gray-600 dark:text-white"><span className='text-gray-600 md:text-xl text-md mr-5'>👉 </span> {item.name} <span className='text-gray-600 dark:text-white'>Problems </span></h3>
                 </div>
                 <div className='flex space-x-5'>
                     <div className='mt-2'>
-                        <span className="p-1 w-6 h-6 text-red-600 rounded-md border border-gray-600 dark:bg-slate-700 dark:text-gray-300 px-2 py-1.5"><span className='text-gray-600 dark:text-white hidden md:inline'>Total Problems : </span>{item.completedProblems}{item.Problems}</span>
+                        <span className="p-1 w-6 h-6 text-red-600 rounded-md border border-gray-600 dark:bg-slate-700 dark:text-gray-300 px-2 py-1.5"><span className='text-gray-600 dark:text-white hidden md:inline'>Problems : </span>{item.completedProblems}{item.Problems}</span>
                     </div>
                     <button className="p-1.5 border-2 bg-gray-600 border-gray-600 text-white rounded-md dark:bg-slate-700 dark:text-gray-300">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className={`w-6 h-6 transform transition-transform ${isOpen ? 'rotate-180' : ''}`}>
@@ -64,8 +64,8 @@ function Sheetcard({ item }) {
             </div>
 
             {isOpen && (
-                <div className={`w-full dark:bg-slate-800 bg-white rounded dark:text-white dark:border-none sm:px-0 py-5 md:px-4`}>
-                    <div className='lg:mt-[-65px] lg:ml-[30%] lg:absolute lg:p-0 px-6 pb-5 justify-center space-x-2 dark:from-slate-800 rounded-t-md'>
+                <div className={`w-full dark:bg-slate-800 bg-[#f5f4fb] rounded dark:text-white dark:border-none sm:px-0 py-5 md:px-4`}>
+                    <div className='lg:mt-[-65px] lg:ml-[30%] lg:absolute lg:p-0 px-1 pb-5 justify-center space-x-2 dark:from-slate-800 rounded-t-md'>
                         <button className="bg-gray-500 shadow-lg hover:shadow-gray-500/30 shadow-black/30 text-white dark:bg-slate-800 dark:text-white px-2 py-1 border-2 rounded-lg border-gray-500" onClick={() => handleLevelClick('Random')}>Random</button>
                         <button className="bg-green-500 shadow-lg hover:shadow-green-500/30 shadow-black/30 text-white dark:bg-slate-800 dark:text-white px-2 py-1 border-2 rounded-lg border-green-500" onClick={() => handleLevelClick('Easy')}>Easy</button>
                         <button className="bg-yellow-500 shadow-lg hover:shadow-yellow-500/30 shadow-black/30 text-white dark:bg-slate-800 dark:text-white px-2 py-1 border-2 rounded-lg border-yellow-500" onClick={() => handleLevelClick('Medium')}>Medium</button>

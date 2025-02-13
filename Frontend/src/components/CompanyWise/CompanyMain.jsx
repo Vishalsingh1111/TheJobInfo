@@ -13,7 +13,7 @@ import Footer from "../Footer";
 const CompanyMain = () => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [activeSection, setActiveSection] = useState("Google");
+    const [activeSection, setActiveSection] = useState("Accenture");
     const [checkboxes, setCheckboxes] = useState({});
     const [starredProblems, setStarredProblems] = useState({});
     const [notesArray, setNotesArray] = useState({});
@@ -161,42 +161,47 @@ const CompanyMain = () => {
     return (
         <>
             <Navbar />
-            <div className="dark:to-bg-slate-900 dark:from-slate-800 bg-gradient-to-l dark:bg-gradient-to-t to-[#F6F7FC] via-blue-100 from-[#F6F7FC] ">
+
+            <div className="dark:bg-gradient-to-t dark:from-slate-800 dark:to-slate-900 bg-gradient-to-b to-blue-100 from-[#fff]">
                 <Breadcrumb />
-                <div className='flex flex-col sm:flex-row lg:flex-row justify-left text-2xl font-semibold dark:text-white text-gray-700 mb-5 pt-5 pb-5 pl-5 lg:pl-20 '>
-                    <div className='flex flex-col space-y-2'>
-
-                        <span className="bg-gradient-to-r from-red-600 via-yellow-600 to-green-600 bg-clip-text text-transparent">Sde Sheet Based On Company</span>
-                        <span className='text-sm text-gray-700 dark:text-gray-300'><span className="text-red-500">Last Updated : </span> August 18, 2024</span>
+                <div className='text-center justify-center mx-auto font-semibold dark:text-white text-gray-700 pb-2 '>
+                    <div>
+                        <span className="bg-gradient-to-r px-3 text-3xl pb-2 from-red-600 via-yellow-600 to-green-600 bg-clip-text text-transparent">Sde Sheet Based On Company</span>
                     </div>
-                    <div className='lg:w-[680px] md:ml-32 mr-2'>
-                        <Searchbar />
+                </div>
+
+
+                <div className="w-full mx-auto md:px-[120px] pb-1">
+                    {/* Scrollable Horizontal Navbar */}
+                    <div className="flex overflow-x-auto whitespace-nowrap mb-4  dark:text-white  py-3 px-1 rounded-sm ">
+                        {companyButtons
+                            .slice()
+                            .sort((a, b) => a.localeCompare(b)).map((company) => (
+                                <button
+                                    key={company}
+                                    className={`text-md mx-0.5 px-3 py-1 ${activeSection === company ? "text-white border dark:text-white rounded-sm bg-red-500 border-red-500" : "text-gray-900  dark:text-white  dark:border-white rounded-sm border border-gray-900"}`}
+                                    onClick={() => handleSectionChange(company)}
+                                >
+                                    {company}
+                                </button>
+                            ))}
                     </div>
                 </div>
             </div>
 
-            <div className="w-full mx-auto md:px-20 pb-1 mb-4">
-                {/* Scrollable Horizontal Navbar */}
-                <div className="flex overflow-x-auto whitespace-nowrap mb-4 dark:bg-slate-900 dark:text-white  py-3 px-2 rounded-sm ">
-                    {companyButtons.map((company) => (
-                        <button
-                            key={company}
-                            className={`text-md mx-0.5 px-3 py-1 ${activeSection === company ? "text-white border dark:text-white rounded-sm bg-red-500 border-red-500" : "text-gray-900  dark:text-white  dark:border-white rounded-sm border border-gray-900"}`}
-                            onClick={() => handleSectionChange(company)}
-                        >
-                            {company}
-                        </button>
-                    ))}
-                </div>
+            <div className='lg:w-[800px] mx-auto justify-center dark:bg-slate-800 bg-blue-100 px-3 pb-3 mb-20 md:rounded-b-full '>
+                <Searchbar />
             </div>
 
-            <section className="relative max-w-screen-2xl flex container md:pl-20 px-4 overflow-visible dark:bg-slate-900 dark:text-white lg:pb-[90px] lg:pt-[10px] text-center">
+
+
+            <section className="relative max-w-screen-2xl flex container md:px-[130px]  px-2 overflow-visible dark:bg-slate-900 dark:text-white lg:pb-[90px] lg:pt-[10px] text-center">
 
                 {/* Data Table */}
-                <div className="w-full md:w-[1060px] text-left border-2 border-gray-400 dark:border-none dark:bg-slate-800 border-gray-200 rounded-lg">
+                <div className="w-full text-left border-2 border-gray-400 dark:border-none dark:bg-slate-800 border-gray-200 rounded-lg">
 
                     {/* Level Buttons */}
-                    <div className="flex px-2 justify-center space-x-2 py-3 bg-gradient-to-t from-[#f5f4fb] to-[#ffffff] dark:from-slate-800 rounded-t-md">
+                    <div className="flex px-2 justify-center space-x-1 py-3 bg-[#f5f4fb] dark:bg-slate-800 rounded-t-md">
                         <button
                             className="bg-gray-500 shadow-lg hover:shadow-gray-500/30 shadow-black/30 text-white dark:bg-slate-800 dark:text-white px-2 py-1 border-2 rounded-lg border-gray-500"
                             onClick={() => handleLevelClick('Random')}
@@ -223,11 +228,11 @@ const CompanyMain = () => {
                         </button>
                     </div>
 
-                    <div className="w-full p-0 sm:p-0 md:p-4 lg:p-4 max-w-full mx-auto bg-[#ffffff] dark:bg-slate-800 dark:border-none">
+                    <div className="w-full p-0 sm:p-0 md:p-4 lg:p-4 max-w-full mx-auto bg-[#f5f4fb] dark:bg-slate-800 dark:border-none">
                         {loading ? (
                             <Skeleton1 />
                         ) : (
-                            <div className="lg:mx-4 mx-0 dark:bg-slate-900 dark:text-white dark:border border-2 border-gray-400 rounded-lg overflow-auto">
+                            <div className="lg:mx-4 mx-2 bg-[#ffffff] dark:bg-slate-900 dark:text-white dark:border border-2 border-gray-400 rounded-lg overflow-auto">
                                 <table className="table dark:bg-slate-900 dark:text-white dark:border">
                                     <thead className="font-semibold text-gray-600 shadow dark:bg-slate-900 dark:text-white">
                                         <Sheetheading />
@@ -308,13 +313,6 @@ const CompanyMain = () => {
                             </div>
                         )}
                     </div>
-                </div>
-
-                {/* Poster */}
-                <div className="w-[250px] h-full pl-10 hidden md:inline sticky top-[100px]">
-                    <a href="/Signup">
-                        <img src="./poster.png" alt="Poster" />
-                    </a>
                 </div>
             </section>
 

@@ -101,6 +101,10 @@ function HomeVideo() {
                     />
                 </button>
             </div>
+            <div className="mx-auto text-center">
+                <button><a href='https://www.youtube.com/channel/UCEdVltuHd8O6hrPKJh_lAIA'><button className="border border-red-500 py-2 rounded-md text-white mb-10 px-4 mt-6 group bg-red-500 shadow-lg hover:shadow-red-500/30 shadow-black/30">Explore Youtube</button></a></button>
+            </div>
+
         </div>
     );
 }

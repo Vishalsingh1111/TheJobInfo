@@ -2,8 +2,8 @@ import React, { useState } from "react";
 
 const Accordion = () => {
     return (
-        <section className="max-w-5xl container mx-auto md:px-20 px-4 relative z-20 overflow-hidden bg-transparent pb-4 dark:bg-slate-900 dark:text-white lg:pb-[30px] lg:pt-[50px] text-center ">
-            <div className="container mx-auto mt-20">
+        <section className="max-w-5xl container mx-auto md:px-20 px-4 relative z-20 overflow-hidden bg-transparent pb-4 dark:bg-slate-900 dark:text-white lg:pb-[30px] lg:pt-[20px] text-center ">
+            <div className="container mx-auto mt-10">
                 <div className="-mx-4 flex flex-wrap justify-center">
                     <div className="w-full px-4">
                         <div className="mx-auto mb-8 max-w-auto text-center lg:mb-8">

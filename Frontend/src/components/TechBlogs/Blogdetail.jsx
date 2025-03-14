@@ -5,7 +5,6 @@ import CodeSnippet from "../CodeSnippet/CodeSnippet";
 import Navbar from '../Navbar';
 import Footer from '../Footer';
 import Breadcrumb from '../Breadcrumb';
-import SearchForm from '../Searchbar';
 import { baseUrl } from '../../Baseurl';
 import Skeleton1 from '../Skeleton';
 
@@ -56,7 +55,6 @@ const BlogDetail = () => {
             <>
                 <Navbar />
                 <Breadcrumb />
-                <SearchForm />
                 <Skeleton1 />
                 <Footer />
             </>
@@ -126,12 +124,7 @@ const BlogDetail = () => {
         <>
             <Navbar />
             <Breadcrumb />
-            <SearchForm />
-            <div className="flex justify-center my-2 md:fixed top-[120px] right-10">
-                <button className="bg-green-500 text-lg text-white shadow-lg hover:shadow-green-500/30 shadow-black/30 py-2 px-4 rounded-xl">
-                    <a href="/Contibuteblog">Contribute <br />a Blog</a>
-                </button>
-            </div>
+
 
             <div className="pt-[50px] mx-auto max-w-screen-2xl md:px-20 px-4 py-5">
                 <div className="flex flex-col gap-10">
@@ -175,6 +168,11 @@ const BlogDetail = () => {
                 </div>
             </div>
 
+            <div className="flex justify-center mb-10 ">
+                <button className="bg-green-500 text-lg text-white shadow-lg hover:shadow-green-500/30 shadow-black/30 py-5 px-20 rounded-xl">
+                    <a href="/Contibuteblog">Contribute a Blog</a>
+                </button>
+            </div>
 
             <Footer />
         </>

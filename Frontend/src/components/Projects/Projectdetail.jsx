@@ -7,10 +7,9 @@ import CodeSnippet from '../CodeSnippet/CodeSnippet';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
 import Breadcrumb from '../Breadcrumb';
-import SearchForm from '../Searchbar';
 import { baseUrl } from '../../Baseurl';
 import Skeleton1 from '../Skeleton';
-import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
+
 
 const ProjectDetail = () => {
     const { id } = useParams();
@@ -125,7 +124,6 @@ const ProjectDetail = () => {
             <div>
                 <Navbar />
                 <Breadcrumb />
-                <SearchForm />
                 <Skeleton1 />
                 <Footer />
             </div>
@@ -136,7 +134,6 @@ const ProjectDetail = () => {
         <>
             <Navbar />
             <Breadcrumb />
-            <SearchForm />
             <div className="mx-auto max-w-screen-xl text-gray-600 dark:text-white md:px-20 px-4 py-5">
                 <div className="w-full p-3 sm:p-5 md:p-8 lg:p-10 max-w-[1000px] mx-auto border-t md:shadow-sm md:shadow-black/30  rounded-xl bg-[rgb(255,255,255)] dark:bg-slate-800 dark:border-none mt-3">
                     <h2 className="text-2xl text-center font-semibold mb-4">{item.header}</h2>

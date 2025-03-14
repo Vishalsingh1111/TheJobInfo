@@ -7,7 +7,6 @@ import Commentbox from '../Commentbox';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
 import Breadcrumb from '../Breadcrumb';
-import SearchForm from '../Searchbar';
 import { baseUrl } from '../../Baseurl';
 import Skeleton1 from '../Skeleton';
 
@@ -43,7 +42,6 @@ const ContestDetail = () => {
             <>
                 <Navbar />
                 <Breadcrumb />
-                <SearchForm />
                 <Skeleton1 />
                 <Footer />
             </>
@@ -85,7 +83,6 @@ const ContestDetail = () => {
         <>
             <Navbar />
             <Breadcrumb />
-            <SearchForm />
             <div className="pt-[50px] mx-auto max-w-screen-2xl md:px-20 px-4 py-5">
                 <div className='flex flex-col lg:flex-col gap-10 '>
                     <div className="w-full p-3 sm:p-5 md:p-8 lg:p-10 max-w-[1030px] mx-auto border-t md:shadow-sm md:shadow-black/30  rounded-xl bg-[rgb(255,255,255)] dark:bg-slate-800 dark:border-none mt-3">

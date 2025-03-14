@@ -5,7 +5,6 @@ import notesvg from '../../../public/note.svg';
 import NoteModal from '../Sriversdecomponents/Keepnote';
 import Sheetheading from "../Sriversdecomponents/Sheetheading";
 import Skeleton1 from "../Skeleton";
-import Searchbar from "../Searchbar";
 import Navbar from "../Navbar";
 import Breadcrumb from "../Breadcrumb";
 import Footer from "../Footer";
@@ -162,9 +161,9 @@ const CompanyMain = () => {
         <>
             <Navbar />
 
-            <div className="dark:bg-gradient-to-t dark:from-slate-800 dark:to-slate-900 bg-gradient-to-b to-blue-100 from-[#fff]">
+            <div className="dark:bg-gradient-to-t dark:from-slate-800 dark:to-slate-900 bg-gradient-to-b to-blue-100 from-[#fff] mb-10">
                 <Breadcrumb />
-                <div className='text-center justify-center mx-auto font-semibold dark:text-white text-gray-700 pb-2 '>
+                <div className='text-center justify-center mx-auto font-semibold dark:text-white text-gray-700 pb-5 '>
                     <div>
                         <span className="bg-gradient-to-r px-3 text-3xl pb-2 from-red-600 via-yellow-600 to-green-600 bg-clip-text text-transparent">Sde Sheet Based On Company</span>
                     </div>
@@ -187,10 +186,6 @@ const CompanyMain = () => {
                             ))}
                     </div>
                 </div>
-            </div>
-
-            <div className='lg:w-[800px] mx-auto justify-center dark:bg-slate-800 bg-blue-100 px-3 pb-3 mb-20 md:rounded-b-full '>
-                <Searchbar />
             </div>
 
 

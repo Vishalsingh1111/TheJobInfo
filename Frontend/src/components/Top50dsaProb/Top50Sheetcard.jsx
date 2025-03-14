@@ -5,7 +5,6 @@ import notesvg from '/note.svg';
 import NoteModal from '../Sriversdecomponents/Keepnote';
 import Sheetheading from "../Sriversdecomponents/Sheetheading";
 import Skeleton1 from "../Skeleton";
-import Searchbar from "../Searchbar";
 import Navbar from "../Navbar";
 import Breadcrumb from "../Breadcrumb";
 import Footer from "../Footer";
@@ -132,16 +131,12 @@ const Top100dsaProb = () => {
             <div className="dark:bg-gradient-to-t dark:from-slate-800 dark:to-slate-900 bg-gradient-to-b to-blue-100 from-[#fff]">
 
                 <Breadcrumb />
-                <div className='text-center justify-center mx-auto font-semibold dark:text-white text-gray-700 pb-2 '>
+                <div className='text-center justify-center mx-auto font-semibold dark:text-white text-gray-600 pb-5 mb-10 '>
                     <div className='flex flex-col'>
                         <span className="bg-gradient-to-r px-3 text-3xl pb-3 from-red-600 via-yellow-600 to-green-600 bg-clip-text text-transparent">Top 50 Coding Problem For Interview</span>
-                        <span className=" text-lg pb-2 text-gray-700 ">"A curated list of the top 50 coding problems for interviews to enhance your preparation."</span>
+                        <span className=" text-lg pb-2 text-gray-600 ">"A curated list of the top 50 coding problems for interviews to enhance your preparation."</span>
                     </div>
                 </div>
-            </div>
-
-            <div className='lg:w-[800px] mx-auto justify-center dark:bg-slate-800 bg-blue-100 px-3 pb-3 mb-20 md:rounded-b-full '>
-                <Searchbar />
             </div>
 
 

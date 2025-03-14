@@ -4,7 +4,6 @@ import axios from 'axios';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
 import Breadcrumb from '../Breadcrumb';
-import SearchForm from '../Searchbar';
 import { baseUrl } from '../../Baseurl';
 import Skeleton1 from '../Skeleton';
 
@@ -104,7 +103,7 @@ const JobDetail = () => {
             <div>
                 <Navbar />
                 <Breadcrumb />
-                <SearchForm />
+
                 <Skeleton1 />
                 <Footer />
             </div>
@@ -115,7 +114,7 @@ const JobDetail = () => {
         <>
             <Navbar />
             <Breadcrumb />
-            <SearchForm />
+
             <div className="mx-auto max-w-screen-xl text-gray-600 dark:text-white md:px-20 px-4 py-5">
                 <div className="w-full p-3 sm:p-5 md:p-8 lg:p-10 max-w-[1000px] mx-auto border-t md:shadow-sm md:shadow-black/30  rounded-xl bg-[rgb(255,255,255)] dark:bg-slate-800 dark:border-none mt-3">
                     <h2 className="text-2xl text-center font-semibold mb-4">{item.header}</h2>
@@ -123,7 +122,7 @@ const JobDetail = () => {
                         <div className="py-5 md:px-10 text-center">
                             <img src={mainImage} alt="Description of main image" className="max-w-full mx-auto" />
                             <div className="mt-5">
-                                <span className="text-2xl text-red-600">Title: {item.figtitle}</span>
+                                <span className="text-sm text-red-600">Title: {item.figtitle}</span>
                             </div>
                         </div>
                     )}
@@ -190,8 +189,8 @@ const JobDetail = () => {
                         )
                     ))}
                     <div className='mt-10 text-center flex justify-start space-x-5'>
-                        <Link to={item.link1} className='px-2 py-2 bg-red-500 text-sm text-white shadow-lg hover:shadow-red-500/30 shadow-black/30 py-3 px-4 rounded-md'>Click to Download from GitHub</Link>
-                        <Link to={item.link2} className='px-2 py-2 bg-green-500 text-sm text-white shadow-lg hover:shadow-green-500/30 shadow-black/30 py-3 px-4 rounded-md'>Watch Live Job</Link>
+                        <Link to={item.link1} className='px-2 py-2 bg-red-500 text-sm text-white shadow-lg hover:shadow-red-500/30 shadow-black/30 py-3 px-4 rounded-md'>View Details</Link>
+
                     </div>
                 </div>
 

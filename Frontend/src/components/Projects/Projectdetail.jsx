@@ -263,7 +263,7 @@ const ProjectDetail = () => {
                 </div>
 
                 <div className="my-20 mx-auto max-w-screen-lg ">
-                    <h2 className="text-4xl text-center mb-8 text-red-500">Recent Projects</h2>
+                    <h1 className="text-gray-600 mb-10 text-3xl dark:text-white md:text-5xl font-[900] text-center">Recent <span className="text-red-500">Projects</span></h1>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  gap-8">
                         {items
                             .filter(item => item.id !== parseInt(id))

@@ -119,23 +119,19 @@ const CcontentFetch = () => {
     return (
         <>
 
-            <div className="dark:to-bg-slate-900 dark:from-slate-800 bg-gradient-to-l dark:bg-gradient-to-t to-[#F6F7FC] via-red-100 from-[#F6F7FC] ">
+            <div className="dark:bg-gradient-to-t dark:from-slate-800 dark:to-slate-900 bg-gradient-to-b to-blue-100 from-[#fff] pb-8">
                 <Breadcrumb />
-                <div className='flex flex-col sm:flex-row lg:flex-row justify-between text-2xl font-semibold dark:text-white text-gray-700 mb-5 pt-5 pb-5 pl-5 lg:pl-20 '>
+                <div className='flex flex-col sm:flex-row lg:flex-row justify-between dark:text-white text-gray-700 pt-5  pl-5 lg:pl-20 '>
                     <div className='flex flex-col space-y-4'>
-                        <span className="bg-gradient-to-r from-red-600 via-yellow-600 to-green-500 bg-clip-text text-transparent">Basic Interview Questions – C Programming</span>
-                        <span className='text-sm text-gray-700 dark:text-gray-300'><span className="text-red-500">Last Updated : </span> July 20, 2024</span>
+                        <span className=" justify-between md:pl-10 text-[4.5vmax] md:text-[5.5vmin] font-extrabold text-gray-600 dark:text-white">Basic Interview Questions – <span className="text-red-500">C Programming</span></span>
                     </div>
                     <div className='mt-4 sm:mt-0 lg:mt-4 sm:mr-20 lg:mr-[100px]'>
                         <a href="path-to-your-file.pdf" download>
-                            <button className='bg-red-500 hover:bg-red-600 text-sm dark:bg-slate-900 text-white border border-red-500 px-5 py-3 rounded-md'>Download PDF</button>
+                            <button className='bg-red-500 hover:bg-red-600 text-sm text-white border border-red-500 px-[2vmin] py-[1.5vmin] rounded-md'>Download PDF</button>
                         </a>
                     </div>
                 </div></div>
 
-            {/* <div className="relative mx-auto w-[350px] md:w-[600px] lg:w-[600px] hidden md:block">
-                <span className="absolute rounded-full top-0 left-0 h-0.5 w-full bg-gradient-to-r from-blue-500 via-yellow-500 to-red-500"></span>
-            </div> */}
 
             <section className="max-w-screen-2xl container pb-5 md:pl-20 px-4  dark:bg-slate-900 dark:text-white lg:pb-[90px] text-center">
                 <div className="mx-auto flex text-left">
@@ -150,11 +146,11 @@ const CcontentFetch = () => {
                     </div>
 
                     {/* Poster */}
-                    <div className="w-[240px] h-full ml-32 pt-5 hidden md:inline sticky top-[80px] ">
+                    {/* <div className="w-[240px] h-full ml-32 pt-5 hidden md:inline sticky top-[80px] ">
                         <a href="/Signup">
                             <img src="./poster.png" alt="Poster" />
                         </a>
-                    </div>
+                    </div> */}
                 </div>
 
                 {/* Pagination Controls */}

@@ -35,7 +35,7 @@ const ContactForm = () => {
             <div className="py-16 px-8 ">
                 <Toaster />
                 <div className="max-w-screen-xl container mx-auto md:px-20 px-4 mx-auto">
-                    <h2 className="md:text-6xl text-4xl font-semibold text-gray-700 mt-10 mx-auto text-center dark:text-white">Get In Touch</h2>
+                    <h1 className="font-[750] text-center text-gray-700 text-[4.5vmax] mt-10 md:text-[6.5vmin] pb-2 dark:text-white mx-auto" id='homecontentcard'>Get In <span className='text-red-500'>Touch</span></h1>
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 pt-10 md:pt-20">
                         {/* Contact Info */}
                         <div>

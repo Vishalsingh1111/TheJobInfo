@@ -26,7 +26,7 @@ const ContactSection = () => {
                         alt="Avatar 3"
                     />
                 </div>
-                <h2 className="text-xl font-semibold text-[#484B54] dark:text-white mb-2">Still have questions?</h2>
+                <h2 className="text-2xl font-bold text-red-500 dark:text-white mb-2">Still have questions?</h2>
                 <p className="text-[#484B54] dark:text-white mb-6">Can't find the answer you're looking for? Please chat to our friendly team.</p>
                 <a href="/Contact" className="inline-block bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg hover:shadow-red-500/30 shadow-black/30 transition duration-300">
                     Get in Touch

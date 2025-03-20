@@ -133,8 +133,7 @@ const Top100dsaProb = () => {
                 <Breadcrumb />
                 <div className='text-center justify-center mx-auto font-semibold dark:text-white text-gray-600 pb-5 mb-10 '>
                     <div className='flex flex-col'>
-                        <span className="bg-gradient-to-r px-3 text-3xl pb-3 from-red-600 via-yellow-600 to-green-600 bg-clip-text text-transparent">Top 50 Coding Problem For Interview</span>
-                        <span className=" text-lg pb-2 text-gray-600 ">"A curated list of the top 50 coding problems for interviews to enhance your preparation."</span>
+                        <span className=" justify-center text-[4.5vmax] md:text-[5.5vmin] font-extrabold text-gray-600 dark:text-white"><span className="text-red-500">Top 50 </span>Coding Problem For Interview</span>
                     </div>
                 </div>
             </div>

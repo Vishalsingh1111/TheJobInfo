@@ -6,17 +6,12 @@ const Service = () => {
     return (
         <>
             <Navbar />
-            <section className="lg:pb-[10px] lg:pt-[50px] mt-20 max-w-screen-xl container mx-auto md:px-20 px-4 dark:bg-slate-900 dark:text-white">
+            <section className="lg:pb-[10px] lg:pt-[50px] max-w-screen-xl container mx-auto md:px-20 px-0 dark:bg-slate-900 dark:text-white">
                 <div className="container mx-auto">
                     <div className="-mx-4 flex flex-wrap">
                         <div className="w-full px-4 h-auto">
                             <div className="mx-auto mb-5 max-w-auto text-center lg:mb-8">
-                                <h2 className="mb-3 text-4xl font-[500] text-dark dark:text-white sm:text-4xl md:text-[40px]">
-                                    What will You Get ?
-                                </h2>
-                                <p className="text-base text-body-color dark:text-dark-6">
-                                    There are many variations types of content which is going to help you to enhance your skill.
-                                </p>
+                                <h1 className="font-[750] text-center text-gray-700 text-[4.5vmax] md:text-[6.5vmin] pt-10 pb-2 dark:text-white mx-auto" id='homecontentcard'>What will You <span className='text-red-500'> Get ?</span></h1>
                             </div>
                         </div>
                     </div>

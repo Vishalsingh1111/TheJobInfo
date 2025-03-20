@@ -38,11 +38,12 @@ function Sheetpage() {
                 <Breadcrumb />
                 <div className='text-center justify-center mx-auto font-semibold dark:text-white text-gray-700 pb-5 mb-0 '>
                     <div className='flex flex-col'>
-                        <span className="bg-gradient-to-r px-3 text-3xl pb-3 from-red-600 via-yellow-600 to-green-600 bg-clip-text text-transparent">Sde Sheet Most Asked In Interview</span>
-                        <span className=" text-lg pb-2 text-gray-600 ">"A comprehensive SDE sheet featuring the most frequently asked interview questions to help you prepare effectively."</span>
+                        <span className=" justify-center text-[4.5vmax] md:text-[5.5vmin] font-extrabold text-gray-600 dark:text-white"><span className="text-red-500">SDE Sheet </span>Most Asked In Interview</span>
                     </div>
                 </div>
             </div>
+
+
 
             <div className='max-w-screen-2xl container my-10 md:px-[130px] px-2 mb-10 lg:mb-10 sm:mb-3 dark:bg-slate-900 dark:text-white'>
                 <div className='flex justify-center'>

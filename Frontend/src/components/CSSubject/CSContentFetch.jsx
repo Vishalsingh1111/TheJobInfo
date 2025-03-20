@@ -132,71 +132,71 @@ const CScontentfetch = () => {
 
     return (
         <>
-            <div className="dark:to-bg-slate-900 dark:from-slate-800 bg-gradient-to-l dark:bg-gradient-to-t to-[#F6F7FC] via-blue-100 from-[#F6F7FC] ">
+
+            <div className="dark:to-bg-slate-900 dark:from-slate-800 bg-gradient-to-l dark:bg-gradient-to-t to-[#F6F7FC] via-blue-100 from-[#F6F7FC] pb-8 ">
                 <Breadcrumb />
-                <div className='flex flex-col sm:flex-row lg:flex-row justify-between text-2xl font-semibold dark:text-white text-gray-700 mb-5 pt-5 pb-5 pl-5 lg:pl-20 '>
-                    <div className='flex flex-col space-y-2'>
-                        <span className="bg-gradient-to-r from-red-600 via-yellow-600 to-green-500 bg-clip-text text-transparent">Basic Interview Questions.</span>
-                        <span className='text-sm text-gray-700 dark:text-gray-300'><span className="text-red-500">Last Updated : </span> August 8, 2024</span>
+                <div className='flex flex-col sm:flex-row lg:flex-row justify-between dark:text-white text-gray-700 pt-2  pl-5 lg:pl-20 '>
+                    <div className='flex flex-col space-y-4'>
+                        <span className=" justify-between md:pl-10 text-[4.5vmax] md:text-[5.5vmin] font-extrabold text-gray-600 dark:text-white">Basic <span className="text-red-500">Interview</span>  Questions</span>
                     </div>
-
-                    <div className="flex justify-center items-center mb-4 w-full md:w-[500px] md:mt-0 mt-5">
-                        <div className="relative w-full" ref={dropdownRef}>
-                            <button
-                                className="inline-flex justify-between w-full rounded-md border border-gray-300 shadow-sm px-4 py-3 bg-white dark:bg-slate-900 text-sm font-medium text-gray-700 dark:text-white hover:bg-gray-50 dark:hover:bg-slate-700"
-                                onClick={() => setDropdownOpen(!dropdownOpen)}
-                            >
-                                {activeSection === "os" ? "Operating System" : "Computer Network"}
-                                <svg
-                                    className="-mr-1 ml-2 h-5 w-5"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 20 20"
-                                    fill="currentColor"
-                                    aria-hidden="true"
-                                >
-                                    <path
-                                        fillRule="evenodd"
-                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 011.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                        clipRule="evenodd"
-                                    />
-                                </svg>
-                            </button>
-
-                            {/* Dropdown menu */}
-                            {dropdownOpen && (
-                                <div className="absolute right-0 z-10 mt-2 w-full rounded-md shadow-lg bg-white dark:bg-slate-800">
-                                    <div className="py-1 border rounded-lg" role="menu" aria-orientation="vertical">
-                                        <button
-                                            className={`block w-full text-left px-4 py-3 border-b text-sm ${activeSection === "os" ? "text-red-500 bg-gray-100 dark:bg-slate-700" : "text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-slate-700"}`}
-                                            onClick={() => {
-                                                handleSectionChange("os");
-                                                setDropdownOpen(false);
-                                            }}
-                                        >
-                                            Operating System
-                                        </button>
-                                        <button
-                                            className={`block w-full text-left px-4 py-3 text-sm ${activeSection === "cn" ? "text-red-500 bg-gray-100 dark:bg-slate-700" : "text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-slate-700"}`}
-                                            onClick={() => {
-                                                handleSectionChange("cn");
-                                                setDropdownOpen(false);
-                                            }}
-                                        >
-                                            Computer Network
-                                        </button>
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-                    </div>
-
-                    <div className='mb-4 sm:mt-0 lg:mt-4 sm:mr-20 lg:ml-[40px]'>
+                    <div className='mt-4 sm:mt-0 lg:mt-4 sm:mr-20 lg:mr-[100px]'>
                         <a href="path-to-your-file.pdf" download>
-                            <button className='bg-blue-500 text-sm dark:bg-slate-900 text-white border dark:text-white border-blue-500 px-5 py-3 rounded-md'>Download PDF</button>
+                            <button className='bg-red-500 hover:bg-red-600 text-sm text-white border border-red-500 px-[2vmin] py-[1.5vmin] rounded-md'>Download PDF</button>
                         </a>
                     </div>
-
                 </div></div>
+
+
+
+            <div className="flex justify-center items-center mb-0 w-full md:w-[500px] mt-5 mx-auto">
+                <div className="relative w-full" ref={dropdownRef}>
+                    <button
+                        className="inline-flex justify-between w-full rounded-md border border-gray-300 shadow-sm px-4 py-3 bg-white dark:bg-slate-900 text-sm font-medium text-gray-700 dark:text-white hover:bg-gray-50 dark:hover:bg-slate-700"
+                        onClick={() => setDropdownOpen(!dropdownOpen)}
+                    >
+                        {activeSection === "os" ? "Operating System" : "Computer Network"}
+                        <svg
+                            className="-mr-1 ml-2 h-5 w-5"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                            aria-hidden="true"
+                        >
+                            <path
+                                fillRule="evenodd"
+                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 011.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                clipRule="evenodd"
+                            />
+                        </svg>
+                    </button>
+
+                    {/* Dropdown menu */}
+                    {dropdownOpen && (
+                        <div className="absolute right-0 z-10 mt-2 w-full rounded-md shadow-lg bg-white dark:bg-slate-800">
+                            <div className="py-1 border rounded-lg" role="menu" aria-orientation="vertical">
+                                <button
+                                    className={`block w-full text-left px-4 py-3 border-b text-sm ${activeSection === "os" ? "text-red-500 bg-gray-100 dark:bg-slate-700" : "text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-slate-700"}`}
+                                    onClick={() => {
+                                        handleSectionChange("os");
+                                        setDropdownOpen(false);
+                                    }}
+                                >
+                                    Operating System
+                                </button>
+                                <button
+                                    className={`block w-full text-left px-4 py-3 text-sm ${activeSection === "cn" ? "text-red-500 bg-gray-100 dark:bg-slate-700" : "text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-slate-700"}`}
+                                    onClick={() => {
+                                        handleSectionChange("cn");
+                                        setDropdownOpen(false);
+                                    }}
+                                >
+                                    Computer Network
+                                </button>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            </div>
 
             <section className="max-w-screen-2xl container pb-5 md:pl-20 px-4  dark:bg-slate-900 dark:text-white lg:pb-[90px] text-center">
                 <div className="mx-auto flex text-left">
@@ -211,11 +211,11 @@ const CScontentfetch = () => {
                     </div>
 
                     {/* Poster */}
-                    <div className="w-[240px] h-full ml-32 pt-5 hidden md:inline sticky top-[80px] ">
+                    {/* <div className="w-[240px] h-full ml-32 pt-5 hidden md:inline sticky top-[80px] ">
                         <a href="/Signup">
                             <img src="./poster.png" alt="Poster" />
                         </a>
-                    </div>
+                    </div> */}
                 </div>
 
                 {/* Pagination Controls */}

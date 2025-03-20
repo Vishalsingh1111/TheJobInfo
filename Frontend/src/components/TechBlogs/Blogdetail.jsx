@@ -139,7 +139,7 @@ const BlogDetail = () => {
 
 
             <div className="pt-[80px] mx-auto max-w-full md:px-[220px] px-4 py-5">
-                <h1 className="text-red-500 mb-10 text-4xl font-semibold text-center">Recent Uploaded</h1>
+                <h1 className="text-gray-600 mb-10 text-3xl dark:text-white md:text-5xl font-[900] text-center">Recent <span className="text-red-500">Content</span></h1>
                 <div className=" md:top-20 ">
                     <div className="grid sm:grid-cols-1 lg:grid-cols-2 gap-10 ">
                         {items

@@ -82,8 +82,7 @@ const ResourceCard = ({ title, description, buttonText, icon, link }) => {
 const ResourceGrid = () => (
     <div className="p-6 max-w-[1270px] container mx-auto md:px-20 px-4">
         <div className="pb-10 text-center">
-            <h1 className="font-[600] bg-gradient-to-r from-red-600 via-yellow-600 to-green-500 bg-clip-text text-transparent text-3xl pb-2 " id='homecontentcard'>Courses Offered For Your Preparation</h1>
-            <p>Python, Java, C, C++, DSA , Sheet, Blog etc.</p>
+            <h1 className="font-[750] text-gray-700 text-2xl md:text-4xl pb-2 dark:text-white" id='homecontentcard'>Courses Offered For Your <span className='text-red-500'>Preparation</span></h1>
         </div>
         <div className="max-w-screen-xl container mx-auto">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

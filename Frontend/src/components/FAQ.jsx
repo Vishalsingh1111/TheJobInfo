@@ -66,11 +66,11 @@ const AccordionItem = ({ header, text }) => {
                     </h4>
                 </div>
 
-                <div className=" flex h-10 w-full max-w-[40px] items-center justify-center rounded-md bg-red-500 group-hover:shadow-lg group-hover:shadow-black/40 dark:bg-white/5">
+                <div className=" m-2 flex h-8 w-full max-w-[40px] items-center justify-center rounded-md bg-red-500 group-hover:shadow-lg group-hover:shadow-black/40 dark:bg-white/5">
                     <svg
                         className={`fill-white stroke-white duration-200 ease-in-out ${active ? "rotate-180" : ""
                             }`}
-                        width="17"
+                        width="10"
                         height="10"
                         viewBox="0 0 17 10"
                         xmlns="http://www.w3.org/2000/svg"

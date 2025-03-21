@@ -50,7 +50,7 @@ function HomeVideo() {
                     <img
                         src="left.png"
                         alt="Previous"
-                        className="md:w-[60px] w-10 md:h-[60px] h-10 cursor-pointer hover:opacity-80"
+                        className="md:w-[50px] w-5 md:h-[50px] h-5 cursor-pointer hover:opacity-80"
                     />
                 </button>
 
@@ -64,7 +64,7 @@ function HomeVideo() {
                         allowFullScreen
                         title="YouTube Project Tutorial"
                         aria-label="YouTube Project Tutorial Video"
-                        className="w-full lg:w-[600px] h-[240px] lg:h-[380px] p-5 lg:p-8 mb-5 dark:bg-slate-800 dark:border-gray-600 bg-white dark:border shadow shadow-black/40 rounded-lg"
+                        className="w-[60vmin] lg:w-[80vmin] h-[45vmin] lg:h-[48vmin] p-[4vmin] lg:p-[4vmin] mb-5 dark:bg-slate-800 dark:border-gray-600 bg-white dark:border shadow shadow-black/40 rounded-lg"
                     ></iframe>
                 ) : videos.length > 0 ? (
                     <iframe
@@ -75,7 +75,7 @@ function HomeVideo() {
                         allowFullScreen
                         title="YouTube Project Tutorial"
                         aria-label="YouTube Project Tutorial Video"
-                        className="w-full lg:w-[600px] h-[240px] lg:h-[380px] p-5 lg:p-8 mb-5 dark:bg-slate-800 dark:border-gray-600 bg-white dark:border shadow shadow-black/40 rounded-lg"
+                        className="w-[65vmin] lg:w-[80vmin] h-[45vmin] lg:h-[48vmin] p-[4vmin] lg:p-[4vmin] mb-5 dark:bg-slate-800 dark:border-gray-600 bg-white dark:border shadow shadow-black/40 rounded-lg"
                     ></iframe>
                 ) : (
                     <p className="text-red-500">No video available.</p>
@@ -89,7 +89,7 @@ function HomeVideo() {
                     <img
                         src="right.png"
                         alt="Next"
-                        className="md:w-[60px] w-10 md:h-[60px] h-10  cursor-pointer hover:opacity-80"
+                        className="md:w-[50px] w-5 md:h-[50px] h-5  cursor-pointer hover:opacity-80"
                     />
                 </button>
             </div>

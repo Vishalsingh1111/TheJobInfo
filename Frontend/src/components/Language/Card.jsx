@@ -31,9 +31,9 @@ function Card({ item }) {
                         </div>
                     </div>
                     <div className='bg-gradient-to-t from-[#ffffff] to-[#ffffff] p-6 pt-1 rounded-lg dark:from-slate-800'>
-                        <h2 className="mt-4 text-xl font-semibold text-black dark:text-white">{item.name}</h2>
-                        <p className="mt-2 text-sm text-gray-600 dark:text-white">{item.title}</p>
-                        <button className="mt-4 px-4 py-2 border text-red-500 border-red-400 dark:border-white rounded-md group-hover:shadow-lg group-hover:bg-red-500 group-hover:text-white group-hover:shadow-black/30 group-hover:border-red-500 transition-colors dark:text-white">
+                        <h2 className="mt-4 text-xl font-semibold text-gray-600 dark:text-white">{item.name}</h2>
+                        <p className="mt-2 text-md text-gray-600 dark:text-white">{item.title}</p>
+                        <button className="mt-4 px-[1.5vmin] py-[1vmin] border text-red-500 border-red-400 dark:border-white rounded-md group-hover:shadow-lg group-hover:bg-red-500 group-hover:text-white group-hover:shadow-black/30 group-hover:border-red-500 transition-colors dark:text-white">
                             {"Click to Open"} &rarr;
                         </button>
                     </div>

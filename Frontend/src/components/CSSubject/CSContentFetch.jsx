@@ -137,7 +137,7 @@ const CScontentfetch = () => {
                 <Breadcrumb />
                 <div className='flex flex-col sm:flex-row lg:flex-row justify-between dark:text-white text-gray-700 pt-2  pl-5 lg:pl-20 '>
                     <div className='flex flex-col space-y-4'>
-                        <span className=" justify-between md:pl-10 text-[4.5vmax] md:text-[5.5vmin] font-extrabold text-gray-600 dark:text-white">Basic <span className="text-red-500">Interview</span>  Questions</span>
+                        <span className=" justify-between md:pl-10 text-[4.5vmax] md:text-[5.5vmin] font-bold text-gray-600 dark:text-white">Basic <span className="text-red-500">Interview</span>  Questions</span>
                     </div>
                     <div className='mt-4 sm:mt-0 lg:mt-4 sm:mr-20 lg:mr-[100px]'>
                         <a href="path-to-your-file.pdf" download>

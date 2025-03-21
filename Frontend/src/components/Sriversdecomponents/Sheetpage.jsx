@@ -38,7 +38,7 @@ function Sheetpage() {
                 <Breadcrumb />
                 <div className='text-center justify-center mx-auto font-semibold dark:text-white text-gray-700 pb-5 mb-0 '>
                     <div className='flex flex-col'>
-                        <span className=" justify-center text-[4.5vmax] md:text-[5.5vmin] font-extrabold text-gray-600 dark:text-white"><span className="text-red-500">SDE Sheet </span>Most Asked In Interview</span>
+                        <span className=" justify-center text-[4.5vmax] md:text-[5.5vmin] titillium-web-bold text-gray-600 dark:text-white"><span className="text-red-500">SDE Sheet </span>Most Asked In Interview</span>
                     </div>
                 </div>
             </div>

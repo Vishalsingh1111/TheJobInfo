@@ -79,15 +79,15 @@ function Sheetproblems({ item }) {
                         />
                     </label>
                 </td>
-                <td className='border-r-2 border-gray-400 border-l-2'><span>{item.name}</span></td>
+                <td className='border-r-2 border-gray-400 titillium-web-regular border-l-2'><span>{item.name}</span></td>
                 <td className='border-r-2 border-gray-400 text-left'>
-                    <span className={`${getLevelClass(item.Level)} text-white px-2 py-1 w-16 rounded-md`}>{item.Level}</span>
+                    <span className={`${getLevelClass(item.Level)} text-white px-2 titillium-web-regular py-1 w-16 rounded-md`}>{item.Level}</span>
                 </td>
-                <td className='border-r-2 border-gray-400 text-center'><Link to={item.article}>Soon</Link></td>
+                <td className='border-r-2 border-gray-400 titillium-web-regular text-center'><Link to={item.article}>Soon</Link></td>
                 <td className='border-r-2 border-gray-400 border-l-2'>
                     {companiesArray ? (
                         <button
-                            className="bg-blue-500 text-white rounded px-2 py-1 ml-2"
+                            className="bg-blue-500 text-white titillium-web-regular rounded px-2 py-1 ml-2"
                             onClick={handleShowClick}
                         >
                             Show

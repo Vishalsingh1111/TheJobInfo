@@ -133,7 +133,7 @@ const Top100dsaProb = () => {
                 <Breadcrumb />
                 <div className='text-center justify-center mx-auto font-semibold dark:text-white text-gray-600 pb-5 mb-10 '>
                     <div className='flex flex-col'>
-                        <span className=" justify-center text-[4.5vmax] md:text-[5.5vmin] font-extrabold text-gray-600 dark:text-white"><span className="text-red-500">Top 50 </span>Coding Problem For Interview</span>
+                        <span className=" justify-center text-[4.5vmax] md:text-[5.5vmin] font-bold text-gray-600 dark:text-white"><span className="text-red-500">Top 50 </span>Coding Problem For Interview</span>
                     </div>
                 </div>
             </div>

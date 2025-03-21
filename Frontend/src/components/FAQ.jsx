@@ -7,7 +7,7 @@ const Accordion = () => {
                 <div className="-mx-4 flex flex-wrap justify-center">
                     <div className="w-full px-4">
                         <div className="mx-auto mb-8 max-w-auto text-center lg:mb-3">
-                            <h1 className="font-[750] text-gray-700 text-2xl md:text-4xl pb-2 dark:text-white" id='homecontentcard'>Got Questions? Find Your <span className='text-red-500'> Answers Here !</span></h1>
+                            <h1 className="titillium-web-semibold text-gray-600 text-3xl md:text-4xl pb-2 dark:text-white" id='homecontentcard'>Got Questions? Find Your <span className='text-red-500'> Answers Here !</span></h1>
 
                         </div>
                     </div>
@@ -55,13 +55,13 @@ const AccordionItem = ({ header, text }) => {
         setActive(!active);
     };
     return (
-        <div className=" w-full border-b dark:border-1 border-gray-400 px-4 py-3  dark:text-white sm:p-8 lg:px-6 xl:px-8 dark:border-gray-600">
+        <div className=" w-full border-b dark:border-1 border-gray-400 px-4 py-2  dark:text-white sm:p-8 lg:px-6 xl:px-8 dark:border-gray-600">
             <button
                 className={`faq-btn flex w-full text-left group hover`}
                 onClick={() => handleToggle()}
             >
                 <div className="w-full">
-                    <h4 className="mt-1 sm:text-md lg:text-xl text-[#484B54] font-semibold text-dark dark:text-white">
+                    <h4 className="mt-1 sm:text-md lg:text-xl text-gray-600 titillium-web-semibold text-dark dark:text-white">
                         {header}
                     </h4>
                 </div>
@@ -90,7 +90,7 @@ const AccordionItem = ({ header, text }) => {
                 className={` duration-200 ease-in-out ${active ? "block" : "hidden"
                     }`}
             >
-                <p className="py-3 text-md leading-relaxed text-[#484B54]  dark:text-white dark:text-dark-6">
+                <p className="py-3 text-md leading-relaxed text-[#484B54] titillium-web-regular dark:text-white dark:text-dark-6">
                     {text}
                 </p>
             </div>

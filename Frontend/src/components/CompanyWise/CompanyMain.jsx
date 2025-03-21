@@ -165,7 +165,7 @@ const CompanyMain = () => {
                 <Breadcrumb />
                 <div className='text-center justify-center mx-auto font-semibold dark:text-white text-gray-700 pb-5 '>
                     <div>
-                        <span className=" justify-center text-[4.5vmax] md:text-[5.5vmin] font-extrabold text-gray-600 dark:text-white">Sde Sheet Based On <span className="text-red-500">Company </span></span>
+                        <span className=" justify-center text-[4.5vmax] md:text-[5.5vmin] font-bold text-gray-600 dark:text-white">Sde Sheet Based On <span className="text-red-500">Company </span></span>
                     </div>
                 </div>
 

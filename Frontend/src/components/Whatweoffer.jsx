@@ -11,7 +11,7 @@ const Service = () => {
                     <div className="-mx-4 flex flex-wrap">
                         <div className="w-full px-4 h-auto">
                             <div className="mx-auto mb-5 max-w-auto text-center lg:mb-8">
-                                <h1 className="font-[750] text-center text-gray-700 text-[4.5vmax] md:text-[6.5vmin] pt-10 pb-2 dark:text-white mx-auto" id='homecontentcard'>What will You <span className='text-red-500'> Get ?</span></h1>
+                                <h1 className="titillium-web-bold text-center text-gray-600 text-[4.5vmax] md:text-[6.5vmin] pt-10 pb-2 dark:text-white mx-auto" id='homecontentcard'>What will You <span className='text-red-500'> Get ?</span></h1>
                             </div>
                         </div>
                     </div>

@@ -49,11 +49,11 @@ function Sheetcard({ item }) {
             <div className="bg-gray-600 h-1 rounded-t-full" style={{ width: `${(item.completedProblems / item.Problems) * 100}%` }}></div>
             <div className={`flex rounded items-center dark:from-slate-800 justify-between py-2 lg:px-10 px-5 cursor-pointer dark:bg-slate-800 bg-[#f5f4fb]`} onClick={toggleAccordion}>
                 <div className="flex flex-col">
-                    <h3 className="md:text-xl text-md text-gray-600 text-gray-600 dark:text-white"><span className='text-gray-600 md:text-xl text-md mr-5'>👉 </span> {item.name} <span className='text-gray-600 dark:text-white'>Problems </span></h3>
+                    <h3 className="md:text-xl text-md text-gray-600 text-gray-600 dark:text-white titillium-web-regular"><span className='text-gray-600 md:text-xl  text-md mr-5'>👉 </span> {item.name} <span className='text-gray-600 titillium-web-regular dark:text-white'>Problems </span></h3>
                 </div>
                 <div className='flex space-x-5'>
                     <div className='mt-2'>
-                        <span className="p-1 w-6 h-6 text-red-600 rounded-md border border-gray-600 dark:bg-slate-700 dark:text-gray-300 px-2 py-1.5"><span className='text-gray-600 dark:text-white hidden md:inline'>Problems : </span>{item.completedProblems}{item.Problems}</span>
+                        <span className="p-1 w-6 h-6 text-red-600 rounded-md border border-gray-600 dark:bg-slate-700 dark:text-gray-300 px-2 py-1.5"><span className='text-gray-600 titillium-web-regular dark:text-white hidden md:inline'>Problems : </span>{item.completedProblems}{item.Problems}</span>
                     </div>
                     <button className="p-1.5 border-2 bg-gray-600 border-gray-600 text-white rounded-md dark:bg-slate-700 dark:text-gray-300">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className={`w-6 h-6 transform transition-transform ${isOpen ? 'rotate-180' : ''}`}>

@@ -38,8 +38,7 @@ function HomeVideo() {
     return (
         <div className="relative mt-10 lg:mt-20 px-4 justify-center items-center">
             <div className="pb-10 text-center">
-                <h1 className="font-[750] text-gray-700 text-2xl md:text-4xl pb-2 dark:text-white" id='homecontentcard'>Enjoy Free <span className='text-red-500'>YouTube Tutorial </span>Videos, AnyTime !</h1>
-
+                <h1 className="titillium-web-semibold text-gray-600 text-3xl md:text-4xl pb-2 dark:text-white" id='homecontentcard'>Enjoy Free <span className='text-red-500'>YouTube Tutorial </span>Videos, AnyTime !</h1>
             </div>
 
             <div className="relative w-full flex justify-center items-center">

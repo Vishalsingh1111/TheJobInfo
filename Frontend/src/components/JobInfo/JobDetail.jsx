@@ -196,21 +196,21 @@ const JobDetail = () => {
 
                 <div className="my-20 mx-auto max-w-screen-lg ">
                     <h1 className="text-gray-600 mb-10 text-3xl dark:text-white md:text-5xl titillium-web-bold text-center">Recent <span className="text-red-500">Jobs</span></h1>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  gap-8">
+                    <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3  gap-4">
                         {items
                             .filter(item => item.id !== parseInt(id))
                             .slice(0, visibleCount)
                             .map((Job, index) => (
                                 <div
                                     key={index}
-                                    className="border-t bg-[#ffffff] flex flex-col min-h-[400px] flex-grow border border-gray-300 dark:border-gray-600 dark:border group hover:shadow hover:shadow-black/30 rounded-md cursor-pointer hover:shadow-lg dark:bg-slate-900 dark:text-white"
+                                    className="border-t bg-[#ffffff] flex flex-col min-h-[50vmin] flex-grow border border-gray-300 dark:border-gray-600 dark:border group hover:shadow hover:shadow-black/30 rounded-md cursor-pointer hover:shadow-lg dark:bg-slate-900 dark:text-white"
                                     onClick={() => handleCardClick(Job.id)}
                                 >
-                                    <img src={Job.image1} alt="Job" className="w-full object-cover p-6 pb-0 rounded-t" />
-                                    <div className='flex-grow bg-gradient-to-t from-[[#ffffff]] to-[#ffffff] p-6 pt-2 rounded-b-md space-y-3 dark:from-slate-800 '>
-                                        <h3 className="mt-2 text-xl">{truncateText(Job.header, 40)}</h3>
-                                        <p className="text-gray-600 dark:text-gray-400">{truncateText(Job.text, 60)}</p>
-                                        <p className='text-red-500'>Read More .. </p></div>
+                                    <img src={Job.image1} alt="Job" className="w-full object-cover h-[25vmin] p-[3vmin] pb-0 rounded-t" />
+                                    <div className='flex-grow bg-gradient-to-t from-[[#ffffff]] to-[#ffffff] p-[3vmin] pt-2 rounded-b-md space-y-3 dark:from-slate-800 '>
+                                        <h3 className="mt-2 text-[2.3vmin] font-semibold text-gray-600 dark:text-white">{truncateText(Job.header, 40)}</h3>
+                                        <p className="text-gray-500 text-[2vmin] dark:text-gray-400">{truncateText(Job.text, 60)}</p>
+                                        <p className='text-red-500 text-[2vmin]'>Read More .. </p></div>
                                 </div>
                             ))}
                     </div>

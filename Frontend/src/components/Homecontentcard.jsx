@@ -61,7 +61,7 @@ const ResourceCard = ({ title, description, buttonText, icon, link }) => {
 
     return (
         <a href={link} className="block group">
-            <div className="bg-white rounded-lg border-t shadow-md shadow-black/30 transition-colors dark:border dark:bg-slate-900 dark:text-white dark:border-gray-600">
+            <div className="bg-white rounded-lg border-2 transition-colors dark:border-2 dark:bg-slate-900 dark:text-white dark:border-gray-600">
                 <div className="px-5 pb-5 pt-2 bg-gradient-to-t rounded-md dark:from-slate-800">
                     <div className={`w-[10vmin] h-[9vmin] mt-2 mb-3 flex items-center justify-center ${bgColor} border text-[5vmin] rounded-lg dark:bg-slate-700`}>
                         <i className={`fas ${icon}`}></i>
@@ -78,7 +78,7 @@ const ResourceCard = ({ title, description, buttonText, icon, link }) => {
 };
 
 const ResourceGrid = () => (
-    <div className="p-6 max-w-[1270px] container mx-auto md:px-20 px-4">
+    <div className="p-6 max-w-[1250px] container mx-auto md:px-20 px-4">
         <div className="pb-10 text-center">
             <h1 className="titillium-web-semibold text-gray-600 text-3xl md:text-4xl pb-2 dark:text-white" id='homecontentcard'>Courses Offered For Your <span className='text-red-500'>Preparation</span></h1>
         </div>

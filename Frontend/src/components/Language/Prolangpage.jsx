@@ -24,11 +24,11 @@ function Content() {
 
     return (
         <>
-            <div className="max-w-screen-xl container mx-auto mb-10 px-4 md:px-20">
+            <div className="max-w-[1250px] container mx-auto mb-10 px-4 md:px-20">
                 {loading ? (
                     <Skeleton1 />
                 ) : (
-                    <div className="my-20 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div className="my-10 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         {note.map((item) => (
                             <Card key={item.id} item={item} />
                         ))}

@@ -36,7 +36,8 @@ const Projectpage = () => {
             {loading ? (
                 <Skeleton1 />
             ) : (
-                <div className="my-20 mx-auto max-w-full lg:max-w-screen-xl  grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 px-4 md:px-[120px]">
+
+                <div className="my-10 mx-auto max-w-[1250px]  grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4 px-4 md:px-[120px]">
                     {data.map(item => (
                         <Projectcard key={item.id} item={item} onClick={() => handleCardClick(item.id)} />
                     ))}

@@ -119,7 +119,7 @@ const CcontentFetch = () => {
     return (
         <>
 
-            <div className="dark:bg-gradient-to-t dark:from-slate-800 dark:to-slate-900 bg-gradient-to-b to-blue-100 from-[#fff] pb-8">
+            <div className="dark:bg-gradient-to-t dark:from-slate-800 dark:to-slate-900 bg-gradient-to-b to-red-50 from-[#fff] pb-8">
                 <Breadcrumb />
                 <div className='flex flex-col sm:flex-row lg:flex-row justify-between dark:text-white text-gray-700 pt-5  pl-5 lg:pl-20 '>
                     <div className='flex flex-col space-y-4'>

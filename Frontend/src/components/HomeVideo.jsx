@@ -36,12 +36,14 @@ function HomeVideo() {
     };
 
     return (
-        <div className="relative mt-10 lg:mt-20 px-4 justify-center items-center">
+        <div className="relative mt-10 lg:mt-20  justify-center items-center">
+
             <div className="pb-10 text-center">
                 <h1 className="titillium-web-semibold text-gray-600 text-3xl md:text-4xl pb-2 dark:text-white" id='homecontentcard'>Enjoy Free <span className='text-red-500'>YouTube Tutorial </span>Videos, AnyTime !</h1>
             </div>
 
-            <div className="relative w-full flex justify-center items-center">
+            {/* <div className='bg-gradient-to-b from-white via-red-50 to-white dark:from-slate-900 dark:via-slate-900 dark:to-slate-900 pt-10'> */}
+            <div className="relative w-full flex justify-center items-center pt-5">
                 {/* Left Button */}
                 <button
                     onClick={handlePrev}
@@ -96,8 +98,9 @@ function HomeVideo() {
             <div className="mx-auto text-center">
                 <button><a href='https://www.youtube.com/channel/UCEdVltuHd8O6hrPKJh_lAIA'><button className="border border-red-500 py-2 rounded-md text-white mb-10 px-4 mt-6 group bg-red-500 shadow-lg hover:shadow-red-500/30 shadow-black/30">Explore Youtube</button></a></button>
             </div>
-
         </div>
+
+        // </div>
     );
 }
 

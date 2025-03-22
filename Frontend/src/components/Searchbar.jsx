@@ -62,7 +62,7 @@ function SearchForm() {
     };
 
     return (
-        <div className="relative flex flex-col items-center max-w-2xl mx-auto bg-transparent">
+        <div className="relative flex flex-col items-center max-w-2xl mx-auto">
             <form onSubmit={handleSearch} className="w-full flex items-center my-3 dark:border rounded-md dark:border-gray-600">
                 <label htmlFor="voice-search" className="sr-only">Search</label>
                 <div className="relative w-full">
@@ -75,14 +75,14 @@ function SearchForm() {
                     <input
                         type="text"
                         id="voice-search"
-                        className="bg-white border border-gray-300 text-gray-900 text-sm rounded-md block w-full pl-10 p-3 dark:bg-slate-800 dark:border-none dark:placeholder-white dark:text-white"
+                        className="bg-transparent border border-gray-400 text-gray-900 text-sm rounded-md block w-full pl-10 p-3 dark:bg-slate-800 dark:border-none dark:placeholder-white dark:text-white"
                         placeholder="Search your contents"
                         value={query}
                         onChange={handleQueryChange} // Use the new change handler
                         required
                     />
                     <button type="submit" className="absolute inset-y-0 right-0 flex items-center pr-3">
-                        <svg className="w-4 h-4 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 20">
+                        <svg className="w-4 h-4 text-gray-500 dark:text-gray-400 hover:text-red-900 dark:hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 20">
                             <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 7v3a5.006 5.006 0 0 1-5 5H6a5.006 5.006 0 0 1-5-5V7m7 9v3m-3 0h6M7 1h2a3 3 0 0 1 3 3v5a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V4a3 3 0 0 1 3-3Z" />
                         </svg>
                     </button>
@@ -91,11 +91,11 @@ function SearchForm() {
 
             <div className="w-full relative">
                 {query.length > 0 && !isSuggestionSelected && suggestions.length > 0 && ( // Check both query and selection state
-                    <ul className="absolute w-full bg-white text-left shadow-md h-[350px] overflow-auto rounded-lg p-2 mb-4 dark:bg-slate-800 z-10">
+                    <ul className="absolute w-full bg-red-50 text-left shadow-md h-[300px] overflow-auto rounded-lg p-2 mb-4 dark:bg-slate-800 z-10">
                         {suggestions.map((suggestion) => (
                             <li
                                 key={suggestion._id}
-                                className="p-2 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer"
+                                className="p-2 hover:bg-red-200 dark:hover:bg-gray-700 cursor-pointer"
                                 onClick={() => handleSuggestionClick(suggestion)}
                             >
                                 {suggestion.header}

@@ -33,7 +33,7 @@ function Sheetpage() {
 
     return (
         <>
-            <div className="dark:bg-gradient-to-t dark:from-slate-800 dark:to-slate-900 bg-gradient-to-b to-blue-100 from-[#fff]">
+            <div className="dark:bg-gradient-to-t dark:from-slate-800 dark:to-slate-900 bg-gradient-to-b to-red-50 from-[#fff]">
 
                 <Breadcrumb />
                 <div className='text-center justify-center mx-auto font-semibold dark:text-white text-gray-700 pb-5 mb-0 '>

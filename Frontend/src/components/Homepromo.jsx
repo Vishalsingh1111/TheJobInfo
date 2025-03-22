@@ -6,7 +6,8 @@ import avatar3 from '/avatar2.avif';
 
 const ContactSection = () => {
     return (
-        <section className="pb-20 dark:bg-slate-900 text-center mx-5 ">
+
+        <section className="pb-20 dark:bg-slate-900 text-center mx-5  ">
             <div className="container mx-auto p-8 lg:max-w-[80%] md:max-w-[80%]  rounded-lg">
                 <div className="flex justify-center mb-4">
 

@@ -133,7 +133,7 @@ const CScontentfetch = () => {
     return (
         <>
 
-            <div className="dark:to-bg-slate-900 dark:from-slate-800 bg-gradient-to-l dark:bg-gradient-to-t to-[#F6F7FC] via-blue-100 from-[#F6F7FC] pb-8 ">
+            <div className="dark:to-bg-slate-900 dark:from-slate-800 bg-gradient-to-l dark:bg-gradient-to-t to-[#F6F7FC] via-red-50 from-[#F6F7FC] pb-8 ">
                 <Breadcrumb />
                 <div className='flex flex-col sm:flex-row lg:flex-row justify-between dark:text-white text-gray-700 pt-2  pl-5 lg:pl-20 '>
                     <div className='flex flex-col space-y-4'>

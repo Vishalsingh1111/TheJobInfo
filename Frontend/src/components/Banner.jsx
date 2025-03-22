@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 function Banner() {
     return (
         <>
-            <div className='bg-gradient-to-b from-white via-red-100 to-white dark:from-slate-900 dark:via-slate-900 dark:to-slate-900 '>
+            <div className='bg-gradient-to-b from-white to-red-100 dark:from-slate-900 dark:via-slate-900 dark:to-slate-900 '>
                 <div className='pt-[80px] mx-4'><SearchForm /></div>
 
                 <div className='max-w-screen-2xl  container mx-auto md:px-20 px-4 flex flex-col items-center mb-5 dark:bg-slate-900 dark:text-white'>

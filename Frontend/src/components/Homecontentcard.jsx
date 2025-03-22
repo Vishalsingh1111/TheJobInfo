@@ -62,12 +62,12 @@ const ResourceCard = ({ title, description, buttonText, icon, link }) => {
     return (
         <a href={link} className="block group">
             <div className="bg-white rounded-lg border-2 transition-colors dark:border-2 dark:bg-slate-900 dark:text-white dark:border-gray-600">
-                <div className="px-5 pb-5 pt-2 bg-gradient-to-t rounded-md dark:from-slate-800">
+                <div className="px-3 pb-5 pt-2 bg-gradient-to-t rounded-md dark:from-slate-800">
                     <div className={`w-[10vmin] h-[9vmin] mt-2 mb-3 flex items-center justify-center ${bgColor} border text-[5vmin] rounded-lg dark:bg-slate-700`}>
                         <i className={`fas ${icon}`}></i>
                     </div>
-                    <h2 className="text-[2.5vmin] titillium-web-semibold text-gray-600 dark:text-white">{title}</h2>
-                    <p className="text-[2vmin] titillium-web-regular dark:text-white mt-2">{description}</p>
+                    <h2 className="text-[2vmax] md:text-[2.5vmin] titillium-web-semibold text-gray-600 dark:text-white">{title}</h2>
+                    <p className="text-[1.8vmax] md:text-[2vmin] titillium-web-regular dark:text-white mt-2">{description}</p>
                     <button className="mt-4 px-[2vmin] py-[1vmin] border text-[2vmin] text-red-500 border-red-400 dark:border-white rounded-md group-hover:shadow-lg group-hover:bg-red-500 group-hover:text-white group-hover:shadow-black/30 group-hover:border-red-500 transition-colors dark:text-white">
                         {buttonText} &rarr;
                     </button>

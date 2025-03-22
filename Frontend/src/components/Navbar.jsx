@@ -40,7 +40,7 @@ const Navbar = () => {
             <li>
                 <details>
                     <summary>DSA SHEET</summary>
-                    <ul className="bg-red-50 w-[200px] rounded-t-none rounded-md py-5 dark:bg-slate-900 dark:text-white">
+                    <ul className="bg-base-100 w-[200px] rounded-t-none rounded-md py-5 dark:bg-slate-900 dark:text-white">
                         <li><a href='/New-Updated-Sheet'>NEW UPDATED SHEET</a></li>
                         <li><a href='/Company-Wise-Sheet'>COMPANY WISE SHEET</a></li>
                         <li><a href='/Top-50'>TOP 50 DSA PROBLEMS</a></li>
@@ -56,7 +56,7 @@ const Navbar = () => {
             <li>
                 <details>
                     <summary>NOTES</summary>
-                    <ul className="bg-red-50 w-[200px] rounded-t-none rounded-md py-5 dark:bg-slate-900 dark:text-white">
+                    <ul className="bg-base-100 w-[200px] rounded-t-none rounded-md py-5 dark:bg-slate-900 dark:text-white">
                         <li><a href='/Languages'>PROGRAMING LANGUAGE</a></li>
                         <li><a href='/CS-Fundamental'>CS FUNDAMENTAL</a></li>
 
@@ -70,7 +70,7 @@ const Navbar = () => {
             <li>
                 <details>
                     <summary>MORE</summary>
-                    <ul className="bg-red-50 w-48 rounded-t-none rounded-md p-2 dark:bg-slate-900 dark:text-white">
+                    <ul className="bg-base-100 w-48 rounded-t-none rounded-md p-2 dark:bg-slate-900 dark:text-white">
                         <li><a href='/Project'>PROJECT IDEAS</a></li>
                         <li><a href='/Contest-Solution'>CONTEST SOLUTION</a></li>
                     </ul>
@@ -90,7 +90,7 @@ const Navbar = () => {
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" />
                             </svg>
                         </div>
-                        <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-red-50 rounded-box w-56 dark:bg-slate-900 dark:text-white">
+                        <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-56 dark:bg-slate-900 dark:text-white">
                             {navItems}
                         </ul>
                     </div>

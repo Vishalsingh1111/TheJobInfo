@@ -24,7 +24,7 @@ function Content() {
 
     return (
         <>
-            <div className="max-w-[1250px] container mx-auto mb-10 px-4 md:px-20">
+            <div className="max-w-[1200px] container mx-auto mb-10 px-4 md:px-20">
                 {loading ? (
                     <Skeleton1 />
                 ) : (

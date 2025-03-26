@@ -4,6 +4,7 @@ import { baseUrl } from "../../../Baseurl";
 import GetContent from "../GetContent";
 import Skeleton1 from "../../Skeleton";
 import Breadcrumb from "../../Breadcrumb"
+import SocialMediaPoster from "../../SocialMediaPoster";
 
 const QUESTIONS_PER_PAGE = 10;
 
@@ -132,7 +133,7 @@ const DsaContentFetch = () => {
                 </div></div>
 
             <section className="max-w-screen-2xl container pb-5 md:pl-20 px-4  dark:bg-slate-900 dark:text-white lg:pb-[90px] text-center">
-                <div className="mx-auto flex text-left">
+                <div className="mx-auto flex text-left flex-col lg:flex-row">
                     <div className="w-full p-0 sm:p-6 md:pl-10  max-w-[900px]  md:shadow-black/30 rounded-xl  dark:bg-slate-900 dark:border-none">
                         {loading ? (
                             <Skeleton1 />
@@ -143,12 +144,9 @@ const DsaContentFetch = () => {
                         )}
                     </div>
 
-                    {/* Poster */}
-                    {/* <div className="w-[240px] h-full ml-32 pt-5 hidden md:inline sticky top-[80px] ">
-                        <a href="/Signup">
-                            <img src="./poster.png" alt="Poster" />
-                        </a>
-                    </div> */}
+                    <div>
+                        <SocialMediaPoster />
+                    </div>
                 </div>
 
                 {/* Pagination Controls */}

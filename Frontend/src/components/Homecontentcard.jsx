@@ -78,7 +78,7 @@ const ResourceCard = ({ title, description, buttonText, icon, link }) => {
 };
 
 const ResourceGrid = () => (
-    <div className="p-6 max-w-[1200px] mt-10 container mx-auto md:px-20 px-4">
+    <div className="p-6 max-w-[1200px] mt-10 container mx-auto md:px-20 px-4 ">
         <div className="pb-10 text-center">
             <h1 className="titillium-web-semibold text-gray-600 text-3xl md:text-4xl pb-2 dark:text-white" id='homecontentcard'>Courses Offered For Your <span className='text-red-500'>Preparation</span></h1>
         </div>

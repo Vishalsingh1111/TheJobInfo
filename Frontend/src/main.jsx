@@ -10,7 +10,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <BrowserRouter>
     <AuthProvider>
       <AuthProvider2>
-        <div className='dark:bg-slate-900 dark:text-white'>
+        <div className='dark:bg-slate-900 dark:text-white bg-gradient-to-b from-white via-gray-50 to-gray-100 dark:from-slate-900 dark:via-slate-900 dark:to-slate-900'>
           <App />
         </div>
       </AuthProvider2>

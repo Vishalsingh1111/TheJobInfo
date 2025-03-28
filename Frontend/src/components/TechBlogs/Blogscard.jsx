@@ -16,7 +16,7 @@ const Blogcard = ({ item, onClick }) => {
                 <h3 className="text-lg font-[500] text-black dark:text-white p-5 pb-2">
                     {item.header}
                 </h3>
-                <div className="flex-grow p-5 pt-0 bg-gradient-to-t from-[#ffffff] to-[#ffffff] rounded-md dark:from-slate-800">
+                <div className="flex-grow p-5 pt-0 bg-gradient-to-t from-red-50 to-[#ffffff] rounded-md dark:from-slate-800">
                     <p className="text-sm text-gray-600 dark:text-white">
                         {truncateText(item.explanation, 70)}
                     </p>

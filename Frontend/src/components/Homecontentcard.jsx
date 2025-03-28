@@ -61,8 +61,8 @@ const ResourceCard = ({ title, description, buttonText, icon, link }) => {
 
     return (
         <a href={link} className="block group">
-            <div className="bg-white rounded-lg border-2 transition-colors dark:border-2 dark:bg-slate-900 dark:text-white dark:border-gray-600">
-                <div className="px-4 pb-5 pt-2 bg-gradient-to-t rounded-md dark:from-slate-800">
+            <div className="bg-transparent rounded-lg border-2 border-gray-300 transition-colors dark:border-2 dark:bg-slate-900 dark:text-white dark:border-gray-600">
+                <div className="px-4 pb-5 pt-2 bg-gradient-to-t from-red-50 via-white to-white rounded-md dark:from-slate-800">
                     <div className={`w-[10vmin] h-[9vmin] mt-2 mb-3 flex items-center justify-center ${bgColor} border text-[5vmin] rounded-lg dark:bg-slate-700`}>
                         <i className={`fas ${icon}`}></i>
                     </div>

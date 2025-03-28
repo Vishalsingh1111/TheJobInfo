@@ -275,7 +275,7 @@ const ProjectDetail = () => {
                                     onClick={() => handleCardClick(project.id)}
                                 >
                                     <img src={project.image1} alt="Project" className="w-full object-cover p-[3vmin]  pb-0 rounded-t" />
-                                    <div className='flex-grow bg-gradient-to-t from-[[#ffffff]] to-[#ffffff] p-[3vmin] pt-0 rounded-b-md space-y-1 dark:from-slate-800 '>
+                                    <div className='flex-grow bg-gradient-to-t from-red-50 to-[#ffffff] p-[3vmin] pt-0 rounded-b-md space-y-1 dark:from-slate-800 '>
                                         <h3 className="mt-2 text-[1.8vmax] md:text-[2.3vmin] font-semibold text-gray-600 dark:text-white">{truncateText(project.header, 40)}</h3>
                                         <p className="text-gray-500 text-[1.6vmax] md:text-[2vmin] dark:text-gray-400">{truncateText(project.text, 60)}</p>
                                         <p className='text-red-500 text-[1.6vmax] md:text-[2vmin]'>Read More .. </p></div>

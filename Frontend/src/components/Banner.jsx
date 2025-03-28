@@ -4,48 +4,68 @@ import { motion } from 'framer-motion';
 
 function Banner() {
     return (
-        <>
-            <div className="relative  dark:bg-slate-900 pb-[70px] bg-gradient-to-b from-white via-red-50 to-gray-50 dark:from-slate-900 dark:via-slate-900 dark:to-slate-900">
+        <div className="relative min-h-screen md:py-0 py-20 flex flex-col items-center justify-center bg-gradient-to-l from-white via-red-50 to-gray-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 overflow-hidden text-center px-6">
+            {/* Animated Background Waves */}
+            <motion.div
+                className="absolute w-full h-full opacity-20"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 2 }}
 
-                <div className="absolute inset-0 bg-transparent mt-[90px]"
-                    style={{
-                        backgroundImage: "linear-gradient(rgba(96, 96, 96, 0.15) 1px, transparent 1px), linear-gradient(to right, rgba(96, 96, 96, 0.15) 1px, transparent 1px)",
-                        backgroundSize: "110px 110px",
-                        backgroundPosition: "0 -25px, 0 0",
-                        clipPath: "inset(1px 1px 1px 1px)"
-                    }}
-                ></div>
+            ></motion.div>
 
+            {/* Rotating Dots Animation */}
+            <motion.div
+                className="absolute w-[110px] h-[110px] bg-red-500 rounded-full opacity-40 top-[300px] left-20 blur-xl"
+                animate={{ x: [0, 20, -20, 0], rotate: 360 }}
+                transition={{ repeat: Infinity, duration: 6 }}
+            ></motion.div>
+            <motion.div
+                className="absolute w-[110px] h-[110px] bg-yellow-600 rounded-full opacity-40 bottom-10 right-20 blur-xl"
+                animate={{ y: [0, 20, -20, 0], rotate: -360 }}
+                transition={{ repeat: Infinity, duration: 5 }}
+            ></motion.div>
 
-                <div className='max-w-screen-2xl container mx-auto md:px-20 px-4 flex flex-col items-center mb-5 dark:text-white relative z-100'>
-                    <motion.div
-                        className='w-full md:w-4/5 mt-0 text-center'
-                        initial={{ opacity: 0, y: -50 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 1 }}
+            <motion.div
+                className="relative z-10 max-w-4xl mx-auto"
+                initial={{ opacity: 0, y: -50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 1 }}
+            >
+                <SearchForm />
+                <motion.h1
+                    className="text-6xl md:text-8xl font-bold text-gray-800 dark:text-white mt-6"
+                    initial={{ scale: 0.8, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ duration: 1 }}
+                >
+                    <span className="text-red-500">Gear Up For Success:</span><br />
+                    <span className="text-gray-700 dark:text-white">Your Ultimate </span><span className="text-gray-700 dark:text-white">Preparation Hub!</span>
+                </motion.h1>
+                <motion.p
+                    className="text-xl text-gray-700 dark:text-gray-300 mt-6 px-4 md:px-10"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 1.5, delay: 0.5 }}
+                >
+                    Simplify complex concepts with our detailed programming notes and ace your interviews with expert-curated questions.
+                    Master DSA through comprehensive sheets and hands-on projects, ensuring we meet your learning needs.
+                </motion.p>
+                <motion.a
+                    href="#homecontentcard"
+                    whileHover={{ scale: 1.1, rotate: 3 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="inline-block mt-10"
+                >
+                    <motion.button
+                        className="bg-red-500 text-white px-8 py-4 rounded-xl text-lg font-bold shadow-xl hover:shadow-red-500/50 transition-all"
+                        whileHover={{ scale: 1.2 }}
                     >
-                        <div className='bg-gradient-to-b from-white via-red-50 to-gray-50 dark:from-slate-900 dark:via-slate-900 dark:to-slate-900 dark:bg-slate-900 rounded-[1000px] px-10 '>
-                            <div className='pt-[90px] mx-4 relative z-10 pb-10'><SearchForm /></div>
-                            <h1 className='text-5xl text-gray-700 dark:text-white lg:text-[10vmin] pb-10 pt-5 font-[700]'>
-                                <span className='text-red-500'>Gear Up For Success:</span><br />
-                                Your Ultimate <span className=''>Preparation Hub!</span>
-                            </h1>
-                            <p className='text-lg titillium-web-regular text-gray-700 dark:text-white'>
-                                Simplify complex concepts with our detailed programming notes and ace your interviews with expert-curated questions.
-                                Master DSA through comprehensive sheets and hands-on projects, ensuring we meet your learning needs.
-                            </p>
-                            <motion.a href='#homecontentcard' whileHover={{ scale: 1.1 }}>
-
-                                <button className="border border-red-500 py-3 rounded-md text-white mb-10 px-6 mt-10 group bg-red-500 shadow-lg hover:shadow-red-500/30 shadow-black/30">
-                                    Get Started &rarr;
-                                </button>
-
-                            </motion.a>
-                        </div>
-                    </motion.div>
-                </div>
-            </div>
-        </>
+                        Get Started &rarr;
+                    </motion.button>
+                </motion.a>
+            </motion.div>
+        </div>
     );
 }
 

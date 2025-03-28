@@ -10,7 +10,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <BrowserRouter>
     <AuthProvider>
       <AuthProvider2>
-        <div className='dark:bg-slate-900 dark:text-white '>
+        <div className='dark:bg-slate-900 dark:text-white bg-white'>
           <App />
         </div>
       </AuthProvider2>

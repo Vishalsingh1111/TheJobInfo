@@ -6,8 +6,8 @@ const Card = ({ item }) => {
 
     return (
         <a href={item.link} className="block group">
-            <div className="bg-white rounded-lg border-2 transition-colors dark:border-2 dark:bg-slate-900 dark:text-white dark:border-gray-600">
-                <div className="px-[3vmin] pt-2 bg-gradient-to-t rounded-md dark:from-slate-800">
+            <div className="bg-white rounded-lg border-2 border-gray-300 transition-colors dark:border-2 dark:bg-slate-900 dark:text-white dark:border-gray-600">
+                <div className="px-[3vmin] pt-2 bg-gradient-to-t from-red-50 via-white to-white rounded-md dark:from-slate-800">
                     <div className={`w-[12vmin] h-[11vmin] mt-2 mb-3 p-[1.5vmin] flex items-center justify-center border-gray-300 border text-[5vmin] rounded-xl dark:bg-slate-700`}>
                         <img src={item.image} alt="Course Img" className="w-full h-auto" />
                     </div>
@@ -19,13 +19,13 @@ const Card = ({ item }) => {
                         </button>
                         {/* Show category only if it is 'Free' */}
                         {item.category === 'Free' && (
-                            <div className="badge rounded-md px-[2vmin] text-[2vmin] py-[2.5vmin] text-white bg-green-500 mt-4">
+                            <div className="badge border-none rounded-md px-[2vmin] text-[2vmin] py-[2.5vmin] text-white bg-green-500 mt-4">
                                 {item.category}
                             </div>
                         )}
                         {/* Show price only if category is not 'Free' */}
                         {item.category !== 'Free' && (
-                            <div className="badge rounded-md bg-red-500 text-[2vmin] text-white px-[1vmin] py-[2.5vmin] mt-4 dark:bg-red-800">
+                            <div className="badge rounded-md border-none bg-red-500 text-[2vmin] text-white px-[1vmin] py-[2.5vmin] mt-4 dark:bg-red-800">
                                 Price: ${item.price}
                             </div>
                         )}

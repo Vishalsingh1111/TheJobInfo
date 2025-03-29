@@ -16,12 +16,12 @@ function Banner() {
 
             {/* Rotating Dots Animation */}
             <motion.div
-                className="absolute w-[110px] h-[110px] bg-red-500 rounded-full opacity-40 top-[300px] left-20 blur-xl"
+                className="fixed w-[110px] h-[110px] bg-red-500 rounded-full opacity-40 top-[300px] left-20 blur-xl"
                 animate={{ x: [0, 20, -20, 0], rotate: 360 }}
                 transition={{ repeat: Infinity, duration: 6 }}
             ></motion.div>
             <motion.div
-                className="absolute w-[110px] h-[110px] bg-yellow-600 rounded-full opacity-40 bottom-10 right-20 blur-xl"
+                className="fixed w-[110px] h-[110px] bg-yellow-600 rounded-full opacity-40 bottom-10 right-20 blur-xl"
                 animate={{ y: [0, 20, -20, 0], rotate: -360 }}
                 transition={{ repeat: Infinity, duration: 5 }}
             ></motion.div>

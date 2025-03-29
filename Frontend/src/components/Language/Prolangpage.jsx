@@ -3,6 +3,7 @@ import axios from 'axios';
 import Card from './Card';
 import { baseUrl } from '../../Baseurl';
 import Skeleton1 from '../Skeleton';
+import Breadcrumb from '../Breadcrumb';
 
 function Content() {
     const [note, setNote] = useState([]);
@@ -24,18 +25,25 @@ function Content() {
 
     return (
         <>
-            <div className="max-w-[1200px] container mx-auto mb-10 px-4 md:px-20">
-                {loading ? (
-                    <Skeleton1 />
-                ) : (
-                    <div className="my-10 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {note.map((item) => (
-                            <Card key={item.id} item={item} />
-                        ))}
-                    </div>
-                )}
-            </div>
+            <div className=' min-h-screen bg-gradient-to-l from-white via-red-50 to-gray-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 '>
+                <Breadcrumb />
+                <div className="max-w-[1200px] container mx-auto mb-10 px-4 md:px-20">
+                    {loading ? (
+                        <>
+                            <Skeleton1 />
+                        </>
 
+                    ) : (
+                        <>
+                            <div className="my-10 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                                {note.map((item) => (
+                                    <Card key={item.id} item={item} />
+                                ))}
+                            </div>
+                        </>
+                    )}
+                </div>
+            </div>
         </>
     );
 }

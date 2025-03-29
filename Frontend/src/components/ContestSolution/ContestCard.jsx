@@ -11,7 +11,7 @@ const Contestcard = ({ item, onClick }) => {
 
         <div
             onClick={onClick}
-            className="relative bg-[#ffffff] border border-gray-400 group rounded-md min-h-[200px] m-5 flex flex-col w-full md:w-[350px] dark:border-gray-600 dark:border dark:bg-slate-900 dark:text-white cursor-pointer hover:shadow hover:shadow-black/30 hover:shadow-lg"
+            className="relative bg-transparent border-2 border-gray-300 group rounded-md min-h-[200px] m-5 flex flex-col w-full md:w-[350px] dark:border-gray-600 dark:border-2 dark:bg-transparent dark:text-white cursor-pointer hover:shadow hover:shadow-black/30 hover:shadow-lg"
         >
             <div className="content flex flex-col m-auto px-3">
 

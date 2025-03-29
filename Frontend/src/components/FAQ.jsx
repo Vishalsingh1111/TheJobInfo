@@ -1,47 +1,51 @@
 import React, { useState } from "react";
+import Homepromo from './Homepromo';
 
 const Accordion = () => {
     return (
-        <section className="max-w-5xl container mx-auto md:px-20 px-4 relative z-20 overflow-hidden bg-transparent pb-4 dark:bg-slate-900 dark:text-white lg:pb-[30px] lg:pt-[20px] text-center ">
-            <div className="container mx-auto mt-10">
-                <div className="-mx-4 flex flex-wrap justify-center">
-                    <div className="w-full px-4">
-                        <div className="mx-auto mb-8 max-w-auto text-center lg:mb-3">
-                            <h1 className="titillium-web-semibold text-gray-600 text-3xl md:text-4xl pb-2 dark:text-white" id='homecontentcard'>Got Questions? Find Your <span className='text-red-500'> Answers Here !</span></h1>
+        <div className=" bg-gradient-to-l from-white via-red-50 to-gray-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+            <section className="max-w-5xl container mx-auto md:px-20 px-4 relative z-20 overflow-hidden pb-10 dark:text-white lg:pb-[30px] lg:pt-[20px] text-center ">
+                <div className="container mx-auto mt-10">
+                    <div className="-mx-4 flex flex-wrap justify-center">
+                        <div className="w-full px-4">
+                            <div className="mx-auto mb-8 max-w-auto text-center lg:mb-3">
+                                <h1 className="titillium-web-semibold text-gray-600 text-3xl md:text-4xl pb-2 dark:text-white" id='homecontentcard'>Got Questions? Find Your <span className='text-red-500'> Answers Here !</span></h1>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="mx-auto text-left">
+                        <div className="w-full px-4 max-w-[1050px] mx-auto">
+                            <AccordionItem
+                                header="What types of programming languages do you cover?"
+                                text="We cover a wide range of programming languages including but not limited to Python, Java, C, C++, DSA etc. Our notes are designed to cater to both beginners and advanced users, providing comprehensive insights and practical examples."
+                            />
+                            <AccordionItem
+                                header="How often is new content added to the site?"
+                                text="We update our site regularly with new content. You can expect new blog posts, notes, interview questions, and project ideas every week. Our team of experienced developers and educators work tirelessly to ensure you have the latest and most relevant information.."
+                            />
+                            <AccordionItem
+                                header="Can I request specific topics to be covered?"
+                                text="Absolutely! We value our community’s feedback and are always open to suggestions. If there’s a specific topic or a programming language you want us to cover, feel free to reach out to us via our contact page. We’ll do our best to accommodate your request in our upcoming content schedule."
+                            />
+                        </div>
+                        <div className="w-full px-4 max-w-[1050px] mx-auto">
+                            <AccordionItem
+                                header="What is included in the DSA sheets?"
+                                text="Our Data Structures and Algorithms (DSA) sheets include detailed explanations, sample code, and a variety of problems to solve. Each sheet is designed to help you understand fundamental concepts and apply them to solve real-world problems. We also provide solutions and explanations for each problem to enhance your learning experience."
+                            />
+                            <AccordionItem
+                                header="How can I use the projects listed on your site?"
+                                text="The projects listed on our site are categorized by difficulty level and are designed to help you apply the concepts you've learned. Each project includes a detailed description, required technologies, and step-by-step instructions. You can use these projects to build your portfolio, practice coding, or even as a base for your own unique projects."
+                            />
 
                         </div>
                     </div>
                 </div>
-
-                <div className="mx-auto text-left">
-                    <div className="w-full px-4 max-w-[1050px] mx-auto">
-                        <AccordionItem
-                            header="What types of programming languages do you cover?"
-                            text="We cover a wide range of programming languages including but not limited to Python, Java, C, C++, DSA etc. Our notes are designed to cater to both beginners and advanced users, providing comprehensive insights and practical examples."
-                        />
-                        <AccordionItem
-                            header="How often is new content added to the site?"
-                            text="We update our site regularly with new content. You can expect new blog posts, notes, interview questions, and project ideas every week. Our team of experienced developers and educators work tirelessly to ensure you have the latest and most relevant information.."
-                        />
-                        <AccordionItem
-                            header="Can I request specific topics to be covered?"
-                            text="Absolutely! We value our community’s feedback and are always open to suggestions. If there’s a specific topic or a programming language you want us to cover, feel free to reach out to us via our contact page. We’ll do our best to accommodate your request in our upcoming content schedule."
-                        />
-                    </div>
-                    <div className="w-full px-4 max-w-[1050px] mx-auto">
-                        <AccordionItem
-                            header="What is included in the DSA sheets?"
-                            text="Our Data Structures and Algorithms (DSA) sheets include detailed explanations, sample code, and a variety of problems to solve. Each sheet is designed to help you understand fundamental concepts and apply them to solve real-world problems. We also provide solutions and explanations for each problem to enhance your learning experience."
-                        />
-                        <AccordionItem
-                            header="How can I use the projects listed on your site?"
-                            text="The projects listed on our site are categorized by difficulty level and are designed to help you apply the concepts you've learned. Each project includes a detailed description, required technologies, and step-by-step instructions. You can use these projects to build your portfolio, practice coding, or even as a base for your own unique projects."
-                        />
-
-                    </div>
-                </div>
-            </div>
-        </section>
+            </section>
+            <Homepromo />
+        </div>
     );
 };
 

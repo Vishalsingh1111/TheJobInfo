@@ -6,9 +6,9 @@ const Card = ({ item }) => {
 
     return (
         <a href={item.link} className="block group">
-            <div className="bg-white rounded-lg border-2 border-gray-300 transition-colors dark:border-2 dark:bg-slate-900 dark:text-white dark:border-gray-600">
-                <div className="px-[3vmin] pt-2 bg-gradient-to-t from-red-50 via-white to-white rounded-md dark:from-slate-800">
-                    <div className={`w-[12vmin] h-[11vmin] mt-2 mb-3 p-[1.5vmin] flex items-center justify-center border-gray-300 border text-[5vmin] rounded-xl dark:bg-slate-700`}>
+            <div className="bg-transparent rounded-lg border-2 border-gray-300 transition-colors dark:border-2 dark:bg-transparent dark:text-white dark:border-gray-600">
+                <div className="px-[3vmin] pt-2 bg-transparent dark:bg-transparentrounded-md ">
+                    <div className={`w-[12vmin] h-[11vmin] mt-2 mb-3 p-[1.5vmin] flex items-center justify-center border-gray-300 border text-[5vmin] rounded-xl dark:bg-transparent`}>
                         <img src={item.image} alt="Course Img" className="w-full h-auto" />
                     </div>
                     <h2 className="text-[2vmax] md:text-[2.5vmin] titillium-web-semibold text-gray-600 dark:text-white">{item.name}</h2>

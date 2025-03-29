@@ -32,7 +32,7 @@ const Contest = () => {
 
     return (
         <>
-            <div className="min-h-screen">
+            <div className="min-h-screen bg-gradient-to-l from-white via-red-50 to-gray-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 ">
                 <Breadcrumb />
                 {loading ? (
                     <Skeleton1 />

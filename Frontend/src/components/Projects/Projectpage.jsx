@@ -32,18 +32,20 @@ const Projectpage = () => {
 
     return (
         <>
-            <Breadcrumb />
-            {loading ? (
-                <Skeleton1 />
-            ) : (
+            <div className="bg-gradient-to-l from-white via-red-50 to-gray-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 ">
+                <Breadcrumb />
+                {loading ? (
+                    <Skeleton1 />
+                ) : (
 
-                <div className="my-10 mx-auto max-w-[1250px]  grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4 px-4 md:px-[120px]">
-                    {data.map(item => (
-                        <Projectcard key={item.id} item={item} onClick={() => handleCardClick(item.id)} />
-                    ))}
-                </div>
+                    <div className="py-10 mx-auto max-w-[1250px]  grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4 px-4 md:px-[120px]">
+                        {data.map(item => (
+                            <Projectcard key={item.id} item={item} onClick={() => handleCardClick(item.id)} />
+                        ))}
+                    </div>
 
-            )}
+                )}
+            </div>
         </>
     );
 };

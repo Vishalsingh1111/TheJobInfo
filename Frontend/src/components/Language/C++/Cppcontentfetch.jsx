@@ -127,7 +127,7 @@ const Cppcontentfetch = () => {
                         <span className=" justify-between md:pl-10 text-[4.5vmax] md:text-[5.5vmin] font-bold text-gray-600 dark:text-white">Basic Interview Questions – <span className="text-red-500">C++ & OOPs</span></span>
                     </div>
                     <div className='mt-4 sm:mt-0 lg:mt-4 sm:mr-20 lg:mr-[100px]'>
-                        <a href="path-to-your-file.pdf" download>
+                        <a href="/DCODER_OOPS.pdf" download>
                             <button className='bg-red-500 hover:bg-red-600 text-sm text-white border border-red-500 px-[2vmin] py-[1.5vmin] rounded-md'>Download PDF</button>
                         </a>
                     </div>

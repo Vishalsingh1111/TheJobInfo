@@ -2,7 +2,7 @@ import React from 'react';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 const resources = [
-    { title: "Updated DSA Sheet", description: "Boost your DSA skills with our handy cheat sheets according to your choice.", buttonText: "Try it free", icon: "fa-file-alt", link: "/Sheet" },
+    { title: "Updated DSA Sheet", description: "Boost your DSA skills with our handy cheat sheets .", buttonText: "Try it free", icon: "fa-file-alt", link: "/Sheet" },
     { title: "Programming Languages", description: "Design better systems with our simplified approach.", buttonText: "Try it free", icon: "fa-laptop-code", link: "/Languages" },
     { title: "Blogs", description: "Dive Deep into Tech Innovation with Our Engaging Blogs.", buttonText: "Try it free", icon: "fa-blog", link: "/Technical-Blog" },
     { title: "Project's Basket", description: "Master algorithms effortlessly with our curated DSA playlist.", buttonText: "Watch Now", icon: "fa-play-circle", link: "/Project" },
@@ -26,7 +26,7 @@ const ResourceCard = ({ title, description, buttonText, icon, link }) => {
         <a href={link} className="block group">
             <div className={`rounded-lg border transition-colors dark:border-2 dark:transparent dark:text-white dark:border-gray-600 dark:bg-transparent ${bgColor}`}>
                 <div className="px-4 pb-5 pt-2 rounded-md bg-transparent">
-                    <div className={`w-[10vmin] h-[9vmin] mt-2 mb-3 flex items-center justify-center ${bgColor} border text-[5vmin] rounded-lg dark:bg-transparent`}>
+                    <div className={`w-[10vmin] h-[10vmin] mt-3 mb-3 flex items-center justify-center ${bgColor} border text-[5vmin] rounded-full dark:bg-transparent`}>
                         <i className={`fas ${icon}`}></i>
                     </div>
                     <h2 className="text-[2vmax] md:text-[2.5vmin] titillium-web-semibold text-gray-700 dark:text-white">{title}</h2>

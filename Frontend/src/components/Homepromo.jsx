@@ -7,7 +7,7 @@ import avatar3 from '/avatar2.avif';
 const ContactSection = () => {
     return (
 
-        <section className="pb-20 text-center mx-5  ">
+        <section className="pb-20 text-center mx-5 pt-10 bg-gradient-to-l dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 ">
             <div className="container mx-auto p-8 lg:max-w-[80%] md:max-w-[80%]  rounded-lg">
                 <div className="flex justify-center mb-4">
 
@@ -27,7 +27,7 @@ const ContactSection = () => {
                         alt="Avatar 3"
                     />
                 </div>
-                <h2 className="text-2xl font-semibold text-red-500 dark:text-white mb-2">Still have questions?</h2>
+                <h2 className="text-2xl font-semibold text-red-500 dark:text-white mb-2">Do You Have Any Question?</h2>
                 <p className="text-gray-600 titillium-web-regular dark:text-white mb-6">Can't find the answer you're looking for? Please chat to our friendly team.</p>
                 <a href="/Contact" className="inline-block bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg hover:shadow-red-500/30 shadow-black/30 transition duration-300">
                     Get in Touch

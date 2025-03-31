@@ -2,7 +2,8 @@ import React from 'react';
 import Navbar from '../components/Navbar';
 import Banner from '../components/Banner';
 import Footer from '../components/Footer';
-import FAQ from '../components/FAQ';
+import Homepromo from '../components/Homepromo';
+// import FAQ from '../components/FAQ';
 import Homecontentcard from '../components/Homecontentcard';
 import HomeVideo from '../components/HomeVideo';
 
@@ -14,7 +15,8 @@ function Home() {
             <Banner />
             <Homecontentcard />
             <HomeVideo />
-            <FAQ />
+            {/* <FAQ /> */}
+            <Homepromo />
             <Footer />
         </>
     );

@@ -36,9 +36,9 @@ function HomeVideo() {
     };
 
     return (
-        <div className=" pt-10 px-3 justify-center items-center dark:bg-slate-900 pb-[20px] bg-gradient-to-l from-white via-red-50 to-gray-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+        <div className=" pt-10 px-3 justify-center items-center dark:bg-slate-900 pb-[10px] bg-gradient-to-l from-white via-red-100 to-white dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
 
-            <div className="pb-5 text-center pt-10">
+            <div className="pb-5 text-center">
                 <h1 className="titillium-web-semibold text-gray-600 text-3xl md:text-4xl pb-2 dark:text-white" id='homecontentcard'>Enjoy Free <span className='text-red-500'>YouTube Tutorial </span>Videos, AnyTime !</h1>
             </div>
 
@@ -77,7 +77,7 @@ function HomeVideo() {
                         allowFullScreen
                         title="YouTube Project Tutorial"
                         aria-label="YouTube Project Tutorial Video"
-                        className="w-[65vmin] lg:w-[80vmin] h-[45vmin] lg:h-[48vmin] p-[4vmin] lg:p-[4vmin] mb-5 dark:bg-transparent dark:border-gray-600 bg-transparent dark:border shadow shadow-black/40 rounded-lg"
+                        className="w-[65vmin] lg:w-[80vmin] h-[45vmin] lg:h-[48vmin] p-[4vmin] lg:p-[4vmin] mb-5 dark:bg-transparent dark:border-gray-600 bg-gray-50 dark:border shadow shadow-black/40 rounded-lg"
                     ></iframe>
                 ) : (
                     <p className="text-red-500">No video available.</p>

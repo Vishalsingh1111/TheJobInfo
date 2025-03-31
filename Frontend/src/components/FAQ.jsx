@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import Homepromo from './Homepromo';
 
 const Accordion = () => {
     return (
-        <div className=" bg-gradient-to-l from-white via-red-50 to-gray-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+        <div className=" dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 pt-10">
             <section className="max-w-5xl container mx-auto md:px-20 px-4 relative z-20 overflow-hidden pb-10 dark:text-white lg:pb-[30px] lg:pt-[20px] text-center ">
                 <div className="container mx-auto mt-10">
                     <div className="-mx-4 flex flex-wrap justify-center">
@@ -44,7 +43,6 @@ const Accordion = () => {
                     </div>
                 </div>
             </section>
-            <Homepromo />
         </div>
     );
 };

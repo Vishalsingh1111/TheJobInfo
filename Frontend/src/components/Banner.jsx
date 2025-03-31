@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 
 function Banner() {
     return (
-        <div className="relative min-h-screen md:py-0 py-20 flex flex-col items-center justify-center bg-gradient-to-l from-white via-red-50 to-gray-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 overflow-hidden text-center px-6">
+        <div className="relative min-h-screen md:py-0 py-20 flex flex-col items-center justify-center bg-gradient-to-l from-white via-red-100 to-white dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 overflow-hidden text-center px-6">
             {/* Animated Background Waves */}
             <motion.div
                 className="absolute w-full h-full opacity-20"

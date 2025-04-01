@@ -36,7 +36,7 @@ function HomeVideo() {
     };
 
     return (
-        <div className=" pt-10 px-3 justify-center items-center dark:bg-slate-900 pb-[10px] bg-gradient-to-l from-white via-red-100 to-white dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+        <div className=" pt-10 px-3 justify-center items-center dark:bg-slate-900 pb-[10px] bg-gradient-to-l from-white via-gray-100 to-white dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
 
             <div className="pb-5 text-center">
                 <h1 className="titillium-web-semibold text-gray-600 text-3xl md:text-4xl pb-2 dark:text-white" id='homecontentcard'>Enjoy Free <span className='text-red-500'>YouTube Tutorial </span>Videos, AnyTime !</h1>

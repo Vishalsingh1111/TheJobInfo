@@ -6,7 +6,7 @@ const Card = ({ item }) => {
 
     return (
         <a href={item.link} className="block group">
-            <div className="bg-transparent rounded-lg border-2 border-gray-300 transition-colors dark:border-2 dark:bg-transparent dark:text-white dark:border-gray-600">
+            <div className="bg-gray-50 rounded-lg border border-gray-400 transition-colors dark:border dark:bg-transparent dark:text-white dark:border-gray-400">
                 <div className="px-[3vmin] pt-2 bg-transparent dark:bg-transparentrounded-md ">
                     <div className={`w-[12vmin] h-[11vmin] mt-2 mb-3 p-[1.5vmin] flex items-center justify-center border-gray-300 border text-[5vmin] rounded-xl dark:bg-transparent`}>
                         <img src={item.image} alt="Course Img" className="w-full h-auto" />
@@ -38,3 +38,4 @@ const Card = ({ item }) => {
 };
 
 export default Card;
+

@@ -25,7 +25,7 @@ function Content() {
 
     return (
         <>
-            <div className=' min-h-screen bg-gradient-to-l from-white via-red-50 to-gray-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 '>
+            <div className=' min-h-screen bg-gradient-to-b from-white via-white to-white dark:from-slate-900 dark:via-slate-800 dark:to-slate-800 '>
                 <Breadcrumb />
                 <div className="max-w-[1200px] container mx-auto mb-10 px-4 md:px-20">
                     {loading ? (
@@ -35,7 +35,7 @@ function Content() {
 
                     ) : (
                         <>
-                            <div className="my-10 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                            <div className="my-10 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                                 {note.map((item) => (
                                     <Card key={item.id} item={item} />
                                 ))}

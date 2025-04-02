@@ -68,9 +68,9 @@ const Chat = () => {
             <Navbar />
             <div className="max-w-screen-2xl container mx-auto md:px-20 px-4 min-h-screen py-20 dark:bg-none dark:text-white"> {/* Adjusted padding */}
                 <div className='w-full sm:w-[100px] md:w-full mb-5'>
-                    <img src="/robot.jpg" alt="AI Illustration" className="w-[100px] rounded-full border-2  border-blue-500 mx-auto" />
+                    <img src="/assistant.png" alt="AI Illustration" className="w-[100px] mx-auto" />
                 </div>
-                <div className="mb-10 max-w-4xl text-left mx-auto space-y-3 ">
+                <div className="mb-10 max-w-4xl text-center mx-auto space-y-3 ">
                     <h1 className="md:text-5xl text-xl font-semibold mb-2">
                         Hello, <span className="text-red-500">{authUser?.firstName || 'Guest'}</span>
                     </h1>
@@ -78,33 +78,33 @@ const Chat = () => {
                         How can I help you today?
                     </h2>
                 </div>
-                <div className=" w-full max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-4 lg:grid-cols gap-4">
+                <div className=" w-full max-w-3xl mx-auto grid grid-cols-2 md:grid-cols-2 lg:grid-cols gap-4">
                     <button
-                        className="p-8 border rounded-2xl border-gray-300 justify-start flex text-left dark:bg-slate-800 dark-text-white"
+                        className="p-4 border rounded-2xl border-gray-300 justify-start flex text-left dark:bg-slate-900 dark-text-white"
                         onClick={() => handleQuery('Outline a way to home routine: organizing my closet')}
                     >
                         Outline a way to home routine: organizing my closet
                     </button>
                     <button
-                        className="p-8 border rounded-2xl border-gray-300 justify-start flex text-left dark:bg-slate-800 dark-text-white"
+                        className="p-4 border rounded-2xl border-gray-300 justify-start flex text-left dark:bg-slate-900 dark-text-white"
                         onClick={() => handleQuery('Help me incorporate more plant-based options in my diet')}
                     >
                         Help me incorporate more plant-based options in my diet
                     </button>
                     <button
-                        className="p-8 border rounded-2xl border-gray-300 justify-start flex text-left dark:bg-slate-800 dark-text-white"
+                        className="p-4 border rounded-2xl border-gray-300 justify-start flex text-left dark:bg-slate-900 dark-text-white"
                         onClick={() => handleQuery('Come up with a recipe for an upcoming event')}
                     >
                         Come up with a recipe for an upcoming event
                     </button>
                     <button
-                        className="p-8 border rounded-2xl border-gray-300 justify-start flex text-left dark:bg-slate-800 dark-text-white"
+                        className="p-4 border rounded-2xl border-gray-300 justify-start flex text-left dark:bg-slate-900 dark-text-white"
                         onClick={() => handleQuery('Create a 12-week study plan for learning a new language')}
                     >
                         Create a 12-week study plan for learning a new language
                     </button>
                 </div>
-                <div className='w-full max-w-4xl mx-auto mb-12 text-justify justify-start md:mt-10 mt-12 rounded  dark-text-white rounded-xl'>
+                <div className='w-full max-w-3xl mx-auto mb-12 text-justify justify-start md:mt-10 mt-12 rounded  dark-text-white rounded-xl'>
                     {loading ? (
                         <div className="text-center text-2xl text-red-500">
                             Getting Your Response Ready ...
@@ -116,7 +116,7 @@ const Chat = () => {
 
                 </div>
 
-                <div className="w-full max-w-4xl p-4 mx-auto bg-white shadow-md border-t rounded-full flex items-center dark:bg-slate-800 dark-text-white">
+                <div className="w-full max-w-3xl p-4 mx-auto bg-white shadow-md border-t rounded-full flex items-center dark:bg-slate-800 dark-text-white">
                     <input
                         type="text"
                         value={query}

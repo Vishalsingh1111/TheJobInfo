@@ -9,6 +9,7 @@ import Footer from '../Footer';
 import Breadcrumb from '../Breadcrumb';
 import { baseUrl } from '../../Baseurl';
 import Skeleton1 from '../Skeleton';
+import SocialMediaPoster from '../SocialMediaPoster';
 
 const ContestDetail = () => {
     const { id } = useParams();
@@ -83,18 +84,21 @@ const ContestDetail = () => {
         <>
             <Navbar />
             <Breadcrumb />
-            <div className="pt-[50px] mx-auto max-w-screen-2xl md:px-20 px-4 py-5">
-                <div className='flex flex-col lg:flex-col gap-10 '>
-                    <div className="w-full p-3 sm:p-5 md:p-8 lg:p-10 max-w-[1030px] mx-auto border-t md:shadow-sm md:shadow-black/30  rounded-xl bg-[rgb(255,255,255)] dark:bg-slate-800 dark:border-none mt-3">
+            <div className=" mx-auto max-w-screen-2xl md:px-20 px-4">
 
-                        <div className="flex flex-col items-left bg-gray-200 p-5 mb-5 border-l-2 border-l-red-500 dark:bg-slate-900">
+                <div className="flex items-center justify-center py-10">
+                    <h2 className="text-4xl text-red-500 font-bold mb-4 sm:mb-0">{item.header}</h2>
+                </div>
+
+                <div className='flex flex-col md:flex-row'>
+                    <div className="w-full p-2 md:p-6 border rounded mx-auto bg-white dark:bg-slate-900 mt-3">
+
+                        <div className="flex flex-col items-left bg-gray-300 p-5 mb-5 border-l-2 border-l-red-500 dark:bg-slate-800">
                             <h2 className="text-xl text-red-500 font-semibold item-left mb-2">Disclaimer !</h2>
                             <p className="text-lg">Do it yourself, This is only for reference. Don't Copy & Paste.</p>
                         </div>
 
-                        <div className="flex flex-col sm:flex-row items-center justify-between">
-                            <h2 className="text-2xl font-semibold mb-4 sm:mb-0">{item.header}</h2>
-                        </div>
+
 
                         {/* Explanation 1 */}
                         {item.explanation && (
@@ -149,6 +153,18 @@ const ContestDetail = () => {
                             </>
                         ))}
 
+                        <div className=' lg:space-x-8 flex flex-col lg:flex-row mt-5 mx-auto justify-center'>
+                            <iframe
+                                width="320"
+                                height="200"
+                                src={item.image}
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowFullScreen
+                                title="YouTube Video"
+                                className='p-5 mb-5 dark:bg-slate-800 dark:border-none bg-[rgb(255,255,255)] border-t shadow shadow-black/40 rounded-lg'
+                            ></iframe>
+                        </div>
+
                         <div className="flex mt-4 items-center text-xl">
                             <button onClick={increaseThumbsUp} className="flex items-center text-gray-700 dark:text-gray-300 mr-4">
                                 <FaThumbsUp className="mr-1 text-blue-500" /> {thumbsUpCount}
@@ -158,23 +174,21 @@ const ContestDetail = () => {
                             </button>
                         </div>
                     </div>
-
-                    <div className=' lg:space-x-8 flex flex-col lg:flex-row mt-5 mx-auto justify-center'>
-                        <iframe
-                            width="320"
-                            height="200"
-                            src={item.image}
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowFullScreen
-                            title="YouTube Video"
-                            className='p-5 mb-5 dark:bg-slate-800 dark:border-none bg-[rgb(255,255,255)] border-t shadow shadow-black/40 rounded-lg'
-                        ></iframe>
+                    <div>
+                        <SocialMediaPoster />
                     </div>
 
+
                 </div>
+
+
+
+
+
+            </div>
+            <div className='bg-gray-50 dark:bg-slate-800'>
                 <Commentbox />
             </div>
-
             <Footer />
         </>
     );

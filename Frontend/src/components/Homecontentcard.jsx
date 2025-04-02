@@ -6,7 +6,7 @@ const resources = [
     { title: "Updated DSA Sheet", description: "Boost your DSA skills with our handy cheat sheets .", buttonText: "Try it free", icon: "fa-file-alt", link: "/Sheet" },
     { title: "Programming Languages", description: "Design better systems with our simplified approach.", buttonText: "Try it free", icon: "fa-laptop-code", link: "/Languages" },
     { title: "Blogs", description: "Dive Deep into Tech Innovation with Our Engaging Blogs.", buttonText: "Try it free", icon: "fa-blog", link: "/Technical-Blog" },
-    { title: "Project's Basket", description: "Master algorithms effortlessly with our curated DSA playlist.", buttonText: "Watch Now", icon: "fa-play-circle", link: "/Project" },
+    { title: "Project's Basket", description: "Master algorithms effortlessly with our curated DSA playlist.", buttonText: "Watch Now", icon: "fa-play-circle", link: "/Pagenotfound" },
     { title: "CS Fundamentals", description: "Demystify CS topics with our easy-to-understand guides.", buttonText: "Try it free", icon: "fa-book", link: "/CS-Fundamental" },
     { title: "Contests Solution", description: "Level up your coding with participating in Contests.", buttonText: "Try it free", icon: "fa-pencil-alt", link: "/Contest-Solution" }
 ];

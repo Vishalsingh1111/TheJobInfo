@@ -14,7 +14,7 @@ const cheatsheets = [
 const CheatsheetPage = () => {
     return (
         <div className="bg-gradient-to-l from-white via-white to-white dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 p-5">
-            <h1 className="text-center text-3xl md:text-4xl font-semibold text-gray-700 dark:text-white pt-20 pb-10">
+            <h1 className="text-center text-3xl md:text-4xl font-semibold text-gray-700 dark:text-white pb-10">
                 Cheatsheets <span className="text-red-500">Instant Learning</span>
             </h1>
             <div className="max-w-[1300px] container mx-auto my-10 px-0 md:px-20 grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -26,7 +26,7 @@ const CheatsheetPage = () => {
                         <div className="h-20 w-20  flex items-center justify-center mx-auto mb-3">
                             <img src={sheet.icon} alt="Icon Loading" />
                         </div>
-                        <h2 className="text-xl font-semibold">{sheet.name}</h2>
+                        <h2 className="text-md md:text-xl font-semibold">{sheet.name}</h2>
                     </div></a>
                 ))}
             </div>

@@ -32,12 +32,12 @@ const Contest = () => {
 
     return (
         <>
-            <div className="min-h-screen bg-gradient-to-l from-white via-red-50 to-gray-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 ">
+            <div className="min-h-screen bg-gradient-to-b from-white via-white to-gray-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-800 px-5">
                 <Breadcrumb />
                 {loading ? (
                     <Skeleton1 />
                 ) : (
-                    <div className="flex flex-wrap justify-center max-w-screen-2xl mx-auto md:px-20 px-4 py-5 pt-10">
+                    <div className="max-w-[1340px] container mx-auto my-10 px-0 md:px-20 grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6">
                         {data.length > 0 ? (
                             data.map((item) => (
                                 <ContestCard key={item.id} item={item} onClick={() => handleCardClick(item.id.toString())} />

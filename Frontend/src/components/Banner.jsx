@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 
 function Banner() {
     return (
-        <div className="relative min-h-screen md:py-0 py-20 flex flex-col items-center justify-center bg-gradient-to-l from-white via-red-100 to-white dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 overflow-hidden text-center px-6">
+        <div className="relative min-h-screen md:py-0 py-20 flex flex-col items-center justify-center bg-gradient-to-l from-white via-red-50 to-white dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 overflow-hidden text-center px-6">
             {/* Animated Background Waves */}
             <motion.div
                 className="absolute w-full h-full opacity-20"
@@ -16,13 +16,13 @@ function Banner() {
 
             {/* Rotating Dots Animation */}
             <motion.div
-                className="fixed w-[110px] h-[110px] bg-red-500 rounded-full opacity-40 top-[300px] left-20 blur-xl"
-                animate={{ x: [0, 20, -20, 0], rotate: 360 }}
-                transition={{ repeat: Infinity, duration: 6 }}
+                className="fixed w-[150px] h-[150px] bg-red-500 rounded-full opacity-50 top-[300px] left-20 blur-xl"
+                animate={{ x: [0, 20, -100, 0], rotate: 360 }}
+                transition={{ repeat: Infinity, duration: 5 }}
             ></motion.div>
             <motion.div
-                className="fixed w-[110px] h-[110px] bg-yellow-600 rounded-full opacity-40 bottom-10 right-20 blur-xl"
-                animate={{ y: [0, 20, -20, 0], rotate: -360 }}
+                className="fixed w-[150px] h-[150px] bg-green-500 rounded-full opacity-50 bottom-10 right-20 blur-xl"
+                animate={{ y: [0, 20, -100, 0], rotate: -360 }}
                 transition={{ repeat: Infinity, duration: 5 }}
             ></motion.div>
 

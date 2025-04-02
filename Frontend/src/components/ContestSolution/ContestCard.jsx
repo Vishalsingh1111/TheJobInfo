@@ -1,40 +1,40 @@
 import React from 'react';
 
-// Truncate text function
-const truncateText = (text, length) => {
-    if (text.length <= length) return text;
-    return text.slice(0, length) + '...';
+// Function to format the date
+const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' });
 };
 
 const Contestcard = ({ item, onClick }) => {
     return (
-
         <div
             onClick={onClick}
-            className="relative bg-transparent border-2 border-gray-300 group rounded-md min-h-[200px] m-5 flex flex-col w-full md:w-[350px] dark:border-gray-600 dark:border-2 dark:bg-transparent dark:text-white cursor-pointer hover:shadow hover:shadow-black/30 hover:shadow-lg"
+            className="relative bg-gray-50 px-2 md:px-5 py-5 border border-gray-400 group rounded-md flex flex-col dark:border-gray-400 dark:border dark:bg-transparent dark:text-white cursor-pointer hover:shadow hover:shadow-black/10 hover:shadow-lg"
         >
-            <div className="content flex flex-col m-auto px-3">
-
-                <h3 className="text-lg font-[400] text-red-500 pb-2">
+            <div className="content flex flex-col m-auto">
+                <h3 className="text-sm md:text-md font-[400] text-red-400 pb-2">
                     <h2>Live Updates</h2>
                 </h3>
 
-                <h3 className="text-2xl font-[600] text-gray-600 dark:text-white">
+                <h3 className="text-md md:text-xl font-semibold text-gray-600 dark:text-white">
                     {item.header}
                 </h3>
 
-                <div className="flex justify-start mt-4">
+                <h3 className="text-sm md:text-md font-[400] text-gray-500 py-2">
+                    <h2>{item.createdAt ? formatDate(item.createdAt) : "Date not available"}</h2>
+                </h3>
+
+                <div className="flex justify-start mt-2">
                     <a
-                        className="text-red-500 inline-block border p-2 rounded-lg border-red-500 group-hover:shadow-lg group-hover:bg-red-500 group-hover:text-white group-hover:shadow-black/30 group-hover:border-red-500 transition-all duration-300"
+                        className=" bg-green-600 text-sm md:text-md text-white inline-block border px-2 py-1.5 rounded-lg border-green-600 group-hover:shadow-lg group-hover:shadow-black/30 transition-all duration-300"
                         href="#"
                     >
                         Click to open
                     </a>
                 </div>
             </div>
-
         </div>
-
     );
 };
 

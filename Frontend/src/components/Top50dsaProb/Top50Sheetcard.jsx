@@ -145,7 +145,7 @@ const Top100dsaProb = () => {
                 <div className="w-full  text-left border-2 border-gray-400 dark:border-none dark:bg-slate-800 border-gray-200 rounded-lg">
 
                     {/* Level Buttons */}
-                    <div className="flex px-2 justify-center space-x-1 py-3 bg-[#f5f4fb] dark:bg-slate-800 rounded-t-md">
+                    <div className="flex px-2 justify-center space-x-1 py-3 bg-gray-50 dark:bg-slate-800 rounded-t-md">
                         <button
                             className="bg-gray-500 shadow-lg hover:shadow-gray-500/30 shadow-black/30 text-white dark:bg-slate-800 dark:text-white px-2 py-1 border-2 rounded-lg border-gray-500"
                             onClick={() => handleLevelClick('Random')}
@@ -172,12 +172,12 @@ const Top100dsaProb = () => {
                         </button>
                     </div>
 
-                    <div className="w-full p-0 sm:p-0 md:p-4 lg:p-4 max-w-full mx-auto bg-[#f5f4fb]  dark:bg-slate-800 dark:border-none">
+                    <div className="w-full p-0 sm:p-0 md:p-4 lg:p-4 max-w-full mx-auto bg-gray-50  dark:bg-slate-800 dark:border-none">
                         {loading ? (
                             <Skeleton1 />
                         ) : (
-                            <div className="lg:mx-4 mx-2 bg-[#ffffff] dark:bg-slate-900 dark:text-white dark:border border-2 border-gray-400 rounded-lg overflow-auto">
-                                <table className="table dark:bg-slate-900 dark:text-white dark:border">
+                            <div className="lg:mx-4 mx-2 bg-gray-50 dark:bg-slate-900 dark:text-white dark:border border-2 border-gray-400 rounded-lg overflow-auto">
+                                <table className="table bg-white dark:bg-slate-900 dark:text-white dark:border">
                                     <thead className="font-semibold text-gray-600 shadow dark:bg-slate-900 dark:text-white">
                                         <Sheetheading />
                                     </thead>

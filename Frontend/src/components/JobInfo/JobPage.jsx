@@ -35,7 +35,7 @@ const JobPage = () => {
     return (
         <>
             <Navbar />
-            <div className="bg-gradient-to-l from-white via-red-50 to-gray-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 ">
+            <div className="bg-gradient-to-b from-white via-white to-white dark:from-slate-900 dark:via-slate-800 dark:to-slate-800 ">
                 <Breadcrumb />
                 {loading ? (
                     <Skeleton1 />

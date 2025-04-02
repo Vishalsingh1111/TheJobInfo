@@ -34,12 +34,12 @@ const Techblog = () => {
 
     return (
         <>
-            <div className="bg-gradient-to-l from-white via-red-50 to-gray-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 ">
+            <div className="bg-gradient-to-b p-4 from-white via-white to-white dark:from-slate-900 dark:via-slate-800 dark:to-slate-800 ">
                 <Breadcrumb />
                 {loading ? (
                     <Skeleton1 />
                 ) : (
-                    <div className="flex flex-wrap justify-center max-w-screen-2xl mx-auto md:px-20 px-4 py-5 pt-10">
+                    <div className="max-w-[1300px] container mx-auto my-10 px-0 md:px-20 grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {data.map(item => (
                             <Blogcard key={item.id} item={item} onClick={() => handleCardClick(item.id.toString())} />
                         ))}

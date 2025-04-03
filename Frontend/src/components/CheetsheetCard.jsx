@@ -7,7 +7,7 @@ const cheatsheets = [
     { name: "C Cheatsheet", icon: "/images/c.png", link: "/C", bgColor: "bg-gray-50" },
     { name: "C++ Cheatsheet", icon: "/images/c++.png", link: "/Cpp", bgColor: "bg-gray-50" },
     { name: "C++ STL Cheatsheet", icon: "/images/c++.png", link: "/Cpp", bgColor: "bg-gray-50" },
-    { name: "JavaScript Cheatsheet", icon: "/images/js.png", link: "/Pagenotfound", bgColor: "bg-gray-50" },
+    { name: "JavaScript Cheatsheet", icon: "/images/js.png", link: "/JSCheatsheet", bgColor: "bg-gray-50" },
     { name: "Java Cheatsheet", icon: "/images/java.png", link: "/Java", bgColor: "bg-gray-50" },
 ];
 

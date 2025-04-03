@@ -40,6 +40,7 @@ import Top50dsaProb from './components/Top50dsaProb/Top50Sheetcard';
 import Contributeblog from './components/TechBlogs/UserContribution';
 import JobPage from './components/JobInfo/JobPage';
 import JobDetail from './components/JobInfo/JobDetail';
+import JSCheatsheet from './components/Cheatsheet/JS';
 
 
 const App = () => {
@@ -90,7 +91,7 @@ const App = () => {
           <Route path='/Profile' element={<Profile />} />
           <Route path='/Ai' element={<Ai />} />
           <Route path="/results/:id" component={ResultDetailPage} />
-
+          <Route path='/JSCheatsheet' element={<JSCheatsheet />} />
 
         </Routes>
         <Toaster />

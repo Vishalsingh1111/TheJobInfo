@@ -26,7 +26,7 @@ const ResourceCard = ({ title, description, buttonText, icon, link }) => {
     return (
         <a href={link} className="block group">
             <div className={`rounded-lg border border-gray-400 transition-colors dark:border dark:transparent dark:text-white dark:border-gray-400 dark:bg-transparent bg-gray-50`}>
-                <div className="px-4 pb-5 pt-2 rounded-md bg-transparent">
+                <div className="px-6 pb-5 pt-2 rounded-md bg-transparent">
                     <div className={`w-[10vmin] h-[10vmin] mt-2 mb-2 flex items-center justify-center ${iconBg} text-[5vmin] rounded-full`}>
                         <i className={`fas ${icon}`}></i>
                     </div>
@@ -46,7 +46,7 @@ const ResourceGrid = () => (
         <h1 className="text-center text-3xl md:text-4xl font-semibold text-gray-700 dark:text-white mb-10">
             Courses Offered For Your <span className="text-red-500">Preparation</span>
         </h1>
-        <div className="max-w-[1230px] container mx-auto mb-10 px-0 md:px-20 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="max-w-[1200px] container mx-auto mb-10 px-0 md:px-20 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {resources.map((resource, index) => (
                 <ResourceCard key={index} {...resource} />
             ))}

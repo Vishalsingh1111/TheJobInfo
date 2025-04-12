@@ -41,10 +41,9 @@ const Navbar = () => {
                 <details>
                     <summary>DSA SHEET</summary>
                     <ul className="bg-base-100 w-[200px] rounded-t-none rounded-md py-5 dark:bg-slate-900 dark:text-white">
-                        <li><a href='/New-Updated-Sheet'>NEW UPDATED SHEET</a></li>
                         <li><a href='/Company-Wise-Sheet'>COMPANY WISE SHEET</a></li>
                         <li><a href='/Top-50'>TOP 50 DSA PROBLEMS</a></li>
-
+                        <li><a href='/New-Updated-Sheet'>NEW UPDATED SHEET</a></li>
                     </ul>
                 </details>
             </li>

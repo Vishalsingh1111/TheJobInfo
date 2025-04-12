@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 
 function Banner() {
     return (
-        <div className="relative min-h-screen md:py-0 py-20 flex flex-col items-center justify-center bg-gradient-to-l from-white via-red-50 to-white dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 overflow-hidden text-center px-6">
+        <div className="relative min-h-screen md:py-0 py-20 flex flex-col items-center justify-center bg-gradient-to-l from-white via-gray-100 to-white dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 overflow-hidden text-center px-6">
             {/* Animated Background Waves */}
             <motion.div
                 className="absolute w-full h-full opacity-20"
@@ -12,18 +12,6 @@ function Banner() {
                 animate={{ opacity: 1 }}
                 transition={{ duration: 2 }}
 
-            ></motion.div>
-
-            {/* Rotating Dots Animation */}
-            <motion.div
-                className="fixed w-[120px] h-[120px] bg-red-500 rounded-full opacity-30 top-[300px] left-20 blur-xl"
-                animate={{ x: [0, 20, -100, 0], rotate: 360 }}
-                transition={{ repeat: Infinity, duration: 5 }}
-            ></motion.div>
-            <motion.div
-                className="fixed w-[120px] h-[120px] bg-green-500 rounded-full opacity-30 bottom-10 right-20 blur-xl"
-                animate={{ y: [0, 20, -100, 0], rotate: -360 }}
-                transition={{ repeat: Infinity, duration: 5 }}
             ></motion.div>
 
             <motion.div

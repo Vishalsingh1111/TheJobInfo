@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import leetcodesvg from '../../../public/leetcode.svg';
-import notesvg from '../../../public/note.svg';
+import leetcodesvg from '/leetcode.svg';
+import notesvg from '/note.svg';
 import NoteModal from './Keepnote';
-import emptyStar from '../../../public/empty-start.svg';
-import filledStar from '../../../public/fill-star.svg';
+import emptyStar from '/empty-start.svg';
+import filledStar from '/fill-star.svg';
 
 function Sheetproblems({ item }) {
     const [isChecked, setIsChecked] = useState(false);

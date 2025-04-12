@@ -160,7 +160,7 @@ function SheetViewer() {
                             </div>
                         </div>
                     ) : (
-                        <p className="text-gray-600 dark:text-white">Select a sheet to view problems.</p>
+                        <Skeleton />
                     )}
                 </div>
             </div>

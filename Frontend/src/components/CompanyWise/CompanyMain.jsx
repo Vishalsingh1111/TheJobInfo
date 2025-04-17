@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import { baseUrl } from "../../Baseurl";
-import notesvg from '../../../public/note.svg';
+import notesvg from '/note.svg';
 import NoteModal from '../Sriversdecomponents/Keepnote';
 import Sheetheading from "../Sriversdecomponents/Sheetheading";
 import Skeleton1 from "../Skeleton";
@@ -309,6 +309,7 @@ const CompanyMain = () => {
                         )}
                     </div>
                 </div>
+
             </section>
 
 

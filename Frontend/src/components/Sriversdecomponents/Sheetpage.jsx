@@ -14,7 +14,7 @@ function SheetViewer() {
     const [loadingSheets, setLoadingSheets] = useState(true);
     const [loadingProblems, setLoadingProblems] = useState(false);
     const [selectedLevel, setSelectedLevel] = useState('');
-    const [sidebarOpen, setSidebarOpen] = useState(false);
+
 
     useEffect(() => {
         const fetchSheets = async () => {
@@ -62,57 +62,47 @@ function SheetViewer() {
     };
 
     return (
-        <div className="flex flex-col min-h-screen md:h-screen ">
+        <div className="flex flex-col">
             {/* Navbar */}
             <div className="dark:bg-gradient-to-t dark:from-slate-800 dark:to-slate-900 bg-gradient-to-b to-red-50 from-[#fff] py-4 relative">
                 <Breadcrumb />
-                <div className='text-center justify-center mx-auto font-semibold dark:text-white text-gray-700'>
+                <div className='text-center justify-center mx-auto font-normal dark:text-white text-gray-700'>
                     <div className='flex flex-col'>
                         <span className="text-[4.5vmax] md:text-[5.5vmin] titillium-web-bold text-gray-600 dark:text-white">
                             <span className="text-red-500">SDE Sheet </span>Most Asked In Interview
                         </span>
                     </div>
+
+
+                    {/* Navbar */}
+                    <div className="w-full mx-auto md:px-[120px] pb-1">
+                        {loadingSheets ? (
+                            <p className="dark:text-white">Loading ..</p>
+                        ) : (
+                            <div className='flex overflow-x-auto whitespace-nowrap mb-4  dark:text-white  py-3 px-1 rounded-sm'>
+                                {sheets.map(sheet => (
+                                    <button
+                                        key={sheet.id}
+                                        className={`text-md mx-0.5 px-3 py-1 ${selectedSheet?.id === sheet.id ? "text-white border dark:text-white rounded-sm bg-red-500 border-red-500" : "text-gray-900  dark:text-white  dark:border-white rounded-sm border border-gray-900"}`}
+                                        onClick={() => {
+                                            handleSheetClick(sheet);
+                                        }}
+                                    >
+                                        {sheet.name}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+
                 </div>
             </div>
 
             {/* Content Area */}
-            <div className="flex flex-1 overflow-hidden dark:bg-slate-900 relative mr-0 md:mr-10">
-
-
-                {/* Sidebar */}
-                <div className={`
-                    fixed md:static top-20 right-0 h-full z-40 transition-transform duration-300
-                    ${sidebarOpen ? 'translate-x-0' : 'translate-x-full'} 
-                    md:translate-x-0 w-[240px] bg-white dark:bg-slate-800 p-4 pt-8
-                `}>
-                    {loadingSheets ? (
-                        <p className="dark:text-white">Loading ..</p>
-                    ) : (
-                        <ul className="space-y-1">
-                            {sheets.map(sheet => (
-                                <li
-                                    key={sheet.id}
-                                    className={`cursor-pointer px-3 py-2 rounded hover:bg-gray-200 dark:hover:bg-slate-700 ${selectedSheet?.id === sheet.id ? 'bg-gray-200 dark:bg-slate-700 font-semibold' : ''}`}
-                                    onClick={() => {
-                                        handleSheetClick(sheet);
-                                        setSidebarOpen(false); // Auto-close on mobile
-                                    }}
-                                >
-                                    {sheet.name}
-                                </li>
-                            ))}
-                        </ul>
-                    )}
-                </div>
+            <div className="relative max-w-screen-2xl flex container md:px-[130px]  px-2 overflow-visible dark:bg-slate-900 dark:text-white lg:pb-[90px] lg:pt-[10px] text-center">
 
                 {/* Main Content */}
                 <div className="flex-1 overflow-y-auto scrollbar-hide p-2">
-                    {/* Hamburger Icon – absolute top-left of content area */}
-                    <div className="md:hidden">
-                        <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-2 rounded-md bg-blue-500 text-white dark:bg-slate-700">
-                            Choose Topic
-                        </button>
-                    </div>
                     {loadingProblems ? (
                         <Skeleton />
                     ) : selectedSheet ? (

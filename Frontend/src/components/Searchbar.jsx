@@ -91,11 +91,11 @@ function SearchForm() {
 
             <div className="w-full relative">
                 {query.length > 0 && !isSuggestionSelected && suggestions.length > 0 && ( // Check both query and selection state
-                    <ul className="absolute w-full bg-red-50 text-left shadow-md h-[300px] overflow-auto rounded-lg p-2 mb-4 dark:bg-slate-800 z-10">
+                    <ul className="absolute w-full bg-gray-50 text-left shadow-md h-[300px] overflow-auto rounded-lg p-2 mb-4 dark:bg-slate-800 z-10">
                         {suggestions.map((suggestion) => (
                             <li
                                 key={suggestion._id}
-                                className="p-2 hover:bg-red-200 dark:hover:bg-gray-700 cursor-pointer"
+                                className="p-2 hover:bg-red-100 dark:hover:bg-gray-700 cursor-pointer"
                                 onClick={() => handleSuggestionClick(suggestion)}
                             >
                                 {suggestion.header}

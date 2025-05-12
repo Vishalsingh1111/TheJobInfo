@@ -1,86 +1,87 @@
-import React, { useEffect, useState } from 'react';
-import Logout from './Logout';
+import React, { useEffect, useRef, useState } from 'react';
 import { useAuth } from '../Context/AuthProvider';
 import TechAICard from './TechAICard';
 
 const Navbar = () => {
-    // Use Auth context
-    const [authUser, setAuthUser] = useAuth();
-
+    const [authUser] = useAuth();
     const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
-    const element = document.documentElement;
+    const [sticky, setSticky] = useState(false);
 
-    // Handle theme change
+    // Refs for dropdowns
+    const dsaRef = useRef(null);
+    const notesRef = useRef(null);
+    const moreRef = useRef(null);
+
+    // Theme handler
     useEffect(() => {
+        const element = document.documentElement;
         if (theme === "dark") {
             element.classList.add("dark");
-            localStorage.setItem("theme", "dark");
             document.body.classList.add("dark");
         } else {
             element.classList.remove("dark");
-            localStorage.setItem("theme", "light");
             document.body.classList.remove("dark");
         }
+        localStorage.setItem("theme", theme);
     }, [theme]);
 
-    // Handle sticky navbar
-    const [sticky, setSticky] = useState(false);
-
+    // Sticky navbar on scroll
     useEffect(() => {
-        const handleScroll = () => {
-            setSticky(window.scrollY > 0);
-        };
+        const handleScroll = () => setSticky(window.scrollY > 0);
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
+    // Close dropdowns on outside click
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            [dsaRef, notesRef, moreRef].forEach(ref => {
+                if (ref.current && !ref.current.contains(event.target)) {
+                    ref.current.removeAttribute('open');
+                }
+            });
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
     const navItems = (
         <>
             <li><a href='/'>HOME</a></li>
             <li>
-                <details>
+                <details ref={dsaRef}>
                     <summary>DSA SHEET</summary>
-                    <ul className="bg-base-100 w-[200px] rounded-t-none rounded-md py-5 dark:bg-slate-900 dark:text-white">
+                    <ul className="bg-white w-[200px] rounded-t-none rounded-md py-5 dark:bg-slate-900 dark:text-white">
                         <li><a href='/New-Updated-Sheet'>NEW UPDATED SHEET</a></li>
                         <li><a href='/Company-Wise-Sheet'>COMPANY WISE SHEET</a></li>
                         <li><a href='/Top-50'>TOP 50 DSA PROBLEMS</a></li>
                     </ul>
                 </details>
             </li>
-
-
             <li><a href='/JobPage'>JOB INFO</a></li>
-
-
             <li>
-                <details>
+                <details ref={notesRef}>
                     <summary>NOTES</summary>
-                    <ul className="bg-base-100 w-[200px] rounded-t-none rounded-md py-5 dark:bg-slate-900 dark:text-white">
+                    <ul className="bg-white w-[200px] rounded-t-none rounded-md py-5 dark:bg-slate-900 dark:text-white">
                         <li><a href='/Languages'>PROGRAMING LANGUAGE</a></li>
                         <li><a href='/CS-Fundamental'>CS FUNDAMENTAL</a></li>
-
                     </ul>
                 </details>
             </li>
-
             <li><a href='/Technical-Blog'>BLOGS</a></li>
-
-
             <li>
-                <details>
+                <details ref={moreRef}>
                     <summary>MORE</summary>
-                    <ul className="bg-base-100 w-48 rounded-t-none rounded-md p-2 dark:bg-slate-900 dark:text-white">
-                        {/* <li><a href='/Project'>PROJECT IDEAS</a></li> */}
+                    <ul className="bg-white w-48 rounded-t-none rounded-md p-2 dark:bg-slate-900 dark:text-white">
                         <li><a href='/Contest-Solution'>CONTEST SOLUTION</a></li>
                     </ul>
                 </details>
             </li>
-
         </>
     );
 
     return (
-        <div className={`max-w-screen-2xl container font-[600] mx-auto md:px-20 px-4 dark:bg-none dark:text-white z-50 fixed top-0 left-0 ${sticky ? "sticky-navbar shadow-md bg-[rgb(255,255,255)] dark:bg-slate-900 dark:text-white duration-300 transition-all ease-in-out" : ""}`} >
+        <div className={`max-w-screen-2xl container font-[600] mx-auto md:px-20 px-4 dark:bg-none dark:text-white z-50 fixed top-0 left-0 ${sticky ? "sticky-navbar shadow-md bg-[rgb(255,255,255)] dark:bg-slate-900 dark:text-white duration-300 transition-all ease-in-out" : ""}`}>
             <div className="navbar">
                 <div className="navbar-start">
                     <div className="dropdown">
@@ -110,24 +111,18 @@ const Navbar = () => {
                     <TechAICard />
 
                     {!authUser && (
-                        <a href="/Login" className="bg-red-600 text-white px-3.5 py-1.5 text-white shadow-lg hover:shadow-red-500/30 shadow-black/30 rounded-md duration-300 cursor-pointer dark:bg-red-800">
+                        <a href="/Login" className="bg-red-600 text-white px-3.5 py-1.5 shadow-lg hover:shadow-red-500/30 shadow-black/30 rounded-md duration-300 cursor-pointer dark:bg-red-800">
                             Login
                         </a>
                     )}
                 </div>
 
-
-
                 <div>
-                    {authUser ? (
+                    {authUser && (
                         <div className='md:ml-2 lg:ml-10 ml-2 w-[42px] h-[42px]'>
                             <a href='/Profile'>
                                 {authUser.photo && authUser.photo !== "null" ? (
-                                    <img
-                                        src={authUser.photo}
-                                        alt="Profile"
-                                        className='w-[42px] h-[42px] rounded-full'
-                                    />
+                                    <img src={authUser.photo} alt="Profile" className='w-[42px] h-[42px] rounded-full' />
                                 ) : (
                                     <h1 className='text-white text-2xl text-center leading-[42px] w-[42px] h-[42px] bg-red-500 cursor-pointer rounded-full'>
                                         {authUser.firstName ? authUser.firstName.charAt(0).toUpperCase() : '0'}
@@ -135,13 +130,11 @@ const Navbar = () => {
                                 )}
                             </a>
                         </div>
-                    ) : null}
+                    )}
                 </div>
-
             </div>
         </div>
     );
 };
 
 export default Navbar;
-

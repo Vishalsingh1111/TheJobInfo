@@ -3,7 +3,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
 import CodeSnippet from "../CodeSnippet/CodeSnippet";
-import Commentbox from '../Commentbox';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
 import Breadcrumb from '../Breadcrumb';
@@ -84,7 +83,7 @@ const ContestDetail = () => {
         <>
             <Navbar />
             <Breadcrumb />
-            <div className=" mx-auto max-w-screen-2xl md:px-20 px-4">
+            <div className=" mx-auto max-w-screen-2xl md:px-20 px-4 mb-10">
 
                 <div className="flex items-center justify-center py-10">
                     <h2 className="text-4xl text-red-500 font-bold mb-4 sm:mb-0">{item.header}</h2>
@@ -185,9 +184,6 @@ const ContestDetail = () => {
 
 
 
-            </div>
-            <div className='bg-gray-50 dark:bg-slate-800'>
-                <Commentbox />
             </div>
             <Footer />
         </>

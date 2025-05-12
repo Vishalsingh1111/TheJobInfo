@@ -1,23 +1,23 @@
-import JobInfo from "../Modal/JobInfo.modal.js";
+import Cheatnote from "../Modal/CheatNote.modal.js";
 
-export const getJobInfo = async (req, res) => {
+export const getCheatnote = async (req, res) => {
     try {
-        const jobInfoList = await JobInfo.find(); // Renamed variable to avoid conflict
-        res.status(200).json(jobInfoList);
+        const CheatnoteList = await Cheatnote.find(); // Renamed variable to avoid conflict
+        res.status(200).json(CheatnoteList);
     } catch (error) {
         console.error("Error fetching job info:", error);
         res.status(500).json({ error: "Error fetching job info" });
     }
 };
 
-export const createJobInfo = async (req, res) => {
+export const createCheatnote = async (req, res) => {
     try {
         const {
             id, header, text, statement, substatement1, substatement3, statement2, feature,
             substatement2, explain, note, image1, category, figtitle, link1, link2
         } = req.body;
 
-        const newJobInfo = new JobInfo({
+        const newCheatnote = new Cheatnote({
             id,
             header,
             text,
@@ -36,15 +36,15 @@ export const createJobInfo = async (req, res) => {
             link2
         });
 
-        await newJobInfo.save();
-        res.status(201).json({ message: "Created successfully", newJobInfo });
+        await newCheatnote.save();
+        res.status(201).json({ message: "Created successfully", newCheatnote });
     } catch (error) {
         console.error("Error creating job info:", error);
         res.status(500).json({ error: "Error creating job info" });
     }
 };
 
-export const updateJobInfo = async (req, res) => {
+export const updateCheatnote = async (req, res) => {
     const { id } = req.params;
     const {
         header, text, statement, substatement1, substatement3, statement2, feature,
@@ -52,7 +52,7 @@ export const updateJobInfo = async (req, res) => {
     } = req.body;
 
     try {
-        const updatedJobInfo = await JobInfo.findByIdAndUpdate(
+        const updatedCheatnote = await Cheatnote.findByIdAndUpdate(
             id,
             {
                 header, text, statement, substatement1, substatement3, statement2, feature,
@@ -61,24 +61,24 @@ export const updateJobInfo = async (req, res) => {
             { new: true }
         );
 
-        if (!updatedJobInfo) {
+        if (!updatedCheatnote) {
             return res.status(404).json({ error: "Job info not found" });
         }
 
-        res.status(200).json({ message: "Content updated successfully", updatedJobInfo });
+        res.status(200).json({ message: "Content updated successfully", updatedCheatnote });
     } catch (error) {
         console.error("Error updating job info:", error);
         res.status(500).json({ error: "Error updating job info" });
     }
 };
 
-export const deleteJobInfo = async (req, res) => {
+export const deleteCheatnote = async (req, res) => {
     const { id } = req.params;
 
     try {
-        const deletedJobInfo = await JobInfo.findByIdAndDelete(id);
+        const deletedCheatnote = await Cheatnote.findByIdAndDelete(id);
 
-        if (!deletedJobInfo) {
+        if (!deletedCheatnote) {
             return res.status(404).json({ error: "Job info not found" });
         }
 

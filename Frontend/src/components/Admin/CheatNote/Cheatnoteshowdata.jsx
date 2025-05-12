@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Projectupdatebtncomp from './Projectupdatebtncomp';
+import Cheatnoteupdatebtncomp from './Cheatnoteupdatebtncomp';
 import { baseUrl } from '../../../Baseurl';
 
-const NoteList = () => {
+const Cheatnote = () => {
     const [notes, setNotes] = useState([]);
     const [updatingNote, setUpdatingNote] = useState(null); // Track which note is being updated
     const [isModalOpen, setIsModalOpen] = useState(false); // Track modal state for update
@@ -12,7 +12,7 @@ const NoteList = () => {
     useEffect(() => {
         const fetchNotes = async () => {
             try {
-                const response = await axios.get(`${baseUrl}/project`);
+                const response = await axios.get(`${baseUrl}/Cheatnote`);
                 setNotes(response.data); // Assuming API response is an array of notes
             } catch (error) {
                 console.error('Error fetching notes:', error);
@@ -36,7 +36,7 @@ const NoteList = () => {
 
     const handleDelete = async (id) => {
         try {
-            await axios.delete(`${baseUrl}/project/${id}`);
+            await axios.delete(`${baseUrl}/Cheatnote/${id}`);
             setNotes(notes.filter(note => note._id !== id)); // Remove the deleted note from the local state
             console.log('Deleted note with id:', id);
         } catch (error) {
@@ -68,19 +68,12 @@ const NoteList = () => {
                                 <th className='border border-gray-300 px-4 py-2'>Statement</th>
                                 <th className='border border-gray-300 px-4 py-2'>Substatement1</th>
                                 <th className='border border-gray-300 px-4 py-2'>Substatement3</th>
-                                <th className='border border-gray-300 px-4 py-2'>Code1</th>
-                                <th className='border border-gray-300 px-4 py-2'>Code2</th>
-                                <th className='border border-gray-300 px-4 py-2'>Code3</th>
-                                <th className='border border-gray-300 px-4 py-2'>Code4</th>
                                 <th className='border border-gray-300 px-4 py-2'>Statement2</th>
                                 <th className='border border-gray-300 px-4 py-2'>Feature</th>
                                 <th className='border border-gray-300 px-4 py-2'>Substatement2</th>
                                 <th className='border border-gray-300 px-4 py-2'>Explain</th>
                                 <th className='border border-gray-300 px-4 py-2'>Note</th>
                                 <th className='border border-gray-300 px-4 py-2'>Image1</th>
-                                <th className='border border-gray-300 px-4 py-2'>Image2</th>
-                                <th className='border border-gray-300 px-4 py-2'>Image3</th>
-                                <th className='border border-gray-300 px-4 py-2'>Image4</th>
                                 <th className='border border-gray-300 px-4 py-2'>Category</th>
                                 <th className='border border-gray-300 px-4 py-2'>Figtitle</th>
                                 <th className='border border-gray-300 px-4 py-2'>Link1</th>
@@ -97,19 +90,12 @@ const NoteList = () => {
                                     <td className='border border-gray-300 px-4 py-3'>{note.statement}</td>
                                     <td className='border border-gray-300 px-4 py-3'>{note.substatement1}</td>
                                     <td className='border border-gray-300 px-4 py-3'>{note.substatement3}</td>
-                                    <td className='border border-gray-300 px-4 py-3'>{note.code1}</td>
-                                    <td className='border border-gray-300 px-4 py-3'>{note.code2}</td>
-                                    <td className='border border-gray-300 px-4 py-3'>{note.code3}</td>
-                                    <td className='border border-gray-300 px-4 py-3'>{note.code4}</td>
                                     <td className='border border-gray-300 px-4 py-3'>{note.statement2}</td>
                                     <td className='border border-gray-300 px-4 py-3'>{note.feature}</td>
                                     <td className='border border-gray-300 px-4 py-3'>{note.substatement2}</td>
                                     <td className='border border-gray-300 px-4 py-3'>{note.explain}</td>
                                     <td className='border border-gray-300 px-4 py-3'>{note.note}</td>
                                     <td className='border border-gray-300 px-4 py-3'>{note.image1}</td>
-                                    <td className='border border-gray-300 px-4 py-3'>{note.image2}</td>
-                                    <td className='border border-gray-300 px-4 py-3'>{note.image3}</td>
-                                    <td className='border border-gray-300 px-4 py-3'>{note.image4}</td>
                                     <td className='border border-gray-300 px-4 py-3'>{note.category}</td>
                                     <td className='border border-gray-300 px-4 py-3'>{note.figtitle}</td>
                                     <td className='border border-gray-300 px-4 py-3'>{note.link1}</td>
@@ -132,7 +118,7 @@ const NoteList = () => {
             {isModalOpen && (
                 <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
                     <div className="bg-white p-8 rounded shadow-lg flex flex-col">
-                        <Projectupdatebtncomp note={updatingNote} onUpdateSuccess={handleUpdateSuccess} onClose={closeModal} />
+                        <Cheatnoteupdatebtncomp note={updatingNote} onUpdateSuccess={handleUpdateSuccess} onClose={closeModal} />
                     </div>
                 </div>
             )}
@@ -153,4 +139,4 @@ const NoteList = () => {
     );
 };
 
-export default NoteList;
+export default Cheatnote;

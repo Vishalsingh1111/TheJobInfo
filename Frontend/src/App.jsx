@@ -3,7 +3,6 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import Home from '../src/Home/Home';
 import Languages from './Content/Languages';
-import Project from './Content/Project';
 import About from './components/Whatweoffer';
 import Sheet from './Content/Sheet';
 import LoginPage from './components/Login';
@@ -25,8 +24,6 @@ import CSPage from './components/CSSubject/CSPage';
 import BlogDetail from './components/TechBlogs/Blogdetail';
 import ContestSol from './components/ContestSolution/ContestSolPage';
 import ContestSoldetail from './components/ContestSolution/Contestdetail';
-import Projectdetail from './components/Projects/Projectdetail';
-import Projectpage from './components/Projects/Projectpage';
 import DashBoard from './components/Admin/Dashboard';
 import Contactform from './Contacts/Contactform';
 import { useAuth } from './Context/AuthProvider';
@@ -38,9 +35,7 @@ import NewUpdatedSheet from '../src/Content/Sheet';
 import CompanyWiseSheet from './components/CompanyWise/CompanyMain';
 import Top50dsaProb from './components/Top50dsaProb/Top50Sheetcard';
 import Contributeblog from './components/TechBlogs/UserContribution';
-import JobPage from './components/JobInfo/JobPage';
-import JobDetail from './components/JobInfo/JobDetail';
-import JSCheatsheet from './components/Cheatsheet/JS';
+import JSCheatsheet from './components/CheatNote/JS';
 
 
 const App = () => {
@@ -59,7 +54,6 @@ const App = () => {
           <Route path="/About" element={<About />}></Route>
           <Route path='/Contactform' element={authUser ? <Contactform /> : <Navigate to="/Signup" />}></Route>
           <Route path="/Languages" element={<Languages />}></Route>
-          <Route path="/Project" element={<Project />}></Route>
           <Route path="/Sheet" element={<Sheet />}></Route>
           <Route path="/Signup" element={<Signup />}></Route>
           <Route path="/Login" element={<LoginPage />}></Route>
@@ -82,10 +76,6 @@ const App = () => {
           <Route path='/techblog' element={<Techblog />}></Route>
           <Route path='/Contibuteblog' element={authUser ? <Contributeblog /> : <Navigate to="/Signup" />}></Route>
           <Route path='/detail/:id' element={<BlogDetail />}></Route>
-          <Route path='/Projectpage' element={<Projectpage />}></Route>
-          <Route path='/JobPage' element={<JobPage />}></Route>
-          <Route path='/jobdetail/:id' element={<JobDetail />}></Route>
-          <Route path='/projectdetail/:id' element={<Projectdetail />}></Route>
           <Route path='/contestdetail/:id' element={<ContestSoldetail />}></Route>
           <Route path='/Dashboard' element={authAdmin ? <DashBoard /> : <Navigate to="/Adminlogin" />}></Route>
           <Route path='/Profile' element={<Profile />} />

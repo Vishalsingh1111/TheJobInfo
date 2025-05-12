@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { baseUrl } from '../../../Baseurl';
 
-const UpdateJobInfocontentForm = ({ note, onUpdateSuccess, onClose }) => {
+const UpdateCheatnotecontentForm = ({ note, onUpdateSuccess, onClose }) => {
     const [updatedNoteData, setUpdatedNoteData] = useState({
         id: note.id,
         header: note.header,
@@ -33,7 +33,7 @@ const UpdateJobInfocontentForm = ({ note, onUpdateSuccess, onClose }) => {
     const handleSaveUpdate = async (e) => {
         e.preventDefault();
         try {
-            await axios.put(`${baseUrl}/jobinfo/${note._id}`, updatedNoteData);
+            await axios.put(`${baseUrl}/Cheatnote/${note._id}`, updatedNoteData);
             onUpdateSuccess(updatedNoteData);
             console.log('Note updated successfully!');
         } catch (error) {
@@ -98,4 +98,4 @@ const UpdateJobInfocontentForm = ({ note, onUpdateSuccess, onClose }) => {
     );
 };
 
-export default UpdateJobInfocontentForm;
+export default UpdateCheatnotecontentForm;

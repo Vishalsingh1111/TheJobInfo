@@ -11,18 +11,11 @@ const FormElementInput = () => {
         substatement1: "",
         substatement2: "",
         substatement3: "",
-        code1: "",
-        code2: "",
-        code3: "",
-        code4: "",
         statement2: "",
         feature: "",
         explain: "",
         note: "",
         image1: "",
-        image2: "",
-        image3: "",
-        image4: "",
         category: "",
         figtitle: "",
         link1: "",
@@ -37,7 +30,7 @@ const FormElementInput = () => {
     };
 
     const validateForm = () => {
-        const requiredFields = ["id", "header", "category", "code1"];
+        const requiredFields = ["id", "header"]; // Removed "code1"
         let errors = {};
         for (let field of requiredFields) {
             if (!formData[field]) {
@@ -56,8 +49,8 @@ const FormElementInput = () => {
         }
 
         try {
-            await axios.post(`${baseUrl}/project`, formData, {
-                headers: { "Content-Type": "application/json" }
+            await axios.post(`${baseUrl}/Cheatnote`, formData, {
+                headers: { "Content-Type": "application/json" },
             });
             alert("Content Uploaded Successfully!");
             setFormData({
@@ -68,18 +61,11 @@ const FormElementInput = () => {
                 substatement1: "",
                 substatement2: "",
                 substatement3: "",
-                code1: "",
-                code2: "",
-                code3: "",
-                code4: "",
                 statement2: "",
                 feature: "",
                 explain: "",
                 note: "",
                 image1: "",
-                image2: "",
-                image3: "",
-                image4: "",
                 category: "",
                 figtitle: "",
                 link1: "",
@@ -87,15 +73,15 @@ const FormElementInput = () => {
             });
             setValidationErrors({});
         } catch (error) {
-            console.error("Error submitting note:", error);
-            alert("Error, Fill Required Details");
+            console.error("Error submitting note:", error.message || error);
+            alert("Error occurred. Please try again.");
         }
     };
 
     return (
         <section className="mx-5 dark:bg-gray-800">
             <div className="mb-10">
-                <h1 className="text-center text-3xl text-black">Enter Required Details</h1>
+                <h1 className="text-center text-3xl text-black dark:text-white">Enter Required Details</h1>
             </div>
             <div className="container mx-auto p-10 border-2 rounded-xl text-left">
                 <form onSubmit={handleSubmit} className="flex flex-wrap -mx-4">
@@ -111,7 +97,10 @@ const FormElementInput = () => {
                         </DefaultColumn>
                     ))}
                     <div className="w-full px-4 text-center">
-                        <button type="submit" className="bg-red-500 shadow-lg hover:shadow-red-500/30 shadow-black/30  text-white py-3 px-10 rounded-md">
+                        <button
+                            type="submit"
+                            className="bg-red-500 shadow-lg hover:bg-red-600 text-white py-3 px-10 rounded-md transition ease-in-out duration-200"
+                        >
                             Submit
                         </button>
                     </div>
@@ -121,22 +110,20 @@ const FormElementInput = () => {
     );
 };
 
-const DefaultColumn = ({ children }) => {
-    return (
-        <div className="w-full px-4 md:w-1/2 lg:w-1/3">
-            <div className="mb-8">{children}</div>
-        </div>
-    );
-};
+const DefaultColumn = ({ children }) => (
+    <div className="w-full px-4 md:w-1/2 lg:w-1/3">
+        <div className="mb-8">{children}</div>
+    </div>
+);
 
 const DefaultInput = ({ name, value, onChange, label, error }) => {
-    const isRequired = name === "id" || name === "header" || name === "category" || name === "code1";
-    const isTextarea = !["links", "images", "id"].includes(name.toLowerCase());
+    const isTextarea = ["text", "statement", "note", "explain"].includes(name);
 
     return (
         <>
             <label className="block text-base font-medium text-gray-700 dark:text-gray-300 mb-2">
-                {label}{isRequired && <span className="text-red-500">*</span>}
+                {label}
+                {["id", "header"].includes(name) && <span className="text-red-500">*</span>}
             </label>
             {isTextarea ? (
                 <textarea
@@ -144,7 +131,7 @@ const DefaultInput = ({ name, value, onChange, label, error }) => {
                     value={value}
                     onChange={onChange}
                     placeholder={`Enter ${label.toLowerCase()}`}
-                    rows={3} // Adjust rows as needed
+                    rows={3}
                     className="w-full bg-white dark:bg-gray-700 rounded-md border border-gray-300 dark:border-gray-600 py-3 px-4 text-gray-700 dark:text-gray-300 outline-none transition duration-150 ease-in-out focus:border-red-500 dark:focus:border-red-400 focus:ring focus:ring-red-200 dark:focus:ring-red-900 resize-none"
                 />
             ) : (

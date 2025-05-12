@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const JobInfoSchema = mongoose.Schema({
+const CheatnoteSchema = mongoose.Schema({
     id: { type: Number, required: true },
     header: { type: String, required: true },
     text: { type: String, required: false },
@@ -19,7 +19,7 @@ const JobInfoSchema = mongoose.Schema({
     link2: { type: String, required: false }
 });
 
-JobInfoSchema.index({ header: 'text', text: 'text' });
+CheatnoteSchema.index({ header: 'text', text: 'text' });
 
-const JobInfo = mongoose.model("JobInfo", JobInfoSchema);
-export default JobInfo;
+const Cheatnote = mongoose.model("Cheatnote", CheatnoteSchema);
+export default Cheatnote;

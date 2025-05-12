@@ -11,7 +11,6 @@ import noteRoute from "./Route/Note.route.js";
 import sheetRoute from "./Route/Sheet.route.js";
 import sheetproblemRoute from "./Route/Sheetproblem.route.js";
 import sdeproblemRoute from "./Route/SDEProblem.route.js";
-import projectRoute from "./Route/Project.route.js";
 import CheatnoteRoute from "./Route/CheatNote.route.js";
 import blogRoute from "./Route/Blog.route.js";
 import contestsolRoute from "./Route/ContestSol.route.js"
@@ -68,7 +67,6 @@ app.use("/note", noteRoute);
 app.use("/sheet", sheetRoute);
 app.use("/sheetproblem", sheetproblemRoute);
 app.use("/sdeproblem", sdeproblemRoute);
-app.use("/project", projectRoute);
 app.use("/cheatnote", CheatnoteRoute);
 app.use("/blog", blogRoute);
 app.use("/contestsol", contestsolRoute);

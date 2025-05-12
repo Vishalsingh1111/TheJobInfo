@@ -20,7 +20,6 @@ import contactRoute from "./Route/Contact.route.js";
 import AdminRoute from "./Route/Admin.route.js";
 import newslatterRoute from './Route/Newslatter.route.js';
 import searchRoute from './Route/Search.route.js';
-import commentRoute from './Route/Comment.route.js';
 import ViewercountRoute from './Route/Viewercount.route.js';
 
 // Controller imports
@@ -76,7 +75,6 @@ app.use("/contact", contactRoute);
 app.use("/admin", AdminRoute);
 app.use("/newslatter", newslatterRoute);
 app.use("/search", searchRoute);
-app.use("/comment", commentRoute);
 app.use("/viewercount", ViewercountRoute);
 
 // Chat route

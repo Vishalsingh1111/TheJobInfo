@@ -36,6 +36,7 @@ import CompanyWiseSheet from './components/CompanyWise/CompanyMain';
 import Top50dsaProb from './components/Top50dsaProb/Top50Sheetcard';
 import Contributeblog from './components/TechBlogs/UserContribution';
 import JSCheatsheet from './components/CheatNote/JS';
+import CppStl from './components/CheatNote/CPPSTL';
 
 
 const App = () => {
@@ -82,6 +83,7 @@ const App = () => {
           <Route path='/Ai' element={<Ai />} />
           <Route path="/results/:id" component={ResultDetailPage} />
           <Route path='/JSCheatsheet' element={<JSCheatsheet />} />
+          <Route path='/Cppstl' element={<CppStl />} />
 
         </Routes>
         <Toaster />

@@ -58,7 +58,6 @@ const Navbar = () => {
                     </ul>
                 </details>
             </li>
-            <li><a href='/JobPage'>JOB INFO</a></li>
             <li>
                 <details ref={notesRef}>
                     <summary>NOTES</summary>

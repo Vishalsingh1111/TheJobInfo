@@ -1,4 +1,7 @@
+
+
 import React, { useState, useEffect } from 'react';
+import { FaWhatsapp } from "react-icons/fa";
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
@@ -86,13 +89,13 @@ const ContestDetail = () => {
             <div className=" mx-auto max-w-screen-2xl md:px-20 px-4 mb-10">
 
                 <div className="flex items-center justify-center py-10">
-                    <h2 className="text-4xl text-red-500 font-bold mb-4 sm:mb-0">{item.header}</h2>
+                    <h2 className="text-5xl text-red-500 font-bold mb-4 sm:mb-0">{item.header}</h2>
                 </div>
 
                 <div className='flex flex-col md:flex-row'>
-                    <div className="w-full p-2 md:p-6 border rounded mx-auto bg-white dark:bg-slate-900 mt-3">
+                    <div className="w-full p-2 md:p-6 border rounded mx-auto bg-gray-50 dark:bg-slate-800 mt-3">
 
-                        <div className="flex flex-col items-left bg-gray-300 p-5 mb-5 border-l-2 border-l-red-500 dark:bg-slate-800">
+                        <div className="flex flex-col items-left bg-gray-300 p-5 mb-5 border-l-2 border-l-red-500 dark:bg-slate-700">
                             <h2 className="text-xl text-red-500 font-semibold item-left mb-2">Disclaimer !</h2>
                             <p className="text-lg">Do it yourself, This is only for reference. Don't Copy & Paste.</p>
                         </div>
@@ -152,15 +155,15 @@ const ContestDetail = () => {
                             </>
                         ))}
 
-                        <div className=' lg:space-x-8 flex flex-col lg:flex-row mt-5 mx-auto justify-center'>
+                        <div className=' lg:space-x-8 flex flex-col lg:flex-row mt-10 mx-auto justify-left'>
                             <iframe
-                                width="320"
-                                height="200"
+                                width="650"
+                                height="400"
                                 src={item.image}
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                 allowFullScreen
                                 title="YouTube Video"
-                                className='p-5 mb-5 dark:bg-slate-800 dark:border-none bg-[rgb(255,255,255)] border-t shadow shadow-black/40 rounded-lg'
+                                className='p-8 mb-5 dark:bg-slate-700 dark:border-none bg-[rgb(255,255,255)] border-t shadow shadow-black/40 rounded-lg'
                             ></iframe>
                         </div>
 
@@ -171,6 +174,21 @@ const ContestDetail = () => {
                             <button onClick={increaseThumbsDown} className="flex items-center text-gray-700 dark:text-gray-300">
                                 <FaThumbsDown className="mr-1 text-red-500" /> {thumbsDownCount}
                             </button>
+                            {/* Share Buttons */}
+                            <div className="flex items-center pl-5 text-md">
+
+                                {/* WhatsApp */}
+                                <a
+                                    href={`https://wa.me/?text=${encodeURIComponent(item.header + " - " + window.location.href)}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-green-500 hover:text-green-600"
+                                    title="Share on WhatsApp"
+                                >
+                                    <FaWhatsapp size={24} />
+                                </a>
+                            </div>
+
                         </div>
                     </div>
                     <div>
@@ -179,10 +197,6 @@ const ContestDetail = () => {
 
 
                 </div>
-
-
-
-
 
             </div>
             <Footer />

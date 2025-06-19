@@ -78,32 +78,61 @@ const Chat = () => {
                         How can I help you today?
                     </h2>
                 </div>
-                <div className=" w-full max-w-3xl mx-auto grid grid-cols-2 md:grid-cols-2 lg:grid-cols gap-4">
+                {/* <div className=" w-full max-w-3xl mx-auto grid grid-cols-2 md:grid-cols-2 lg:grid-cols gap-4">
                     <button
                         className="p-4 border rounded-2xl border-gray-300 justify-start flex text-left dark:bg-slate-900 dark-text-white"
-                        onClick={() => handleQuery('Outline a way to home routine: organizing my closet')}
+                        onClick={() => handleQuery('Outline a weekly coding practice routine for mastering Data Structures and Algorithms (DSA)')}
                     >
-                        Outline a way to home routine: organizing my closet
+                        Outline a weekly coding practice routine for mastering Data Structures and Algorithms (DSA)
                     </button>
                     <button
                         className="p-4 border rounded-2xl border-gray-300 justify-start flex text-left dark:bg-slate-900 dark-text-white"
-                        onClick={() => handleQuery('Help me incorporate more plant-based options in my diet')}
+                        onClick={() => handleQuery('Help me incorporate more real-world coding projects into my learning path')}
                     >
-                        Help me incorporate more plant-based options in my diet
+                        Help me incorporate more real-world coding projects into my learning path
                     </button>
                     <button
                         className="p-4 border rounded-2xl border-gray-300 justify-start flex text-left dark:bg-slate-900 dark-text-white"
-                        onClick={() => handleQuery('Come up with a recipe for an upcoming event')}
+                        onClick={() => handleQuery('Come up with a roadmap for building a portfolio project like a weather app or blog platform')}
                     >
-                        Come up with a recipe for an upcoming event
+                        Come up with a roadmap for building a portfolio project like a weather app or blog platform
                     </button>
                     <button
                         className="p-4 border rounded-2xl border-gray-300 justify-start flex text-left dark:bg-slate-900 dark-text-white"
-                        onClick={() => handleQuery('Create a 12-week study plan for learning a new language')}
+                        onClick={() => handleQuery('Create a 12-week study plan for learning a new programming language like Python or JavaScript')}
                     >
-                        Create a 12-week study plan for learning a new language
+                        Create a 12-week study plan for learning a new programming language like Python or JavaScript
+                    </button>
+                </div> */}
+
+                <div className="w-full max-w-3xl mx-auto grid grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-4">
+                    <button
+                        className="p-4 border rounded-2xl border-gray-300 justify-start flex text-left dark:bg-slate-900 dark:text-white"
+                        onClick={() => handleQuery('Weekly DSA practice plan')}
+                    >
+                        Weekly DSA practice plan
+                    </button>
+                    <button
+                        className="p-4 border rounded-2xl border-gray-300 justify-start flex text-left dark:bg-slate-900 dark:text-white"
+                        onClick={() => handleQuery('Add real-world coding projects to my learning')}
+                    >
+                        Real-world coding projects
+                    </button>
+                    <button
+                        className="p-4 border rounded-2xl border-gray-300 justify-start flex text-left dark:bg-slate-900 dark:text-white"
+                        onClick={() => handleQuery('Roadmap for a portfolio project')}
+                    >
+                        Portfolio project roadmap
+                    </button>
+                    <button
+                        className="p-4 border rounded-2xl border-gray-300 justify-start flex text-left dark:bg-slate-900 dark:text-white"
+                        onClick={() => handleQuery('12-week plan for learning a new language')}
+                    >
+                        12-week coding language plan
                     </button>
                 </div>
+
+
                 <div className='w-full max-w-3xl mx-auto mb-12 text-justify justify-start md:mt-10 mt-12 rounded  dark-text-white rounded-xl'>
                     {loading ? (
                         <div className="text-center text-2xl text-red-500">

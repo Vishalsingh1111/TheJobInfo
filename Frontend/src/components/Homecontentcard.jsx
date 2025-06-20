@@ -44,7 +44,7 @@ const resources = [
         buttonText: "Try it free",
         icon: "fa-pencil-alt",
         link: "/Contest-Solution",
-        tag: "Updating",
+        tag: "Updated",
         tagColor: "bg-orange-500"
     }
 ];

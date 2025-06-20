@@ -86,7 +86,7 @@ const ContestDetail = () => {
         <>
             <Navbar />
             <Breadcrumb />
-            <div className=" mx-auto max-w-screen-2xl md:px-20 px-4 mb-10">
+            <div className=" mx-auto max-w-screen-xl md:px-20 px-4 mb-10">
 
                 <div className="flex items-center justify-center py-10">
                     <h2 className="text-5xl text-red-500 font-bold mb-4 sm:mb-0">{item.header}</h2>
@@ -155,15 +155,15 @@ const ContestDetail = () => {
                             </>
                         ))}
 
-                        <div className=' lg:space-x-8 flex flex-col lg:flex-row mt-10 mx-auto justify-left'>
+                        <div className=' lg:space-x-8 flex flex-col lg:flex-row mt-10 mx-auto justify-center'>
                             <iframe
-                                width="650"
-                                height="400"
+                                width="100%"
+                                height="auto"
                                 src={item.image}
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                 allowFullScreen
                                 title="YouTube Video"
-                                className='p-8 mb-5 dark:bg-slate-700 dark:border-none bg-[rgb(255,255,255)] border-t shadow shadow-black/40 rounded-lg'
+                                className="w-[65vmin] lg:w-[80vmin] h-[45vmin] lg:h-[48vmin] p-[4vmin] lg:p-[4vmin] mb-5 dark:bg-transparent dark:border-gray-600 bg-gray-50 dark:border shadow shadow-black/40 rounded-lg"
                             ></iframe>
                         </div>
 
@@ -188,12 +188,12 @@ const ContestDetail = () => {
                                     <FaWhatsapp size={24} />
                                 </a>
                             </div>
-
                         </div>
                     </div>
-                    <div>
+
+                    {/* <div>
                         <SocialMediaPoster />
-                    </div>
+                    </div> */}
 
 
                 </div>

@@ -227,9 +227,6 @@ const SignupPage = () => {
                         </a>
                     </div>
                     <div className='flex space-x-5'>
-                        <a className="inline-block align-baseline text-sm text-blue-500 hover:underline" href="/Adminlogin">
-                            Admin Login
-                        </a>
                         <a className="inline-block align-baseline text-sm text-blue-500 hover:underline" href="/Login">
                             Already have account
                         </a>

@@ -188,9 +188,6 @@ const LoginPage = () => {
                         </a>
                     </div>
                     <div className='flex space-x-5'>
-                        <a className="inline-block align-baseline text-sm text-blue-500 hover:underline" href="/Adminlogin">
-                            Admin Login
-                        </a>
                         <a className="inline-block align-baseline text-sm text-blue-500 hover:underline" href="/Signup">
                             New user? Register
                         </a>

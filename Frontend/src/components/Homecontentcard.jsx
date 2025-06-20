@@ -6,7 +6,7 @@ const resources = [
         title: "Popular DSA Sheet",
         description: "Boost your DSA skills with our handy cheat sheets.",
         buttonText: "Try it free",
-        icon: "fa-file-alt",
+        icon: "fa-file-code",
         link: "/Sheet",
         tag: "Trending",
         tagColor: "bg-red-500"
@@ -24,7 +24,7 @@ const resources = [
         title: "Problems Solutions",
         description: "Dive Deep into Tech Innovation with Our Amazing Solution.",
         buttonText: "Try it free",
-        icon: "fa-blog",
+        icon: "fa-lightbulb",
         link: "/Technical-Blog",
         tag: "Top Rated",
         tagColor: "bg-yellow-500"
@@ -33,7 +33,7 @@ const resources = [
         title: "CS Fundamentals",
         description: "Demystify CS topics with our easy-to-understand guides.",
         buttonText: "Try it free",
-        icon: "fa-book",
+        icon: "fa-layer-group",
         link: "/CS-Fundamental",
         tag: "Quick Read",
         tagColor: "bg-green-500"
@@ -42,21 +42,33 @@ const resources = [
         title: "Contests Solution",
         description: "Level up your coding with participating in Contests.",
         buttonText: "Try it free",
-        icon: "fa-pencil-alt",
+        icon: "fa-stopwatch",
         link: "/Contest-Solution",
-        tag: "Updated",
+        tag: "Live Update",
         tagColor: "bg-orange-500"
-    }
+    },
+    {
+        title: "Interview Prep Roadmaps",
+        description: "Be Interview Ready for your dream Companies.",
+        buttonText: "Try it free",
+        icon: "fa-user-tie",
+        link: "/pagenotfound",
+        tag: "Upcoming",
+        tagColor: "bg-gray-500"
+    },
 ];
 
 const iconStyles = {
-    "fa-file-alt": "bg-blue-500 text-white",
+    "fa-file-code": "bg-blue-500 text-white",
     "fa-laptop-code": "bg-green-500 text-white",
-    "fa-blog": "bg-red-500 text-white",
+    "fa-lightbulb": "bg-red-500 text-white",
     "fa-play-circle": "bg-purple-500 text-white",
-    "fa-book": "bg-orange-500 text-white",
-    "fa-pencil-alt": "bg-pink-500 text-white"
+    "fa-layer-group": "bg-orange-500 text-white",
+    "fa-pencil-alt": "bg-pink-500 text-white",
+    "fa-stopwatch": "bg-pink-500 text-white",
+    "fa-user-tie": "bg-purple-600 text-white"
 };
+
 
 const ResourceCard = ({ title, description, buttonText, icon, link, tag, tagColor }) => {
     const iconBg = iconStyles[icon] || "bg-gray-500 text-white";
@@ -64,7 +76,7 @@ const ResourceCard = ({ title, description, buttonText, icon, link, tag, tagColo
     return (
         <a href={link} className="block group relative">
             {/* Top Label */}
-            <span className={`absolute top-5 right-3 px-2 py-1 text-[1.5vmax] md:text-[2vmin] titillium-web text-white rounded-md ${tagColor} z-10`}>
+            <span className={`absolute top-5 right-4 px-2 py-1 text-[1.5vmax] md:text-[2vmin] titillium-web text-white rounded-md ${tagColor} z-10`}>
                 {tag}
             </span>
 

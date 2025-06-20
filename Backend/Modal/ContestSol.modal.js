@@ -1,7 +1,36 @@
 
+// import mongoose from "mongoose";
+
+// const ContestSchema = mongoose.Schema(
+//     {
+//         id: { type: Number, required: true, unique: true },
+//         header: { type: String, required: false },
+//         code: { type: String, required: false },
+//         explanation: { type: String, required: false },
+//         code2: { type: String, required: false },
+//         explanation2: { type: String, required: false },
+//         code3: { type: String, required: false },
+//         explanation3: { type: String, required: false },
+//         code4: { type: String, required: false },
+//         explanation4: { type: String, required: false },
+//         code5: { type: String, required: false },
+//         explanation5: { type: String, required: false },
+//         image: { type: String, required: false },
+//         category: { type: String, required: true }
+//     },
+//     { timestamps: true }
+// );
+
+// // Text index for searching
+// ContestSchema.index({ header: 'text', code: 'text', explanation: 'text', category: 'text' });
+
+// const Contest = mongoose.model("contest", ContestSchema);
+// export default Contest;
+
+
 import mongoose from "mongoose";
 
-const ContestSchema = mongoose.Schema(
+const ContestSchema = new mongoose.Schema(
     {
         id: { type: Number, required: true, unique: true },
         header: { type: String, required: false },
@@ -16,13 +45,22 @@ const ContestSchema = mongoose.Schema(
         code5: { type: String, required: false },
         explanation5: { type: String, required: false },
         image: { type: String, required: false },
-        category: { type: String, required: true }
+        category: { type: String, required: true },
+        contestDate: { type: String, required: true }, // e.g. "2025-07-21"
+        contestTime: { type: String, required: true }  // e.g. "14:00"
     },
-    { timestamps: true }
+    {
+        timestamps: true
+    }
 );
 
-// Text index for searching
-ContestSchema.index({ header: 'text', code: 'text', explanation: 'text', category: 'text' });
+// Optional: Full-text search index
+ContestSchema.index({
+    header: 'text',
+    code: 'text',
+    explanation: 'text',
+    category: 'text'
+});
 
 const Contest = mongoose.model("contest", ContestSchema);
 export default Contest;

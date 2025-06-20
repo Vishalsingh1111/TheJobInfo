@@ -95,12 +95,17 @@ const ContestDetail = () => {
                 <div className='flex flex-col md:flex-row'>
                     <div className="w-full p-2 md:p-6 border rounded mx-auto bg-gray-50 dark:bg-slate-800 mt-3">
 
+
                         <div className="flex flex-col items-left bg-gray-300 p-5 mb-5 border-l-2 border-l-red-500 dark:bg-slate-700">
                             <h2 className="text-xl text-red-500 font-semibold item-left mb-2">Disclaimer !</h2>
                             <p className="text-lg">Do it yourself, This is only for reference. Don't Copy & Paste.</p>
                         </div>
 
 
+                        <div className='flex space-x-3'>
+                            <h3 className='text-red-500'>{item.contestDate}</h3>
+                            <h3 className='text-blue-500'>{item.contestTime}</h3>
+                        </div>
 
                         {/* Explanation 1 */}
                         {item.explanation && (

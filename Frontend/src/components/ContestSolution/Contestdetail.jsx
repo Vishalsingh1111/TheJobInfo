@@ -13,6 +13,16 @@ import { baseUrl } from '../../Baseurl';
 import Skeleton1 from '../Skeleton';
 import SocialMediaPoster from '../SocialMediaPoster';
 
+const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+        weekday: 'long',
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric',
+    });
+};
+
 const ContestDetail = () => {
     const { id } = useParams();
     const navigate = useNavigate();
@@ -102,9 +112,10 @@ const ContestDetail = () => {
                         </div>
 
 
-                        <div className='flex space-x-3'>
-                            <h3 className='text-red-500'>{item.contestDate}</h3>
-                            <h3 className='text-blue-500'>{item.contestTime}</h3>
+                        <div className='flex space-x-3 text-sm md:text-lg font-[400] text-gray-700 py-2'>
+                            <h3 className='text-red-500'>{item.contestDate ? formatDate(item.createdAt) : "Date not available"}</h3>
+                            <h3 >Start at :<span className='text-blue-500'>{item.contestTime}</span> </h3>
+
                         </div>
 
                         {/* Explanation 1 */}

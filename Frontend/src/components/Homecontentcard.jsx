@@ -48,7 +48,7 @@ const resources = [
         tagColor: "bg-orange-500"
     },
     {
-        title: "Interview Prep Roadmaps",
+        title: "Companies Preparation Sheet",
         description: "Be Interview Ready for your dream Companies.",
         buttonText: "Try it free",
         icon: "fa-user-tie",

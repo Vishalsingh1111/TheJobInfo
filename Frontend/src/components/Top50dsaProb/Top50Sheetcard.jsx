@@ -4,9 +4,9 @@ import { baseUrl } from "../../Baseurl";
 import notesvg from '/note.svg';
 import NoteModal from '../Sriversdecomponents/Keepnote';
 import Sheetheading from "../Sriversdecomponents/Sheetheading";
-import Skeleton1 from "../Skeleton";
+import Skeleton1 from "../Common/Skeleton";
 import Navbar from "../Navbar";
-import Breadcrumb from "../Breadcrumb";
+import Breadcrumb from "../Common/Breadcrumb";
 import Footer from "../Footer";
 
 const Top100dsaProb = () => {

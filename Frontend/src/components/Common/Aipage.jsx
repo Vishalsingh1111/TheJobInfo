@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import Navbar from './Navbar';
-import { baseUrl } from '../Baseurl';
+import Navbar from '../Navbar';
+import { baseUrl } from '../../Baseurl';
 
 const formatResponse = (response) => {
     let formattedResponse = response

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Logout from './Logout';
+import Logout from '../Authentications/Logout';
 
 function App() {
     const [isModalOpen, setModalOpen] = useState(true); // Modal opens by default

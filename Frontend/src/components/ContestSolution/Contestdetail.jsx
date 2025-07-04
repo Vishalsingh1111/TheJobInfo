@@ -8,10 +8,10 @@ import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
 import CodeSnippet from "../CodeSnippet/CodeSnippet";
 import Navbar from '../Navbar';
 import Footer from '../Footer';
-import Breadcrumb from '../Breadcrumb';
+import Breadcrumb from '../Common/Breadcrumb';
 import { baseUrl } from '../../Baseurl';
-import Skeleton1 from '../Skeleton';
-import SocialMediaPoster from '../SocialMediaPoster';
+import Skeleton1 from '../Common/Skeleton';
+import SocialMediaPoster from '../Common/SocialMediaPoster';
 
 const formatDate = (dateString) => {
     const date = new Date(dateString);

@@ -3,8 +3,8 @@ import axios from 'axios';
 import { baseUrl } from '../../Baseurl';
 import Sheetheading from '../Sriversdecomponents/Sheetheading';
 import Sheetproblems from '../Sriversdecomponents/Sheetproblems';
-import Breadcrumb from "../Breadcrumb";
-import Skeleton from "../Skeleton";
+import Breadcrumb from "../Common/Breadcrumb";
+import Skeleton from "../Common/Skeleton";
 
 function SheetViewer() {
     const [sheets, setSheets] = useState([]);

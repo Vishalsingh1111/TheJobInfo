@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { baseUrl } from '../Baseurl';
+import { baseUrl } from '../../Baseurl';
 
 function SearchForm() {
     const [query, setQuery] = useState('');

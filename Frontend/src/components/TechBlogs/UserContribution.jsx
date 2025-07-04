@@ -4,7 +4,7 @@ import axios from "axios";
 import { baseUrl } from "../../Baseurl";
 import Navbar from "../Navbar";
 import { toast } from 'react-hot-toast';
-import Breadcrumb from "../Breadcrumb";
+import Breadcrumb from "../Common/Breadcrumb";
 import Footer from "../Footer";
 
 const FormElementInput = () => {

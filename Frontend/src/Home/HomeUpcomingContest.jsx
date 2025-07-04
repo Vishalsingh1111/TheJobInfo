@@ -71,7 +71,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { baseUrl } from '../Baseurl';
-import Contestcard from './ContestSolution/ContestCard';
+import Contestcard from '../components/ContestSolution/ContestCard';
 
 const getContestStatus = (contestDate, contestTime) => {
     if (!contestDate || !contestTime) return "Unknown";

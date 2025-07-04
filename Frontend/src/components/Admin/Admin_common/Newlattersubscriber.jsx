@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
-import { baseUrl } from '../../Baseurl';
+import { baseUrl } from '../../../Baseurl';
 
 const Subscribers = () => {
     const [subscribers, setSubscribers] = useState([]);

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useAuth } from '../Context/AuthProvider';
-import TechAICard from './TechAICard';
+import TechAICard from './Common/TechAICard';
 
 const Navbar = () => {
     const [authUser] = useAuth();

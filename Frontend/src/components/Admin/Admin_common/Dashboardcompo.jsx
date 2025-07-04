@@ -1,5 +1,5 @@
 import React from "react";
-import ShowAdminDetail from "./Usersdetail/Showadmindetail";
+import ShowAdminDetail from "../Usersdetail/Showadmindetail";
 import Newlattersubsciber from "./Newlattersubscriber";
 
 

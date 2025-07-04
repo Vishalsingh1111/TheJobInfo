@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import { baseUrl } from '../Baseurl';
+import { baseUrl } from '../../Baseurl';
 
 const ResultDetailPage = () => {
     const { id } = useParams();

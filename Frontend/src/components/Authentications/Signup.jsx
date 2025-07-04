@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import toast, { Toaster } from 'react-hot-toast';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { EyeSlashIcon } from '@heroicons/react/24/outline';
-import { baseUrl } from '../Baseurl';
+import { baseUrl } from '../../Baseurl';
 
 const SignupPage = () => {
     const [formData, setFormData] = useState({

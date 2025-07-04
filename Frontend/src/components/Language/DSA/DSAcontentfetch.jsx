@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import { baseUrl } from "../../../Baseurl";
 import GetContent from "../GetContent";
-import Skeleton1 from "../../Skeleton";
-import Breadcrumb from "../../Breadcrumb"
-import SocialMediaPoster from "../../SocialMediaPoster";
+import Skeleton1 from "../../Common/Skeleton";
+import Breadcrumb from "../../Common/Breadcrumb"
+import SocialMediaPoster from "../../Common/SocialMediaPoster";
 
 const QUESTIONS_PER_PAGE = 10;
 

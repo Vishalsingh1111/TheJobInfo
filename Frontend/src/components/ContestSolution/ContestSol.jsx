@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import ContestCard from './ContestCard';
-import Breadcrumb from '../Breadcrumb';
+import Breadcrumb from '../Common/Breadcrumb';
 import { baseUrl } from "../../Baseurl";
-import Skeleton1 from "../Skeleton";
+import Skeleton1 from "../Common/Skeleton";
 
 const Contest = () => {
     const [data, setData] = useState([]); // Initialize as empty array

@@ -1,5 +1,5 @@
 import React from 'react';
-import SearchForm from './Searchbar';
+import SearchForm from '../components/Common/Searchbar';
 import { motion } from 'framer-motion';
 
 function Banner() {

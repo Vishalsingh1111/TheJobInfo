@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Card from './Card';
 import { baseUrl } from '../../Baseurl';
-import Skeleton1 from '../Skeleton';
-import Breadcrumb from '../Breadcrumb';
+import Skeleton1 from '../Common/Skeleton';
+import Breadcrumb from '../Common/Breadcrumb';
 
 function Content() {
     const [note, setNote] = useState([]);

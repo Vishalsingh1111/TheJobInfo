@@ -4,9 +4,9 @@ import axios from 'axios';
 import CodeSnippet from "../CodeSnippet/CodeSnippet";
 import Navbar from '../Navbar';
 import Footer from '../Footer';
-import Breadcrumb from '../Breadcrumb';
+import Breadcrumb from '../Common/Breadcrumb';
 import { baseUrl } from '../../Baseurl';
-import Skeleton1 from '../Skeleton';
+import Skeleton1 from '../Common/Skeleton';
 
 const BlogDetail = () => {
     const { id } = useParams();

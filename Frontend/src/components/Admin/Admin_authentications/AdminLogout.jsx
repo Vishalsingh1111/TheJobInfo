@@ -1,5 +1,5 @@
 import React from 'react';
-import { useadminAuth } from '../Context/AuthProvider2';
+import { useadminAuth } from '../../../Context/AuthProvider2';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
@@ -16,7 +16,7 @@ function Logout() {
 
             toast.success("Logout Successfully");
             setTimeout(() => {
-                navigate('/');
+                navigate('https://dcoder-frontend.onrender.com/Adminlogin');
                 window.location.reload();
             }, 1000);
         } catch (error) {

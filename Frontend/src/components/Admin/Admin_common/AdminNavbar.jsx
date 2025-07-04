@@ -1,26 +1,26 @@
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
-import Strisdesheetcard from './StriverSDESheet/Strisdesheetcard';
-import Strisheetproblemform from './StriverSDESheet/Strisheetproblemform';
-import SDEProblemform from './StriverSDESheet/SDEProblemform'
-import Strisdecardshowdata from './StriverSDESheet/Strisdecardshowdata';
-import Striproblemshowdata from './StriverSDESheet/Striproblemshowdata';
-import SDEProblemshowdata from './StriverSDESheet/SDEProblemshowdata';
-import Notecardform from './Languages/Notecardform';
-import Notecardshowdata from './Languages/Notecardshowdata';
-import Notecontentform from './Languages/Notecontentform';
-import Notecontentshowdata from './Languages/Notecontentshowdata';
-import Techblogform from './Tech Blogs/Techblogform';
-import Techblogshowdata from './Tech Blogs/Techblogshowdata';
-import ContestSolform from './ContestSol/ContestSolform';
-import ContestSolShowdata from './ContestSol/ContestSolShowdata';
-import Cheatnoteform from './CheatNote/Cheatnoteform';
-import Cheatnoteshowdata from './CheatNote/Cheatnoteshowdata';
-import Showusersdetail from './Usersdetail/Showusersdetail';
-import ShowContactMsg from './Showcontactmsg';
+import Strisdesheetcard from '../StriverSDESheet/Strisdesheetcard';
+import Strisheetproblemform from '../StriverSDESheet/Strisheetproblemform';
+import SDEProblemform from '../StriverSDESheet/SDEProblemform'
+import Strisdecardshowdata from '../StriverSDESheet/Strisdecardshowdata';
+import Striproblemshowdata from '../StriverSDESheet/Striproblemshowdata';
+import SDEProblemshowdata from '../StriverSDESheet/SDEProblemshowdata';
+import Notecardform from '../Languages/Notecardform';
+import Notecardshowdata from '../Languages/Notecardshowdata';
+import Notecontentform from '../Languages/Notecontentform';
+import Notecontentshowdata from '../Languages/Notecontentshowdata';
+import Techblogform from '../Tech Blogs/Techblogform';
+import Techblogshowdata from '../Tech Blogs/Techblogshowdata';
+import ContestSolform from '../ContestSol/ContestSolform';
+import ContestSolShowdata from '../ContestSol/ContestSolShowdata';
+import Cheatnoteform from '../CheatNote/Cheatnoteform';
+import Cheatnoteshowdata from '../CheatNote/Cheatnoteshowdata';
+import Showusersdetail from '../Usersdetail/Showusersdetail';
+import ShowContactMsg from '../Admin_common/Showcontactmsg';
 import DashboardCompo from './Dashboardcompo';
-import AdminLogout from '../AdminLogout'
+import AdminLogout from '../../Admin/Admin_authentications/AdminLogout'
 
 const Sidebar = () => {
     const [isSidebarOpen, setSidebarOpen] = useState(false);

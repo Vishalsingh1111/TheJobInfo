@@ -1,5 +1,5 @@
 import React from 'react'
-import { useAuth } from '../Context/AuthProvider'
+import { useAuth } from '../../Context/AuthProvider'
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 

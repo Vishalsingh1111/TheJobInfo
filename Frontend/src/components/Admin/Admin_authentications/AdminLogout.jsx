@@ -16,7 +16,7 @@ function Logout() {
 
             toast.success("Logout Successfully");
             setTimeout(() => {
-                navigate('https://dcoder-frontend.onrender.com/Adminlogin');
+                navigate('/Adminlogin');
                 window.location.reload();
             }, 1000);
         } catch (error) {

@@ -52,7 +52,7 @@ const resources = [
         description: "Be Interview Ready for your dream Companies.",
         buttonText: "Try it free",
         icon: "fa-user-tie",
-        link: "/pagenotfound",
+        link: "/Companies_Preaparation_Sheet",
         tag: "Upcoming",
         tagColor: "bg-gray-500"
     },

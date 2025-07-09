@@ -37,6 +37,8 @@ import Top50dsaProb from './components/Top50dsaProb/Top50Sheetcard';
 import Contributeblog from './components/TechBlogs/UserContribution';
 import JSCheatsheet from './components/CheatNote/JS';
 import CppStl from './components/CheatNote/CPPSTL';
+import Companies_Preaparation_Sheet from './components/CompaniesPreparation/ComapaniesPreparationMain';
+import TcsMain from './components/CompaniesPreparation/TCS/TcsMain'
 
 
 const App = () => {
@@ -84,6 +86,8 @@ const App = () => {
           <Route path="/results/:id" component={ResultDetailPage} />
           <Route path='/JSCheatsheet' element={<JSCheatsheet />} />
           <Route path='/Cppstl' element={<CppStl />} />
+          <Route path='/Companies_Preaparation_Sheet' element={<Companies_Preaparation_Sheet />} />
+          <Route path='/TCS' element={<TcsMain />} />
 
         </Routes>
         <Toaster />

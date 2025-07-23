@@ -108,7 +108,8 @@ const ContestDetail = () => {
 
                         <div className="flex flex-col items-left bg-gray-300 p-5 mb-5 border-l-2 border-l-red-500 dark:bg-slate-700">
                             <h2 className="text-xl text-red-500 font-semibold item-left mb-2">Disclaimer !</h2>
-                            <p className="text-lg">Do it yourself, This is only for reference. Don't Copy & Paste.</p>
+                            <p className="text-lg">Do it yourself, Solution Will be Published After Contets and is only for reference. Don't Copy & Paste.</p>
+                            <p className="text-lg text-green-700">To Get Solution During Contest <a href='https://t.me/dcoder21575' className='text-red-600 hover:text-blue-800 cursor-pointer'>Click Here</a></p>
                         </div>
 
 

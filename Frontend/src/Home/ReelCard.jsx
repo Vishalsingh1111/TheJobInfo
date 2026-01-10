@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { X, Sparkles, Send, Heart, Share2, MessageCircle, Play, TrendingUp } from 'lucide-react';
-import { baseUrl } from "../../Baseurl";
+import { baseUrl } from "../Baseurl";
 
 const BASE_URL = `${baseUrl}/instapost`;
 

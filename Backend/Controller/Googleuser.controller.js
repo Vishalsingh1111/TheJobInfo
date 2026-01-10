@@ -63,10 +63,10 @@ passport.deserializeUser(async (id, done) => {
 export const googleLogin = passport.authenticate("google", { scope: ["profile", "email"] });
 
 // Google login callback route handler
-export const googleCallback = passport.authenticate("google", { failureRedirect: "https://dcoder-frontend.onrender.com/login" });
+export const googleCallback = passport.authenticate("google", { failureRedirect: "https://dcoder-7vi1.onrender.com/login" });
 
 export const googleCallbackRedirect = (req, res) => {
     console.log('Google login successful!');
     // Redirect to the frontend root URL with user details
-    res.redirect(`https://dcoder-frontend.onrender.com/?user=${encodeURIComponent(JSON.stringify(req.user))}`);
+    res.redirect(`https://dcoder-7vi1.onrender.com/?user=${encodeURIComponent(JSON.stringify(req.user))}`);
 };

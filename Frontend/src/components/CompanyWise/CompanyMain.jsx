@@ -661,9 +661,9 @@ import Navbar from "../Navbar";
 import Breadcrumb from "../Common/Breadcrumb";
 import Footer from "../Footer";
 import Skeleton1 from "../Common/Skeleton";
-import BASE_URL from "../../Baseurl";
+// import BASE_URL from "../../Baseurl";
 
-// const BASE_URL = "http://localhost:4001";
+const BASE_URL = "https://dcoder-backend.onrender.com";
 
 const CompanyMain = () => {
     const [data, setData] = useState([]);

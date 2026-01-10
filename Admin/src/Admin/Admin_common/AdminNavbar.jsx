@@ -11,8 +11,7 @@ import Notecardform from '../Languages/Notecardform';
 import Notecardshowdata from '../Languages/Notecardshowdata';
 import Notecontentform from '../Languages/Notecontentform';
 import Notecontentshowdata from '../Languages/Notecontentshowdata';
-import Techblogform from '../Tech Blogs/Techblogform';
-import Techblogshowdata from '../Tech Blogs/Techblogshowdata';
+import Techblogform from '../Tech Blogs/TechBlogForm';
 import InstaPostform from '../InstaPost/InstaPostform';
 import Showusersdetail from '../Usersdetail/UserManagement';
 import ShowContactMsg from '../Admin_common/Showcontactmsg';
@@ -284,7 +283,7 @@ const Sidebar = () => {
                                     <path d="M18 0H6a2 2 0 0 0-2 2h14v12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Z" />
                                     <path d="M14 4H2a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2ZM2 16v-6h12v6H2Z" />
                                 </svg>
-                                <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">Technical blogs</span>
+                                <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">Tech Blogs / Sol</span>
                                 <svg
                                     className="w-3 h-3"
                                     aria-hidden="true"
@@ -310,18 +309,10 @@ const Sidebar = () => {
                                         onClick={() => handleContentChange('Techblogform')}
                                         className="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                                     >
-                                        Upload blog
+                                        Blog management
                                     </button>
                                 </li>
-                                <li>
-                                    <button
-                                        onClick={() => handleContentChange('Techblogshowdata')}
 
-                                        className="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                                    >
-                                        Manage blog
-                                    </button>
-                                </li>
                             </ul>
                         </li>
 
@@ -437,7 +428,6 @@ const Sidebar = () => {
                 {selectedContent === 'Notecontentform' && <Notecontentform />}
                 {selectedContent === 'Notecontentshowdata' && <Notecontentshowdata />}
                 {selectedContent === 'Techblogform' && <Techblogform />}
-                {selectedContent === 'Techblogshowdata' && <Techblogshowdata />}
                 {selectedContent === 'InstaPostform' && <InstaPostform />}
                 {selectedContent === 'Showusersdetail' && <Showusersdetail />}
                 {selectedContent === 'ShowContactMsg' && <ShowContactMsg />}

@@ -428,15 +428,13 @@
 //         </>
 //     );
 // }
-
-
 import { useEffect, useState } from "react";
 import { X, Send, Heart, Share2, MessageCircle, Search, Filter, Clock, Play, Sparkles } from "lucide-react";
 import Navbar from "../Navbar";
 import Footer from "../Footer";
+import { baseUrl } from "../../Baseurl";
 
-const BASE_URL = "https://dcoder-backend.onrender.com/instapost";
-const FILE_URL = "https://dcoder-backend.onrender.com";
+const BASE_URL = `${baseUrl}/instapost`;
 
 export default function AllReels() {
     const [reels, setReels] = useState([]);
@@ -683,13 +681,14 @@ export default function AllReels() {
                                 onClick={() => openReel(item)}
                             >
                                 <div className="relative aspect-[9/16] bg-gradient-to-br from-purple-100 to-pink-100 dark:from-purple-900/30 dark:to-pink-900/30">
+                                    {/* ✅ FIXED: Use Cloudinary URL directly */}
                                     <video
                                         className="w-full h-full object-cover"
                                         muted
                                         loop
                                         playsInline
                                     >
-                                        <source src={`${FILE_URL}${item.fileUrl}`} />
+                                        <source src={item.fileUrl} />
                                     </video>
 
                                     {/* Overlay */}
@@ -752,13 +751,14 @@ export default function AllReels() {
                             {/* Left - Video Section */}
                             <div className="flex-1 bg-black flex items-center justify-center lg:border-r border-gray-200 dark:border-gray-700">
                                 <div className="w-full h-full flex items-center justify-center p-4">
+                                    {/* ✅ FIXED: Use Cloudinary URL directly */}
                                     <video
                                         controls
                                         autoPlay
                                         loop
                                         className="w-full h-full object-contain rounded-2xl"
                                     >
-                                        <source src={`${FILE_URL}${activeReel.fileUrl}`} />
+                                        <source src={activeReel.fileUrl} />
                                     </video>
                                 </div>
                             </div>

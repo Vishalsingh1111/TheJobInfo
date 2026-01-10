@@ -5,7 +5,6 @@ import Footer from '../components/Footer';
 import Homepromo from './Homepromo';
 import Homecontentcard from './Homecontentcard';
 import PostCard from './PostCard';
-import CheatsheetPage from './CheetsheetCard';
 import ReelCard from './ReelCard';
 
 
@@ -17,7 +16,6 @@ function Home() {
             <Homecontentcard />
             <ReelCard />
             <PostCard />
-            <CheatsheetPage />
             <Homepromo />
             <Footer />
         </>

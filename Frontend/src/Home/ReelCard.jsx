@@ -1,10 +1,8 @@
-
-
 import { useState, useEffect } from 'react';
 import { X, Sparkles, Send, Heart, Share2, MessageCircle, Play, TrendingUp } from 'lucide-react';
+import { baseUrl } from "../../Baseurl";
 
-const BASE_URL = "https://dcoder-backend.onrender.com/instapost";
-const FILE_URL = "https://dcoder-backend.onrender.com";
+const BASE_URL = `${baseUrl}/instapost`;
 
 export default function SingleReelHero() {
     const [latestReel, setLatestReel] = useState(null);
@@ -116,8 +114,6 @@ export default function SingleReelHero() {
                     <p className="text-center text-gray-600 dark:text-gray-300 text-lg md:text-xl max-w-2xl mx-auto">
                         Comment correct output of the given code reel to win exciting rewards!
                     </p>
-
-
                 </div>
             </div>
 
@@ -183,7 +179,6 @@ export default function SingleReelHero() {
                                 </button>
                             </div>
 
-
                             {/* Info Cards */}
                             <div className="max-w-md grid md:grid-cols-3 gap-4">
                                 <a href="/trending">
@@ -224,13 +219,14 @@ export default function SingleReelHero() {
                                 <div className="absolute inset-0 bg-gradient-to-r from-purple-400 to-pink-400 rounded-3xl blur-2xl opacity-30 group-hover:opacity-50 transition-opacity"></div>
                                 <div className="relative bg-black rounded-3xl overflow-hidden shadow-2xl border-4 border-white dark:border-gray-700">
                                     <div className="aspect-[9/16] max-h-[500px] mx-auto bg-gradient-to-br from-purple-100 to-pink-100 dark:from-purple-900/30 dark:to-pink-900/30">
+                                        {/* ✅ FIXED: Use Cloudinary URL directly */}
                                         <video
                                             className="w-full h-full object-cover"
                                             loop
                                             muted
                                             playsInline
                                         >
-                                            <source src={`${FILE_URL}${latestReel.fileUrl}`} type="video/mp4" />
+                                            <source src={latestReel.fileUrl} type="video/mp4" />
                                         </video>
 
                                         {/* Play Overlay */}
@@ -262,13 +258,14 @@ export default function SingleReelHero() {
                         {/* Left - Video Section */}
                         <div className="flex-1 bg-black flex items-center justify-center lg:border-r border-gray-200 dark:border-gray-700">
                             <div className="w-full h-full flex items-center justify-center p-4">
+                                {/* ✅ FIXED: Use Cloudinary URL directly */}
                                 <video
                                     controls
                                     autoPlay
                                     loop
                                     className="w-full h-full object-contain rounded-2xl"
                                 >
-                                    <source src={`${FILE_URL}${latestReel.fileUrl}`} type="video/mp4" />
+                                    <source src={latestReel.fileUrl} type="video/mp4" />
                                 </video>
                             </div>
                         </div>
@@ -374,10 +371,6 @@ export default function SingleReelHero() {
                     </div>
                 </div>
             )}
-
-            {/* Decorative Floating Blobs */}
-            {/* <div className="fixed top-20 left-10 w-72 h-72 bg-purple-300 dark:bg-purple-600 rounded-full mix-blend-multiply dark:mix-blend-normal dark:opacity-10 filter blur-xl opacity-20 animate-blob pointer-events-none"></div>
-            <div className="fixed bottom-20 right-10 w-72 h-72 bg-pink-300 dark:bg-pink-600 rounded-full mix-blend-multiply dark:mix-blend-normal dark:opacity-10 filter blur-xl opacity-20 animate-blob animation-delay-2000 pointer-events-none"></div> */}
 
             <style>{`
                 @keyframes blob {

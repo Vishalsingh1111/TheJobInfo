@@ -36,7 +36,6 @@ import Top50dsaProb from './components/Top50dsaProb/Top50Sheetcard';
 import Contributeblog from './components/TechBlogs/UserContribution';
 import Companies_Preaparation_Sheet from './components/CompaniesPreparation/ComapaniesPreparationMain';
 import TcsMain from './components/CompaniesPreparation/TCS/TcsMain'
-import CheatsheetPage from './components/CSSubject/CheatSheetPage';
 
 
 const App = () => {

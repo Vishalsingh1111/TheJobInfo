@@ -442,10 +442,9 @@
 import { useEffect, useState, useRef } from "react";
 import { X, ChevronLeft, ChevronRight, FileText, Calendar, Tag, BookOpen, Download, ZoomIn, ZoomOut, Maximize2, Sparkles, Eye } from "lucide-react";
 import HTMLFlipBook from "react-pageflip";
+import { baseUrl } from "../../Baseurl";
 
-const BASE_URL = "https://dcoder-backend.onrender.com/instapost";
-// ❌ REMOVE THIS LINE - Not needed anymore for Cloudinary
-// const FILE_URL = "https://dcoder-backend.onrender.com";
+const BASE_URL = `${baseUrl}/instapost`;
 
 export default function BookReaderPosts() {
     const [posts, setPosts] = useState([]);

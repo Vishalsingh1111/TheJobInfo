@@ -439,13 +439,13 @@
 // }
 
 
-
 import { useEffect, useState, useRef } from "react";
 import { X, ChevronLeft, ChevronRight, FileText, Calendar, Tag, BookOpen, Download, ZoomIn, ZoomOut, Maximize2, Sparkles, Eye } from "lucide-react";
 import HTMLFlipBook from "react-pageflip";
 
 const BASE_URL = "https://dcoder-backend.onrender.com/instapost";
-const FILE_URL = "https://dcoder-backend.onrender.com";
+// ❌ REMOVE THIS LINE - Not needed anymore for Cloudinary
+// const FILE_URL = "https://dcoder-backend.onrender.com";
 
 export default function BookReaderPosts() {
     const [posts, setPosts] = useState([]);
@@ -505,9 +505,10 @@ export default function BookReaderPosts() {
         setIsFullscreen(!isFullscreen);
     };
 
+    // ✅ FIXED: Just return the fileUrl directly (it's already a complete Cloudinary URL)
     const getFirstImageUrl = (item) => {
         if (item.files && item.files.length > 0) {
-            return `${FILE_URL}${item.files[0].fileUrl}`;
+            return item.files[0].fileUrl; // ✅ Direct Cloudinary URL
         }
         return null;
     };
@@ -594,7 +595,7 @@ export default function BookReaderPosts() {
                                                             <img
                                                                 src={firstImageUrl}
                                                                 alt={item.title}
-                                                                className="w-full h-full "
+                                                                className="w-full h-full object-cover"
                                                             />
                                                         ) : (
                                                             <BookOpen className="w-14 h-14 text-purple-600 dark:text-purple-400" />
@@ -638,10 +639,7 @@ export default function BookReaderPosts() {
                                                         </div>
                                                     )}
                                                 </div>
-
-
                                             </div>
-
 
                                             <div className="px-5 mb-3">
                                                 <button className={`w-full flex items-center justify-center gap-2 px-3 py-2 bg-gradient-to-r ${gradient} text-white rounded-xl font-semibold shadow-md group-hover:shadow-lg transition-all duration-300 transform group-hover:scale-105`}>
@@ -650,7 +648,6 @@ export default function BookReaderPosts() {
                                                 </button>
                                             </div>
                                             <div className={`h-1 bg-gradient-to-r ${gradient}`}></div>
-
                                         </div>
                                     </div>
                                 </div>
@@ -773,8 +770,9 @@ export default function BookReaderPosts() {
                                         data-density="hard"
                                     >
                                         <div className="page-content">
+                                            {/* ✅ FIXED: Use fileUrl directly - it's already a complete Cloudinary URL */}
                                             <img
-                                                src={`${FILE_URL}${file.fileUrl}`}
+                                                src={file.fileUrl}
                                                 alt={`Page ${index + 1}`}
                                                 className="page-image"
                                                 draggable={false}

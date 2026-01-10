@@ -83,7 +83,6 @@ const App = () => {
           <Route path="/results/:id" component={ResultDetailPage} />
           <Route path='/Companies_Preaparation_Sheet' element={<Companies_Preaparation_Sheet />} />
           <Route path='/TCS' element={<TcsMain />} />
-          <Route path='/CheatsheetPage' element={<CheatsheetPage />} />
 
         </Routes>
         <Toaster />

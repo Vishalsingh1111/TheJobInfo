@@ -11,7 +11,7 @@ import Notecardform from '../Languages/Notecardform';
 import Notecardshowdata from '../Languages/Notecardshowdata';
 import Notecontentform from '../Languages/Notecontentform';
 import Notecontentshowdata from '../Languages/Notecontentshowdata';
-import Techblogform from '../Tech Blogs/TechBlogForm';
+import TechBlog from '../TechBlogs/TechBlogForm';
 import InstaPostform from '../InstaPost/InstaPostform';
 import Showusersdetail from '../Usersdetail/UserManagement';
 import ShowContactMsg from '../Admin_common/Showcontactmsg';
@@ -306,7 +306,7 @@ const Sidebar = () => {
                             >
                                 <li>
                                     <button
-                                        onClick={() => handleContentChange('Techblogform')}
+                                        onClick={() => handleContentChange('TechBlog')}
                                         className="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                                     >
                                         Blog management
@@ -427,7 +427,7 @@ const Sidebar = () => {
                 {selectedContent === 'Notecardshowdata' && <Notecardshowdata />}
                 {selectedContent === 'Notecontentform' && <Notecontentform />}
                 {selectedContent === 'Notecontentshowdata' && <Notecontentshowdata />}
-                {selectedContent === 'Techblogform' && <Techblogform />}
+                {selectedContent === 'TechBlog' && <TechBlog />}
                 {selectedContent === 'InstaPostform' && <InstaPostform />}
                 {selectedContent === 'Showusersdetail' && <Showusersdetail />}
                 {selectedContent === 'ShowContactMsg' && <ShowContactMsg />}

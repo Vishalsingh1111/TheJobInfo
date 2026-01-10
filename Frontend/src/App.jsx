@@ -22,8 +22,8 @@ import C from './components/Language/C/C';
 import Techblog from './components/TechBlogs/Techblog';
 import CSPage from './components/CSSubject/CSPage';
 import BlogDetail from './components/TechBlogs/Blogdetail';
-import ContestSol from './components/ContestSolution/ContestSolPage';
-import ContestSoldetail from './components/ContestSolution/Contestdetail';
+import ContestSol from './components/InstaContent/Posts';
+import Reels from './components/InstaContent/Reels';
 import DashBoard from './components/Admin/Admin_common/Dashboard';
 import Contactform from './Contacts/Contactform';
 import { useAuth } from './Context/AuthProvider';
@@ -35,10 +35,9 @@ import NewUpdatedSheet from '../src/Content/Sheet';
 import CompanyWiseSheet from './components/CompanyWise/CompanyMain';
 import Top50dsaProb from './components/Top50dsaProb/Top50Sheetcard';
 import Contributeblog from './components/TechBlogs/UserContribution';
-import JSCheatsheet from './components/CheatNote/JS';
-import CppStl from './components/CheatNote/CPPSTL';
 import Companies_Preaparation_Sheet from './components/CompaniesPreparation/ComapaniesPreparationMain';
 import TcsMain from './components/CompaniesPreparation/TCS/TcsMain'
+import CheatsheetPage from './components/CSSubject/CheatSheetPage';
 
 
 const App = () => {
@@ -65,7 +64,8 @@ const App = () => {
           <Route path="/Forgetpassword" element={<Forgetpassword />}></Route>
           <Route path='/Pagenotfound' element={<Pagenotfound />}></Route>
           <Route path='/Technical-Blog' element={<Technicalblog />}></Route>
-          <Route path='/Contest-Solution' element={authUser ? <ContestSol /> : <Navigate to="/Signup" />}></Route>
+          <Route path='/Post' element={<ContestSol />}></Route>
+          {/* <Route path='/Post' element={authUser ? <ContestSol /> : <Navigate to="/Signup" />}></Route> */}
           <Route path='/CS-Fundamental' element={<CSPage />}></Route>
           <Route path='/DSA' element={authUser ? <DSA /> : <Navigate to="/Signup" />}></Route>
           <Route path='/New-Updated-Sheet' element={<NewUpdatedSheet />}></Route>
@@ -79,15 +79,14 @@ const App = () => {
           <Route path='/techblog' element={<Techblog />}></Route>
           <Route path='/Contibuteblog' element={authUser ? <Contributeblog /> : <Navigate to="/Signup" />}></Route>
           <Route path='/detail/:id' element={<BlogDetail />}></Route>
-          <Route path='/contestdetail/:id' element={<ContestSoldetail />}></Route>
+          <Route path='/Reels' element={<Reels />}></Route>
           <Route path='/Dashboard' element={authAdmin ? <DashBoard /> : <Navigate to="/Adminlogin" />}></Route>
           <Route path='/Profile' element={<Profile />} />
           <Route path='/Ai' element={<Ai />} />
           <Route path="/results/:id" component={ResultDetailPage} />
-          <Route path='/JSCheatsheet' element={<JSCheatsheet />} />
-          <Route path='/Cppstl' element={<CppStl />} />
           <Route path='/Companies_Preaparation_Sheet' element={<Companies_Preaparation_Sheet />} />
           <Route path='/TCS' element={<TcsMain />} />
+          <Route path='/CheatsheetPage' element={<CheatsheetPage />} />
 
         </Routes>
         <Toaster />

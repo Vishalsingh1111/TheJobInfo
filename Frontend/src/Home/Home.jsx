@@ -4,9 +4,9 @@ import Banner from './Banner';
 import Footer from '../components/Footer';
 import Homepromo from './Homepromo';
 import Homecontentcard from './Homecontentcard';
-import HomeVideo from './HomeVideo';
+import PostCard from './PostCard';
 import CheatsheetPage from './CheetsheetCard';
-import HomeUpcomingContest from './HomeUpcomingContest';
+import ReelCard from './ReelCard';
 
 
 function Home() {
@@ -15,8 +15,8 @@ function Home() {
             <Navbar />
             <Banner />
             <Homecontentcard />
-            <HomeUpcomingContest />
-            <HomeVideo />
+            <ReelCard />
+            <PostCard />
             <CheatsheetPage />
             <Homepromo />
             <Footer />

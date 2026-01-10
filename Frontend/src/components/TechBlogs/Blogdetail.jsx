@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -7,6 +8,7 @@ import Footer from '../Footer';
 import Breadcrumb from '../Common/Breadcrumb';
 import { baseUrl } from '../../Baseurl';
 import Skeleton1 from '../Common/Skeleton';
+import { ChevronRight, Code2, Lightbulb, Rocket, Award, ArrowRight, ExternalLink, CheckCircle2 } from 'lucide-react';
 
 const BlogDetail = () => {
     const { id } = useParams();
@@ -14,25 +16,8 @@ const BlogDetail = () => {
     const [items, setItems] = useState([]);
     const [item, setItem] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [visibleCount, setVisibleCount] = useState(4);
-    const [accordionState, setAccordionState] = useState({});
-    const [showCodeState, setShowCodeState] = useState({}); // Separate state for code snippets
-
-    // Toggle Accordion Item
-    const toggleAccordion = (index) => {
-        setAccordionState((prevState) => ({
-            ...prevState,
-            [index]: !prevState[index],
-        }));
-    };
-
-    // Toggle Show/Hide Code
-    const toggleShowCode = (index) => {
-        setShowCodeState((prevState) => ({
-            ...prevState,
-            [index]: !prevState[index],
-        }));
-    };
+    const [activeApproach, setActiveApproach] = useState(0);
+    const [showCode, setShowCode] = useState(false);
 
     useEffect(() => {
         const getBlogData = async () => {
@@ -61,57 +46,34 @@ const BlogDetail = () => {
         );
     }
 
-    const renderAccordion = (title, content, code, index) => (
-        <div className="w-full border-b border-gray-400 px-4 py-3 dark:border-gray-600">
-            <button
-                className="faq-btn flex w-full text-left group hover"
-                onClick={() => toggleAccordion(index)}
-            >
-                <div className="w-full">
-                    <h4 className="mt-1 sm:text-md lg:text-xl text-[#484B54] font-semibold text-dark dark:text-white">
-                        <span className="text-xl dark:text-white font-semibold text-gray-600">
-                            {title}
-                        </span>
-                    </h4>
-                </div>
-                <div className="flex h-10 w-full max-w-[40px] items-center justify-center rounded-md bg-red-500 group-hover:shadow-lg group-hover:shadow-black/40 dark:bg-white/5">
-                    <svg
-                        className={`fill-white stroke-white duration-200 ease-in-out ${accordionState[index] ? 'rotate-180' : ''
-                            }`}
-                        width="17"
-                        height="10"
-                        viewBox="0 0 17 10"
-                        xmlns="http://www.w3.org/2000/svg"
-                    >
-                        <path
-                            d="M7.28687 8.43257L7.28679 8.43265L7.29496 8.43985C7.62576 8.73124 8.02464 8.86001 8.41472 8.86001C8.83092 8.86001 9.22376 8.69083 9.53447 8.41713L9.53454 8.41721L9.54184 8.41052L15.7631 2.70784L15.7691 2.70231L15.7749 2.69659C16.0981 2.38028 16.1985 1.80579 15.7981 1.41393C15.4803 1.1028 14.9167 1.00854 14.5249 1.38489L8.41472 7.00806L2.29995 1.38063L2.29151 1.37286L2.28271 1.36548C1.93092 1.07036 1.38469 1.06804 1.03129 1.41393L1.01755 1.42738L1.00488 1.44184C0.69687 1.79355 0.695778 2.34549 1.0545 2.69659L1.05999 2.70196L1.06565 2.70717L7.28687 8.43257Z"
-                        />
-                    </svg>
-                </div>
-            </button>
-            <div className={`duration-200 ease-in-out ${accordionState[index] ? 'block' : 'hidden'}`}>
-                <p className="py-3 text-md leading-relaxed text-[#484B54] dark:text-white">
-                    {content && content.split('\n').map((line, idx) => (
-                        <p className="py-1 text-lg" key={idx}>
-                            {line.trim()}
-                        </p>
-                    ))}
-                    {code && (
-                        <div className="my-5 mx-auto text-left">
-                            <button
-                                onClick={() => toggleShowCode(index)}
-                                className="mb-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
-                            >
-                                {showCodeState[index] ? 'Hide Code' : 'Show Code'}
-                            </button>
-                            {showCodeState[index] && <CodeSnippet codeString={code} />}
-                        </div>
-                    )}
-                </p>
-            </div>
-        </div>
-    );
+    const approaches = [
+        {
+            title: "Brute Force",
+            explanation: item.explanation,
+            code: item.code,
+            icon: <Lightbulb className="w-6 h-6" />,
+            color: "from-red-500 to-orange-500",
+            badge: "Basic"
+        },
+        {
+            title: "Better Approach",
+            explanation: item.explanation2,
+            code: item.code2,
+            icon: <Rocket className="w-6 h-6" />,
+            color: "from-yellow-500 to-amber-500",
+            badge: "Improved"
+        },
+        {
+            title: "Optimal Solution",
+            explanation: item.explanation3,
+            code: item.code3,
+            icon: <Award className="w-6 h-6" />,
+            color: "from-green-500 to-emerald-500",
+            badge: "Best"
+        }
+    ];
 
+    const currentApproach = approaches[activeApproach];
 
     const handleCardClick = (id) => navigate(`/detail/${id}`);
 
@@ -123,58 +85,291 @@ const BlogDetail = () => {
     return (
         <>
             <Navbar />
-            <Breadcrumb />
+            <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
+                <Breadcrumb />
 
-
-            <div className="pt-[50px] mx-auto max-w-screen-2xl md:px-20 px-4 py-5">
-                <div className="flex flex-col gap-10">
-                    <div className="w-full p-3 sm:p-5 md:p-8 lg:p-10 max-w-[1000px] mx-auto border-t md:shadow-sm md:shadow-black/30 rounded-xl bg-white dark:bg-slate-800 dark:border-none mt-3">
-                        <h2 className="text-2xl font-semibold mb-4">{item.header}</h2>
-                        {renderAccordion('Brute Force Approach', item.explanation, item.code, 0)}
-                        {renderAccordion('Better Approach', item.explanation2, item.code2, 1)}
-                        {renderAccordion('Best Approach', item.explanation3, item.code3, 2)}
-                    </div>
-                </div>
-            </div>
-
-
-            <div className="pt-[80px] mx-auto max-w-full md:px-[220px] px-4 py-5">
-                <h1 className="text-gray-600 mb-10 text-3xl dark:text-white md:text-5xl font-bold text-center">Recent <span className="text-red-500">Content</span></h1>
-                <div className=" md:top-20 ">
-                    <div className="grid sm:grid-cols-1 lg:grid-cols-2 gap-10 ">
-                        {items
-                            .filter(blogItem => blogItem.id.toString() !== id)
-                            .sort((a, b) => new Date(b.date) - new Date(a.date))
-                            .slice(0, visibleCount)
-                            .map(blogItem => (
-                                <div key={blogItem.id} className=" flex-col border border-t md:shadow-sm md:shadow-black/30 lg:flex-row items-center justify-between bg-[rgb(255,255,255)] dark:border-gray-600 group hover:border hover:border-gray-300 rounded-xl dark:bg-slate-900 dark:border rounded-md  cursor-pointer space-y-4 lg:space-y-0 lg:space-x-10">
-                                    <div className="flex-1 text-left" onClick={() => handleCardClick(blogItem.id)}>
-                                        <h3 className="text-lg font-[500] p-8 pb-0">{blogItem.header}</h3>
-                                        <div className=' p-8 pt-0 rounded-xl dark:from-slate-800'>
-                                            <p className="text-sm text-gray-700 dark:text-gray-200 mt-2">{truncateText(blogItem.explanation, 100)}</p>
-
-                                            <p className='inline-block rounded-md text-red-500 mt-3 border p-2 border-red-600 group-hover:bg-red-500 group-hover:text-white transition duration-200'>
-                                                Read more
-                                            </p></div>
+                {/* Problem Header - Full Width Banner */}
+                <div className="bg-transparent dark:bg-gray-950 border-b border-gray-200 dark:border-gray-800">
+                    <div className="container mx-auto px-4 py-12 max-w-7xl">
+                        <div className="flex items-start justify-between gap-8">
+                            <div className="flex-1">
+                                <div className="flex items-center gap-3 mb-4">
+                                    <div className="px-3 py-1 rounded-full bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 text-sm font-bold">
+                                        DSA Problem
+                                    </div>
+                                    <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+                                        <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                                        Active
                                     </div>
                                 </div>
+                                <h1 className="text-2xl md:text-3xl font-semibold text-gray-900 dark:text-white mb-4 leading-tight">
+                                    {item.header}
+                                </h1>
+                                <p className="text-lg text-gray-600 dark:text-gray-400 max-w-3xl">
+                                    Explore multiple solution approaches from basic to optimal
+                                </p>
+                            </div>
 
-
-                            ))}
+                            {/* Solution Count Badge */}
+                            <div className="hidden md:block">
+                                <div className="text-center p-6 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-500 text-white shadow-xl">
+                                    <p className="text-4xl mb-1">3</p>
+                                    <p className="text-sm font-medium opacity-90">Solutions</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div className="text-center my-10">
-                    <button className="bg-red-500 text-lg text-white shadow-lg hover:shadow-red-500/30 shadow-black/30 py-2 px-4 rounded-lg"><a href='/Technicalblog'>Show More</a></button>
+
+                {/* Main Content - Split Panel Design */}
+                <div className="container mx-auto px-4 py-8 max-w-7xl">
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                        {/* Left Sidebar - Approach Navigator */}
+                        <div className="lg:col-span-3">
+                            <div className="sticky top-6 space-y-3">
+                                <h3 className="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4">
+                                    Approaches
+                                </h3>
+                                {approaches.map((approach, index) => (
+                                    <button
+                                        key={index}
+                                        onClick={() => {
+                                            setActiveApproach(index);
+                                            setShowCode(false);
+                                        }}
+                                        className={`w-full text-left p-4 rounded-xl transition-all duration-300 ${activeApproach === index
+                                            ? `bg-gradient-to-r ${approach.color} text-white shadow-lg`
+                                            : 'bg-white dark:bg-gray-900 text-gray-900 dark:text-white hover:shadow-md border border-gray-200 dark:border-gray-800'
+                                            }`}
+                                    >
+                                        <div className="flex items-center gap-3">
+                                            <div className={`${activeApproach === index ? 'text-white' : 'text-gray-400'}`}>
+                                                {approach.icon}
+                                            </div>
+                                            <div className="flex-1">
+                                                <p className="font-bold text-sm mb-0.5">{approach.title}</p>
+                                                <p className={`text-xs ${activeApproach === index ? 'text-white/80' : 'text-gray-500 dark:text-gray-400'}`}>
+                                                    {approach.badge}
+                                                </p>
+                                            </div>
+                                            {activeApproach === index && (
+                                                <CheckCircle2 className="w-5 h-5" />
+                                            )}
+                                        </div>
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Main Content Area */}
+                        <div className="lg:col-span-9">
+                            {/* Approach Content Card */}
+                            <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 overflow-hidden shadow-lg mt-10 mb-6">
+                                {/* Header */}
+                                <div className={`bg-gradient-to-r ${currentApproach.color} p-6 text-white`}>
+                                    <div className="flex items-center gap-3 mb-2">
+                                        {currentApproach.icon}
+                                        <h2 className="text-2xl font-semibold">{currentApproach.title}</h2>
+                                    </div>
+                                    <p className="text-white/90 text-sm">
+                                        {currentApproach.badge} approach to solve this problem
+                                    </p>
+                                </div>
+
+                                {/* Explanation */}
+                                <div className="p-6">
+                                    <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                                        <span className={`w-6 h-6 rounded-full bg-gradient-to-br ${currentApproach.color} flex items-center justify-center text-white text-xs font-bold`}>
+                                            1
+                                        </span>
+                                        Explanation
+                                    </h3>
+                                    {currentApproach.explanation && (
+                                        <div className="prose prose-gray dark:prose-invert max-w-none">
+                                            {currentApproach.explanation.split('\n').map((line, idx) => (
+                                                <p key={idx} className="mb-3 text-gray-700 dark:text-gray-300 leading-relaxed">
+                                                    {line.trim()}
+                                                </p>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* Code Section */}
+                                {currentApproach.code && (
+                                    <div className="border-t border-gray-200 dark:border-gray-800 p-6">
+                                        <div className="flex items-center justify-between mb-4">
+                                            <h3 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                                                <span className={`w-6 h-6 rounded-full bg-gradient-to-br ${currentApproach.color} flex items-center justify-center text-white text-xs font-bold`}>
+                                                    2
+                                                </span>
+                                                Implementation
+                                            </h3>
+                                            <button
+                                                onClick={() => setShowCode(!showCode)}
+                                                className={`px-4 py-2 rounded-lg font-semibold transition-all duration-300 ${showCode
+                                                    ? `bg-gradient-to-r ${currentApproach.color} text-white shadow-lg`
+                                                    : 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white hover:shadow-md'
+                                                    }`}
+                                            >
+                                                {showCode ? 'Hide Code' : 'Show Code'}
+                                            </button>
+                                        </div>
+                                        {showCode && (
+                                            <div className="animate-fadeIn">
+                                                <CodeSnippet codeString={currentApproach.code} />
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Navigation Arrows */}
+                            <div className="flex items-center justify-between mb-12">
+                                <button
+                                    onClick={() => setActiveApproach(Math.max(0, activeApproach - 1))}
+                                    disabled={activeApproach === 0}
+                                    className={`px-6 py-3 rounded-xl font-semibold transition-all ${activeApproach === 0
+                                        ? 'bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-600 cursor-not-allowed'
+                                        : 'bg-white dark:bg-gray-900 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-800 hover:shadow-lg'
+                                        }`}
+                                >
+                                    ← Previous
+                                </button>
+                                <button
+                                    onClick={() => setActiveApproach(Math.min(2, activeApproach + 1))}
+                                    disabled={activeApproach === 2}
+                                    className={`px-6 py-3 rounded-xl font-semibold transition-all ${activeApproach === 2
+                                        ? 'bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-600 cursor-not-allowed'
+                                        : 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg hover:shadow-xl'
+                                        }`}
+                                >
+                                    Next →
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Related Problems Section */}
+                <div className="bg-gradient-to-br from-transparent to-transparent dark:from-gray-950 dark:to-gray-950 py-16 border-t border-gray-200 dark:border-gray-800">
+                    <div className="container mx-auto px-4 max-w-7xl">
+                        <div className="text-center mb-12">
+                            <h2 className="text-3xl md:text-4xl font-semibold text-gray-900 dark:text-white mb-3">
+                                More Problems
+                            </h2>
+                            <p className="text-gray-600 dark:text-gray-400">
+                                Continue your learning journey
+                            </p>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                            {items
+                                .filter(blogItem => blogItem.id.toString() !== id)
+                                .sort((a, b) => new Date(b.date) - new Date(a.date))
+                                .slice(0, 4)
+                                .map((blogItem, index) => {
+                                    const colors = [
+                                        'from-red-500 to-orange-500',
+                                        'from-blue-500 to-cyan-500',
+                                        'from-green-500 to-emerald-500',
+                                        'from-purple-500 to-pink-500'
+                                    ];
+                                    return (
+                                        <div
+                                            key={blogItem.id}
+                                            onClick={() => handleCardClick(blogItem.id)}
+                                            className="group bg-white dark:bg-gray-900 rounded-xl p-6 border border-gray-200 dark:border-gray-800 hover:shadow-xl transition-all duration-300 cursor-pointer"
+                                        >
+                                            <div className="flex items-start gap-4">
+                                                <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${colors[index]} flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform`}>
+                                                    <Code2 className="w-6 h-6 text-white" />
+                                                </div>
+                                                <div className="flex-1">
+                                                    <h3 className="font-bold text-gray-900 dark:text-white mb-2 line-clamp-2 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:bg-clip-text group-hover:from-purple-600 group-hover:to-pink-600 transition-all">
+                                                        {blogItem.header}
+                                                    </h3>
+                                                    <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2 mb-3">
+                                                        {truncateText(blogItem.explanation, 100)}
+                                                    </p>
+                                                    <div className="flex items-center gap-2 text-sm font-medium text-purple-600 dark:text-purple-400">
+                                                        View Solution
+                                                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                        </div>
+
+                        <div className="text-center">
+                            <a href='/Technicalblog'>
+                                <button className="inline-flex items-center gap-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-4 rounded-xl font-bold shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300">
+                                    Explore All Problems
+                                    <ExternalLink className="w-5 h-5" />
+                                </button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Contribute CTA */}
+                <div className="container mx-auto px-4 py-16 max-w-5xl">
+                    <div className="relative rounded-3xl overflow-hidden">
+                        <div className="absolute inset-0 bg-gradient-to-r from-green-500 to-emerald-500 opacity-90"></div>
+                        <div className="relative p-12 text-center text-white">
+                            <Award className="w-16 h-16 mx-auto mb-6" />
+                            <h3 className="text-3xl font-semibold mb-4">Share Your Solution</h3>
+                            <p className="text-green-50 text-lg mb-8 max-w-2xl mx-auto">
+                                Help the community by contributing your unique approach to solving problems
+                            </p>
+                            <a href="/Contibuteblog">
+                                <button className="bg-white text-green-600 px-8 py-4 rounded-xl font-bold shadow-2xl hover:shadow-white/20 transform hover:scale-105 transition-all duration-300">
+                                    Contribute Now
+                                </button>
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
-
-            <div className="flex justify-center mb-10 ">
-                <button className="bg-green-500 text-lg text-white shadow-lg hover:shadow-green-500/30 shadow-black/30 py-5 px-20 rounded-xl">
-                    <a href="/Contibuteblog">Contribute a Blog</a>
-                </button>
-            </div>
-
             <Footer />
+
+            {/* Decorative Floating Blobs */}
+            <div className="fixed top-20 left-10 w-72 h-72 bg-blue-300 dark:bg-blue-600 rounded-full mix-blend-multiply dark:mix-blend-normal dark:opacity-10 filter blur-xl opacity-20 animate-blob pointer-events-none"></div>
+            <div className="fixed top-40 right-10 w-72 h-72 bg-purple-300 dark:bg-purple-600 rounded-full mix-blend-multiply dark:mix-blend-normal dark:opacity-10 filter blur-xl opacity-20 animate-blob animation-delay-2000 pointer-events-none"></div>
+            <div className="fixed bottom-20 left-1/2 w-72 h-72 bg-pink-300 dark:bg-pink-600 rounded-full mix-blend-multiply dark:mix-blend-normal dark:opacity-10 filter blur-xl opacity-20 animate-blob animation-delay-4000 pointer-events-none"></div>
+
+            <style>{`
+                @keyframes blob {
+                    0%, 100% { transform: translate(0, 0) scale(1); }
+                    25% { transform: translate(20px, -50px) scale(1.1); }
+                    50% { transform: translate(-20px, 20px) scale(0.9); }
+                    75% { transform: translate(50px, 50px) scale(1.05); }
+                }
+                
+                .animate-blob {
+                    animation: blob 7s infinite;
+                }
+                
+                .animation-delay-2000 {
+                    animation-delay: 2s;
+                }
+                
+                .animation-delay-4000 {
+                    animation-delay: 4s;
+                }
+            `}</style>
+
+            <style>{`
+                @keyframes fadeIn {
+                    from { opacity: 0; transform: translateY(-10px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+                .animate-fadeIn {
+                    animation: fadeIn 0.3s ease-out;
+                }
+            `}</style>
         </>
     );
 };

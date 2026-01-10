@@ -3,8 +3,8 @@
 import { useState, useEffect } from 'react';
 import { X, Sparkles, Send, Heart, Share2, MessageCircle, Play, TrendingUp } from 'lucide-react';
 
-const BASE_URL = "http://localhost:4001/instapost";
-const FILE_URL = "http://localhost:4001";
+const BASE_URL = "https://dcoder-backend.onrender.com/instapost";
+const FILE_URL = "https://dcoder-backend.onrender.com";
 
 export default function SingleReelHero() {
     const [latestReel, setLatestReel] = useState(null);

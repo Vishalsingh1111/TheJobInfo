@@ -444,8 +444,8 @@ import { useEffect, useState, useRef } from "react";
 import { X, ChevronLeft, ChevronRight, FileText, Calendar, Tag, BookOpen, Download, ZoomIn, ZoomOut, Maximize2, Sparkles, Eye } from "lucide-react";
 import HTMLFlipBook from "react-pageflip";
 
-const BASE_URL = "http://localhost:4001/instapost";
-const FILE_URL = "http://localhost:4001";
+const BASE_URL = "https://dcoder-backend.onrender.com/instapost";
+const FILE_URL = "https://dcoder-backend.onrender.com";
 
 export default function BookReaderPosts() {
     const [posts, setPosts] = useState([]);

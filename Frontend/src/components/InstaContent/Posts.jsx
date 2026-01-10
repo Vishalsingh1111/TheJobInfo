@@ -1011,8 +1011,8 @@ import Navbar from "../Navbar";
 import Footer from "../Footer";
 import Breadcrumb from "../Common/Breadcrumb";
 
-const BASE_URL = "http://localhost:4001/instapost";
-const FILE_URL = "http://localhost:4001";
+const BASE_URL = "https://dcoder-backend.onrender.com/instapost";
+const FILE_URL = "https://dcoder-backend.onrender.com";
 
 export default function AllPostsBookReader() {
     const [posts, setPosts] = useState([]);

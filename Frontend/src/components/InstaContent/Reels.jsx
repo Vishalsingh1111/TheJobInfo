@@ -435,8 +435,8 @@ import { X, Send, Heart, Share2, MessageCircle, Search, Filter, Clock, Play, Spa
 import Navbar from "../Navbar";
 import Footer from "../Footer";
 
-const BASE_URL = "http://localhost:4001/instapost";
-const FILE_URL = "http://localhost:4001";
+const BASE_URL = "https://dcoder-backend.onrender.com/instapost";
+const FILE_URL = "https://dcoder-backend.onrender.com";
 
 export default function AllReels() {
     const [reels, setReels] = useState([]);

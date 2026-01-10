@@ -4,8 +4,8 @@ import React, { useState, useEffect, useRef } from "react";
 import { ArrowRight, Code, Sparkles, TrendingUp, Download, Eye, Star, X, ChevronLeft, ChevronRight, ZoomIn, ZoomOut, Maximize2, Calendar, Tag } from "lucide-react";
 import HTMLFlipBook from "react-pageflip";
 
-const BASE_URL = "http://localhost:4001/instapost";
-const FILE_URL = "http://localhost:4001";
+const BASE_URL = "https://dcoder-backend.onrender.com/instapost";
+const FILE_URL = "https://dcoder-backend.onrender.com";
 
 const CheatsheetCard = ({ sheet, index, onOpen }) => {
     const [isHovered, setIsHovered] = useState(false);

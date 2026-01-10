@@ -8,8 +8,7 @@ import Sheet from './Content/Sheet';
 import LoginPage from './components/Authentications/Login';
 import Forgetpassword from './components/Authentications/Forgetpassword';
 import Signup from './components/Authentications/Signup';
-import AdminloginPage from './components/Admin/Admin_authentications/Adminlogin';
-import AddAdmin from './components/Admin/Admin_authentications/Addadmin';
+
 import Contact from './Contacts/Contact';
 import Pagenotfound from './components/Common/Pagenotfound';
 import Technicalblog from './Content/Technicalblog';
@@ -24,10 +23,10 @@ import CSPage from './components/CSSubject/CSPage';
 import BlogDetail from './components/TechBlogs/Blogdetail';
 import ContestSol from './components/InstaContent/Posts';
 import Reels from './components/InstaContent/Reels';
-import DashBoard from './components/Admin/Admin_common/Dashboard';
+
 import Contactform from './Contacts/Contactform';
 import { useAuth } from './Context/AuthProvider';
-import { useadminAuth } from './Context/AuthProvider2';
+
 import Profile from './components/Common/Profile';
 import Ai from './components/Common/Aipage';
 import ResultDetailPage from './components/Common/ResultDetailPage';
@@ -43,7 +42,7 @@ import CheatsheetPage from './components/CSSubject/CheatSheetPage';
 const App = () => {
   //auth user function 
   const [authUser, setAuthUser] = useAuth();
-  const [authAdmin, setAuthAdmin] = useadminAuth();
+
 
 
 
@@ -59,8 +58,7 @@ const App = () => {
           <Route path="/Sheet" element={<Sheet />}></Route>
           <Route path="/Signup" element={<Signup />}></Route>
           <Route path="/Login" element={<LoginPage />}></Route>
-          <Route path="/Adminlogin" element={<AdminloginPage />}></Route>
-          <Route path="/AddAdmin" element={<AddAdmin />}></Route>
+
           <Route path="/Forgetpassword" element={<Forgetpassword />}></Route>
           <Route path='/Pagenotfound' element={<Pagenotfound />}></Route>
           <Route path='/Technical-Blog' element={<Technicalblog />}></Route>
@@ -80,7 +78,7 @@ const App = () => {
           <Route path='/Contibuteblog' element={authUser ? <Contributeblog /> : <Navigate to="/Signup" />}></Route>
           <Route path='/detail/:id' element={<BlogDetail />}></Route>
           <Route path='/Reels' element={<Reels />}></Route>
-          <Route path='/Dashboard' element={authAdmin ? <DashBoard /> : <Navigate to="/Adminlogin" />}></Route>
+
           <Route path='/Profile' element={<Profile />} />
           <Route path='/Ai' element={<Ai />} />
           <Route path="/results/:id" component={ResultDetailPage} />

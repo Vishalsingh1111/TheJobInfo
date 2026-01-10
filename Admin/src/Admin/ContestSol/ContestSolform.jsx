@@ -373,7 +373,7 @@ export default function AdminCRUD() {
                             >
                                 {/* Preview */}
                                 <div className="relative aspect-[21/9] bg-gradient-to-br from-purple-100 to-pink-100 dark:from-purple-900/20 dark:to-pink-900/20">
-                                    {/* {item.type === "REEL" && item.fileUrl ? (
+                                    {item.type === "REEL" && item.fileUrl ? (
                                         <video
                                             className="w-full h-full object-cover"
                                             muted
@@ -390,7 +390,7 @@ export default function AdminCRUD() {
                                         <div className="w-full h-full flex items-center justify-center">
                                             <ImageIcon className="w-16 h-16 text-gray-300 dark:text-gray-600" />
                                         </div>
-                                    )} */}
+                                    )}
 
                                     {/* Badges */}
                                     <div className="absolute top-16 right-3 flex flex-col gap-2">

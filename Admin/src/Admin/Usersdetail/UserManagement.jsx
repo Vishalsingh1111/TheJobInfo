@@ -1,89 +1,3 @@
-// import React, { useState, useEffect } from 'react';
-// import axios from 'axios';
-// import { baseUrl } from '../../Baseurl';
-
-// const ShowAdminDetail = () => {
-//     const [admins, setAdmins] = useState([]);
-//     const [deleteAdminId, setDeleteAdminId] = useState(null); // Track admin to delete
-
-//     useEffect(() => {
-//         const fetchAdmins = async () => {
-//             try {
-//                 const response = await axios.get(`${baseUrl}/admin`);
-//                 setAdmins(response.data); // Assuming API response is an array of admins
-//             } catch (error) {
-//                 console.error('Error fetching admins:', error);
-//             }
-//         };
-
-//         fetchAdmins();
-//     }, []);
-
-//     const handleDelete = async (id) => {
-//         try {
-//             await axios.delete(`${baseUrl}/admin/${id}`);
-//             setAdmins(admins.filter(admin => admin._id !== id)); // Remove the deleted admin from the local state
-//             console.log('Deleted admin with id:', id);
-//         } catch (error) {
-//             console.error('Error deleting admin:', error);
-//         }
-//         setDeleteAdminId(null); // Clear deleteAdminId to close the delete confirmation modal
-//     };
-
-//     const openDeleteModal = (id) => {
-//         setDeleteAdminId(id); // Set the admin to delete
-//     };
-
-//     return (
-//         <div className="bg-white shadow rounded pt-5">
-//             <h2 className="text-lg font-bold mb-3">Admin Details</h2>
-//             {admins && admins.length > 0 ? (
-//                 <div className="overflow-x-auto">
-//                     <table className="min-w-full divide-y divide-gray-200">
-//                         <thead className="bg-gray-50">
-//                             <tr>
-//                                 <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Username</th>
-//                                 <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-//                             </tr>
-//                         </thead>
-//                         <tbody className="bg-white divide-y divide-gray-200">
-//                             {admins.map(admin => (
-//                                 <tr key={admin._id} className="text-center">
-//                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-center font-medium text-gray-900">{admin.username}</td>
-//                                     <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
-//                                         <button className="text-red-600 hover:text-red-900" onClick={() => openDeleteModal(admin._id)}>
-//                                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-//                                                 <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 000-2h-1V3a1 1 0 00-1-1H6zm8 4H6v10h8V6zm-5 2a1 1 0 012 0v6a1 1 0 01-2 0V8z" clipRule="evenodd" />
-//                                             </svg>
-//                                         </button>
-//                                     </td>
-//                                 </tr>
-//                             ))}
-//                         </tbody>
-//                     </table>
-//                 </div>
-//             ) : (
-//                 <p className="text-center mt-4">No admins found.</p>
-//             )}
-
-//             {/* Modal for delete confirmation */}
-//             {deleteAdminId && (
-//                 <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-//                     <div className="bg-white p-8 rounded shadow-lg flex flex-col">
-//                         <p className="text-lg font-semibold mb-4">Are you sure you want to delete this admin?</p>
-//                         <div className="flex justify-between">
-//                             <button className="bg-red-500 shadow-lg hover:shadow-red-500/30 shadow-black/30  text-white font-bold py-2 px-4 rounded" onClick={() => handleDelete(deleteAdminId)}>Delete</button>
-//                             <button className="bg-gray-300 shadow-lg hover:shadow-gray-500/30 shadow-black/30  text-gray-800 font-bold py-2 px-4 rounded" onClick={() => setDeleteAdminId(null)}>Cancel</button>
-//                         </div>
-//                     </div>
-//                 </div>
-//             )}
-//         </div>
-//     );
-// };
-
-// export default ShowAdminDetail;
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { baseUrl } from '../../Baseurl';
@@ -101,93 +15,244 @@ import {
     TrendingUp,
     Mail,
     Phone,
-    Ban,
     CheckCircle,
     XCircle,
     AlertCircle,
     Trash2,
     Eye,
-    Download
+    Download,
+    RefreshCw,
+    FileText,
+    BarChart3,
+    Activity,
+    Zap,
+    UserPlus
 } from 'lucide-react';
 
 export default function UserManagement() {
     const [users, setUsers] = useState([]);
-    const [stats, setStats] = useState(null);
+    const [filteredUsers, setFilteredUsers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
-    const [statusFilter, setStatusFilter] = useState('all');
+    const [verificationFilter, setVerificationFilter] = useState('all');
+    const [authMethodFilter, setAuthMethodFilter] = useState('all');
+    const [dateRangeFilter, setDateRangeFilter] = useState('all');
     const [currentPage, setCurrentPage] = useState(1);
-    const [pagination, setPagination] = useState(null);
+    const [itemsPerPage, setItemsPerPage] = useState(10);
     const [selectedUser, setSelectedUser] = useState(null);
-    const [showBlockModal, setShowBlockModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [showDetailsModal, setShowDetailsModal] = useState(false);
-    const [blockReason, setBlockReason] = useState('');
     const [sortBy, setSortBy] = useState('createdAt');
     const [sortOrder, setSortOrder] = useState('desc');
+    const [stats, setStats] = useState({
+        totalUsers: 0,
+        verifiedUsers: 0,
+        unverifiedUsers: 0,
+        googleUsers: 0,
+        regularUsers: 0,
+        recentUsers: 0,
+        todayUsers: 0,
+        usersWithPhone: 0,
+        usersWithPhoto: 0
+    });
+    const [refreshing, setRefreshing] = useState(false);
 
     useEffect(() => {
         fetchUsers();
-        fetchStats();
-    }, [currentPage, searchTerm, statusFilter, sortBy, sortOrder]);
+    }, []);
+
+    useEffect(() => {
+        filterAndSortUsers();
+    }, [users, searchTerm, verificationFilter, authMethodFilter, dateRangeFilter, sortBy, sortOrder]);
 
     const fetchUsers = async () => {
         try {
             setLoading(true);
-            const response = await axios.get(`${baseUrl}/user`, {
-                params: {
-                    page: currentPage,
-                    limit: 10,
-                    search: searchTerm,
-                    status: statusFilter,
-                    sortBy,
-                    order: sortOrder
-                }
-            });
-            setUsers(response.data.users);
-            setPagination(response.data.pagination);
+            // Backend returns all users without pagination
+            const response = await axios.get(`${baseUrl}/user`);
+
+            // Handle different response structures
+            let userData = [];
+            if (Array.isArray(response.data)) {
+                userData = response.data;
+            } else if (response.data.users && Array.isArray(response.data.users)) {
+                userData = response.data.users;
+            } else if (response.data.data && Array.isArray(response.data.data)) {
+                userData = response.data.data;
+            }
+
+            console.log(`Fetched ${userData.length} users from API`);
+            setUsers(userData);
+            calculateStats(userData);
         } catch (error) {
             console.error('Error fetching users:', error);
+            alert('❌ Failed to fetch users');
+            setUsers([]); // Set empty array on error
         } finally {
             setLoading(false);
         }
     };
 
-    const fetchStats = async () => {
-        try {
-            const response = await axios.get(`${baseUrl}/user/stats`);
-            setStats(response.data);
-        } catch (error) {
-            console.error('Error fetching stats:', error);
-        }
+    const handleRefresh = async () => {
+        setRefreshing(true);
+        await fetchUsers();
+        setTimeout(() => setRefreshing(false), 500);
     };
 
-    const handleBlockUser = async () => {
-        try {
-            await axios.put(`${baseUrl}/user/${selectedUser._id}/block`, {
-                reason: blockReason || 'Blocked by administrator'
+    const calculateStats = (userData) => {
+        // Safety check - ensure userData is an array
+        if (!Array.isArray(userData)) {
+            setStats({
+                totalUsers: 0,
+                verifiedUsers: 0,
+                unverifiedUsers: 0,
+                googleUsers: 0,
+                regularUsers: 0,
+                recentUsers: 0,
+                todayUsers: 0,
+                usersWithPhone: 0,
+                usersWithPhoto: 0
             });
-            alert('✅ User blocked successfully');
-            setShowBlockModal(false);
-            setBlockReason('');
-            fetchUsers();
-            fetchStats();
-        } catch (error) {
-            console.error('Error blocking user:', error);
-            alert('❌ Failed to block user');
+            return;
         }
+
+        const now = new Date();
+        const todayStart = new Date(now);
+        todayStart.setHours(0, 0, 0, 0);
+
+        const thirtyDaysAgo = new Date(now);
+        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+        const stats = {
+            totalUsers: userData.length,
+            verifiedUsers: userData.filter(u => u.otpVerified).length,
+            unverifiedUsers: userData.filter(u => !u.otpVerified).length,
+            googleUsers: userData.filter(u => u.googleId && u.googleId !== 'null').length,
+            regularUsers: userData.filter(u => !u.googleId || u.googleId === 'null').length,
+            recentUsers: userData.filter(u => {
+                const createdDate = u.createdAt ? new Date(u.createdAt) : null;
+                return createdDate && createdDate >= thirtyDaysAgo;
+            }).length,
+            todayUsers: userData.filter(u => {
+                const createdDate = u.createdAt ? new Date(u.createdAt) : null;
+                if (!createdDate) return false;
+                const userDateStart = new Date(createdDate);
+                userDateStart.setHours(0, 0, 0, 0);
+                return userDateStart.getTime() === todayStart.getTime();
+            }).length,
+            usersWithPhone: userData.filter(u => u.phone && u.phone !== 'null' && u.phone.trim() !== '').length,
+            usersWithPhoto: userData.filter(u => u.photo && u.photo !== 'null' && u.photo.trim() !== '').length
+        };
+
+        setStats(stats);
     };
 
-    const handleUnblockUser = async (userId) => {
-        try {
-            await axios.put(`${baseUrl}/user/${userId}/unblock`);
-            alert('✅ User unblocked successfully');
-            fetchUsers();
-            fetchStats();
-        } catch (error) {
-            console.error('Error unblocking user:', error);
-            alert('❌ Failed to unblock user');
+    const filterAndSortUsers = () => {
+        // Safety check - ensure users is an array
+        if (!Array.isArray(users)) {
+            setFilteredUsers([]);
+            return;
         }
+
+        let filtered = [...users];
+
+        // Search filter
+        if (searchTerm) {
+            const searchLower = searchTerm.toLowerCase();
+            filtered = filtered.filter(user => {
+                const firstName = user.firstName || '';
+                const lastName = user.lastName || '';
+                const fullName = `${firstName} ${lastName}`.toLowerCase();
+                const email = (user.email || '').toLowerCase();
+                const phone = user.phone || '';
+
+                return fullName.includes(searchLower) ||
+                    email.includes(searchLower) ||
+                    (phone !== 'null' && phone.includes(searchTerm));
+            });
+        }
+
+        // Verification filter
+        if (verificationFilter !== 'all') {
+            filtered = filtered.filter(user =>
+                verificationFilter === 'verified' ? user.otpVerified : !user.otpVerified
+            );
+        }
+
+        // Auth method filter
+        if (authMethodFilter !== 'all') {
+            filtered = filtered.filter(user =>
+                authMethodFilter === 'google'
+                    ? (user.googleId && user.googleId !== 'null')
+                    : (!user.googleId || user.googleId === 'null')
+            );
+        }
+
+        // Date range filter - FIX: Don't mutate the date object
+        if (dateRangeFilter !== 'all') {
+            const now = new Date();
+            let startDate;
+
+            switch (dateRangeFilter) {
+                case 'today':
+                    startDate = new Date();
+                    startDate.setHours(0, 0, 0, 0);
+                    break;
+                case 'week':
+                    startDate = new Date();
+                    startDate.setDate(now.getDate() - 7);
+                    break;
+                case 'month':
+                    startDate = new Date();
+                    startDate.setMonth(now.getMonth() - 1);
+                    break;
+                case 'year':
+                    startDate = new Date();
+                    startDate.setFullYear(now.getFullYear() - 1);
+                    break;
+                default:
+                    startDate = null;
+            }
+
+            if (startDate) {
+                filtered = filtered.filter(user => {
+                    const createdDate = user.createdAt ? new Date(user.createdAt) : null;
+                    return createdDate && createdDate >= startDate;
+                });
+            }
+        }
+
+        // Sorting
+        filtered.sort((a, b) => {
+            let aValue, bValue;
+
+            switch (sortBy) {
+                case 'firstName':
+                    aValue = (a.firstName || '').toLowerCase();
+                    bValue = (b.firstName || '').toLowerCase();
+                    break;
+                case 'email':
+                    aValue = (a.email || '').toLowerCase();
+                    bValue = (b.email || '').toLowerCase();
+                    break;
+                case 'createdAt':
+                    aValue = a.createdAt ? new Date(a.createdAt) : new Date(0);
+                    bValue = b.createdAt ? new Date(b.createdAt) : new Date(0);
+                    break;
+                default:
+                    aValue = a[sortBy] || '';
+                    bValue = b[sortBy] || '';
+            }
+
+            if (sortOrder === 'asc') {
+                return aValue > bValue ? 1 : -1;
+            } else {
+                return aValue < bValue ? 1 : -1;
+            }
+        });
+
+        setFilteredUsers(filtered);
+        setCurrentPage(1);
     };
 
     const handleDeleteUser = async () => {
@@ -196,39 +261,24 @@ export default function UserManagement() {
             alert('✅ User deleted successfully');
             setShowDeleteModal(false);
             fetchUsers();
-            fetchStats();
         } catch (error) {
             console.error('Error deleting user:', error);
             alert('❌ Failed to delete user');
         }
     };
 
-    const handleStatusChange = async (userId, newStatus) => {
-        try {
-            await axios.put(`${baseUrl}/user/${userId}/status`, {
-                status: newStatus
-            });
-            alert('✅ User status updated successfully');
-            fetchUsers();
-            fetchStats();
-        } catch (error) {
-            console.error('Error updating status:', error);
-            alert('❌ Failed to update status');
-        }
-    };
-
-    const exportUsers = () => {
+    const exportToCSV = () => {
         const csv = [
-            ['First Name', 'Last Name', 'Email', 'Phone', 'Status', 'Registered', 'Last Login', 'Login Count'],
-            ...users.map(user => [
-                user.firstName,
-                user.lastName,
+            ['First Name', 'Last Name', 'Email', 'Phone', 'Verified', 'Auth Method', 'Registered Date', 'Has Photo'],
+            ...filteredUsers.map(user => [
+                user.firstName || 'N/A',
+                user.lastName || 'N/A',
                 user.email,
-                user.phone || 'N/A',
-                user.accountStatus,
-                new Date(user.createdAt).toLocaleDateString(),
-                user.lastLogin ? new Date(user.lastLogin).toLocaleDateString() : 'Never',
-                user.loginCount || 0
+                (user.phone && user.phone !== 'null') ? user.phone : 'N/A',
+                user.otpVerified ? 'Yes' : 'No',
+                (user.googleId && user.googleId !== 'null') ? 'Google' : 'Email',
+                user.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'N/A',
+                (user.photo && user.photo !== 'null') ? 'Yes' : 'No'
             ])
         ].map(row => row.join(',')).join('\n');
 
@@ -236,21 +286,39 @@ export default function UserManagement() {
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `users_${new Date().toISOString().split('T')[0]}.csv`;
+        a.download = `users_export_${new Date().toISOString().split('T')[0]}.csv`;
         a.click();
+        window.URL.revokeObjectURL(url);
     };
 
-    const getStatusColor = (status, isBlocked) => {
-        if (isBlocked) return 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400';
-        switch (status) {
-            case 'active': return 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400';
-            case 'suspended': return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400';
-            case 'deleted': return 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400';
-            default: return 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400';
-        }
+    const exportToJSON = () => {
+        const json = JSON.stringify(filteredUsers.map(user => ({
+            firstName: user.firstName || 'N/A',
+            lastName: user.lastName || 'N/A',
+            email: user.email,
+            phone: (user.phone && user.phone !== 'null') ? user.phone : 'N/A',
+            verified: user.otpVerified,
+            authMethod: (user.googleId && user.googleId !== 'null') ? 'Google' : 'Email',
+            registeredDate: user.createdAt ? new Date(user.createdAt).toISOString() : null,
+            hasPhoto: (user.photo && user.photo !== 'null')
+        })), null, 2);
+
+        const blob = new Blob([json], { type: 'application/json' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `users_export_${new Date().toISOString().split('T')[0]}.json`;
+        a.click();
+        window.URL.revokeObjectURL(url);
     };
 
-    const StatCard = ({ icon: Icon, label, value, color, trend }) => (
+    // Pagination
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = filteredUsers.slice(indexOfFirstItem, indexOfLastItem);
+    const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
+
+    const StatCard = ({ icon: Icon, label, value, color, trend, subtitle }) => (
         <div className={`bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border-l-4 ${color} transform hover:scale-105 transition-all duration-300`}>
             <div className="flex items-center justify-between">
                 <div>
@@ -262,6 +330,9 @@ export default function UserManagement() {
                             {trend}
                         </p>
                     )}
+                    {subtitle && (
+                        <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">{subtitle}</p>
+                    )}
                 </div>
                 <div className={`p-4 rounded-full ${color.replace('border-', 'bg-').replace('-500', '-100')} dark:opacity-20`}>
                     <Icon className={`w-8 h-8 ${color.replace('border-', 'text-')}`} />
@@ -270,7 +341,7 @@ export default function UserManagement() {
         </div>
     );
 
-    if (!stats) {
+    if (loading && users.length === 0) {
         return (
             <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-950 dark:via-gray-950 dark:to-gray-950 flex items-center justify-center">
                 <div className="text-center">
@@ -290,21 +361,46 @@ export default function UserManagement() {
                         <div>
                             <h1 className="text-4xl font-bold mb-2 flex items-center gap-3">
                                 <Users className="w-10 h-10" />
-                                User Management
+                                User Management Dashboard
                             </h1>
                             <p className="text-blue-100 dark:text-blue-200">Monitor and manage all registered users</p>
                         </div>
-                        <button
-                            onClick={exportUsers}
-                            className="flex items-center gap-2 bg-white dark:bg-gray-800 text-blue-600 dark:text-blue-400 px-6 py-3 rounded-full font-semibold hover:shadow-lg hover:scale-105 transition-all"
-                        >
-                            <Download className="w-5 h-5" />
-                            Export CSV
-                        </button>
+                        <div className="flex gap-3">
+                            <button
+                                onClick={handleRefresh}
+                                className={`flex items-center gap-2 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white px-4 py-3 rounded-full font-semibold transition-all ${refreshing ? 'animate-spin' : ''}`}
+                                disabled={refreshing}
+                            >
+                                <RefreshCw className="w-5 h-5" />
+                                Refresh
+                            </button>
+                            <div className="relative group">
+                                <button className="flex items-center gap-2 bg-white dark:bg-gray-800 text-blue-600 dark:text-blue-400 px-6 py-3 rounded-full font-semibold hover:shadow-lg hover:scale-105 transition-all">
+                                    <Download className="w-5 h-5" />
+                                    Export
+                                </button>
+                                <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-10">
+                                    <button
+                                        onClick={exportToCSV}
+                                        className="w-full text-left px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2 text-gray-700 dark:text-gray-300 rounded-t-xl"
+                                    >
+                                        <FileText className="w-4 h-4" />
+                                        Export as CSV
+                                    </button>
+                                    <button
+                                        onClick={exportToJSON}
+                                        className="w-full text-left px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2 text-gray-700 dark:text-gray-300 rounded-b-xl"
+                                    >
+                                        <FileText className="w-4 h-4" />
+                                        Export as JSON
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                {/* Stats Grid */}
+                {/* Main Stats Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                     <StatCard
                         icon={Users}
@@ -315,21 +411,23 @@ export default function UserManagement() {
                     />
                     <StatCard
                         icon={UserCheck}
-                        label="Active Users"
-                        value={stats.activeUsers}
+                        label="Verified Users"
+                        value={stats.verifiedUsers}
                         color="border-green-500"
+                        subtitle={`${stats.unverifiedUsers} unverified`}
                     />
                     <StatCard
-                        icon={UserX}
-                        label="Blocked Users"
-                        value={stats.blockedUsers}
-                        color="border-red-500"
+                        icon={Shield}
+                        label="Google Sign-ins"
+                        value={stats.googleUsers}
+                        color="border-purple-500"
+                        subtitle={`${stats.regularUsers} email users`}
                     />
                     <StatCard
                         icon={Clock}
                         label="Recent (30 days)"
                         value={stats.recentUsers}
-                        color="border-purple-500"
+                        color="border-orange-500"
                     />
                 </div>
 
@@ -337,102 +435,168 @@ export default function UserManagement() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                     <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
                         <div className="flex items-center gap-3 mb-4">
-                            <Shield className="w-6 h-6 text-blue-600 dark:text-blue-400" />
-                            <h3 className="font-bold text-gray-800 dark:text-gray-100">Verified Users</h3>
+                            <Phone className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                            <h3 className="font-bold text-gray-800 dark:text-gray-100">Phone Numbers</h3>
                         </div>
-                        <p className="text-3xl font-bold text-gray-800 dark:text-gray-100">{stats.verifiedUsers}</p>
-                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Email verified</p>
+                        <p className="text-3xl font-bold text-gray-800 dark:text-gray-100">{stats.usersWithPhone}</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                            Users with phone ({stats.totalUsers > 0 ? Math.round((stats.usersWithPhone / stats.totalUsers) * 100) : 0}%)
+                        </p>
                     </div>
 
                     <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
                         <div className="flex items-center gap-3 mb-4">
-                            <img src="https://www.google.com/favicon.ico" alt="Google" className="w-6 h-6" />
-                            <h3 className="font-bold text-gray-800 dark:text-gray-100">Google Sign-ins</h3>
+                            <Activity className="w-6 h-6 text-green-600 dark:text-green-400" />
+                            <h3 className="font-bold text-gray-800 dark:text-gray-100">Profile Photos</h3>
                         </div>
-                        <p className="text-3xl font-bold text-gray-800 dark:text-gray-100">{stats.googleUsers}</p>
-                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">OAuth users</p>
+                        <p className="text-3xl font-bold text-gray-800 dark:text-gray-100">{stats.usersWithPhoto}</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                            Users with photos ({stats.totalUsers > 0 ? Math.round((stats.usersWithPhoto / stats.totalUsers) * 100) : 0}%)
+                        </p>
                     </div>
 
                     <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
                         <div className="flex items-center gap-3 mb-4">
-                            <AlertCircle className="w-6 h-6 text-orange-600 dark:text-orange-400" />
-                            <h3 className="font-bold text-gray-800 dark:text-gray-100">Suspended</h3>
+                            <BarChart3 className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+                            <h3 className="font-bold text-gray-800 dark:text-gray-100">Verification Rate</h3>
                         </div>
-                        <p className="text-3xl font-bold text-gray-800 dark:text-gray-100">{stats.suspendedUsers}</p>
-                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Temporarily suspended</p>
+                        <p className="text-3xl font-bold text-gray-800 dark:text-gray-100">
+                            {stats.totalUsers > 0 ? Math.round((stats.verifiedUsers / stats.totalUsers) * 100) : 0}%
+                        </p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                            Email verification completion
+                        </p>
                     </div>
                 </div>
 
                 {/* Filters and Search */}
                 <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg mb-6">
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
                         {/* Search */}
-                        <div className="md:col-span-2">
+                        <div className="lg:col-span-2">
                             <div className="relative">
                                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 w-5 h-5" />
                                 <input
                                     type="text"
                                     placeholder="Search by name, email, or phone..."
                                     value={searchTerm}
-                                    onChange={(e) => {
-                                        setSearchTerm(e.target.value);
-                                        setCurrentPage(1);
-                                    }}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
                                     className="w-full pl-12 pr-4 py-3 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-xl focus:border-blue-500 dark:focus:border-blue-400 focus:outline-none transition-colors"
                                 />
                             </div>
                         </div>
 
-                        {/* Status Filter */}
-                        <div>
-                            <div className="relative">
-                                <Filter className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 w-5 h-5 pointer-events-none" />
-                                <select
-                                    value={statusFilter}
-                                    onChange={(e) => {
-                                        setStatusFilter(e.target.value);
-                                        setCurrentPage(1);
-                                    }}
-                                    className="w-full pl-12 pr-4 py-3 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-xl focus:border-blue-500 dark:focus:border-blue-400 focus:outline-none cursor-pointer appearance-none transition-colors"
-                                >
-                                    <option value="all">All Status</option>
-                                    <option value="active">Active</option>
-                                    <option value="blocked">Blocked</option>
-                                    <option value="suspended">Suspended</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        {/* Sort */}
+                        {/* Verification Filter */}
                         <div>
                             <select
-                                value={`${sortBy}-${sortOrder}`}
-                                onChange={(e) => {
-                                    const [field, order] = e.target.value.split('-');
-                                    setSortBy(field);
-                                    setSortOrder(order);
-                                }}
-                                className="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-xl focus:border-blue-500 dark:focus:border-blue-400 focus:outline-none cursor-pointer appearance-none transition-colors"
+                                value={verificationFilter}
+                                onChange={(e) => setVerificationFilter(e.target.value)}
+                                className="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-xl focus:border-blue-500 dark:focus:border-blue-400 focus:outline-none cursor-pointer"
                             >
-                                <option value="createdAt-desc">Newest First</option>
-                                <option value="createdAt-asc">Oldest First</option>
-                                <option value="firstName-asc">Name (A-Z)</option>
-                                <option value="firstName-desc">Name (Z-A)</option>
-                                <option value="loginCount-desc">Most Active</option>
-                                <option value="lastLogin-desc">Recent Login</option>
+                                <option value="all">All Verification</option>
+                                <option value="verified">Verified Only</option>
+                                <option value="unverified">Unverified Only</option>
                             </select>
+                        </div>
+
+                        {/* Auth Method Filter */}
+                        <div>
+                            <select
+                                value={authMethodFilter}
+                                onChange={(e) => setAuthMethodFilter(e.target.value)}
+                                className="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-xl focus:border-blue-500 dark:focus:border-blue-400 focus:outline-none cursor-pointer"
+                            >
+                                <option value="all">All Auth Methods</option>
+                                <option value="google">Google Only</option>
+                                <option value="email">Email Only</option>
+                            </select>
+                        </div>
+
+                        {/* Date Range Filter */}
+                        <div>
+                            <select
+                                value={dateRangeFilter}
+                                onChange={(e) => setDateRangeFilter(e.target.value)}
+                                className="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-xl focus:border-blue-500 dark:focus:border-blue-400 focus:outline-none cursor-pointer"
+                            >
+                                <option value="all">All Time</option>
+                                <option value="today">Today</option>
+                                <option value="week">Last 7 Days</option>
+                                <option value="month">Last 30 Days</option>
+                                <option value="year">Last Year</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    {/* Sort Options */}
+                    <div className="mt-4 flex items-center gap-4 flex-wrap">
+                        <div className="flex items-center gap-2">
+                            <Filter className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                            <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">Sort by:</span>
+                        </div>
+                        <select
+                            value={`${sortBy}-${sortOrder}`}
+                            onChange={(e) => {
+                                const [field, order] = e.target.value.split('-');
+                                setSortBy(field);
+                                setSortOrder(order);
+                            }}
+                            className="px-4 py-2 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg focus:border-blue-500 dark:focus:border-blue-400 focus:outline-none cursor-pointer"
+                        >
+                            <option value="createdAt-desc">Newest First</option>
+                            <option value="createdAt-asc">Oldest First</option>
+                            <option value="firstName-asc">Name (A-Z)</option>
+                            <option value="firstName-desc">Name (Z-A)</option>
+                            <option value="email-asc">Email (A-Z)</option>
+                        </select>
+
+                        {/* Reset Filters Button */}
+                        {(searchTerm || verificationFilter !== 'all' || authMethodFilter !== 'all' || dateRangeFilter !== 'all') && (
+                            <button
+                                onClick={() => {
+                                    setSearchTerm('');
+                                    setVerificationFilter('all');
+                                    setAuthMethodFilter('all');
+                                    setDateRangeFilter('all');
+                                }}
+                                className="px-4 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg font-semibold transition-colors flex items-center gap-2"
+                            >
+                                <XCircle className="w-4 h-4" />
+                                Clear Filters
+                            </button>
+                        )}
+
+                        {/* Items per page selector */}
+                        <div className="flex items-center gap-2">
+                            <span className="text-sm text-gray-600 dark:text-gray-400">Show:</span>
+                            <select
+                                value={itemsPerPage}
+                                onChange={(e) => {
+                                    setItemsPerPage(Number(e.target.value));
+                                    setCurrentPage(1);
+                                }}
+                                className="px-3 py-2 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg focus:border-blue-500 dark:focus:border-blue-400 focus:outline-none cursor-pointer"
+                            >
+                                <option value={10}>10</option>
+                                <option value={25}>25</option>
+                                <option value={50}>50</option>
+                                <option value={100}>100</option>
+                                <option value={filteredUsers.length || 9999}>All ({filteredUsers.length})</option>
+                            </select>
+                        </div>
+
+                        <div className="ml-auto text-sm text-gray-600 dark:text-gray-400">
+                            <span className="font-semibold">Showing {filteredUsers.length}</span> of <span className="font-semibold">{users.length}</span> total users
+                            {filteredUsers.length !== users.length && (
+                                <span className="ml-2 text-blue-600 dark:text-blue-400">(filtered)</span>
+                            )}
                         </div>
                     </div>
                 </div>
 
                 {/* Users Table */}
                 <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
-                    {loading ? (
-                        <div className="text-center py-20">
-                            <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-purple-200 dark:border-purple-800 border-t-purple-600 dark:border-t-purple-400 mb-4"></div>
-                            <p className="text-gray-600 dark:text-gray-400">Loading users...</p>
-                        </div>
-                    ) : users.length === 0 ? (
+                    {currentItems.length === 0 ? (
                         <div className="text-center py-20">
                             <Users className="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
                             <p className="text-gray-500 dark:text-gray-400 text-xl font-semibold mb-2">No users found</p>
@@ -447,29 +611,32 @@ export default function UserManagement() {
                                             <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">User</th>
                                             <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Contact</th>
                                             <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Status</th>
+                                            <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Auth Method</th>
                                             <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Registered</th>
-                                            <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Activity</th>
                                             <th className="px-6 py-4 text-right text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                                        {users.map(user => (
+                                        {currentItems.map(user => (
                                             <tr key={user._id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
                                                 <td className="px-6 py-4 whitespace-nowrap">
                                                     <div className="flex items-center gap-3">
-                                                        <div className="w-10 h-10 bg-gradient-to-br from-blue-400 to-purple-400 rounded-full flex items-center justify-center text-white font-bold text-lg">
-                                                            {user.firstName?.charAt(0).toUpperCase() || 'U'}
-                                                        </div>
+                                                        {user.photo && user.photo !== 'null' ? (
+                                                            <img
+                                                                src={user.photo}
+                                                                alt={user.firstName}
+                                                                className="w-10 h-10 rounded-full object-cover"
+                                                            />
+                                                        ) : (
+                                                            <div className="w-10 h-10 bg-gradient-to-br from-blue-400 to-purple-400 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                                                                {(user.firstName && user.firstName !== 'null') ? user.firstName.charAt(0).toUpperCase() : 'U'}
+                                                            </div>
+                                                        )}
                                                         <div>
                                                             <p className="font-semibold text-gray-800 dark:text-gray-100">
-                                                                {user.firstName} {user.lastName}
+                                                                {user.firstName && user.firstName !== 'null' ? user.firstName : 'N/A'} {user.lastName && user.lastName !== 'null' ? user.lastName : ''}
                                                             </p>
-                                                            {user.googleId && (
-                                                                <span className="text-xs text-blue-600 dark:text-blue-400 flex items-center gap-1">
-                                                                    <img src="https://www.google.com/favicon.ico" alt="Google" className="w-3 h-3" />
-                                                                    Google
-                                                                </span>
-                                                            )}
+                                                            <p className="text-xs text-gray-500 dark:text-gray-400">ID: {user._id.slice(-6)}</p>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -479,7 +646,7 @@ export default function UserManagement() {
                                                             <Mail className="w-4 h-4 text-gray-400 dark:text-gray-500" />
                                                             {user.email}
                                                         </p>
-                                                        {user.phone && (
+                                                        {user.phone && user.phone !== 'null' && (
                                                             <p className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
                                                                 <Phone className="w-4 h-4 text-gray-400 dark:text-gray-500" />
                                                                 {user.phone}
@@ -489,51 +656,46 @@ export default function UserManagement() {
                                                 </td>
                                                 <td className="px-6 py-4 whitespace-nowrap">
                                                     <div className="space-y-2">
-                                                        <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold ${getStatusColor(user.accountStatus, user.isBlocked)}`}>
-                                                            {user.isBlocked ? (
-                                                                <>
-                                                                    <Ban className="w-3 h-3" />
-                                                                    Blocked
-                                                                </>
-                                                            ) : user.accountStatus === 'active' ? (
-                                                                <>
-                                                                    <CheckCircle className="w-3 h-3" />
-                                                                    Active
-                                                                </>
-                                                            ) : (
-                                                                <>
-                                                                    <XCircle className="w-3 h-3" />
-                                                                    {user.accountStatus}
-                                                                </>
-                                                            )}
-                                                        </span>
-                                                        {user.otpVerified && (
-                                                            <span className="block text-xs text-green-600 dark:text-green-400 flex items-center gap-1">
-                                                                <Shield className="w-3 h-3" />
+                                                        {user.otpVerified ? (
+                                                            <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
+                                                                <CheckCircle className="w-3 h-3" />
                                                                 Verified
+                                                            </span>
+                                                        ) : (
+                                                            <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400">
+                                                                <AlertCircle className="w-3 h-3" />
+                                                                Unverified
                                                             </span>
                                                         )}
                                                     </div>
                                                 </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
-                                                    <div className="flex items-center gap-2">
-                                                        <Calendar className="w-4 h-4" />
-                                                        {new Date(user.createdAt).toLocaleDateString()}
-                                                    </div>
-                                                    <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
-                                                        {new Date(user.createdAt).toLocaleTimeString()}
-                                                    </p>
+                                                <td className="px-6 py-4 whitespace-nowrap">
+                                                    {user.googleId && user.googleId !== 'null' ? (
+                                                        <span className="flex items-center gap-2 text-sm">
+                                                            <img src="https://www.google.com/favicon.ico" alt="Google" className="w-4 h-4" />
+                                                            <span className="text-blue-600 dark:text-blue-400 font-semibold">Google</span>
+                                                        </span>
+                                                    ) : (
+                                                        <span className="flex items-center gap-2 text-sm">
+                                                            <Mail className="w-4 h-4 text-gray-500" />
+                                                            <span className="text-gray-600 dark:text-gray-400">Email</span>
+                                                        </span>
+                                                    )}
                                                 </td>
-                                                <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">
-                                                    <div className="space-y-1">
-                                                        <p className="flex items-center gap-2">
-                                                            <Clock className="w-4 h-4" />
-                                                            {user.lastLogin ? new Date(user.lastLogin).toLocaleDateString() : 'Never'}
-                                                        </p>
-                                                        <p className="text-xs text-gray-500 dark:text-gray-500">
-                                                            {user.loginCount || 0} logins
-                                                        </p>
-                                                    </div>
+                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
+                                                    {user.createdAt ? (
+                                                        <>
+                                                            <div className="flex items-center gap-2">
+                                                                <Calendar className="w-4 h-4" />
+                                                                {new Date(user.createdAt).toLocaleDateString()}
+                                                            </div>
+                                                            <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
+                                                                {new Date(user.createdAt).toLocaleTimeString()}
+                                                            </p>
+                                                        </>
+                                                    ) : (
+                                                        <span className="text-gray-400">N/A</span>
+                                                    )}
                                                 </td>
                                                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                                     <div className="flex justify-end gap-2">
@@ -547,27 +709,6 @@ export default function UserManagement() {
                                                         >
                                                             <Eye className="w-5 h-5" />
                                                         </button>
-
-                                                        {user.isBlocked ? (
-                                                            <button
-                                                                onClick={() => handleUnblockUser(user._id)}
-                                                                className="p-2 text-green-600 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/30 rounded-lg transition-colors"
-                                                                title="Unblock User"
-                                                            >
-                                                                <CheckCircle className="w-5 h-5" />
-                                                            </button>
-                                                        ) : (
-                                                            <button
-                                                                onClick={() => {
-                                                                    setSelectedUser(user);
-                                                                    setShowBlockModal(true);
-                                                                }}
-                                                                className="p-2 text-orange-600 dark:text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-900/30 rounded-lg transition-colors"
-                                                                title="Block User"
-                                                            >
-                                                                <Ban className="w-5 h-5" />
-                                                            </button>
-                                                        )}
 
                                                         <button
                                                             onClick={() => {
@@ -588,10 +729,10 @@ export default function UserManagement() {
                             </div>
 
                             {/* Pagination */}
-                            {pagination && pagination.pages > 1 && (
+                            {totalPages > 1 && (
                                 <div className="bg-gray-50 dark:bg-gray-900 px-6 py-4 flex items-center justify-between border-t border-gray-200 dark:border-gray-700">
                                     <div className="text-sm text-gray-600 dark:text-gray-400">
-                                        Showing {((currentPage - 1) * 10) + 1} to {Math.min(currentPage * 10, pagination.total)} of {pagination.total} users
+                                        Showing <span className="font-semibold">{indexOfFirstItem + 1}</span> to <span className="font-semibold">{Math.min(indexOfLastItem, filteredUsers.length)}</span> of <span className="font-semibold">{filteredUsers.length}</span> {filteredUsers.length !== users.length && `filtered users (${users.length} total)`}
                                     </div>
                                     <div className="flex items-center gap-2">
                                         <button
@@ -603,11 +744,11 @@ export default function UserManagement() {
                                         </button>
 
                                         <div className="flex items-center gap-1">
-                                            {[...Array(pagination.pages)].map((_, idx) => {
+                                            {[...Array(totalPages)].map((_, idx) => {
                                                 const page = idx + 1;
                                                 if (
                                                     page === 1 ||
-                                                    page === pagination.pages ||
+                                                    page === totalPages ||
                                                     (page >= currentPage - 1 && page <= currentPage + 1)
                                                 ) {
                                                     return (
@@ -623,15 +764,15 @@ export default function UserManagement() {
                                                         </button>
                                                     );
                                                 } else if (page === currentPage - 2 || page === currentPage + 2) {
-                                                    return <span key={page} className="px-2">...</span>;
+                                                    return <span key={page} className="px-2 text-gray-500">...</span>;
                                                 }
                                                 return null;
                                             })}
                                         </div>
 
                                         <button
-                                            onClick={() => setCurrentPage(prev => Math.min(pagination.pages, prev + 1))}
-                                            disabled={currentPage === pagination.pages}
+                                            onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                                            disabled={currentPage === totalPages}
                                             className="p-2 border-2 border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                                         >
                                             <ChevronRight className="w-5 h-5" />
@@ -644,54 +785,6 @@ export default function UserManagement() {
                 </div>
             </div>
 
-            {/* Block Modal */}
-            {showBlockModal && selectedUser && (
-                <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-                    <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 max-w-md w-full shadow-2xl">
-                        <div className="text-center mb-6">
-                            <div className="w-16 h-16 bg-orange-100 dark:bg-orange-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <Ban className="w-8 h-8 text-orange-600 dark:text-orange-400" />
-                            </div>
-                            <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-2">Block User</h3>
-                            <p className="text-gray-600 dark:text-gray-400">
-                                Are you sure you want to block <strong>{selectedUser.firstName} {selectedUser.lastName}</strong>?
-                            </p>
-                        </div>
-
-                        <div className="mb-6">
-                            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                                Reason for blocking (optional)
-                            </label>
-                            <textarea
-                                value={blockReason}
-                                onChange={(e) => setBlockReason(e.target.value)}
-                                placeholder="Enter reason..."
-                                className="w-full px-4 py-3 border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-xl focus:border-orange-500 dark:focus:border-orange-400 focus:outline-none resize-none"
-                                rows="3"
-                            />
-                        </div>
-
-                        <div className="flex gap-3">
-                            <button
-                                onClick={() => {
-                                    setShowBlockModal(false);
-                                    setBlockReason('');
-                                }}
-                                className="flex-1 px-6 py-3 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 font-semibold transition-colors"
-                            >
-                                Cancel
-                            </button>
-                            <button
-                                onClick={handleBlockUser}
-                                className="flex-1 px-6 py-3 bg-orange-600 hover:bg-orange-700 text-white rounded-xl font-semibold transition-colors"
-                            >
-                                Block User
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
-
             {/* Delete Modal */}
             {showDeleteModal && selectedUser && (
                 <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
@@ -702,7 +795,7 @@ export default function UserManagement() {
                             </div>
                             <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-2">Delete User</h3>
                             <p className="text-gray-600 dark:text-gray-400">
-                                Are you sure you want to permanently delete <strong>{selectedUser.firstName} {selectedUser.lastName}</strong>? This action cannot be undone.
+                                Are you sure you want to permanently delete <strong>{selectedUser.firstName && selectedUser.firstName !== 'null' ? selectedUser.firstName : 'this user'} {selectedUser.lastName && selectedUser.lastName !== 'null' ? selectedUser.lastName : ''}</strong>? This action cannot be undone.
                             </p>
                         </div>
 
@@ -730,14 +823,23 @@ export default function UserManagement() {
                     <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 max-w-2xl w-full shadow-2xl max-h-[90vh] overflow-y-auto">
                         <div className="flex justify-between items-start mb-6">
                             <div className="flex items-center gap-4">
-                                <div className="w-16 h-16 bg-gradient-to-br from-blue-400 to-purple-400 rounded-full flex items-center justify-center text-white font-bold text-2xl">
-                                    {selectedUser.firstName?.charAt(0).toUpperCase() || 'U'}
-                                </div>
+                                {selectedUser.photo && selectedUser.photo !== 'null' ? (
+                                    <img
+                                        src={selectedUser.photo}
+                                        alt={selectedUser.firstName}
+                                        className="w-16 h-16 rounded-full object-cover"
+                                    />
+                                ) : (
+                                    <div className="w-16 h-16 bg-gradient-to-br from-blue-400 to-purple-400 rounded-full flex items-center justify-center text-white font-bold text-2xl">
+                                        {(selectedUser.firstName && selectedUser.firstName !== 'null') ? selectedUser.firstName.charAt(0).toUpperCase() : 'U'}
+                                    </div>
+                                )}
                                 <div>
                                     <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
-                                        {selectedUser.firstName} {selectedUser.lastName}
+                                        {selectedUser.firstName && selectedUser.firstName !== 'null' ? selectedUser.firstName : 'N/A'} {selectedUser.lastName && selectedUser.lastName !== 'null' ? selectedUser.lastName : ''}
                                     </h3>
                                     <p className="text-gray-600 dark:text-gray-400">{selectedUser.email}</p>
+                                    <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">ID: {selectedUser._id}</p>
                                 </div>
                             </div>
                             <button
@@ -750,46 +852,82 @@ export default function UserManagement() {
 
                         <div className="grid grid-cols-2 gap-4 mb-6">
                             <div className="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-4">
-                                <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Phone</p>
-                                <p className="font-semibold text-gray-800 dark:text-gray-100">{selectedUser.phone || 'Not provided'}</p>
+                                <p className="text-sm text-gray-600 dark:text-gray-400 mb-1 flex items-center gap-2">
+                                    <Phone className="w-4 h-4" />
+                                    Phone
+                                </p>
+                                <p className="font-semibold text-gray-800 dark:text-gray-100">
+                                    {selectedUser.phone && selectedUser.phone !== 'null' ? selectedUser.phone : 'Not provided'}
+                                </p>
                             </div>
                             <div className="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-4">
-                                <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Status</p>
-                                <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold ${getStatusColor(selectedUser.accountStatus, selectedUser.isBlocked)}`}>
-                                    {selectedUser.isBlocked ? 'Blocked' : selectedUser.accountStatus}
+                                <p className="text-sm text-gray-600 dark:text-gray-400 mb-1 flex items-center gap-2">
+                                    <Shield className="w-4 h-4" />
+                                    Verification Status
+                                </p>
+                                <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold ${selectedUser.otpVerified ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400'}`}>
+                                    {selectedUser.otpVerified ? <><CheckCircle className="w-3 h-3" /> Verified</> : <><AlertCircle className="w-3 h-3" /> Unverified</>}
                                 </span>
                             </div>
                             <div className="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-4">
-                                <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Registered</p>
-                                <p className="font-semibold text-gray-800 dark:text-gray-100">
-                                    {new Date(selectedUser.createdAt).toLocaleDateString()}
+                                <p className="text-sm text-gray-600 dark:text-gray-400 mb-1 flex items-center gap-2">
+                                    <Calendar className="w-4 h-4" />
+                                    Registered
+                                </p>
+                                {selectedUser.createdAt ? (
+                                    <>
+                                        <p className="font-semibold text-gray-800 dark:text-gray-100">
+                                            {new Date(selectedUser.createdAt).toLocaleDateString()}
+                                        </p>
+                                        <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
+                                            {new Date(selectedUser.createdAt).toLocaleTimeString()}
+                                        </p>
+                                    </>
+                                ) : (
+                                    <p className="font-semibold text-gray-400">N/A</p>
+                                )}
+                            </div>
+                            <div className="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-4">
+                                <p className="text-sm text-gray-600 dark:text-gray-400 mb-1 flex items-center gap-2">
+                                    <Zap className="w-4 h-4" />
+                                    Auth Method
+                                </p>
+                                <p className="font-semibold text-gray-800 dark:text-gray-100 flex items-center gap-2">
+                                    {selectedUser.googleId && selectedUser.googleId !== 'null' ? (
+                                        <>
+                                            <img src="https://www.google.com/favicon.ico" alt="Google" className="w-4 h-4" />
+                                            Google OAuth
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Mail className="w-4 h-4" />
+                                            Email/Password
+                                        </>
+                                    )}
                                 </p>
                             </div>
-                            <div className="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-4">
-                                <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Last Login</p>
-                                <p className="font-semibold text-gray-800 dark:text-gray-100">
-                                    {selectedUser.lastLogin ? new Date(selectedUser.lastLogin).toLocaleDateString() : 'Never'}
+                            <div className="col-span-2 bg-gray-50 dark:bg-gray-700/50 rounded-xl p-4">
+                                <p className="text-sm text-gray-600 dark:text-gray-400 mb-1 flex items-center gap-2">
+                                    <Activity className="w-4 h-4" />
+                                    Google ID
                                 </p>
-                            </div>
-                            <div className="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-4">
-                                <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Total Logins</p>
-                                <p className="font-semibold text-gray-800 dark:text-gray-100">{selectedUser.loginCount || 0}</p>
-                            </div>
-                            <div className="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-4">
-                                <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Verified</p>
-                                <p className="font-semibold text-gray-800 dark:text-gray-100">
-                                    {selectedUser.otpVerified ? '✅ Yes' : '❌ No'}
+                                <p className="font-mono text-sm text-gray-800 dark:text-gray-100 break-all">
+                                    {selectedUser.googleId && selectedUser.googleId !== 'null' ? selectedUser.googleId : 'Not linked'}
                                 </p>
                             </div>
                         </div>
 
-                        {selectedUser.isBlocked && selectedUser.blockedReason && (
-                            <div className="bg-red-50 dark:bg-red-900/20 border-2 border-red-200 dark:border-red-800 rounded-xl p-4 mb-6">
-                                <p className="text-sm font-semibold text-red-800 dark:text-red-300 mb-1">Block Reason:</p>
-                                <p className="text-red-700 dark:text-red-400">{selectedUser.blockedReason}</p>
-                                <p className="text-xs text-red-600 dark:text-red-500 mt-2">
-                                    Blocked on: {new Date(selectedUser.blockedAt).toLocaleString()}
-                                </p>
+                        {selectedUser.photo && selectedUser.photo !== 'null' && (
+                            <div className="mb-6">
+                                <p className="text-sm text-gray-600 dark:text-gray-400 mb-2 font-semibold">Profile Photo URL:</p>
+                                <a
+                                    href={selectedUser.photo}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-blue-600 dark:text-blue-400 hover:underline text-sm break-all"
+                                >
+                                    {selectedUser.photo}
+                                </a>
                             </div>
                         )}
 
@@ -799,6 +937,16 @@ export default function UserManagement() {
                                 className="flex-1 px-6 py-3 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 font-semibold transition-colors"
                             >
                                 Close
+                            </button>
+                            <button
+                                onClick={() => {
+                                    setShowDetailsModal(false);
+                                    setShowDeleteModal(true);
+                                }}
+                                className="flex-1 px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded-xl font-semibold transition-colors flex items-center justify-center gap-2"
+                            >
+                                <Trash2 className="w-4 h-4" />
+                                Delete User
                             </button>
                         </div>
                     </div>

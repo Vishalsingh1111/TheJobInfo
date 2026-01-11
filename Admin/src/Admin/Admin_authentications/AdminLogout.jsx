@@ -29,7 +29,7 @@ function Logout() {
     return (
         <div>
             <button
-                className=" pl-4"
+                className="pl-5 flex items-center gap-3 w-full p-3 rounded-lg bg-red-500 hover:bg-red-600 text-white transition-colors "
                 onClick={handleLogout}
             >
                 Logout

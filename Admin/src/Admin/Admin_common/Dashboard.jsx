@@ -55,6 +55,7 @@ import TechBlog from '../TechBlogs/TechBlogForm';
 import InstaPostform from '../InstaPost/InstaPostform';
 import Showusersdetail from '../Usersdetail/UserManagement';
 import ShowContactMsg from '../Admin_common/Showcontactmsg';
+import Logout from '../Admin_authentications/AdminLogout';
 
 function AdminDashboard() {
     const [darkMode, setDarkMode] = useState(false);
@@ -600,13 +601,12 @@ function AdminDashboard() {
                                     <span className="font-medium">Add Admin</span>
                                 </button>
                             </a>
-                            <button
-                                onClick={handleLogout}
-                                className="flex items-center gap-3 w-full p-3 rounded-lg bg-red-500 hover:bg-red-600 text-white transition-colors"
-                            >
-                                <LogOut className="w-5 h-5" />
-                                <span className="font-medium">Logout</span>
-                            </button>
+
+
+
+
+                            <Logout />
+
                         </div>
                     </div>
                 </aside>

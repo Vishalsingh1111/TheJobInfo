@@ -8,9 +8,7 @@ import Strisdecardshowdata from '../StriverSDESheet/Strisdecardshowdata';
 import Striproblemshowdata from '../StriverSDESheet/Striproblemshowdata';
 import SDEProblemshowdata from '../StriverSDESheet/SDEProblemshowdata';
 import Notecardform from '../Languages/Notecardform';
-import Notecardshowdata from '../Languages/Notecardshowdata';
 import Notecontentform from '../Languages/Notecontentform';
-import Notecontentshowdata from '../Languages/Notecontentshowdata';
 import TechBlog from '../TechBlogs/TechBlogForm';
 import InstaPostform from '../InstaPost/InstaPostform';
 import Showusersdetail from '../Usersdetail/UserManagement';
@@ -212,7 +210,7 @@ const Sidebar = () => {
                                 <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 20">
                                     <path d="M16 14V2a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2v15a3 3 0 0 0 3 3h12a1 1 0 0 0 0-2h-1v-2a2 2 0 0 0 2-2ZM4 2h2v12H4V2Zm8 16H3a1 1 0 0 1 0-2h9v2Z" />
                                 </svg>
-                                <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">Language</span>
+                                <span className="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">Programing Lang</span>
                                 <svg
                                     className="w-3 h-3"
                                     aria-hidden="true"
@@ -238,34 +236,19 @@ const Sidebar = () => {
                                         onClick={() => handleContentChange('Notecardform')}
                                         className="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                                     >
-                                        Create new card
+                                        Manage Lang Cards
                                     </button>
                                 </li>
-                                <li>
-                                    <button
-                                        onClick={() => handleContentChange('Notecardshowdata')}
 
-                                        className="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                                    >
-                                        Manage card
-                                    </button>
-                                </li>
                                 <li>
                                     <button
                                         onClick={() => handleContentChange('Notecontentform')}
                                         className="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                                     >
-                                        Upload content
+                                        Manage Lang Content
                                     </button>
                                 </li>
-                                <li>
-                                    <button
-                                        onClick={() => handleContentChange('Notecontentshowdata')}
-                                        className="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                                    >
-                                        Manage content
-                                    </button>
-                                </li>
+
                             </ul>
                         </li>
 
@@ -424,9 +407,9 @@ const Sidebar = () => {
                 {selectedContent === 'Uploadsdeproblem' && <SDEProblemform />}
                 {selectedContent === 'Managesdeproblem' && <SDEProblemshowdata />}
                 {selectedContent === 'Notecardform' && <Notecardform />}
-                {selectedContent === 'Notecardshowdata' && <Notecardshowdata />}
+
                 {selectedContent === 'Notecontentform' && <Notecontentform />}
-                {selectedContent === 'Notecontentshowdata' && <Notecontentshowdata />}
+
                 {selectedContent === 'TechBlog' && <TechBlog />}
                 {selectedContent === 'InstaPostform' && <InstaPostform />}
                 {selectedContent === 'Showusersdetail' && <Showusersdetail />}

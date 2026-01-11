@@ -49,22 +49,24 @@ const App = () => {
     <>
       <div className='dark:bg-slate-900 dark:text-white'>
         <Routes>
-          {/* <Route path="/" element={<Home />}></Route> */}
-          <Route path='/' element={authUser ? <Home /> : <Navigate to="/Login" />}></Route>
+          <Route path="/" element={<Home />}></Route>
           <Route path="/Contact" element={<Contact />}></Route>
           <Route path="/About" element={<About />}></Route>
           <Route path='/Contactform' element={authUser ? <Contactform /> : <Navigate to="/Signup" />}></Route>
-          <Route path="/Languages" element={<Languages />}></Route>
-          <Route path="/Sheet" element={<Sheet />}></Route>
+          {/* <Route path="/Languages" element={<Languages />}></Route> */}
+          <Route path='/Languages' element={authUser ? <Languages /> : <Navigate to="/Login" />}></Route>
+          {/* <Route path="/Sheet" element={<Sheet />}></Route> */}
+          <Route path='/Sheet' element={authUser ? <Sheet /> : <Navigate to="/Login" />}></Route>
           <Route path="/Signup" element={<Signup />}></Route>
           <Route path="/Login" element={<LoginPage />}></Route>
 
           <Route path="/Forgetpassword" element={<Forgetpassword />}></Route>
           <Route path='/Pagenotfound' element={<Pagenotfound />}></Route>
-          <Route path='/Technical-Blog' element={<Technicalblog />}></Route>
-          <Route path='/Post' element={<ContestSol />}></Route>
-          {/* <Route path='/Post' element={authUser ? <ContestSol /> : <Navigate to="/Signup" />}></Route> */}
-          <Route path='/CS-Fundamental' element={<CSPage />}></Route>
+          <Route path='/Technical-Blog' element={authUser ? <Technicalblog /> : <Navigate to="/Login" />}></Route>
+          {/* <Route path='/Technical-Blog' element={<Technicalblog />}></Route> */}
+          <Route path='/Post' element={authUser ? <ContestSol /> : <Navigate to="/Login" />}></Route>
+          <Route path='/CS-Fundamental' element={authUser ? <CSPage /> : <Navigate to="/Login" />}></Route>
+          {/* <Route path='/CS-Fundamental' element={<CSPage />}></Route> */}
           <Route path='/DSA' element={authUser ? <DSA /> : <Navigate to="/Signup" />}></Route>
           <Route path='/New-Updated-Sheet' element={<NewUpdatedSheet />}></Route>
           <Route path='/Company-Wise-Sheet' element={<CompanyWiseSheet />}></Route>
@@ -77,10 +79,10 @@ const App = () => {
           <Route path='/techblog' element={<Techblog />}></Route>
           <Route path='/Contibuteblog' element={authUser ? <Contributeblog /> : <Navigate to="/Signup" />}></Route>
           <Route path='/detail/:id' element={<BlogDetail />}></Route>
-          <Route path='/Reels' element={<Reels />}></Route>
-
+          <Route path='/Reels' element={authUser ? <Reels /> : <Navigate to="/Login" />}></Route>
           <Route path='/Profile' element={<Profile />} />
-          <Route path='/Ai' element={<Ai />} />
+          {/* <Route path='/Ai' element={<Ai />} /> */}
+          <Route path='/Ai' element={authUser ? <Ai /> : <Navigate to="/Login" />}></Route>
           <Route path="/results/:id" component={ResultDetailPage} />
           <Route path='/Companies_Preaparation_Sheet' element={<Companies_Preaparation_Sheet />} />
           <Route path='/TCS' element={<TcsMain />} />

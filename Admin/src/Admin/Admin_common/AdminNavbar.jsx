@@ -144,7 +144,7 @@ const Sidebar = () => {
                             >
                                 <li>
                                     <button
-                                        onClick={() => handleContentChange('mapsheet')}
+                                        onClick={() => handleContentChange('CreateCard')}
                                         className="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                                     >
                                         Manage Topic card
@@ -153,7 +153,7 @@ const Sidebar = () => {
 
                                 <li>
                                     <button
-                                        onClick={() => handleContentChange('SDEproblems')}
+                                        onClick={() => handleContentChange('mapsheet')}
                                         className="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                                     >
                                         Manage MAP Sheet
@@ -162,7 +162,7 @@ const Sidebar = () => {
 
                                 <li>
                                     <button
-                                        onClick={() => handleContentChange('CreateCard')}
+                                        onClick={() => handleContentChange('SDEproblems')}
                                         className="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                                     >
                                         Manage SDE Problems

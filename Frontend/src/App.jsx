@@ -49,7 +49,8 @@ const App = () => {
     <>
       <div className='dark:bg-slate-900 dark:text-white'>
         <Routes>
-          <Route path="/" element={<Home />}></Route>
+          {/* <Route path="/" element={<Home />}></Route> */}
+          <Route path='/' element={authUser ? <Home /> : <Navigate to="/Login" />}></Route>
           <Route path="/Contact" element={<Contact />}></Route>
           <Route path="/About" element={<About />}></Route>
           <Route path='/Contactform' element={authUser ? <Contactform /> : <Navigate to="/Signup" />}></Route>

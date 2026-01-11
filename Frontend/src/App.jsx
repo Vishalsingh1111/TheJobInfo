@@ -67,17 +67,17 @@ const App = () => {
           <Route path='/Post' element={authUser ? <ContestSol /> : <Navigate to="/Login" />}></Route>
           <Route path='/CS-Fundamental' element={authUser ? <CSPage /> : <Navigate to="/Login" />}></Route>
           {/* <Route path='/CS-Fundamental' element={<CSPage />}></Route> */}
-          <Route path='/DSA' element={authUser ? <DSA /> : <Navigate to="/Signup" />}></Route>
-          <Route path='/New-Updated-Sheet' element={<NewUpdatedSheet />}></Route>
-          <Route path='/Company-Wise-Sheet' element={<CompanyWiseSheet />}></Route>
-          <Route path='/Top-50' element={<Top50dsaProb />}></Route>
+          <Route path='/DSA' element={authUser ? <DSA /> : <Navigate to="/Login" />}></Route>
+          <Route path='/New-Updated-Sheet' element={authUser ? <NewUpdatedSheet /> : <Navigate to="/Login" />}></Route>
+          <Route path='/Company-Wise-Sheet' element={authUser ? <CompanyWiseSheet /> : <Navigate to="/Login" />}></Route>
+          <Route path='/Top-50' element={authUser ? <Top50dsaProb /> : <Navigate to="/Login" />}></Route>
           <Route path='/Python' element={<Python />}></Route>
-          <Route path='/Dbms' element={authUser ? <Dbms /> : <Navigate to="/Signup" />}></Route>
+          <Route path='/Dbms' element={authUser ? <Dbms /> : <Navigate to="/Login" />}></Route>
           <Route path='/Java' element={<Java />}></Route>
           <Route path='/Cpp' element={<Cpp />}></Route>
           <Route path='/C' element={<C />}></Route>
           <Route path='/techblog' element={<Techblog />}></Route>
-          <Route path='/Contibuteblog' element={authUser ? <Contributeblog /> : <Navigate to="/Signup" />}></Route>
+          <Route path='/Contibuteblog' element={authUser ? <Contributeblog /> : <Navigate to="/Login" />}></Route>
           <Route path='/detail/:id' element={<BlogDetail />}></Route>
           <Route path='/Reels' element={authUser ? <Reels /> : <Navigate to="/Login" />}></Route>
           <Route path='/Profile' element={<Profile />} />

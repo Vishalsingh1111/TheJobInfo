@@ -1,5 +1,615 @@
+// import { useEffect, useState, useRef } from "react";
+// import { X, ChevronLeft, ChevronRight, Calendar, Tag, BookOpen, Download, ZoomIn, ZoomOut, Maximize2, Search, Clock, Eye, Sparkles } from "lucide-react";
+// import HTMLFlipBook from "react-pageflip";
+// import Navbar from "../Navbar";
+// import Footer from "../Footer";
+// import Breadcrumb from "../Common/Breadcrumb";
+// import { baseUrl } from "../../Baseurl";
+
+// const BASE_URL = `${baseUrl}/instapost`;
+
+// export default function AllPostsBookReader() {
+//     const [posts, setPosts] = useState([]);
+//     const [filtered, setFiltered] = useState([]);
+//     const [search, setSearch] = useState("");
+//     const [topic, setTopic] = useState("ALL");
+//     const [sort, setSort] = useState("LATEST");
+//     const [activePost, setActivePost] = useState(null);
+//     const [currentPage, setCurrentPage] = useState(0);
+//     const [zoom, setZoom] = useState(100);
+//     const [isFullscreen, setIsFullscreen] = useState(false);
+//     const flipBookRef = useRef();
+
+//     useEffect(() => {
+//         fetch(`${BASE_URL}/content?type=POST`)
+//             .then(res => res.json())
+//             .then(data => {
+//                 // ✅ REMOVED FILTER - Show all posts
+//                 setPosts(data);
+//                 setFiltered(data);
+//             })
+//             .catch(err => console.error('Error:', err));
+//     }, []);
+
+//     useEffect(() => {
+//         let data = [...posts];
+
+//         if (topic !== "ALL") {
+//             data = data.filter(p => p.topic === topic);
+//         }
+
+//         if (search) {
+//             data = data.filter(p =>
+//                 `${p.title} ${p.description} ${p.topic}`
+//                     .toLowerCase()
+//                     .includes(search.toLowerCase())
+//             );
+//         }
+
+//         data.sort((a, b) =>
+//             sort === "LATEST"
+//                 ? new Date(b.createdAt) - new Date(a.createdAt)
+//                 : new Date(a.createdAt) - new Date(b.createdAt)
+//         );
+
+//         setFiltered(data);
+//     }, [search, topic, sort, posts]);
+
+//     // ✅ REMOVED FILTER - Show all topics
+//     const topics = ["ALL", ...new Set(posts.map(p => p.topic))];
+
+//     const openBook = (post) => {
+//         setActivePost(post);
+//         setCurrentPage(0);
+//         setZoom(100);
+//         setIsFullscreen(false);
+//     };
+
+//     const closeBook = () => {
+//         setActivePost(null);
+//         setCurrentPage(0);
+//     };
+
+//     const handleZoomIn = () => {
+//         if (zoom < 150) setZoom(zoom + 10);
+//     };
+
+//     const handleZoomOut = () => {
+//         if (zoom > 50) setZoom(zoom - 10);
+//     };
+
+//     const toggleFullscreen = () => {
+//         setIsFullscreen(!isFullscreen);
+//     };
+
+//     const nextPage = () => {
+//         if (flipBookRef.current) {
+//             flipBookRef.current.pageFlip().flipNext();
+//         }
+//     };
+
+//     const prevPage = () => {
+//         if (flipBookRef.current) {
+//             flipBookRef.current.pageFlip().flipPrev();
+//         }
+//     };
+
+//     const onPageFlip = (e) => {
+//         setCurrentPage(e.data);
+//     };
+
+//     // ✅ FIXED: Return Cloudinary URL directly
+//     const getFirstImageUrl = (item) => {
+//         if (item.files && item.files.length > 0) {
+//             return item.files[0].fileUrl; // Direct Cloudinary URL
+//         }
+//         return null;
+//     };
+
+//     const getTotalPages = () => {
+//         return activePost?.files?.length || 0;
+//     };
+
+//     const getCurrentPageDisplay = () => {
+//         const total = getTotalPages();
+
+//         if (currentPage === 0) {
+//             return `Page 1-2`;
+//         }
+
+//         const leftPage = currentPage + 1;
+//         const rightPage = currentPage + 2;
+
+//         if (rightPage <= total) {
+//             return `Pages ${leftPage}-${rightPage}`;
+//         } else if (leftPage <= total) {
+//             return `Page ${leftPage}`;
+//         }
+
+//         return `Page ${total}`;
+//     };
+
+//     return (
+//         <>
+//             <Navbar />
+//             <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50 dark:from-gray-950 dark:via-gray-950 dark:to-gray-950">
+//                 {/* Header */}
+//                 <div className="bg-white/80 dark:bg-gray-950 backdrop-blur-xl border-b border-gray-200 dark:border-gray-700 shadow-sm pt-6">
+//                     <Breadcrumb />
+//                     <div className="container mx-auto px-4 pt-2">
+//                         <div className="text-center mb-6">
+//                             <div className="inline-flex items-center gap-2 bg-white/80 dark:bg-gray-950 backdrop-blur-xl px-6 py-3 rounded-full border-2 border-purple-200 dark:border-purple-700 shadow-lg mb-4">
+//                                 <BookOpen className="w-5 h-5 text-purple-600 dark:text-purple-400 animate-pulse" />
+//                                 <span className="text-purple-700 dark:text-purple-300 font-semibold">Digital Library</span>
+//                                 <Sparkles className="w-5 h-5 text-pink-500 dark:text-pink-400" />
+//                             </div>
+//                             <h1 className="text-4xl md:text-5xl font-bold text-gray-800 dark:text-gray-100 mb-2">
+//                                 Explore More With <span className="bg-gradient-to-r from-red-500 to-pink-600 dark:from-red-400 dark:to-pink-500 bg-clip-text text-transparent">Posts</span>
+//                             </h1>
+//                             <p className="text-gray-600 dark:text-gray-300 text-lg">
+//                                 Browse our comprehensive collection of educational resources
+//                             </p>
+//                         </div>
+//                     </div>
+
+//                     {/* Filters */}
+//                     <div className="container mx-auto px-4 pb-6">
+//                         <div className="flex flex-col lg:flex-row gap-6 max-w-5xl mx-auto">
+//                             <div className="flex-1 relative group">
+//                                 <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl blur opacity-0 group-hover:opacity-30 transition-opacity duration-300"></div>
+//                                 <div className="relative">
+//                                     <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-purple-500 dark:text-purple-400 w-5 h-5 group-hover:scale-110 transition-transform" />
+//                                     <input
+//                                         type="text"
+//                                         placeholder="Search for posts..."
+//                                         value={search}
+//                                         onChange={(e) => setSearch(e.target.value)}
+//                                         className="w-full pl-14 pr-6 py-4 rounded-2xl border-2 border-gray-200 dark:border-gray-700 focus:border-purple-500 dark:focus:border-purple-400 focus:outline-none transition-all duration-300 bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl text-gray-800 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400 font-medium shadow-lg group-hover:shadow-xl"
+//                                     />
+//                                     {search && (
+//                                         <button
+//                                             onClick={() => setSearch("")}
+//                                             className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors"
+//                                         >
+//                                             <X className="w-5 h-5" />
+//                                         </button>
+//                                     )}
+//                                 </div>
+//                             </div>
+
+//                             <div className="relative group lg:w-[220px]">
+//                                 <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl blur opacity-0 group-hover:opacity-30 transition-opacity duration-300"></div>
+//                                 <div className="relative">
+//                                     <Clock className="absolute left-5 top-1/2 -translate-y-1/2 text-blue-500 dark:text-blue-400 w-5 h-5 pointer-events-none group-hover:scale-110 transition-transform z-10" />
+//                                     <select
+//                                         value={sort}
+//                                         onChange={(e) => setSort(e.target.value)}
+//                                         className="w-full pl-14 pr-10 py-4 rounded-2xl border-2 border-gray-200 dark:border-gray-700 focus:border-blue-500 dark:focus:border-blue-400 focus:outline-none bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl cursor-pointer appearance-none transition-all duration-300 text-gray-800 dark:text-gray-100 font-medium shadow-lg group-hover:shadow-xl"
+//                                     >
+//                                         <option value="LATEST">Latest First</option>
+//                                         <option value="OLDEST">Oldest First</option>
+//                                     </select>
+//                                 </div>
+//                             </div>
+//                         </div>
+
+//                         <div className="flex gap-2 flex-wrap justify-center mt-6">
+//                             {topics.map(t => (
+//                                 <button
+//                                     key={t}
+//                                     onClick={() => setTopic(t)}
+//                                     className={`px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 ${topic === t
+//                                         ? "bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-xl scale-105"
+//                                         : "bg-white/90 dark:bg-gray-800/90 text-gray-600 dark:text-gray-300 border-2 border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-600 backdrop-blur-xl"
+//                                         }`}
+//                                 >
+//                                     {t}
+//                                 </button>
+//                             ))}
+//                         </div>
+//                     </div>
+//                 </div>
+
+//                 {/* Results Count */}
+//                 <div className="container mx-auto px-4 py-6">
+//                     <div className="text-center">
+//                         <div className="inline-flex items-center gap-3 bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl px-6 py-3 rounded-full border-2 border-purple-200 dark:border-purple-700 shadow-lg">
+//                             <div className="flex items-center gap-2">
+//                                 <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+//                                 <span className="text-gray-600 dark:text-gray-300 font-medium">
+//                                     Showing <span className="font-bold text-purple-600 dark:text-purple-400 text-lg">{filtered.length}</span> post{filtered.length !== 1 ? 's' : ''}
+//                                 </span>
+//                             </div>
+//                         </div>
+//                     </div>
+//                 </div>
+
+//                 {/* Posts Grid */}
+//                 <div className="container mx-auto px-4 pb-12">
+//                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-7xl mx-auto">
+//                         {filtered.map((item, index) => {
+//                             const gradients = [
+//                                 { gradient: "from-red-500 to-orange-600", bgGradient: "from-red-50 to-orange-50 dark:from-red-900/20 dark:to-orange-900/20" },
+//                                 { gradient: "from-green-500 to-emerald-600", bgGradient: "from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20" },
+//                                 { gradient: "from-yellow-500 to-amber-600", bgGradient: "from-yellow-50 to-amber-50 dark:from-yellow-900/20 dark:to-amber-900/20" },
+//                                 { gradient: "from-blue-500 to-cyan-600", bgGradient: "from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20" },
+//                                 { gradient: "from-purple-600 to-pink-600", bgGradient: "from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20" },
+//                                 { gradient: "from-orange-500 to-red-500", bgGradient: "from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20" },
+//                                 { gradient: "from-teal-500 to-cyan-600", bgGradient: "from-teal-50 to-cyan-50 dark:from-teal-900/20 dark:to-cyan-900/20" },
+//                                 { gradient: "from-indigo-600 to-purple-600", bgGradient: "from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20" }
+//                             ];
+//                             const { gradient, bgGradient } = gradients[index % 8];
+//                             const firstImageUrl = getFirstImageUrl(item);
+
+//                             return (
+//                                 <div
+//                                     key={item._id}
+//                                     onClick={() => openBook(item)}
+//                                     className="block group cursor-pointer"
+//                                 >
+//                                     <div className="relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border-2 border-gray-200 dark:border-gray-700 h-full">
+//                                         <div className={`absolute inset-0 bg-gradient-to-br ${gradient} rounded-2xl blur-xl opacity-0 group-hover:opacity-20 transition-opacity duration-500`}></div>
+
+//                                         <div className="relative">
+//                                             <div className={`bg-gradient-to-br ${bgGradient} backdrop-blur-sm p-8 border-b-2 border-gray-200 dark:border-gray-700 relative overflow-hidden`}>
+//                                                 <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${gradient} rounded-full opacity-10 blur-2xl`}></div>
+//                                                 <div className={`absolute bottom-0 left-0 w-20 h-20 bg-gradient-to-br ${gradient} rounded-full opacity-10 blur-xl`}></div>
+
+//                                                 <div className="relative flex justify-center items-center">
+//                                                     <div className="w-28 h-28 bg-white dark:bg-gray-700 rounded-xl shadow-2xl flex items-center justify-center transform group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 overflow-hidden">
+//                                                         {firstImageUrl ? (
+//                                                             <img
+//                                                                 src={firstImageUrl}
+//                                                                 alt={item.title}
+//                                                                 className="w-full h-full object-cover"
+//                                                             />
+//                                                         ) : (
+//                                                             <BookOpen className="w-14 h-14 text-purple-600 dark:text-purple-400" />
+//                                                         )}
+//                                                     </div>
+//                                                 </div>
+
+//                                                 <div className="absolute bottom-4 left-4 right-4 flex justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+//                                                     <div className={`bg-gradient-to-r ${gradient} text-white px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1 shadow-lg`}>
+//                                                         <Eye className="w-3 h-3" />
+//                                                         Quick View
+//                                                     </div>
+//                                                 </div>
+//                                             </div>
+
+//                                             <div className="p-6 py-3 space-y-1">
+//                                                 <div className="flex items-center gap-2">
+//                                                     <Tag className="w-3 h-3 text-purple-600 dark:text-purple-400" />
+//                                                     <span className="text-xs font-semibold text-purple-600 dark:text-purple-400">
+//                                                         {item.topic}
+//                                                     </span>
+//                                                 </div>
+
+//                                                 <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:bg-clip-text group-hover:from-purple-600 group-hover:to-pink-600 dark:group-hover:from-purple-400 dark:group-hover:to-pink-400 transition-all line-clamp-2">
+//                                                     {item.title}
+//                                                 </h3>
+
+//                                                 <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed line-clamp-1">
+//                                                     {item.description}
+//                                                 </p>
+
+//                                                 <div className="flex justify-left space-x-4">
+//                                                     <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
+//                                                         <Calendar className="w-3 h-3" />
+//                                                         <span>{new Date(item.createdAt).toLocaleDateString()}</span>
+//                                                     </div>
+
+//                                                     {item.files && (
+//                                                         <div className="text-xs text-gray-500 dark:text-gray-400">
+//                                                             {item.files.length} page{item.files.length !== 1 ? 's' : ''}
+//                                                         </div>
+//                                                     )}
+//                                                 </div>
+//                                             </div>
+
+//                                             <div className="px-5 mb-4">
+//                                                 <button className={`w-full flex items-center justify-center gap-2 px-3 py-2 bg-gradient-to-r ${gradient} text-white rounded-xl font-semibold shadow-md group-hover:shadow-lg transition-all duration-300 transform group-hover:scale-105`}>
+//                                                     <BookOpen className="w-4 h-4" />
+//                                                     Open & Read
+//                                                 </button>
+//                                             </div>
+//                                             <div className={`h-1 bg-gradient-to-r ${gradient}`}></div>
+//                                         </div>
+//                                     </div>
+//                                 </div>
+//                             );
+//                         })}
+//                     </div>
+
+//                     {filtered.length === 0 && (
+//                         <div className="text-center py-20">
+//                             <div className="text-6xl mb-4">📚</div>
+//                             <p className="text-gray-500 dark:text-gray-400 text-xl font-semibold mb-2">No posts found</p>
+//                             <p className="text-gray-400 dark:text-gray-500">Try adjusting your search or filters</p>
+//                         </div>
+//                     )}
+//                 </div>
+
+//                 {/* Perfect Book Reader Modal */}
+//                 {activePost && activePost.files && activePost.files.length > 0 && (
+//                     <div className={`fixed inset-0 bg-black/95 backdrop-blur-sm z-50 flex items-center justify-center ${isFullscreen ? 'p-0' : 'p-4'}`}>
+//                         {/* Top Controls Bar */}
+//                         <div className="absolute top-0 left-0 right-0 bg-gradient-to-b from-black/90 to-transparent p-4 z-10">
+//                             <div className="container mx-auto max-w-7xl flex justify-between items-center">
+//                                 <div className="flex items-center gap-4">
+//                                     <h3 className="text-white font-semibold text-lg hidden md:block">
+//                                         {activePost.title}
+//                                     </h3>
+//                                     <span className="text-white/70 text-sm bg-white/10 px-3 py-1 rounded-full">
+//                                         {getCurrentPageDisplay()} of {getTotalPages()}
+//                                     </span>
+//                                 </div>
+
+//                                 <div className="flex items-center gap-2">
+//                                     <button
+//                                         onClick={handleZoomOut}
+//                                         className="bg-white/20 hover:bg-white/30 text-white p-2 rounded-lg transition-all"
+//                                         title="Zoom Out"
+//                                     >
+//                                         <ZoomOut className="w-5 h-5" />
+//                                     </button>
+//                                     <span className="text-white text-sm px-2">{zoom}%</span>
+//                                     <button
+//                                         onClick={handleZoomIn}
+//                                         className="bg-white/20 hover:bg-white/30 text-white p-2 rounded-lg transition-all"
+//                                         title="Zoom In"
+//                                     >
+//                                         <ZoomIn className="w-5 h-5" />
+//                                     </button>
+
+//                                     <button
+//                                         onClick={toggleFullscreen}
+//                                         className="bg-white/20 hover:bg-white/30 text-white p-2 rounded-lg transition-all"
+//                                         title="Toggle Fullscreen"
+//                                     >
+//                                         <Maximize2 className="w-5 h-5" />
+//                                     </button>
+
+//                                     <button
+//                                         onClick={closeBook}
+//                                         className="bg-white/20 hover:bg-white/30 text-white p-2 rounded-lg transition-all"
+//                                     >
+//                                         <X className="w-5 h-5" />
+//                                     </button>
+//                                 </div>
+//                             </div>
+//                         </div>
+
+//                         {/* Book Container */}
+//                         <div className="relative w-full h-full flex items-center justify-center pt-20 pb-4">
+//                             {/* Previous Page Button */}
+//                             <button
+//                                 onClick={prevPage}
+//                                 disabled={currentPage === 0}
+//                                 className={`absolute left-4 z-20 bg-white/90 hover:bg-white text-gray-800 p-4 rounded-full shadow-2xl transition-all transform hover:scale-110 ${currentPage === 0 ? 'opacity-30 cursor-not-allowed' : 'opacity-90'
+//                                     }`}
+//                             >
+//                                 <ChevronLeft className="w-8 h-8" />
+//                             </button>
+
+//                             {/* FlipBook with Perfect Dual Page Display */}
+//                             <div
+//                                 className="book-wrapper"
+//                                 style={{
+//                                     transform: `scale(${zoom / 100})`,
+//                                     transition: 'transform 0.3s ease'
+//                                 }}
+//                             >
+//                                 <HTMLFlipBook
+//                                     width={450}
+//                                     height={600}
+//                                     size="stretch"
+//                                     minWidth={315}
+//                                     maxWidth={1000}
+//                                     minHeight={420}
+//                                     maxHeight={1350}
+//                                     maxShadowOpacity={0.5}
+//                                     showCover={true}
+//                                     mobileScrollSupport={true}
+//                                     ref={flipBookRef}
+//                                     className="book-container"
+//                                     onFlip={onPageFlip}
+//                                     drawShadow={true}
+//                                     flippingTime={800}
+//                                     usePortrait={false}
+//                                     startPage={0}
+//                                     autoSize={false}
+//                                     clickEventForward={true}
+//                                     useMouseEvents={true}
+//                                     swipeDistance={30}
+//                                     showPageCorners={true}
+//                                     disableFlipByClick={false}
+//                                 >
+//                                     {activePost.files.map((file, index) => (
+//                                         <div
+//                                             key={index}
+//                                             className="page"
+//                                             data-density="hard"
+//                                         >
+//                                             <div className="page-content">
+//                                                 {/* ✅ FIXED: Use Cloudinary URL directly */}
+//                                                 <img
+//                                                     src={file.fileUrl}
+//                                                     alt={`Page ${index + 1}`}
+//                                                     className="page-image"
+//                                                     draggable={false}
+//                                                 />
+//                                                 <div className="page-number">
+//                                                     {index + 1}
+//                                                 </div>
+//                                             </div>
+//                                         </div>
+//                                     ))}
+//                                 </HTMLFlipBook>
+//                             </div>
+
+//                             {/* Next Page Button */}
+//                             <button
+//                                 onClick={nextPage}
+//                                 disabled={currentPage >= getTotalPages() - 2}
+//                                 className={`absolute right-4 z-20 bg-white/90 hover:bg-white text-gray-800 p-4 rounded-full shadow-2xl transition-all transform hover:scale-110 ${currentPage >= getTotalPages() - 2 ? 'opacity-30 cursor-not-allowed' : 'opacity-90'
+//                                     }`}
+//                             >
+//                                 <ChevronRight className="w-8 h-8" />
+//                             </button>
+//                         </div>
+
+//                         {/* Clean Bottom Info Bar */}
+//                         <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-6">
+//                             <div className="container mx-auto max-w-7xl">
+//                                 <div className="flex items-center justify-between">
+//                                     <div className="flex items-center gap-4">
+//                                         <div className="flex items-center gap-2">
+//                                             <Tag className="w-4 h-4 text-purple-400" />
+//                                             <span className="text-sm font-semibold text-purple-400">
+//                                                 {activePost.topic}
+//                                             </span>
+//                                         </div>
+//                                         <span className="text-white/60 text-sm">•</span>
+//                                         <p className="text-white/80 text-sm">
+//                                             {activePost.description}
+//                                         </p>
+//                                     </div>
+
+//                                     {/* Clean Progress Bar */}
+//                                     <div className="w-48 bg-white/20 rounded-full h-2">
+//                                         <div
+//                                             className="bg-gradient-to-r from-purple-500 to-pink-500 h-2 rounded-full transition-all duration-300"
+//                                             style={{ width: `${((currentPage + 1) / getTotalPages()) * 100}%` }}
+//                                         ></div>
+//                                     </div>
+//                                 </div>
+//                             </div>
+//                         </div>
+//                     </div>
+//                 )}
+
+//                 {/* Decorative Floating Blobs */}
+//                 <div className="fixed top-20 left-10 w-72 h-72 bg-purple-300 dark:bg-purple-600 rounded-full mix-blend-multiply dark:mix-blend-normal dark:opacity-10 filter blur-xl opacity-20 animate-blob pointer-events-none"></div>
+//                 <div className="fixed top-40 right-10 w-72 h-72 bg-pink-300 dark:bg-pink-600 rounded-full mix-blend-multiply dark:mix-blend-normal dark:opacity-10 filter blur-xl opacity-20 animate-blob animation-delay-2000 pointer-events-none"></div>
+//                 <div className="fixed bottom-20 left-1/2 w-72 h-72 bg-blue-300 dark:bg-blue-600 rounded-full mix-blend-multiply dark:mix-blend-normal dark:opacity-10 filter blur-xl opacity-20 animate-blob animation-delay-4000 pointer-events-none"></div>
+
+//                 <style>{`
+//                     @keyframes blob {
+//                         0%, 100% { transform: translate(0, 0) scale(1); }
+//                         25% { transform: translate(20px, -50px) scale(1.1); }
+//                         50% { transform: translate(-20px, 20px) scale(0.9); }
+//                         75% { transform: translate(50px, 50px) scale(1.05); }
+//                     }
+
+//                     .animate-blob {
+//                         animation: blob 7s infinite;
+//                     }
+
+//                     .animation-delay-2000 {
+//                         animation-delay: 2s;
+//                     }
+
+//                     .animation-delay-4000 {
+//                         animation-delay: 4s;
+//                     }
+
+//                     /* Perfect Book Styling */
+//                     .book-wrapper {
+//                         perspective: 2000px;
+//                         transform-style: preserve-3d;
+//                     }
+
+//                     .book-container {
+//                         box-shadow: 0 10px 50px rgba(0, 0, 0, 0.6);
+//                         border-radius: 4px;
+//                     }
+
+//                     /* Page Styling */
+//                     .page {
+//                         background: linear-gradient(to right, #f8f9fa 0%, #ffffff 5%, #ffffff 95%, #f8f9fa 100%);
+//                         box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.1);
+//                         overflow: hidden;
+//                         position: relative;
+//                         user-select: none;
+//                     }
+
+//                     .page-content {
+//                         width: 100%;
+//                         height: 100%;
+//                         display: flex;
+//                         align-items: center;
+//                         justify-content: center;
+//                         position: relative;
+//                         padding: 20px;
+//                         background: white;
+//                     }
+
+//                     .page-image {
+//                         max-width: 100%;
+//                         max-height: 100%;
+//                         width: auto;
+//                         height: auto;
+//                         object-fit: contain;
+//                         pointer-events: none;
+//                     }
+
+//                     /* Clean Page Number */
+//                     .page-number {
+//                         position: absolute;
+//                         bottom: 15px;
+//                         left: 50%;
+//                         transform: translateX(-50%);
+//                         font-size: 11px;
+//                         color: #999;
+//                         font-weight: 500;
+//                         background: rgba(255, 255, 255, 0.9);
+//                         padding: 4px 12px;
+//                         border-radius: 12px;
+//                         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+//                     }
+
+//                     /* Hide library overflow issues */
+//                     .stf__wrapper {
+//                         overflow: visible !important;
+//                     }
+
+//                     .stf__block {
+//                         overflow: visible !important;
+//                     }
+
+//                     /* Enhanced page shadows */
+//                     .stf__item {
+//                         box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+//                     }
+
+//                     /* Page curl effect */
+//                     .stf__item--hard {
+//                         background: linear-gradient(to right, #e8e8e8 0%, #ffffff 5%);
+//                     }
+
+//                     /* Smooth flipping */
+//                     .stf__item.--flipping {
+//                         transition: transform 0.8s cubic-bezier(0.4, 0.0, 0.2, 1);
+//                     }
+
+//                     /* Center alignment for book */
+//                     .stf__parent {
+//                         display: flex;
+//                         align-items: center;
+//                         justify-center: center;
+//                         margin: 0 auto;
+//                     }
+//                 `}</style>
+//             </div>
+//             <Footer />
+//         </>
+//     );
+// }
+
+
 import { useEffect, useState, useRef } from "react";
-import { X, ChevronLeft, ChevronRight, Calendar, Tag, BookOpen, Download, ZoomIn, ZoomOut, Maximize2, Search, Clock, Eye, Sparkles } from "lucide-react";
+import { X, ChevronLeft, ChevronRight, Calendar, Tag, BookOpen, Download, ZoomIn, ZoomOut, Maximize2, Search, Clock, Eye, Sparkles, Share2, BookmarkPlus } from "lucide-react";
 import HTMLFlipBook from "react-pageflip";
 import Navbar from "../Navbar";
 import Footer from "../Footer";
@@ -16,15 +626,32 @@ export default function AllPostsBookReader() {
     const [sort, setSort] = useState("LATEST");
     const [activePost, setActivePost] = useState(null);
     const [currentPage, setCurrentPage] = useState(0);
-    const [zoom, setZoom] = useState(100);
+    const [zoom, setZoom] = useState(130); // Default zoom increased to 130%
     const [isFullscreen, setIsFullscreen] = useState(false);
+    const [isMobile, setIsMobile] = useState(false);
+    const [showShareMenu, setShowShareMenu] = useState(false);
+    const [bookmarks, setBookmarks] = useState([]);
+    const [isDownloading, setIsDownloading] = useState(false);
+    const [showPageSelector, setShowPageSelector] = useState(false);
+    const [selectedPages, setSelectedPages] = useState([]);
     const flipBookRef = useRef();
+    const bookContainerRef = useRef();
+
+    // Detect mobile device
+    useEffect(() => {
+        const checkMobile = () => {
+            setIsMobile(window.innerWidth < 768);
+        };
+
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
 
     useEffect(() => {
         fetch(`${BASE_URL}/content?type=POST`)
             .then(res => res.json())
             .then(data => {
-                // ✅ REMOVED FILTER - Show all posts
                 setPosts(data);
                 setFiltered(data);
             })
@@ -55,23 +682,26 @@ export default function AllPostsBookReader() {
         setFiltered(data);
     }, [search, topic, sort, posts]);
 
-    // ✅ REMOVED FILTER - Show all topics
     const topics = ["ALL", ...new Set(posts.map(p => p.topic))];
 
     const openBook = (post) => {
         setActivePost(post);
         setCurrentPage(0);
-        setZoom(100);
+        setZoom(isMobile ? 100 : 130);
         setIsFullscreen(false);
+        setBookmarks([]);
+        setShowPageSelector(false);
+        setSelectedPages([]);
     };
 
     const closeBook = () => {
         setActivePost(null);
         setCurrentPage(0);
+        setShowShareMenu(false);
     };
 
     const handleZoomIn = () => {
-        if (zoom < 150) setZoom(zoom + 10);
+        if (zoom < 200) setZoom(zoom + 10);
     };
 
     const handleZoomOut = () => {
@@ -79,7 +709,13 @@ export default function AllPostsBookReader() {
     };
 
     const toggleFullscreen = () => {
-        setIsFullscreen(!isFullscreen);
+        if (!document.fullscreenElement) {
+            bookContainerRef.current?.requestFullscreen();
+            setIsFullscreen(true);
+        } else {
+            document.exitFullscreen();
+            setIsFullscreen(false);
+        }
     };
 
     const nextPage = () => {
@@ -98,10 +734,199 @@ export default function AllPostsBookReader() {
         setCurrentPage(e.data);
     };
 
-    // ✅ FIXED: Return Cloudinary URL directly
+    // Add watermark to image
+    const addWatermarkToImage = async (imageUrl, pageNumber) => {
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.crossOrigin = 'anonymous';
+
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+
+                canvas.width = img.width;
+                canvas.height = img.height;
+
+                // Draw the original image
+                ctx.drawImage(img, 0, 0);
+
+                // Add simple watermark at center
+                ctx.save();
+                ctx.globalAlpha = 0.3;
+                ctx.font = `bold ${Math.floor(img.width / 20)}px Arial`;
+                ctx.fillStyle = '#000000';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('dcoder75', canvas.width / 2, canvas.height / 2);
+                ctx.restore();
+
+                // Convert to blob
+                canvas.toBlob((blob) => {
+                    if (blob) {
+                        resolve(blob);
+                    } else {
+                        reject(new Error('Failed to create blob'));
+                    }
+                }, 'image/jpeg', 0.95);
+            };
+
+            img.onerror = () => reject(new Error('Failed to load image'));
+
+            // Try to load image with timestamp to avoid cache issues
+            img.src = imageUrl + (imageUrl.includes('?') ? '&' : '?') + 't=' + new Date().getTime();
+        });
+    };
+
+    // Toggle page selection
+    const togglePageSelection = (pageIndex) => {
+        setSelectedPages(prev => {
+            if (prev.includes(pageIndex)) {
+                return prev.filter(p => p !== pageIndex);
+            } else {
+                return [...prev, pageIndex];
+            }
+        });
+    };
+
+    // Select all pages
+    const selectAllPages = () => {
+        const allPages = Array.from({ length: getTotalPages() }, (_, i) => i);
+        setSelectedPages(allPages);
+    };
+
+    // Deselect all pages
+    const deselectAllPages = () => {
+        setSelectedPages([]);
+    };
+
+    // Download selected pages
+    const downloadSelectedPages = async () => {
+        if (selectedPages.length === 0) {
+            alert('Please select at least one page to download.');
+            return;
+        }
+
+        setIsDownloading(true);
+        let successCount = 0;
+        const totalSelected = selectedPages.length;
+
+        console.log(`Starting download of ${totalSelected} selected pages...`);
+
+        try {
+            // Sort page numbers for sequential download
+            const sortedPages = [...selectedPages].sort((a, b) => a - b);
+
+            for (let i = 0; i < sortedPages.length; i++) {
+                const pageIndex = sortedPages[i];
+                const file = activePost.files[pageIndex];
+                console.log(`Processing page ${pageIndex + 1} (${i + 1}/${totalSelected})...`);
+
+                try {
+                    // Add watermark to image
+                    const watermarkedBlob = await addWatermarkToImage(file.fileUrl, pageIndex + 1);
+                    console.log(`Watermark added to page ${pageIndex + 1}`);
+
+                    // Create download link
+                    const url = window.URL.createObjectURL(watermarkedBlob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `${activePost.title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_page_${String(pageIndex + 1).padStart(2, '0')}.jpg`;
+                    a.style.display = 'none';
+                    document.body.appendChild(a);
+
+                    // Trigger download
+                    a.click();
+                    console.log(`Download triggered for page ${pageIndex + 1}`);
+
+                    // Clean up after a delay
+                    setTimeout(() => {
+                        window.URL.revokeObjectURL(url);
+                        if (document.body.contains(a)) {
+                            document.body.removeChild(a);
+                        }
+                    }, 1000);
+
+                    successCount++;
+
+                    // Add delay between downloads
+                    if (i < sortedPages.length - 1) {
+                        console.log(`Waiting before next download...`);
+                        await new Promise(resolve => setTimeout(resolve, 800));
+                    }
+                } catch (error) {
+                    console.error(`Failed to download page ${pageIndex + 1}:`, error);
+                }
+            }
+
+            console.log(`Download complete. Success: ${successCount}/${totalSelected}`);
+
+            if (successCount > 0) {
+                alert(`Successfully downloaded ${successCount} of ${totalSelected} pages!`);
+                setSelectedPages([]);
+                setShowPageSelector(false);
+            } else {
+                alert('Download failed. Please try again.');
+            }
+        } catch (error) {
+            console.error('Download failed:', error);
+            alert('Download failed. Please try again.');
+        } finally {
+            setIsDownloading(false);
+        }
+    };
+
+    // Share functionality
+    const handleShare = async (platform) => {
+        const shareUrl = window.location.href;
+        const shareText = `Check out "${activePost.title}" - ${activePost.description}`;
+
+        const urls = {
+            facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`,
+            twitter: `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`,
+            linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`,
+            whatsapp: `https://wa.me/?text=${encodeURIComponent(shareText + ' ' + shareUrl)}`,
+            copy: 'copy'
+        };
+
+        if (platform === 'copy') {
+            try {
+                await navigator.clipboard.writeText(shareUrl);
+                alert('Link copied to clipboard!');
+            } catch (err) {
+                console.error('Failed to copy:', err);
+            }
+        } else if (platform === 'native' && navigator.share) {
+            try {
+                await navigator.share({
+                    title: activePost.title,
+                    text: shareText,
+                    url: shareUrl
+                });
+            } catch (err) {
+                console.error('Share failed:', err);
+            }
+        } else {
+            window.open(urls[platform], '_blank');
+        }
+
+        setShowShareMenu(false);
+    };
+
+    // Bookmark current page
+    const toggleBookmark = () => {
+        const pageIndex = currentPage;
+        setBookmarks(prev => {
+            if (prev.includes(pageIndex)) {
+                return prev.filter(p => p !== pageIndex);
+            } else {
+                return [...prev, pageIndex];
+            }
+        });
+    };
+
     const getFirstImageUrl = (item) => {
         if (item.files && item.files.length > 0) {
-            return item.files[0].fileUrl; // Direct Cloudinary URL
+            return item.files[0].fileUrl;
         }
         return null;
     };
@@ -112,6 +937,10 @@ export default function AllPostsBookReader() {
 
     const getCurrentPageDisplay = () => {
         const total = getTotalPages();
+
+        if (isMobile) {
+            return `${currentPage + 1}/${total}`;
+        }
 
         if (currentPage === 0) {
             return `Page 1-2`;
@@ -128,6 +957,30 @@ export default function AllPostsBookReader() {
 
         return `Page ${total}`;
     };
+
+    // Calculate responsive book dimensions
+    const getBookDimensions = () => {
+        if (isMobile) {
+            return {
+                width: Math.min(window.innerWidth - 40, 300),
+                height: Math.min(window.innerHeight - 200, 400),
+                minWidth: 200,
+                maxWidth: 300,
+                minHeight: 300,
+                maxHeight: 400
+            };
+        }
+        return {
+            width: 450,
+            height: 600,
+            minWidth: 315,
+            maxWidth: 1000,
+            minHeight: 420,
+            maxHeight: 1350
+        };
+    };
+
+    const bookDimensions = getBookDimensions();
 
     return (
         <>
@@ -256,7 +1109,7 @@ export default function AllPostsBookReader() {
                                                 <div className={`absolute bottom-0 left-0 w-20 h-20 bg-gradient-to-br ${gradient} rounded-full opacity-10 blur-xl`}></div>
 
                                                 <div className="relative flex justify-center items-center">
-                                                    <div className="w-24 h-24 bg-white dark:bg-gray-700 rounded-xl shadow-2xl flex items-center justify-center transform group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 overflow-hidden">
+                                                    <div className="w-28 h-28 bg-white dark:bg-gray-700 rounded-xl shadow-2xl flex items-center justify-center transform group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 overflow-hidden">
                                                         {firstImageUrl ? (
                                                             <img
                                                                 src={firstImageUrl}
@@ -307,7 +1160,7 @@ export default function AllPostsBookReader() {
                                                 </div>
                                             </div>
 
-                                            <div className="px-5 mb-3">
+                                            <div className="px-5 mb-4">
                                                 <button className={`w-full flex items-center justify-center gap-2 px-3 py-2 bg-gradient-to-r ${gradient} text-white rounded-xl font-semibold shadow-md group-hover:shadow-lg transition-all duration-300 transform group-hover:scale-105`}>
                                                     <BookOpen className="w-4 h-4" />
                                                     Open & Read
@@ -330,97 +1183,265 @@ export default function AllPostsBookReader() {
                     )}
                 </div>
 
-                {/* Perfect Book Reader Modal */}
+                {/* Enhanced Book Reader Modal */}
                 {activePost && activePost.files && activePost.files.length > 0 && (
-                    <div className={`fixed inset-0 bg-black/95 backdrop-blur-sm z-50 flex items-center justify-center ${isFullscreen ? 'p-0' : 'p-4'}`}>
+                    <div
+                        ref={bookContainerRef}
+                        className={`fixed inset-0 bg-black/95 backdrop-blur-sm z-50 flex items-center justify-center ${isFullscreen ? 'p-0' : isMobile ? 'p-0' : 'p-4'}`}
+                    >
+                        {/* Page Selector Panel */}
+                        {showPageSelector && (
+                            <div className="absolute top-16 md:top-20 right-4 bg-white dark:bg-gray-800 rounded-lg shadow-2xl z-50 max-w-md w-full md:w-96 max-h-[70vh] overflow-hidden flex flex-col">
+                                <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+                                    <div className="flex items-center justify-between mb-3">
+                                        <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100">Select Pages</h3>
+                                        <button
+                                            onClick={() => setShowPageSelector(false)}
+                                            className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                                        >
+                                            <X className="w-5 h-5" />
+                                        </button>
+                                    </div>
+                                    <div className="flex gap-2">
+                                        <button
+                                            onClick={selectAllPages}
+                                            className="flex-1 px-3 py-1.5 bg-purple-600 hover:bg-purple-700 text-white text-sm rounded-lg transition-colors"
+                                        >
+                                            Select All
+                                        </button>
+                                        <button
+                                            onClick={deselectAllPages}
+                                            className="flex-1 px-3 py-1.5 bg-gray-500 hover:bg-gray-600 text-white text-sm rounded-lg transition-colors"
+                                        >
+                                            Clear All
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div className="flex-1 overflow-y-auto p-4">
+                                    <div className="grid grid-cols-4 gap-2">
+                                        {activePost.files.map((file, index) => (
+                                            <button
+                                                key={index}
+                                                onClick={() => togglePageSelection(index)}
+                                                className={`relative aspect-[3/4] rounded-lg overflow-hidden border-2 transition-all ${selectedPages.includes(index)
+                                                        ? 'border-purple-500 ring-2 ring-purple-300 dark:ring-purple-700'
+                                                        : 'border-gray-300 dark:border-gray-600 hover:border-purple-400'
+                                                    }`}
+                                            >
+                                                <img
+                                                    src={file.fileUrl}
+                                                    alt={`Page ${index + 1}`}
+                                                    className="w-full h-full object-cover"
+                                                />
+                                                <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                                                    <span className="text-white font-bold text-sm">{index + 1}</span>
+                                                </div>
+                                                {selectedPages.includes(index) && (
+                                                    <div className="absolute top-1 right-1 bg-purple-500 rounded-full p-1">
+                                                        <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                                        </svg>
+                                                    </div>
+                                                )}
+                                                {bookmarks.includes(index) && (
+                                                    <div className="absolute top-1 left-1 text-yellow-500">
+                                                        <span className="text-lg">★</span>
+                                                    </div>
+                                                )}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div className="p-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
+                                    <button
+                                        onClick={downloadSelectedPages}
+                                        disabled={selectedPages.length === 0 || isDownloading}
+                                        className="w-full px-4 py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                                    >
+                                        <Download className="w-5 h-5" />
+                                        {isDownloading ? 'Downloading...' : `Download ${selectedPages.length} Page${selectedPages.length !== 1 ? 's' : ''}`}
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+
                         {/* Top Controls Bar */}
-                        <div className="absolute top-0 left-0 right-0 bg-gradient-to-b from-black/90 to-transparent p-4 z-10">
-                            <div className="container mx-auto max-w-7xl flex justify-between items-center">
-                                <div className="flex items-center gap-4">
-                                    <h3 className="text-white font-semibold text-lg hidden md:block">
+                        <div className="absolute top-0 left-0 right-0 bg-gradient-to-b from-black/90 to-transparent p-3 md:p-4 z-10">
+                            <div className="container mx-auto max-w-7xl flex justify-between items-center gap-2">
+                                <div className="flex items-center gap-2 md:gap-4 flex-1 min-w-0">
+                                    <h3 className="text-white font-semibold text-sm md:text-lg truncate">
                                         {activePost.title}
                                     </h3>
-                                    <span className="text-white/70 text-sm bg-white/10 px-3 py-1 rounded-full">
-                                        {getCurrentPageDisplay()} of {getTotalPages()}
+                                    <span className="text-white/70 text-xs md:text-sm bg-white/10 px-2 md:px-3 py-1 rounded-full whitespace-nowrap">
+                                        {getCurrentPageDisplay()}
                                     </span>
                                 </div>
 
-                                <div className="flex items-center gap-2">
+                                <div className="flex items-center gap-1 md:gap-2">
+                                    {/* Zoom controls - hidden on mobile */}
+                                    {!isMobile && (
+                                        <>
+                                            <button
+                                                onClick={handleZoomOut}
+                                                className="bg-white/20 hover:bg-white/30 text-white p-2 rounded-lg transition-all"
+                                                title="Zoom Out"
+                                            >
+                                                <ZoomOut className="w-4 h-4 md:w-5 md:h-5" />
+                                            </button>
+                                            <span className="text-white text-xs md:text-sm px-1 md:px-2 hidden sm:block">{zoom}%</span>
+                                            <button
+                                                onClick={handleZoomIn}
+                                                className="bg-white/20 hover:bg-white/30 text-white p-2 rounded-lg transition-all"
+                                                title="Zoom In"
+                                            >
+                                                <ZoomIn className="w-4 h-4 md:w-5 md:h-5" />
+                                            </button>
+                                        </>
+                                    )}
+
+                                    {/* Select Pages to Download Button */}
                                     <button
-                                        onClick={handleZoomOut}
-                                        className="bg-white/20 hover:bg-white/30 text-white p-2 rounded-lg transition-all"
-                                        title="Zoom Out"
+                                        onClick={() => setShowPageSelector(!showPageSelector)}
+                                        className="bg-white/20 hover:bg-white/30 text-white p-2 rounded-lg transition-all relative group"
+                                        title="Select Pages to Download"
                                     >
-                                        <ZoomOut className="w-5 h-5" />
-                                    </button>
-                                    <span className="text-white text-sm px-2">{zoom}%</span>
-                                    <button
-                                        onClick={handleZoomIn}
-                                        className="bg-white/20 hover:bg-white/30 text-white p-2 rounded-lg transition-all"
-                                        title="Zoom In"
-                                    >
-                                        <ZoomIn className="w-5 h-5" />
+                                        <Download className="w-4 h-4 md:w-5 md:h-5" />
+                                        {selectedPages.length > 0 && (
+                                            <span className="absolute -top-1 -right-1 bg-purple-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
+                                                {selectedPages.length}
+                                            </span>
+                                        )}
+                                        <span className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-black/80 text-white text-xs px-2 py-1 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                                            Download Pages
+                                        </span>
                                     </button>
 
+                                    {/* Share Button */}
+                                    <div className="relative">
+                                        <button
+                                            onClick={() => setShowShareMenu(!showShareMenu)}
+                                            className="bg-white/20 hover:bg-white/30 text-white p-2 rounded-lg transition-all"
+                                            title="Share"
+                                        >
+                                            <Share2 className="w-4 h-4 md:w-5 md:h-5" />
+                                        </button>
+
+                                        {showShareMenu && (
+                                            <div className="absolute right-0 top-full mt-2 bg-white dark:bg-gray-800 rounded-lg shadow-xl min-w-[180px] z-50 py-2">
+                                                {navigator.share && (
+                                                    <button
+                                                        onClick={() => handleShare('native')}
+                                                        className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                                                    >
+                                                        Share...
+                                                    </button>
+                                                )}
+                                                <button
+                                                    onClick={() => handleShare('whatsapp')}
+                                                    className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                                                >
+                                                    WhatsApp
+                                                </button>
+                                                <button
+                                                    onClick={() => handleShare('facebook')}
+                                                    className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                                                >
+                                                    Facebook
+                                                </button>
+                                                <button
+                                                    onClick={() => handleShare('twitter')}
+                                                    className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                                                >
+                                                    Twitter
+                                                </button>
+                                                <button
+                                                    onClick={() => handleShare('linkedin')}
+                                                    className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                                                >
+                                                    LinkedIn
+                                                </button>
+                                                <button
+                                                    onClick={() => handleShare('copy')}
+                                                    className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                                                >
+                                                    Copy Link
+                                                </button>
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    {/* Bookmark Button */}
                                     <button
-                                        onClick={toggleFullscreen}
-                                        className="bg-white/20 hover:bg-white/30 text-white p-2 rounded-lg transition-all"
-                                        title="Toggle Fullscreen"
+                                        onClick={toggleBookmark}
+                                        className={`${bookmarks.includes(currentPage) ? 'bg-yellow-500/60' : 'bg-white/20'} hover:bg-white/30 text-white p-2 rounded-lg transition-all`}
+                                        title="Bookmark Page"
                                     >
-                                        <Maximize2 className="w-5 h-5" />
+                                        <BookmarkPlus className="w-4 h-4 md:w-5 md:h-5" />
                                     </button>
+
+                                    {!isMobile && (
+                                        <button
+                                            onClick={toggleFullscreen}
+                                            className="bg-white/20 hover:bg-white/30 text-white p-2 rounded-lg transition-all"
+                                            title="Toggle Fullscreen"
+                                        >
+                                            <Maximize2 className="w-4 h-4 md:w-5 md:h-5" />
+                                        </button>
+                                    )}
 
                                     <button
                                         onClick={closeBook}
                                         className="bg-white/20 hover:bg-white/30 text-white p-2 rounded-lg transition-all"
                                     >
-                                        <X className="w-5 h-5" />
+                                        <X className="w-4 h-4 md:w-5 md:h-5" />
                                     </button>
                                 </div>
                             </div>
                         </div>
 
                         {/* Book Container */}
-                        <div className="relative w-full h-full flex items-center justify-center pt-20 pb-4">
+                        <div className={`relative w-full h-full flex items-center justify-center ${isMobile ? 'pt-16 pb-20' : 'pt-20 pb-4'}`}>
                             {/* Previous Page Button */}
                             <button
                                 onClick={prevPage}
                                 disabled={currentPage === 0}
-                                className={`absolute left-4 z-20 bg-white/90 hover:bg-white text-gray-800 p-4 rounded-full shadow-2xl transition-all transform hover:scale-110 ${currentPage === 0 ? 'opacity-30 cursor-not-allowed' : 'opacity-90'
+                                className={`absolute ${isMobile ? 'left-2' : 'left-4'} z-20 bg-white/90 hover:bg-white text-gray-800 ${isMobile ? 'p-2' : 'p-4'} rounded-full shadow-2xl transition-all transform hover:scale-110 ${currentPage === 0 ? 'opacity-30 cursor-not-allowed' : 'opacity-90'
                                     }`}
                             >
-                                <ChevronLeft className="w-8 h-8" />
+                                <ChevronLeft className={`${isMobile ? 'w-5 h-5' : 'w-8 h-8'}`} />
                             </button>
 
-                            {/* FlipBook with Perfect Dual Page Display */}
+                            {/* FlipBook with Responsive Sizing */}
                             <div
                                 className="book-wrapper"
                                 style={{
-                                    transform: `scale(${zoom / 100})`,
+                                    transform: isMobile ? 'scale(1)' : `scale(${zoom / 100})`,
                                     transition: 'transform 0.3s ease'
                                 }}
                             >
                                 <HTMLFlipBook
-                                    width={450}
-                                    height={600}
+                                    width={bookDimensions.width}
+                                    height={bookDimensions.height}
                                     size="stretch"
-                                    minWidth={315}
-                                    maxWidth={1000}
-                                    minHeight={420}
-                                    maxHeight={1350}
+                                    minWidth={bookDimensions.minWidth}
+                                    maxWidth={bookDimensions.maxWidth}
+                                    minHeight={bookDimensions.minHeight}
+                                    maxHeight={bookDimensions.maxHeight}
                                     maxShadowOpacity={0.5}
-                                    showCover={true}
+                                    showCover={false}
                                     mobileScrollSupport={true}
                                     ref={flipBookRef}
                                     className="book-container"
                                     onFlip={onPageFlip}
                                     drawShadow={true}
                                     flippingTime={800}
-                                    usePortrait={false}
+                                    usePortrait={isMobile}
                                     startPage={0}
                                     autoSize={false}
                                     clickEventForward={true}
-                                    useMouseEvents={true}
+                                    useMouseEvents={!isMobile}
                                     swipeDistance={30}
                                     showPageCorners={true}
                                     disableFlipByClick={false}
@@ -432,15 +1453,18 @@ export default function AllPostsBookReader() {
                                             data-density="hard"
                                         >
                                             <div className="page-content">
-                                                {/* ✅ FIXED: Use Cloudinary URL directly */}
                                                 <img
                                                     src={file.fileUrl}
                                                     alt={`Page ${index + 1}`}
                                                     className="page-image"
                                                     draggable={false}
                                                 />
+
                                                 <div className="page-number">
                                                     {index + 1}
+                                                    {bookmarks.includes(index) && (
+                                                        <span className="ml-2 text-yellow-500">★</span>
+                                                    )}
                                                 </div>
                                             </div>
                                         </div>
@@ -451,33 +1475,33 @@ export default function AllPostsBookReader() {
                             {/* Next Page Button */}
                             <button
                                 onClick={nextPage}
-                                disabled={currentPage >= getTotalPages() - 2}
-                                className={`absolute right-4 z-20 bg-white/90 hover:bg-white text-gray-800 p-4 rounded-full shadow-2xl transition-all transform hover:scale-110 ${currentPage >= getTotalPages() - 2 ? 'opacity-30 cursor-not-allowed' : 'opacity-90'
+                                disabled={currentPage >= getTotalPages() - (isMobile ? 1 : 2)}
+                                className={`absolute ${isMobile ? 'right-2' : 'right-4'} z-20 bg-white/90 hover:bg-white text-gray-800 ${isMobile ? 'p-2' : 'p-4'} rounded-full shadow-2xl transition-all transform hover:scale-110 ${currentPage >= getTotalPages() - (isMobile ? 1 : 2) ? 'opacity-30 cursor-not-allowed' : 'opacity-90'
                                     }`}
                             >
-                                <ChevronRight className="w-8 h-8" />
+                                <ChevronRight className={`${isMobile ? 'w-5 h-5' : 'w-8 h-8'}`} />
                             </button>
                         </div>
 
-                        {/* Clean Bottom Info Bar */}
-                        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-6">
+                        {/* Bottom Info Bar */}
+                        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-3 md:p-6">
                             <div className="container mx-auto max-w-7xl">
-                                <div className="flex items-center justify-between">
-                                    <div className="flex items-center gap-4">
+                                <div className={`flex items-center ${isMobile ? 'flex-col gap-2' : 'justify-between'}`}>
+                                    <div className={`flex items-center gap-2 md:gap-4 ${isMobile ? 'flex-wrap justify-center text-center' : ''}`}>
                                         <div className="flex items-center gap-2">
-                                            <Tag className="w-4 h-4 text-purple-400" />
-                                            <span className="text-sm font-semibold text-purple-400">
+                                            <Tag className="w-3 h-3 md:w-4 md:h-4 text-purple-400" />
+                                            <span className="text-xs md:text-sm font-semibold text-purple-400">
                                                 {activePost.topic}
                                             </span>
                                         </div>
-                                        <span className="text-white/60 text-sm">•</span>
-                                        <p className="text-white/80 text-sm">
+                                        {!isMobile && <span className="text-white/60 text-sm">•</span>}
+                                        <p className="text-white/80 text-xs md:text-sm line-clamp-1">
                                             {activePost.description}
                                         </p>
                                     </div>
 
-                                    {/* Clean Progress Bar */}
-                                    <div className="w-48 bg-white/20 rounded-full h-2">
+                                    {/* Progress Bar */}
+                                    <div className={`${isMobile ? 'w-full' : 'w-48'} bg-white/20 rounded-full h-2`}>
                                         <div
                                             className="bg-gradient-to-r from-purple-500 to-pink-500 h-2 rounded-full transition-all duration-300"
                                             style={{ width: `${((currentPage + 1) / getTotalPages()) * 100}%` }}
@@ -554,7 +1578,7 @@ export default function AllPostsBookReader() {
                         pointer-events: none;
                     }
 
-                    /* Clean Page Number */
+                    /* Page Number */
                     .page-number {
                         position: absolute;
                         bottom: 15px;
@@ -567,9 +1591,29 @@ export default function AllPostsBookReader() {
                         padding: 4px 12px;
                         border-radius: 12px;
                         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                        display: flex;
+                        align-items: center;
+                        z-index: 10;
                     }
 
-                    /* Hide library overflow issues */
+                    /* Mobile Responsive Adjustments */
+                    @media (max-width: 768px) {
+                        .book-container {
+                            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.4);
+                        }
+
+                        .page-content {
+                            padding: 10px;
+                        }
+
+                        .page-number {
+                            font-size: 9px;
+                            padding: 3px 8px;
+                            bottom: 10px;
+                        }
+                    }
+
+                    /* Library overflow fix */
                     .stf__wrapper {
                         overflow: visible !important;
                     }
@@ -597,7 +1641,7 @@ export default function AllPostsBookReader() {
                     .stf__parent {
                         display: flex;
                         align-items: center;
-                        justify-center: center;
+                        justify-content: center;
                         margin: 0 auto;
                     }
                 `}</style>

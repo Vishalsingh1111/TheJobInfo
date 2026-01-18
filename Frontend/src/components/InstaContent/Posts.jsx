@@ -750,14 +750,14 @@ export default function AllPostsBookReader() {
                 // Draw the original image
                 ctx.drawImage(img, 0, 0);
 
-                // Add simple watermark at center
+                // Add simple watermark at bottom
                 ctx.save();
                 ctx.globalAlpha = 0.3;
                 ctx.font = `bold ${Math.floor(img.width / 20)}px Arial`;
-                ctx.fillStyle = '#000000';
+                ctx.fillStyle = '#0000008b';
                 ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.fillText('dcoder75', canvas.width / 2, canvas.height / 2);
+                ctx.textBaseline = 'bottom';
+                ctx.fillText('Insta: dcoder75', canvas.width / 2, canvas.height - 20);
                 ctx.restore();
 
                 // Convert to blob
@@ -1225,8 +1225,8 @@ export default function AllPostsBookReader() {
                                                 key={index}
                                                 onClick={() => togglePageSelection(index)}
                                                 className={`relative aspect-[3/4] rounded-lg overflow-hidden border-2 transition-all ${selectedPages.includes(index)
-                                                        ? 'border-purple-500 ring-2 ring-purple-300 dark:ring-purple-700'
-                                                        : 'border-gray-300 dark:border-gray-600 hover:border-purple-400'
+                                                    ? 'border-purple-500 ring-2 ring-purple-300 dark:ring-purple-700'
+                                                    : 'border-gray-300 dark:border-gray-600 hover:border-purple-400'
                                                     }`}
                                             >
                                                 <img

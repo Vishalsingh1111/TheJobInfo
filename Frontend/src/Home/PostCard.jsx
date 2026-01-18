@@ -91,6 +91,8 @@ export default function BookReaderPosts() {
         }
     };
 
+
+
     // Add watermark to image
     const addWatermarkToImage = async (imageUrl, pageNumber) => {
         return new Promise((resolve, reject) => {
@@ -107,14 +109,14 @@ export default function BookReaderPosts() {
                 // Draw the original image
                 ctx.drawImage(img, 0, 0);
 
-                // Add simple watermark at center
+                // Add simple watermark at bottom
                 ctx.save();
                 ctx.globalAlpha = 0.3;
                 ctx.font = `bold ${Math.floor(img.width / 20)}px Arial`;
-                ctx.fillStyle = '#000000';
+                ctx.fillStyle = '#0000008b';
                 ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.fillText('dcoder75', canvas.width / 2, canvas.height / 2);
+                ctx.textBaseline = 'bottom';
+                ctx.fillText('Insta: dcoder75', canvas.width / 2, canvas.height - 20);
                 ctx.restore();
 
                 // Convert to blob

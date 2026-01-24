@@ -1100,7 +1100,7 @@ export default function AllPostsBookReader() {
                                     onClick={() => openBook(item)}
                                     className="block group cursor-pointer"
                                 >
-                                    <div className="relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border-2 border-gray-200 dark:border-gray-700 h-full">
+                                    <div className="relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 h-full">
                                         <div className={`absolute inset-0 bg-gradient-to-br ${gradient} rounded-2xl blur-xl opacity-0 group-hover:opacity-20 transition-opacity duration-500`}></div>
 
                                         <div className="relative">
@@ -1166,7 +1166,7 @@ export default function AllPostsBookReader() {
                                                     Open & Read
                                                 </button>
                                             </div>
-                                            <div className={`h-1 bg-gradient-to-r ${gradient}`}></div>
+                                            {/* <div className={`h-1 bg-gradient-to-r ${gradient}`}></div> */}
                                         </div>
                                     </div>
                                 </div>

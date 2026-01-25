@@ -840,56 +840,57 @@ const CompanyMain = () => {
                     <div className="space-y-6">
                         {/* Level Filters Card */}
                         <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl border border-gray-300 dark:border-gray-700 p-6">
-                            <div className="flex items-center gap-3 mb-6">
-                                <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
-                                    <Filter className="w-5 h-5 text-white" />
+                            <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-4">
+                                <div className="flex items-center gap-3 mb-6">
+                                    <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
+                                        <Filter className="w-5 h-5 text-white" />
+                                    </div>
+                                    <h3 className="text-lg font-bold text-gray-800 dark:text-white">Filter by Difficulty</h3>
                                 </div>
-                                <h3 className="text-lg font-bold text-gray-800 dark:text-white">Filter by Difficulty</h3>
-                            </div>
 
-                            <div className="flex flex-wrap gap-3 mb-6">
-                                <button
-                                    onClick={() => handleLevelClick('Random')}
-                                    className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-gray-500 to-gray-600 text-white rounded-xl font-semibold shadow-lg hover:shadow-gray-500/50 transition-all transform hover:scale-105"
-                                >
-                                    <Shuffle className="w-4 h-4" />
-                                    Random
-                                </button>
-                                <button
-                                    onClick={() => handleLevelClick('Easy')}
-                                    className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl font-semibold shadow-lg hover:shadow-green-500/50 transition-all transform hover:scale-105"
-                                >
-                                    <Zap className="w-4 h-4" />
-                                    Easy
-                                </button>
-                                <button
-                                    onClick={() => handleLevelClick('Medium')}
-                                    className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-yellow-500 to-orange-500 text-white rounded-xl font-semibold shadow-lg hover:shadow-yellow-500/50 transition-all transform hover:scale-105"
-                                >
-                                    <TrendingUp className="w-4 h-4" />
-                                    Medium
-                                </button>
-                                <button
-                                    onClick={() => handleLevelClick('Hard')}
-                                    className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-red-500 to-pink-600 text-white rounded-xl font-semibold shadow-lg hover:shadow-red-500/50 transition-all transform hover:scale-105"
-                                >
-                                    <BookOpen className="w-4 h-4" />
-                                    Hard
-                                </button>
-                                {selectedLevel && (
+                                <div className="flex flex-wrap gap-3 mb-6">
                                     <button
-                                        onClick={() => {
-                                            setSelectedLevel(null);
-                                            setFilteredSheetProblems(data);
-                                        }}
-                                        className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-xl font-semibold border-2 border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 transition-all"
+                                        onClick={() => handleLevelClick('Random')}
+                                        className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-gray-500 to-gray-600 text-white rounded-xl font-semibold shadow-lg hover:shadow-gray-500/50 transition-all transform hover:scale-105"
                                     >
-                                        <X className="w-4 h-4" />
-                                        Clear Filter
+                                        <Shuffle className="w-4 h-4" />
+                                        Random
                                     </button>
-                                )}
+                                    <button
+                                        onClick={() => handleLevelClick('Easy')}
+                                        className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl font-semibold shadow-lg hover:shadow-green-500/50 transition-all transform hover:scale-105"
+                                    >
+                                        <Zap className="w-4 h-4" />
+                                        Easy
+                                    </button>
+                                    <button
+                                        onClick={() => handleLevelClick('Medium')}
+                                        className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-yellow-500 to-orange-500 text-white rounded-xl font-semibold shadow-lg hover:shadow-yellow-500/50 transition-all transform hover:scale-105"
+                                    >
+                                        <TrendingUp className="w-4 h-4" />
+                                        Medium
+                                    </button>
+                                    <button
+                                        onClick={() => handleLevelClick('Hard')}
+                                        className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-red-500 to-pink-600 text-white rounded-xl font-semibold shadow-lg hover:shadow-red-500/50 transition-all transform hover:scale-105"
+                                    >
+                                        <BookOpen className="w-4 h-4" />
+                                        Hard
+                                    </button>
+                                    {selectedLevel && (
+                                        <button
+                                            onClick={() => {
+                                                setSelectedLevel(null);
+                                                setFilteredSheetProblems(data);
+                                            }}
+                                            className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-xl font-semibold border-2 border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 transition-all"
+                                        >
+                                            <X className="w-4 h-4" />
+                                            Clear Filter
+                                        </button>
+                                    )}
+                                </div>
                             </div>
-
                             {/* Stats */}
                             <div className="pt-6 border-t border-gray-200 dark:border-gray-700 grid grid-cols-2 md:grid-cols-4 gap-4">
                                 <div className="bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 p-4 rounded-xl border border-blue-200 dark:border-blue-800 text-center backdrop-blur-xl">

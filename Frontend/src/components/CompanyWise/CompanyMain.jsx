@@ -779,14 +779,7 @@ const CompanyMain = () => {
                 <div className="container mx-auto px-4 ">
                     <Breadcrumb />
 
-                    {/* Badge */}
-                    <div className="flex justify-center mb-6 mt-4">
-                        <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-100 to-cyan-100 dark:from-blue-900/30 dark:to-cyan-900/30 px-6 py-3 rounded-full border-2 border-blue-200 dark:border-blue-700 shadow-lg backdrop-blur-xl">
-                            <Building2 className="w-5 h-5 text-blue-600 dark:text-blue-400 animate-pulse" />
-                            <span className="text-blue-700 dark:text-blue-300 font-semibold">Company-Wise Practice</span>
-                            <Sparkles className="w-5 h-5 text-purple-500 dark:text-purple-400" />
-                        </div>
-                    </div>
+
 
                     <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-2">
                         <span className="text-gray-800 dark:text-white">SDE Sheet Based On</span>{' '}
@@ -822,7 +815,7 @@ const CompanyMain = () => {
                     </div>
 
                     {/* Company Navigation */}
-                    <div className="flex overflow-x-auto gap-2 pb-4 scrollbar-hide px-4 lg:px-20">
+                    <div className="flex overflow-x-auto gap-2 pb-4 scrollbar-hide px-4 lg:px-4">
                         {filteredCompanies.map((company) => (
                             <button
                                 key={company}

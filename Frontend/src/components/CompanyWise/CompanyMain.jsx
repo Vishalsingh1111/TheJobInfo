@@ -815,7 +815,7 @@ const CompanyMain = () => {
                     </div>
 
                     {/* Company Navigation */}
-                    <div className="flex overflow-x-auto gap-2 pb-4 scrollbar-hide px-4 lg:px-4">
+                    <div className="flex overflow-x-auto gap-2 pb-4 scrollbar-hide px-4 lg:px-1">
                         {filteredCompanies.map((company) => (
                             <button
                                 key={company}

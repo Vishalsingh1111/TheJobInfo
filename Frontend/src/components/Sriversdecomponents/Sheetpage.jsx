@@ -88,13 +88,6 @@ function SheetViewer() {
                 <div className="container mx-auto px-4 pt-2">
                     <Breadcrumb />
 
-                    <div className="flex justify-center mb-6">
-                        <div className="inline-flex items-center gap-2 bg-gradient-to-r from-red-100 to-pink-100 dark:from-red-900/30 dark:to-pink-900/30 px-6 py-3 rounded-full border-2 border-red-200 dark:border-red-800 backdrop-blur-xl shadow-lg">
-                            <Code className="w-5 h-5 text-red-600 dark:text-red-400 animate-pulse" />
-                            <span className="text-red-700 dark:text-red-300 font-semibold">DSA Practice</span>
-                            <Sparkles className="w-5 h-5 text-purple-500 dark:text-purple-400" />
-                        </div>
-                    </div>
 
                     <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-2">
                         <span className="bg-gradient-to-r from-red-500 to-pink-600 bg-clip-text text-transparent">
@@ -114,7 +107,7 @@ function SheetViewer() {
                                 <div className="animate-spin rounded-full h-8 w-8 border-4 border-red-200 border-t-red-600"></div>
                             </div>
                         ) : (
-                            <div className="flex overflow-x-auto gap-2 pb-4 scrollbar-hide px-4 lg:px-20">
+                            <div className="flex overflow-x-auto gap-2 pb-4 scrollbar-hide px-4 lg:px-1">
                                 {sheets.map(sheet => (
                                     <button
                                         key={sheet.id}

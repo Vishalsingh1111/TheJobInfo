@@ -31,7 +31,7 @@ import NewUpdatedSheet from '../src/Content/Sheet';
 import CompanyWiseSheet from './components/CompanyWise/CompanyMain';
 import Top50dsaProb from './components/Top50dsaProb/Top50Sheetcard';
 import Contributeblog from './components/TechBlogs/UserContribution';
-import RoadMap from './components/RoadMaps/RoadmapPage';
+import RoadmapsPage from './components/RoadMaps/RoadmapPage';
 
 
 const App = () => {
@@ -72,8 +72,8 @@ const App = () => {
           <Route path='/Profile' element={<Profile />} />
           <Route path='/Ai' element={authUser ? <Ai /> : <Navigate to="/Login" />}></Route>
           <Route path="/results/:id" component={ResultDetailPage} />
-          <Route path='/RoadMap' element={authUser ? <RoadMap /> : <Navigate to="/Login" />}></Route>
-
+          {/* <Route path='/RoadMap' element={authUser ? <RoadMap /> : <Navigate to="/Login" />}></Route> */}
+          <Route path="/RoadMap" element={<RoadmapsPage />} />
         </Routes>
         <Toaster />
       </div>

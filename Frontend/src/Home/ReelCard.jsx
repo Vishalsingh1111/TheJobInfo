@@ -97,11 +97,11 @@ export default function SingleReelHero() {
         <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
             {/* Header */}
             <div className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
-                <div className="container mx-auto px-4 py-6">
+                <div className="container mx-auto px-4 py-8">
                     <div className="text-center">
                         <div className="inline-flex items-center gap-2 bg-purple-100 dark:bg-purple-900/30 px-4 py-2 rounded-full mb-4">
                             <Sparkles className="w-4 h-4 text-purple-600 dark:text-purple-400" />
-                            <span className="text-sm font-semibold text-purple-700 dark:text-purple-300">Boost your coding skills</span>
+                            <span className="text-lg font-semibold text-purple-700 dark:text-purple-300">Boost your coding skills</span>
                         </div>
 
                         <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-3">
@@ -120,36 +120,31 @@ export default function SingleReelHero() {
 
             {/* Stats Bar */}
             <div className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
-                <div className="container mx-auto px-4 py-4">
+                <div className="container mx-auto px-4 py-8">
                     <div className="flex flex-wrap justify-center gap-6">
                         <div className="flex items-center gap-2">
                             <Users className="w-5 h-5 text-purple-600 dark:text-purple-400" />
-                            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">500+ Active Users</span>
+                            <span className="text-lg font-medium text-gray-700 dark:text-gray-300">500+ Active Users</span>
                         </div>
                         <div className="flex items-center gap-2">
                             <Award className="w-5 h-5 text-yellow-600 dark:text-yellow-400" />
-                            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Daily Rewards</span>
+                            <span className="text-lg font-medium text-gray-700 dark:text-gray-300">Daily Rewards</span>
                         </div>
                         <div className="flex items-center gap-2">
                             <Clock className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-                            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">24h Challenge</span>
+                            <span className="text-lg font-medium text-gray-700 dark:text-gray-300">24h Challenge</span>
                         </div>
                     </div>
                 </div>
             </div>
 
             {/* Main Content */}
-            <div className="container mx-auto px-4 py-8">
+            <div className="container mx-auto px-4 py-16">
                 <div className="max-w-6xl mx-auto">
                     <div className="grid lg:grid-cols-2 gap-8 items-start">
                         {/* Left - Info */}
                         <div className="space-y-6">
-                            {/* Topic Badge */}
-                            <div>
-                                <span className="inline-block bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 px-4 py-2 rounded-full text-sm font-semibold">
-                                    {latestReel.topic}
-                                </span>
-                            </div>
+
 
                             {/* Title */}
                             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white leading-tight">
@@ -285,10 +280,10 @@ export default function SingleReelHero() {
                         {/* Right - Video */}
                         <div className="lg:sticky lg:top-4 ">
                             <div
-                                className="relative group cursor-pointer rounded-2xl overflow-hidden bg-black dark:bg-gray-900 border border-gray-200 dark:border-gray-800 hover:shadow-2xl transition-all"
+                                className="relative group cursor-pointer rounded-2xl overflow-hidden bg-black dark:bg-black border border-gray-200 dark:border-gray-800 hover:shadow-2xl transition-all"
                                 onClick={() => setShowModal(true)}
                             >
-                                <div className="aspect-[9/16] max-h-[610px]  mx-auto">
+                                <div className="aspect-[9/16] max-h-[560px]  mx-auto">
                                     <video
                                         className="w-full h-full object-cover"
                                         loop
@@ -324,7 +319,7 @@ export default function SingleReelHero() {
                         </button>
 
                         {/* Video Section */}
-                        <div className="flex-1 bg-black flex items-center justify-center">
+                        <div className="flex-1 bg-black flex items-center justify-center border border-gray-400 dark:border-gray-800 rounded-l-2xl">
                             <video
                                 controls
                                 autoPlay

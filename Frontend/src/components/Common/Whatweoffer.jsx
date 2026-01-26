@@ -98,26 +98,36 @@ const Service = () => {
                 ></div>
                 <div className="fixed bottom-20 left-1/2 w-96 h-96 bg-blue-300 dark:bg-blue-600 rounded-full mix-blend-multiply dark:mix-blend-normal dark:opacity-10 filter blur-3xl opacity-20 animate-blob animation-delay-4000 pointer-events-none"></div>
 
-                {/* Floating Sparkles */}
-                <div className="fixed inset-0 pointer-events-none">
-                    {[...Array(15)].map((_, i) => (
-                        <div
-                            key={i}
-                            className="absolute animate-float-particle"
-                            style={{
-                                left: `${Math.random() * 100}%`,
-                                top: `${Math.random() * 100}%`,
-                                animationDelay: `${Math.random() * 5}s`,
-                                animationDuration: `${10 + Math.random() * 10}s`
-                            }}
-                        >
-                            <Sparkles className="text-purple-400 dark:text-purple-500" size={8 + Math.random() * 12} style={{ opacity: 0.3 }} />
-                        </div>
-                    ))}
-                </div>
 
-                <div className="relative max-w-screen-xl container mx-auto px-4 md:px-20 py-16 md:py-24">
 
+                <div className="relative max-w-screen-xl container mx-auto px-4 md:px-20 py-20 md:py-24">
+                    {/* HEADER SECTION */}
+                    <div className="text-center mb-16 animate-fade-in">
+
+
+                        {/* Heading */}
+                        <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold text-gray-800 dark:text-white mb-6 mt-5 leading-tight">
+                            What will You{' '}
+                            <span className="relative inline-block">
+                                <span className="bg-gradient-to-r from-red-500 via-pink-500 to-purple-600 bg-clip-text text-transparent animate-gradient-x bg-[length:200%_auto]">
+                                    Get?
+                                </span>
+                                <svg className="absolute -bottom-2 left-0 w-full" viewBox="0 0 300 12" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M0 6 Q75 12, 150 6 T300 6" fill="none" stroke="url(#gradient)" strokeWidth="4" className="animate-draw" />
+                                    <defs>
+                                        <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                            <stop offset="0%" stopColor="#f43f5e" />
+                                            <stop offset="50%" stopColor="#ec4899" />
+                                            <stop offset="100%" stopColor="#a855f7" />
+                                        </linearGradient>
+                                    </defs>
+                                </svg>
+                            </span>
+                        </h1>
+                        <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+                            Unlock premium features and accelerate your coding journey with our comprehensive resources
+                        </p>
+                    </div>
 
                     {/* STATS SECTION */}
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-5xl mx-auto mb-16 animate-fade-in animation-delay-200">

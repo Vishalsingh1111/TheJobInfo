@@ -115,11 +115,7 @@ function ProfilePage() {
         <>
             <Navbar />
             <div className="min-h-screen bg-gradient-to-br from-gray-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900 relative overflow-hidden">
-                <div className="relative max-w-7xl container mx-auto px-4 md:px-8 py-8">
-
-
-
-
+                <div className="relative max-w-7xl container mx-auto px-4 md:px-8 py-8 mt-20">
                     {/* Main Card */}
                     <div className="relative bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl rounded-3xl border-2 border-gray-200 dark:border-gray-700 overflow-hidden">
                         {/* Header Section */}

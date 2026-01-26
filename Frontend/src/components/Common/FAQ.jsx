@@ -197,117 +197,120 @@ const Accordion = () => {
             </div>
 
             <section className="relative max-w-5xl container mx-auto md:px-20 px-4 pt-16 pb-20">
+                {/* HEADER SECTION */}
+                <div className="text-center mb-12 animate-fade-in">
 
-                {/* Heading */}
-                <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-800 dark:text-white mb-4 leading-tight">
-                    Got Questions? Find Your{' '}
-                    <span className="relative inline-block">
-                        <span className="bg-gradient-to-r from-red-500 via-pink-500 to-purple-600 bg-clip-text text-transparent animate-gradient-x bg-[length:200%_auto]">
-                            Answers Here!
+
+                    {/* Heading */}
+                    <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-800 dark:text-white mb-4 leading-tight">
+                        Got Questions? Find Your{' '}
+                        <span className="relative inline-block">
+                            <span className="bg-gradient-to-r from-red-500 via-pink-500 to-purple-600 bg-clip-text text-transparent animate-gradient-x bg-[length:200%_auto]">
+                                Answers Here!
+                            </span>
+                            <svg className="absolute -bottom-2 left-0 w-full" viewBox="0 0 300 12" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M0 6 Q75 12, 150 6 T300 6" fill="none" stroke="url(#gradient)" strokeWidth="4" className="animate-draw" />
+                                <defs>
+                                    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                        <stop offset="0%" stopColor="#f43f5e" />
+                                        <stop offset="50%" stopColor="#ec4899" />
+                                        <stop offset="100%" stopColor="#a855f7" />
+                                    </linearGradient>
+                                </defs>
+                            </svg>
                         </span>
-                        <svg className="absolute -bottom-2 left-0 w-full" viewBox="0 0 300 12" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M0 6 Q75 12, 150 6 T300 6" fill="none" stroke="url(#gradient)" strokeWidth="4" className="animate-draw" />
-                            <defs>
-                                <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                                    <stop offset="0%" stopColor="#f43f5e" />
-                                    <stop offset="50%" stopColor="#ec4899" />
-                                    <stop offset="100%" stopColor="#a855f7" />
-                                </linearGradient>
-                            </defs>
-                        </svg>
-                    </span>
-                </h1>
-                <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-                    Everything you need to know about our platform and services
-                </p>
-        </div>
-
-                {/* SEARCH BAR */ }
-    <div className="max-w-2xl mx-auto mb-12 animate-fade-in animation-delay-200">
-        <div className="relative group">
-            <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl blur-lg opacity-0 group-hover:opacity-30 transition-opacity"></div>
-            <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 w-6 h-6 group-hover:scale-110 transition-transform" />
-            <input
-                type="text"
-                placeholder="🔍 Search for answers..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="relative w-full pl-14 pr-6 py-5 rounded-2xl border-2 border-gray-200 dark:border-gray-700 focus:border-purple-400 dark:focus:border-purple-600 focus:outline-none transition-all bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl text-gray-900 dark:text-gray-100 placeholder:text-gray-500 font-semibold text-lg shadow-xl"
-            />
-        </div>
-    </div>
-
-    {/* FAQ ACCORDION */ }
-    <div className="space-y-4 mb-12">
-        {filteredFaqs.map((faq, index) => (
-            <AccordionItem
-                key={index}
-                {...faq}
-                index={index}
-            />
-        ))}
-
-        {filteredFaqs.length === 0 && (
-            <div className="text-center py-12 animate-fade-in">
-                <div className="text-6xl mb-4">🔍</div>
-                <p className="text-gray-600 dark:text-gray-400 text-xl font-semibold">
-                    No results found for "{searchQuery}"
-                </p>
-                <p className="text-gray-500 dark:text-gray-500 mt-2">
-                    Try searching with different keywords
-                </p>
-            </div>
-        )}
-    </div>
-
-    {/* CONTACT CTA */ }
-    <div className="relative max-w-3xl mx-auto animate-fade-in animation-delay-600">
-        <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 rounded-3xl blur-xl opacity-30 animate-pulse-glow"></div>
-        <div className="relative bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 rounded-3xl p-8 md:p-12 text-center overflow-hidden">
-            {/* Floating sparkles */}
-            {[...Array(6)].map((_, i) => (
-                <div
-                    key={i}
-                    className="absolute animate-float-particle"
-                    style={{
-                        left: `${Math.random() * 100}%`,
-                        top: `${Math.random() * 100}%`,
-                        animationDelay: `${Math.random() * 3}s`
-                    }}
-                >
-                    <Sparkles className="text-white" size={12} style={{ opacity: 0.4 }} />
+                    </h1>
+                    <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+                        Everything you need to know about our platform and services
+                    </p>
                 </div>
-            ))}
 
-            <div className="relative z-10">
-                <div className="text-5xl mb-4">💬</div>
-                <h3 className="text-3xl md:text-4xl font-bold text-white mb-3">
-                    Still Have Questions?
-                </h3>
-                <p className="text-lg text-white/90 mb-6 max-w-xl mx-auto">
-                    Can't find the answer you're looking for? Our team is here to help you!
-                </p>
-                <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                    <button className="group relative px-8 py-4 bg-white text-purple-600 font-bold rounded-2xl transition-all transform hover:scale-105 shadow-2xl overflow-hidden">
-                        <div className="absolute inset-0 bg-gradient-to-r from-purple-100 to-pink-100 translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500"></div>
-                        <span className="relative flex items-center justify-center gap-2">
-                            <MessageCircle className="w-5 h-5" />
-                            Chat with Us
-                        </span>
-                    </button>
-                    <button className="group px-8 py-4 bg-white/20 backdrop-blur-sm text-white font-bold rounded-2xl border-2 border-white/50 hover:bg-white/30 transition-all transform hover:scale-105">
-                        <span className="flex items-center justify-center gap-2">
-                            <Mail className="w-5 h-5" />
-                            Email Support
-                        </span>
-                    </button>
+                {/* SEARCH BAR */}
+                <div className="max-w-2xl mx-auto mb-12 animate-fade-in animation-delay-200">
+                    <div className="relative group">
+                        <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl blur-lg opacity-0 group-hover:opacity-30 transition-opacity"></div>
+                        <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 w-6 h-6 group-hover:scale-110 transition-transform" />
+                        <input
+                            type="text"
+                            placeholder="🔍 Search for answers..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            className="relative w-full pl-14 pr-6 py-5 rounded-2xl border-2 border-gray-200 dark:border-gray-700 focus:border-purple-400 dark:focus:border-purple-600 focus:outline-none transition-all bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl text-gray-900 dark:text-gray-100 placeholder:text-gray-500 font-semibold text-lg shadow-xl"
+                        />
+                    </div>
                 </div>
-            </div>
-        </div>
-    </div>
-            </section >
 
-    <style>{`
+                {/* FAQ ACCORDION */}
+                <div className="space-y-4 mb-12">
+                    {filteredFaqs.map((faq, index) => (
+                        <AccordionItem
+                            key={index}
+                            {...faq}
+                            index={index}
+                        />
+                    ))}
+
+                    {filteredFaqs.length === 0 && (
+                        <div className="text-center py-12 animate-fade-in">
+                            <div className="text-6xl mb-4">🔍</div>
+                            <p className="text-gray-600 dark:text-gray-400 text-xl font-semibold">
+                                No results found for "{searchQuery}"
+                            </p>
+                            <p className="text-gray-500 dark:text-gray-500 mt-2">
+                                Try searching with different keywords
+                            </p>
+                        </div>
+                    )}
+                </div>
+
+                {/* CONTACT CTA */}
+                <div className="relative max-w-3xl mx-auto animate-fade-in animation-delay-600">
+                    <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 rounded-3xl blur-xl opacity-30 animate-pulse-glow"></div>
+                    <div className="relative bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 rounded-3xl p-8 md:p-12 text-center overflow-hidden">
+                        {/* Floating sparkles */}
+                        {[...Array(6)].map((_, i) => (
+                            <div
+                                key={i}
+                                className="absolute animate-float-particle"
+                                style={{
+                                    left: `${Math.random() * 100}%`,
+                                    top: `${Math.random() * 100}%`,
+                                    animationDelay: `${Math.random() * 3}s`
+                                }}
+                            >
+                                <Sparkles className="text-white" size={12} style={{ opacity: 0.4 }} />
+                            </div>
+                        ))}
+
+                        <div className="relative z-10">
+                            <div className="text-5xl mb-4">💬</div>
+                            <h3 className="text-3xl md:text-4xl font-bold text-white mb-3">
+                                Still Have Questions?
+                            </h3>
+                            <p className="text-lg text-white/90 mb-6 max-w-xl mx-auto">
+                                Can't find the answer you're looking for? Our team is here to help you!
+                            </p>
+                            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                                <button className="group relative px-8 py-4 bg-white text-purple-600 font-bold rounded-2xl transition-all transform hover:scale-105 shadow-2xl overflow-hidden">
+                                    <div className="absolute inset-0 bg-gradient-to-r from-purple-100 to-pink-100 translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500"></div>
+                                    <span className="relative flex items-center justify-center gap-2">
+                                        <MessageCircle className="w-5 h-5" />
+                                        Chat with Us
+                                    </span>
+                                </button>
+                                <button className="group px-8 py-4 bg-white/20 backdrop-blur-sm text-white font-bold rounded-2xl border-2 border-white/50 hover:bg-white/30 transition-all transform hover:scale-105">
+                                    <span className="flex items-center justify-center gap-2">
+                                        <Mail className="w-5 h-5" />
+                                        Email Support
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <style>{`
                 @keyframes blob {
                     0%, 100% { transform: translate(0, 0) scale(1); }
                     25% { transform: translate(20px, -50px) scale(1.1); }
@@ -357,7 +360,7 @@ const Accordion = () => {
                 .animation-delay-2000 { animation-delay: 2s; }
                 .animation-delay-4000 { animation-delay: 4s; }
             `}</style>
-        </div >
+        </div>
     );
 };
 

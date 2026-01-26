@@ -46,7 +46,7 @@ const App = () => {
           <Route path="/" element={<Home />}></Route>
           <Route path="/Contact" element={<Contact />}></Route>
           <Route path="/About" element={<About />}></Route>
-          <Route path='/Contactform' element={authUser ? <Contactform /> : <Navigate to="/Signup" />}></Route>
+          <Route path='/Contactform' element={authUser ? <Contactform /> : <Navigate to="/Login" />}></Route>
           <Route path='/Languages' element={authUser ? <Languages /> : <Navigate to="/Login" />}></Route>
           <Route path='/Sheet' element={authUser ? <Sheet /> : <Navigate to="/Login" />}></Route>
           <Route path="/Signup" element={<Signup />}></Route>
@@ -72,8 +72,8 @@ const App = () => {
           <Route path='/Profile' element={<Profile />} />
           <Route path='/Ai' element={authUser ? <Ai /> : <Navigate to="/Login" />}></Route>
           <Route path="/results/:id" component={ResultDetailPage} />
-          {/* <Route path='/RoadMap' element={authUser ? <RoadMap /> : <Navigate to="/Login" />}></Route> */}
-          <Route path="/RoadMap" element={<RoadmapsPage />} />
+          <Route path='/RoadMap' element={authUser ? <RoadmapsPage /> : <Navigate to="/Login" />}></Route>
+          {/* <Route path="/RoadMap" element={<RoadmapsPage />} /> */}
         </Routes>
         <Toaster />
       </div>

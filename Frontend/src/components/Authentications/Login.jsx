@@ -560,7 +560,7 @@ const LoginPage = () => {
                     </div>
 
                     {/* Features */}
-                    <div className="space-y-4 mb-8 animate-fade-in animation-delay-800">
+                    <div className="space-y-2 mb-4 animate-fade-in animation-delay-800">
                         {[
                             { icon: '🚀', text: 'Access all premium features' },
                             { icon: '📚', text: 'Track your learning progress' },

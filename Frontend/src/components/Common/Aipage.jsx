@@ -425,7 +425,7 @@ const Chat = () => {
                             </div>
 
                             {/* SUGGESTED PROMPTS */}
-                            <div className="w-full max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-20">
+                            <div className="w-full max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-20">
                                 {filteredPrompts.map((item, index) => (
                                     <button
                                         key={index}

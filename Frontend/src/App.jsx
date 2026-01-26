@@ -31,8 +31,7 @@ import NewUpdatedSheet from '../src/Content/Sheet';
 import CompanyWiseSheet from './components/CompanyWise/CompanyMain';
 import Top50dsaProb from './components/Top50dsaProb/Top50Sheetcard';
 import Contributeblog from './components/TechBlogs/UserContribution';
-import Companies_Preaparation_Sheet from './components/CompaniesPreparation/ComapaniesPreparationMain';
-import TcsMain from './components/CompaniesPreparation/TCS/TcsMain'
+import RoadMap from './components/RoadMaps/RoadmapPage';
 
 
 const App = () => {
@@ -73,8 +72,8 @@ const App = () => {
           <Route path='/Profile' element={<Profile />} />
           <Route path='/Ai' element={authUser ? <Ai /> : <Navigate to="/Login" />}></Route>
           <Route path="/results/:id" component={ResultDetailPage} />
-          <Route path='/Companies_Preaparation_Sheet' element={<Companies_Preaparation_Sheet />} />
-          <Route path='/TCS' element={<TcsMain />} />
+          <Route path='/RoadMap' element={authUser ? <RoadMap /> : <Navigate to="/Login" />}></Route>
+
         </Routes>
         <Toaster />
       </div>

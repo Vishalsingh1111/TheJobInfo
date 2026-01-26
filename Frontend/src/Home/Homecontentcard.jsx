@@ -269,7 +269,7 @@ const resources = [
         description: "Level up your coding with participating in Quizes and Handson.",
         buttonText: "Try it free",
         icon: "⚡",
-        link: "/Contest-Solution",
+        link: "https://quizopedia-ai.onrender.com/",
         tag: "Live Update",
         tagColor: "from-orange-500 to-red-500",
         bgGradient: "from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20"
@@ -279,7 +279,7 @@ const resources = [
         description: "Follow this to be Ready for your dream job.",
         buttonText: "Try it free",
         icon: "🎯",
-        link: "/Companies_Preaparation_Sheet",
+        link: "/RoadMap",
         tag: "Upcoming",
         tagColor: "from-purple-500 to-indigo-500",
         bgGradient: "from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20"

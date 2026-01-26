@@ -552,25 +552,19 @@ const LoginPage = () => {
                         </p>
                     </div>
 
-                    {/* Divider */}
-                    <div className="my-8 flex items-center justify-center animate-fade-in animation-delay-600">
-                        <hr className="flex-grow border-gray-300 dark:border-gray-600" />
-                        <span className="px-4 text-gray-500 dark:text-gray-400 font-semibold">✨</span>
-                        <hr className="flex-grow border-gray-300 dark:border-gray-600" />
-                    </div>
+
 
                     {/* Features */}
                     <div className="space-y-2 mb-4 animate-fade-in animation-delay-800">
                         {[
                             { icon: '🚀', text: 'Access all premium features' },
                             { icon: '📚', text: 'Track your learning progress' },
-                            { icon: '🎯', text: 'Personalized recommendations' }
                         ].map((feature, idx) => (
                             <div
                                 key={idx}
                                 className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                             >
-                                <span className="text-2xl">{feature.icon}</span>
+                                <span className="text-xl">{feature.icon}</span>
                                 <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">
                                     {feature.text}
                                 </span>

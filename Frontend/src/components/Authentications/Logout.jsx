@@ -30,7 +30,7 @@ function Logout() {
 
     return (
         <div>
-            <button className="bg-red-500 text-white px-3 py-1.5 rounded shadow-lg hover:shadow-red-500/30 shadow-black/30  duration-300 cursor-pointer dark:bg-red-800"
+            <button className="bg-red-500 text-white px-4 py-3 rounded shadow-lg hover:shadow-red-500/30 shadow-black/30  duration-300 cursor-pointer dark:bg-red-800"
                 onClick={handleLogout}>
                 Logout
             </button>

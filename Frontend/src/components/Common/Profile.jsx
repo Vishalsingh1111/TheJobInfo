@@ -115,50 +115,19 @@ function ProfilePage() {
         <>
             <Navbar />
             <div className="min-h-screen bg-gradient-to-br from-gray-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900 relative overflow-hidden">
-                {/* Animated Background */}
-                <div
-                    className="fixed top-20 left-10 w-72 h-72 bg-purple-400 dark:bg-purple-600 rounded-full mix-blend-multiply dark:mix-blend-normal dark:opacity-20 filter blur-3xl opacity-30 animate-blob pointer-events-none"
-                    style={{ transform: `translate(${mousePosition.x}px, ${mousePosition.y}px)` }}
-                ></div>
-                <div
-                    className="fixed bottom-20 right-10 w-72 h-72 bg-pink-400 dark:bg-pink-600 rounded-full mix-blend-multiply dark:mix-blend-normal dark:opacity-20 filter blur-3xl opacity-30 animate-blob animation-delay-2000 pointer-events-none"
-                    style={{ transform: `translate(${-mousePosition.x}px, ${mousePosition.y}px)` }}
-                ></div>
 
-                {/* Floating Sparkles */}
-                <div className="fixed inset-0 pointer-events-none">
-                    {[...Array(15)].map((_, i) => (
-                        <div
-                            key={i}
-                            className="absolute animate-float-particle"
-                            style={{
-                                left: `${Math.random() * 100}%`,
-                                top: `${Math.random() * 100}%`,
-                                animationDelay: `${Math.random() * 5}s`,
-                                animationDuration: `${10 + Math.random() * 10}s`
-                            }}
-                        >
-                            <Sparkles className="text-purple-400 dark:text-purple-500" size={8 + Math.random() * 12} style={{ opacity: 0.3 }} />
-                        </div>
-                    ))}
-                </div>
+
+
 
                 <div className="relative max-w-7xl container mx-auto px-4 md:px-8 py-8">
-                    {/* Back Button */}
-                    <button
-                        onClick={() => navigate('/')}
-                        className="mb-6 flex items-center gap-2 px-6 py-3 bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-2xl border-2 border-gray-200 dark:border-gray-700 hover:border-purple-400 dark:hover:border-purple-600 transition-all hover:shadow-xl font-semibold text-gray-700 dark:text-gray-300 group"
-                    >
-                        <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-                        Back to Home
-                    </button>
+
 
                     <div className="animate-fade-in">
                         {/* Glow Effect */}
                         <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 rounded-3xl blur-xl opacity-30 animate-pulse-glow"></div>
 
                         {/* Main Card */}
-                        <div className="relative bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl rounded-3xl shadow-2xl border-2 border-gray-200 dark:border-gray-700 overflow-hidden">
+                        <div className="relative bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl rounded-3xl border-2 border-gray-200 dark:border-gray-700 overflow-hidden">
                             {/* Header Section */}
                             <div className="relative bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 p-8 md:p-12 overflow-hidden">
                                 {/* Floating Sparkles */}

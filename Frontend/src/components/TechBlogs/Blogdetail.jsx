@@ -252,7 +252,7 @@ const BlogDetail = () => {
                 </div>
 
                 {/* Related Problems Section */}
-                <div className="bg-gradient-to-br from-transparent to-transparent dark:from-gray-950 dark:to-gray-950 py-16 border-t border-gray-200 dark:border-gray-800">
+                {/* <div className="bg-gradient-to-br from-transparent to-transparent dark:from-gray-950 dark:to-gray-950 py-16 border-t border-gray-200 dark:border-gray-800">
                     <div className="container mx-auto px-4 max-w-7xl">
                         <div className="text-center mb-12">
                             <h2 className="text-3xl md:text-4xl font-semibold text-gray-900 dark:text-white mb-3">
@@ -312,7 +312,7 @@ const BlogDetail = () => {
                             </a>
                         </div>
                     </div>
-                </div>
+                </div> */}
 
                 {/* Contribute CTA */}
                 <div className="container mx-auto px-4 py-16 max-w-5xl">

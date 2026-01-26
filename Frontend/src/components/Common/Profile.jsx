@@ -118,7 +118,7 @@ function ProfilePage() {
                 <div className="relative max-w-7xl container mx-auto px-4 md:px-8 py-8">
 
 
-                    <div className="animate-fade-in py-20">
+                    <div className="py-20">
                         {/* Glow Effect */}
                         <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 rounded-3xl blur-xl opacity-30 animate-pulse-glow"></div>
 

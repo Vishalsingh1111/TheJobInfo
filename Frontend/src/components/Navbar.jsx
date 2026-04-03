@@ -478,7 +478,7 @@ const Navbar = () => {
                 { name: 'CS FUNDAMENTAL', href: '/CS-Fundamental', icon: <BookOpen className="w-4 h-4" /> },
             ]
         },
-        { name: 'BLOGS', href: '/Technical-Blog' },
+        { name: 'JOBS', href: '/Technical-Blog' },
         {
             name: 'MORE',
             icon: <Layers className="w-4 h-4" />,

@@ -1447,7 +1447,7 @@ const JobDetail = () => {
                             <div className="sticky top-6 space-y-4">
 
                                 {/* Quick Info + Join */}
-                                <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 overflow-hidden shadow-sm">
+                                {/* <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 overflow-hidden shadow-sm">
                                     <div className="bg-gradient-to-r from-purple-500 to-pink-500 px-5 py-4 text-white">
                                         <h3 className="font-bold text-base">Quick Info</h3>
                                         <p className="text-xs text-white/80 mt-0.5">{item.company}</p>
@@ -1497,7 +1497,7 @@ const JobDetail = () => {
                                             </a>
                                         </div>
                                     </div>
-                                </div>
+                                </div> */}
 
                                 {/* AD SPACE 1 — 300×250 */}
                                 <div className="rounded-2xl border-2 border-dashed border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50">

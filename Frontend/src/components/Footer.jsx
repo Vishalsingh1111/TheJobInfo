@@ -119,7 +119,7 @@ function Footer() {
                                     { name: 'SDE Sheet', link: '/Sheet' },
                                     { name: 'CS Fundamental', link: '/CS-Fundamental' },
                                     { name: 'Project Ideas', link: '/Project' },
-                                    { name: 'Tech Blogs', link: '/Technical-Blog' },
+                                    { name: 'Jobs', link: '/Technical-Blog' },
                                     { name: 'Contest Solutions', link: '/Contest-Solution' }
                                 ].map((item, index) => (
                                     <li key={index}>

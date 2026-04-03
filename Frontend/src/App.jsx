@@ -67,7 +67,7 @@ const App = () => {
           <Route path='/C' element={<C />}></Route>
           <Route path='/techblog' element={<Techblog />}></Route>
           <Route path='/Contibuteblog' element={authUser ? <Contributeblog /> : <Navigate to="/Login" />}></Route>
-          <Route path='/jobdetail/:id' element={<BlogDetail />}></Route>
+          <Route path='/jobdetail/:id' element={authUser ? <BlogDetail /> : <Navigate to="/Login" />}></Route>
           <Route path='/Reels' element={authUser ? <Reels /> : <Navigate to="/Login" />}></Route>
           <Route path='/Profile' element={<Profile />} />
           <Route path='/Ai' element={authUser ? <Ai /> : <Navigate to="/Login" />}></Route>

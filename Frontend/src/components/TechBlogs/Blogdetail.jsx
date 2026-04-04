@@ -1432,7 +1432,7 @@ const JobDetail = () => {
                                         })}
                                     </div>
                                     <div className="px-4 pb-4 text-center">
-                                        <a href='/jobs'>
+                                        <a href='/Job-Portal'>
                                             <button className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-2.5 rounded-xl font-bold shadow-lg hover:shadow-xl hover:scale-105 transition-all text-sm">
                                                 Explore All Jobs <ExternalLink className="w-4 h-4" />
                                             </button>

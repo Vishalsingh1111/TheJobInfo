@@ -91,7 +91,7 @@ import Home from '../src/Home/Home';
 import Languages from './Content/Languages';
 import About from './components/Common/Whatweoffer';
 import Sheet from './Content/Sheet';
-import LoginPage from './components/Authentications/Login';
+// import LoginPage from './components/Authentications/Login';
 import Forgetpassword from './components/Authentications/Forgetpassword';
 import Signup from './components/Authentications/Signup';
 import Contact from './Contacts/Contact';
@@ -133,7 +133,7 @@ const App = () => {
           <Route path='/Languages' element={<Languages />} />
           <Route path='/Sheet' element={<Sheet />} />
           <Route path="/Signup" element={<Signup />} />
-          <Route path="/Login" element={<LoginPage />} />
+          {/* <Route path="/Login" element={<LoginPage />} /> */}
           <Route path="/Forgetpassword" element={<Forgetpassword />} />
           <Route path='/Pagenotfound' element={<Pagenotfound />} />
           <Route path='/Technical-Blog' element={<Technicalblog />} />

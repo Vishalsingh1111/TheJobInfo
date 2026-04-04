@@ -578,7 +578,7 @@ const Navbar = () => {
                         </div>
 
                         {/* Auth Section */}
-                        {authUser ? (
+                        {/* {authUser ? (
                             <a href='/Profile' className="flex items-center gap-2">
                                 {authUser.photo && authUser.photo !== "null" ? (
                                     <img
@@ -600,7 +600,7 @@ const Navbar = () => {
                                 <LogIn className="w-4 h-4" />
                                 Login
                             </a>
-                        )}
+                        )} */}
 
                         {/* Mobile Menu Button */}
                         <button
@@ -674,7 +674,7 @@ const Navbar = () => {
                         </div>
 
                         {/* Mobile Login Button */}
-                        {!authUser && (
+                        {/* {!authUser && (
                             <a
                                 href="/Login"
                                 className="flex items-center justify-center gap-2 w-full bg-gradient-to-r from-red-500 to-pink-600 text-white px-6 py-3 rounded-full font-semibold hover:shadow-lg hover:shadow-red-500/50 transition-all duration-300 mt-4"
@@ -683,7 +683,7 @@ const Navbar = () => {
                                 <LogIn className="w-4 h-4" />
                                 Login
                             </a>
-                        )}
+                        )} */}
                     </div>
                 </div>
             )}

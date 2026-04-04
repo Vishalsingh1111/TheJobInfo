@@ -1,452 +1,287 @@
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import {
+    Briefcase, MapPin, IndianRupee, Clock, ArrowUpRight,
+    Flame, Sparkles, ChevronRight, Zap, ExternalLink
+} from 'lucide-react';
+import { baseUrl } from '../../Baseurl';
 
-import { useState, useEffect } from 'react';
-import { X, Sparkles, Send, Heart, Share2, BookOpen, MessageCircle, Play, TrendingUp, Users, Award, Clock, Bookmark, Eye, ThumbsUp } from 'lucide-react';
-import { baseUrl } from "../Baseurl";
+const truncate = (text, len) => {
+    if (!text) return '';
+    return text.length <= len ? text : text.slice(0, len) + '...';
+};
 
-const BASE_URL = `${baseUrl}/instapost`;
+const GRADIENTS = [
+    { card: 'from-violet-500 to-purple-600', badge: 'bg-violet-100 dark:bg-violet-900/40 text-violet-600 dark:text-violet-300', glow: 'shadow-violet-500/20' },
+    { card: 'from-rose-500 to-pink-600', badge: 'bg-rose-100 dark:bg-rose-900/40 text-rose-600 dark:text-rose-300', glow: 'shadow-rose-500/20' },
+    { card: 'from-blue-500 to-cyan-600', badge: 'bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300', glow: 'shadow-blue-500/20' },
+    { card: 'from-emerald-500 to-teal-600', badge: 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-300', glow: 'shadow-emerald-500/20' },
+    { card: 'from-orange-500 to-red-500', badge: 'bg-orange-100 dark:bg-orange-900/40 text-orange-600 dark:text-orange-300', glow: 'shadow-orange-500/20' },
+    { card: 'from-indigo-500 to-blue-600', badge: 'bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-300', glow: 'shadow-indigo-500/20' },
+    { card: 'from-fuchsia-500 to-pink-500', badge: 'bg-fuchsia-100 dark:bg-fuchsia-900/40 text-fuchsia-600 dark:text-fuchsia-300', glow: 'shadow-fuchsia-500/20' },
+    { card: 'from-amber-500 to-orange-500', badge: 'bg-amber-100 dark:bg-amber-900/40 text-amber-600 dark:text-amber-300', glow: 'shadow-amber-500/20' },
+];
 
-export default function SingleReelHero() {
-    const [latestReel, setLatestReel] = useState(null);
-    const [showModal, setShowModal] = useState(false);
-    const [comments, setComments] = useState([]);
-    const [newComment, setNewComment] = useState("");
-    const [userName, setUserName] = useState("");
-    const [likes, setLikes] = useState(0);
-    const [hasLiked, setHasLiked] = useState(false);
-    const [saved, setSaved] = useState(false);
-
-    useEffect(() => {
-        fetch(`${BASE_URL}/content?type=REEL`)
-            .then(res => res.json())
-            .then(data => {
-                if (data.length > 0) {
-                    const reel = data[0];
-                    setLatestReel(reel);
-
-                    const savedComments = localStorage.getItem(`comments_${reel._id}`);
-                    const savedLikes = localStorage.getItem(`likes_${reel._id}`);
-                    const userLiked = localStorage.getItem(`liked_${reel._id}`);
-                    const isSaved = localStorage.getItem(`saved_${reel._id}`);
-
-                    if (savedComments) setComments(JSON.parse(savedComments));
-                    if (savedLikes) setLikes(parseInt(savedLikes));
-                    if (userLiked) setHasLiked(true);
-                    if (isSaved) setSaved(true);
-                }
-            })
-            .catch(err => console.error('Error:', err));
-    }, []);
-
-    const handleAddComment = () => {
-        if (!newComment.trim() || !userName.trim()) return;
-
-        const comment = {
-            id: Date.now(),
-            userName,
-            text: newComment,
-            timestamp: new Date().toISOString()
-        };
-
-        const updatedComments = [...comments, comment];
-        setComments(updatedComments);
-        localStorage.setItem(`comments_${latestReel._id}`, JSON.stringify(updatedComments));
-        setNewComment("");
-    };
-
-    const handleNavigateToReels = () => {
-        window.location.href = '/reels';
-    };
-
-    const handleLike = () => {
-        if (!hasLiked) {
-            const newLikes = likes + 1;
-            setLikes(newLikes);
-            setHasLiked(true);
-            localStorage.setItem(`likes_${latestReel._id}`, newLikes.toString());
-            localStorage.setItem(`liked_${latestReel._id}`, 'true');
-        }
-    };
-
-    const handleSave = () => {
-        setSaved(!saved);
-        localStorage.setItem(`saved_${latestReel._id}`, (!saved).toString());
-    };
-
-    const handleShare = () => {
-        if (navigator.share) {
-            navigator.share({
-                title: latestReel.title,
-                text: latestReel.description,
-                url: window.location.href
-            });
-        }
-    };
-
-    if (!latestReel) {
-        return (
-            <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex items-center justify-center">
-                <div className="text-center">
-                    <div className="w-16 h-16 border-4 border-purple-200 dark:border-purple-900 border-t-purple-600 dark:border-t-purple-400 rounded-full animate-spin mx-auto mb-4"></div>
-                    <p className="text-gray-600 dark:text-gray-400">Loading...</p>
-                </div>
-            </div>
-        );
-    }
+/* ── Single Job Card ── */
+const JobCard = ({ job, index, onClick }) => {
+    const g = GRADIENTS[index % GRADIENTS.length];
 
     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
-            {/* Header */}
-            <div className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
-                <div className="container mx-auto px-4 py-8">
-                    <div className="text-center">
-                        <div className="inline-flex items-center gap-2 bg-purple-100 dark:bg-purple-900/30 px-4 py-2 rounded-full mb-4">
-                            <Sparkles className="w-4 h-4 text-purple-600 dark:text-purple-400" />
-                            <span className="text-lg font-semibold text-purple-700 dark:text-purple-300">Boost your coding skills</span>
+        <div
+            onClick={onClick}
+            className="group relative bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 overflow-hidden cursor-pointer transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl flex flex-col"
+            style={{ animationDelay: `${index * 60}ms` }}
+        >
+            {/* Top gradient bar */}
+            <div className={`h-1.5 bg-gradient-to-r ${g.card} w-0 group-hover:w-full transition-all duration-500`} />
+
+            {/* Subtle background glow on hover */}
+            <div className={`absolute inset-0 bg-gradient-to-br ${g.card} opacity-0 group-hover:opacity-[0.04] transition-opacity duration-300 pointer-events-none`} />
+
+            <div className="p-5 flex flex-col flex-1 relative">
+                {/* Header row */}
+                <div className="flex items-start justify-between gap-3 mb-3">
+                    {/* Company icon */}
+                    <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${g.card} flex items-center justify-center flex-shrink-0 shadow-lg ${g.glow} group-hover:scale-110 transition-transform duration-300`}>
+                        <Briefcase className="w-6 h-6 text-white" strokeWidth={2} />
+                    </div>
+
+                    {/* Job type badge */}
+                    <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full ${g.badge} flex-shrink-0`}>
+                        {job.jobType || 'Off Campus'}
+                    </span>
+                </div>
+
+                {/* Company name */}
+                <p className={`text-xs font-bold uppercase tracking-wider mb-0.5 bg-gradient-to-r ${g.card} bg-clip-text text-transparent`}>
+                    {job.company}
+                </p>
+
+                {/* Job title */}
+                <h3 className="font-bold text-gray-900 dark:text-white text-sm leading-snug mb-3 line-clamp-2 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:bg-clip-text group-hover:from-violet-600 group-hover:to-pink-600 dark:group-hover:from-violet-400 dark:group-hover:to-pink-400 transition-all duration-300">
+                    {job.title}
+                </h3>
+
+                {/* Description */}
+                <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed mb-4 line-clamp-2 flex-1">
+                    {truncate(job.description, 90)}
+                </p>
+
+                {/* Meta row */}
+                <div className="space-y-1.5 mb-4">
+                    {job.location && (
+                        <div className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400">
+                            <MapPin className="w-3 h-3 text-red-400 flex-shrink-0" />
+                            <span className="truncate">{job.location}</span>
                         </div>
+                    )}
+                    {job.salary && (
+                        <div className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400">
+                            <IndianRupee className="w-3 h-3 text-green-500 flex-shrink-0" />
+                            <span className="font-semibold text-green-600 dark:text-green-400">{job.salary} LPA</span>
+                        </div>
+                    )}
+                    {job.lastDate && (
+                        <div className="flex items-center gap-1.5 text-xs text-red-500 dark:text-red-400">
+                            <Clock className="w-3 h-3 flex-shrink-0" />
+                            <span>Apply by {job.lastDate}</span>
+                        </div>
+                    )}
+                </div>
 
-                        <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-3">
-                            Problem of{' '}
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-400 dark:to-pink-400">
-                                The Day
-                            </span>
-                        </h1>
-
-                        <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-                            Comment correct output of the given code reel to win exciting rewards!
-                        </p>
+                {/* Footer */}
+                <div className="flex items-center justify-between pt-3 border-t border-gray-100 dark:border-gray-800">
+                    <div className="flex items-center gap-1.5">
+                        <Zap className="w-3 h-3 text-yellow-500" fill="currentColor" />
+                        <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">
+                            {job.experience || 'Freshers Welcome'}
+                        </span>
+                    </div>
+                    <div className={`w-8 h-8 rounded-full bg-gradient-to-br ${g.card} flex items-center justify-center shadow-md group-hover:scale-110 transition-transform duration-300`}>
+                        <ArrowUpRight className="w-4 h-4 text-white" strokeWidth={2.5} />
                     </div>
                 </div>
             </div>
-
-            {/* Stats Bar */}
-            <div className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
-                <div className="container mx-auto px-4 py-8">
-                    <div className="flex flex-wrap justify-center gap-6">
-                        <div className="flex items-center gap-2">
-                            <Users className="w-5 h-5 text-purple-600 dark:text-purple-400" />
-                            <span className="text-lg font-medium text-gray-700 dark:text-gray-300">500+ Active Users</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <Award className="w-5 h-5 text-yellow-600 dark:text-yellow-400" />
-                            <span className="text-lg font-medium text-gray-700 dark:text-gray-300">Daily Rewards</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <Clock className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-                            <span className="text-lg font-medium text-gray-700 dark:text-gray-300">24h Challenge</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {/* Main Content */}
-            <div className="container mx-auto px-4 py-16">
-                <div className="max-w-6xl mx-auto">
-                    <div className="grid lg:grid-cols-2 gap-8 items-start">
-                        {/* Left - Info */}
-                        <div className="space-y-6">
-
-
-                            {/* Title */}
-                            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white leading-tight">
-                                {latestReel.title}
-                            </h2>
-
-                            {/* Description */}
-                            <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
-                                {latestReel.description}
-                            </p>
-
-                            {/* Engagement Stats */}
-                            <div className="grid grid-cols-3 gap-4">
-                                <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-4 hover:shadow-lg transition-shadow">
-                                    <div className="flex items-center gap-3">
-                                        <div className="p-3 bg-red-100 dark:bg-red-900/30 rounded-lg">
-                                            <Heart className="w-5 h-5 text-red-600 dark:text-red-400" />
-                                        </div>
-                                        <div>
-                                            <p className="text-2xl font-bold text-gray-900 dark:text-white">{likes}</p>
-                                            <p className="text-xs text-gray-600 dark:text-gray-400">Likes</p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-4 hover:shadow-lg transition-shadow">
-                                    <div className="flex items-center gap-3">
-                                        <div className="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
-                                            <MessageCircle className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-                                        </div>
-                                        <div>
-                                            <p className="text-2xl font-bold text-gray-900 dark:text-white">{comments.length}</p>
-                                            <p className="text-xs text-gray-600 dark:text-gray-400">Comments</p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-4 hover:shadow-lg transition-shadow">
-                                    <div className="flex items-center gap-3">
-                                        <div className="p-3 bg-green-100 dark:bg-green-900/30 rounded-lg">
-                                            <Eye className="w-5 h-5 text-green-600 dark:text-green-400" />
-                                        </div>
-                                        <div>
-                                            <p className="text-2xl font-bold text-gray-900 dark:text-white">1.2k</p>
-                                            <p className="text-xs text-gray-600 dark:text-gray-400">Views</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Action Buttons */}
-                            <div className="flex flex-wrap gap-3">
-                                <button
-                                    onClick={() => setShowModal(true)}
-                                    className="flex-1 min-w-[200px] flex items-center justify-center gap-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-6 py-3 rounded-xl font-semibold transition-all hover:shadow-lg"
-                                >
-                                    <Play className="w-5 h-5" fill="currentColor" />
-                                    Watch Now
-                                </button>
-
-                                <button
-                                    onClick={handleLike}
-                                    disabled={hasLiked}
-                                    className={`flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all border-2 ${hasLiked
-                                        ? 'bg-red-600 border-red-600 text-white cursor-not-allowed'
-                                        : 'border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
-                                        }`}
-                                >
-                                    <Heart className="w-5 h-5" fill={hasLiked ? "currentColor" : "none"} />
-                                    Like
-                                </button>
-
-                                <button
-                                    onClick={handleSave}
-                                    className={`flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all border-2 ${saved
-                                        ? 'bg-purple-600 border-purple-600 text-white'
-                                        : 'border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
-                                        }`}
-                                >
-                                    <Bookmark className="w-5 h-5" fill={saved ? "currentColor" : "none"} />
-                                    Save
-                                </button>
-
-                                <button
-                                    onClick={handleShare}
-                                    className="flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all border-2 border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
-                                >
-                                    <Share2 className="w-5 h-5" />
-                                    Share
-                                </button>
-                            </div>
-
-                            {/* Quick Links */}
-                            <div className="grid grid-cols-3 gap-4">
-                                <a href="/trending" className="group">
-                                    <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-4 hover:shadow-lg hover:border-purple-300 dark:hover:border-purple-700 transition-all text-center">
-                                        <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
-                                            <TrendingUp className="w-6 h-6 text-purple-600 dark:text-purple-400" />
-                                        </div>
-                                        <p className="text-sm font-semibold text-gray-900 dark:text-white">Trending</p>
-                                    </div>
-                                </a>
-
-                                <a href="/discussion" className="group">
-                                    <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-4 hover:shadow-lg hover:border-pink-300 dark:hover:border-pink-700 transition-all text-center">
-                                        <div className="w-12 h-12 bg-pink-100 dark:bg-pink-900/30 rounded-lg flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
-                                            <MessageCircle className="w-6 h-6 text-pink-600 dark:text-pink-400" />
-                                        </div>
-                                        <p className="text-sm font-semibold text-gray-900 dark:text-white">Discussion</p>
-                                    </div>
-                                </a>
-
-                                <a href="/support" className="group">
-                                    <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-4 hover:shadow-lg hover:border-blue-300 dark:hover:border-blue-700 transition-all text-center">
-                                        <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
-                                            <ThumbsUp className="w-6 h-6 text-blue-600 dark:text-blue-400" />
-                                        </div>
-                                        <p className="text-sm font-semibold text-gray-900 dark:text-white">Support</p>
-                                    </div>
-                                </a>
-                            </div>
-
-                            {/* More Button */}
-                            <button
-                                onClick={handleNavigateToReels}
-                                className="w-full flex items-center justify-center gap-4 text-lg px-3 py-4 bg-gradient-to-r from-green-600 to-blue-600 text-white rounded-xl font-semibold shadow-md group-hover:shadow-lg transition-all duration-300 transform group-hover:scale-105"
-                            >
-                                <BookOpen className="w-4 h-4" />
-                                View More Reels
-                            </button>
-                        </div>
-
-                        {/* Right - Video */}
-                        <div className="lg:sticky lg:top-4 ">
-                            <div
-                                className="relative group cursor-pointer rounded-2xl overflow-hidden bg-black dark:bg-black border border-gray-200 dark:border-gray-800 hover:shadow-2xl transition-all"
-                                onClick={() => setShowModal(true)}
-                            >
-                                <div className="aspect-[9/16] max-h-[560px]  mx-auto">
-                                    <video
-                                        className="w-full h-full object-cover"
-                                        loop
-                                        muted
-                                        playsInline
-                                    >
-                                        <source src={latestReel.fileUrl} type="video/mp4" />
-                                    </video>
-
-                                    {/* Play Overlay */}
-                                    <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-colors flex items-center justify-center">
-                                        <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center group-hover:scale-110 transition-transform shadow-xl">
-                                            <Play className="w-10 h-10 text-purple-600 ml-1" fill="currentColor" />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {/* Modal */}
-            {showModal && (
-                <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-                    <div className="w-full max-w-6xl h-[90vh] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl flex flex-col lg:flex-row overflow-hidden">
-                        {/* Close Button */}
-                        <button
-                            onClick={() => setShowModal(false)}
-                            className="absolute top-4 right-4 z-10 p-2 bg-gray-900/80 hover:bg-gray-900 text-white rounded-full transition-all"
-                        >
-                            <X className="w-6 h-6" />
-                        </button>
-
-                        {/* Video Section */}
-                        <div className="flex-1 bg-black flex items-center justify-center border border-gray-400 dark:border-gray-800 rounded-l-2xl">
-                            <video
-                                controls
-                                autoPlay
-                                loop
-                                className="w-full h-full object-contain"
-                            >
-                                <source src={latestReel.fileUrl} type="video/mp4" />
-                            </video>
-                        </div>
-
-                        {/* Comments Section */}
-                        <div className="w-full lg:w-[400px] flex flex-col bg-gray-50 dark:bg-gray-800">
-                            {/* Header */}
-                            <div className="p-5 border-b border-gray-200 dark:border-gray-700">
-                                <span className="inline-block bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 px-3 py-1 rounded-full text-xs font-semibold mb-3">
-                                    {latestReel.topic}
-                                </span>
-
-                                <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
-                                    {latestReel.title}
-                                </h2>
-
-                                <p className="text-sm text-gray-600 dark:text-gray-400">
-                                    {latestReel.description}
-                                </p>
-
-                                {/* Action Buttons */}
-                                <div className="flex gap-2 mt-4">
-                                    <button
-                                        onClick={handleLike}
-                                        disabled={hasLiked}
-                                        className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-sm transition-all ${hasLiked
-                                            ? 'bg-red-600 text-white'
-                                            : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
-                                            }`}
-                                    >
-                                        <Heart className="w-4 h-4" fill={hasLiked ? "currentColor" : "none"} />
-                                        {likes}
-                                    </button>
-
-                                    <button
-                                        onClick={handleShare}
-                                        className="flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-sm bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 transition-all"
-                                    >
-                                        <Share2 className="w-4 h-4" />
-                                        Share
-                                    </button>
-
-                                    <button
-                                        onClick={handleSave}
-                                        className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-sm transition-all ${saved
-                                            ? 'bg-purple-600 text-white'
-                                            : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
-                                            }`}
-                                    >
-                                        <Bookmark className="w-4 h-4" fill={saved ? "currentColor" : "none"} />
-                                    </button>
-                                </div>
-                            </div>
-
-                            {/* Comments List */}
-                            <div className="flex-1 overflow-y-auto p-5 space-y-4">
-                                <h3 className="font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                                    <MessageCircle className="w-5 h-5 text-purple-600 dark:text-purple-400" />
-                                    Comments ({comments.length})
-                                </h3>
-
-                                {comments.map((comment) => (
-                                    <div
-                                        key={comment.id}
-                                        className="bg-white dark:bg-gray-900 rounded-lg p-4 border border-gray-200 dark:border-gray-700"
-                                    >
-                                        <div className="flex items-start gap-3">
-                                            <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0">
-                                                {comment.userName.charAt(0).toUpperCase()}
-                                            </div>
-                                            <div className="flex-1 min-w-0">
-                                                <p className="font-semibold text-gray-900 dark:text-white text-sm">{comment.userName}</p>
-                                                <p className="text-gray-700 dark:text-gray-300 text-sm mt-1">{comment.text}</p>
-                                                <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-                                                    {new Date(comment.timestamp).toLocaleString()}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                ))}
-
-                                {comments.length === 0 && (
-                                    <div className="text-center py-12">
-                                        <MessageCircle className="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
-                                        <p className="text-gray-500 dark:text-gray-400">No comments yet</p>
-                                        <p className="text-sm text-gray-400 dark:text-gray-500">Be the first to comment!</p>
-                                    </div>
-                                )}
-                            </div>
-
-                            {/* Add Comment */}
-                            <div className="p-4 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
-                                <input
-                                    type="text"
-                                    placeholder="Your name"
-                                    value={userName}
-                                    onChange={(e) => setUserName(e.target.value)}
-                                    className="w-full px-4 py-2 mb-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm"
-                                />
-                                <div className="flex gap-2">
-                                    <input
-                                        type="text"
-                                        placeholder="Add a comment..."
-                                        value={newComment}
-                                        onChange={(e) => setNewComment(e.target.value)}
-                                        onKeyPress={(e) => e.key === 'Enter' && handleAddComment()}
-                                        className="flex-1 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm"
-                                    />
-                                    <button
-                                        onClick={handleAddComment}
-                                        disabled={!newComment.trim() || !userName.trim()}
-                                        className="bg-gradient-to-r from-purple-600 to-pink-600 text-white p-3 rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                                    >
-                                        <Send className="w-5 h-5" />
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
         </div>
     );
-}
+};
+
+/* ── Skeleton loader ── */
+const SkeletonCard = () => (
+    <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-5 animate-pulse">
+        <div className="flex items-start gap-3 mb-4">
+            <div className="w-12 h-12 rounded-xl bg-gray-200 dark:bg-gray-700 flex-shrink-0" />
+            <div className="flex-1 space-y-2 pt-1">
+                <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2" />
+                <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4" />
+            </div>
+        </div>
+        <div className="space-y-2 mb-4">
+            <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-full" />
+            <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-4/5" />
+        </div>
+        <div className="space-y-1.5 mb-4">
+            <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2" />
+            <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/3" />
+        </div>
+        <div className="h-px bg-gray-200 dark:bg-gray-700 mb-3" />
+        <div className="flex justify-between items-center">
+            <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/3" />
+            <div className="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-700" />
+        </div>
+    </div>
+);
+
+/* ── Main Hero Section ── */
+const JobsHeroSection = () => {
+    const navigate = useNavigate();
+    const [jobs, setJobs] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchJobs = async () => {
+            try {
+                const res = await axios.get(`${baseUrl}/job`);
+                const data = Array.isArray(res.data) ? res.data : [];
+                // Sort by id descending to get latest, take 8
+                const latest = [...data]
+                    .sort((a, b) => (b.id || 0) - (a.id || 0))
+                    .slice(0, 8);
+                setJobs(latest);
+            } catch (err) {
+                console.error('Failed to fetch jobs:', err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchJobs();
+    }, []);
+
+    const handleCardClick = (jobId) => {
+        window.scrollTo({ top: 0, behavior: 'instant' });
+        navigate(`/jobdetail/${jobId}`);
+    };
+
+    return (
+        <section className="relative py-16 md:py-24 bg-gray-50 dark:bg-gray-950 overflow-hidden">
+
+            {/* ── Background decorations ── */}
+            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-violet-500/5 dark:bg-violet-500/10 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-pink-500/5 dark:bg-pink-500/10 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-500/3 dark:bg-blue-500/5 rounded-full blur-3xl pointer-events-none" />
+
+            <div className="container mx-auto px-4 max-w-7xl relative">
+
+                {/* ── Section Header ── */}
+                <div className="text-center mb-12">
+                    {/* Pill badge */}
+                    <div className="inline-flex items-center gap-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 px-4 py-2 rounded-full text-sm font-semibold text-gray-600 dark:text-gray-400 shadow-sm mb-5">
+                        <Flame className="w-4 h-4 text-orange-500 animate-pulse" />
+                        <span>Latest Opportunities</span>
+                        <Sparkles className="w-4 h-4 text-yellow-500" />
+                    </div>
+
+                    <h2 className="text-3xl md:text-5xl font-black text-gray-900 dark:text-white mb-4 leading-tight">
+                        Fresh{' '}
+                        <span className="relative inline-block">
+                            <span className="bg-gradient-to-r from-violet-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+                                Job Openings
+                            </span>
+                            {/* Underline accent */}
+                            <span className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-violet-600 to-pink-600 rounded-full" />
+                        </span>
+                        {' '}for You
+                    </h2>
+
+                    <p className="text-gray-500 dark:text-gray-400 text-base md:text-lg max-w-2xl mx-auto">
+                        Handpicked off-campus drives, fresher jobs & internships — updated daily.
+                        Don't miss your next big opportunity.
+                    </p>
+
+                    {/* Live indicator */}
+                    <div className="flex items-center justify-center gap-2 mt-4">
+                        <span className="relative flex h-2.5 w-2.5">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
+                        </span>
+                        <span className="text-xs text-green-600 dark:text-green-400 font-semibold">Updated Today</span>
+                    </div>
+                </div>
+
+                {/* ── Jobs Grid ── */}
+                {loading ? (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 mb-12">
+                        {Array.from({ length: 8 }).map((_, i) => <SkeletonCard key={i} />)}
+                    </div>
+                ) : jobs.length > 0 ? (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 mb-12">
+                        {jobs.map((job, index) => (
+                            <JobCard
+                                key={job._id}
+                                job={job}
+                                index={index}
+                                onClick={() => handleCardClick(job._id)}
+                            />
+                        ))}
+                    </div>
+                ) : (
+                    <div className="text-center py-16">
+                        <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
+                            <Briefcase className="w-8 h-8 text-gray-400" />
+                        </div>
+                        <p className="text-gray-500 dark:text-gray-400">No jobs available right now. Check back soon!</p>
+                    </div>
+                )}
+
+                {/* ── Explore More Button ── */}
+                <div className="text-center">
+                    {/* Stats row */}
+                    <div className="flex items-center justify-center gap-6 mb-6">
+                        <div className="text-center">
+                            <p className="text-2xl font-black bg-gradient-to-r from-violet-600 to-pink-600 bg-clip-text text-transparent">100+</p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400 font-medium">Total Jobs</p>
+                        </div>
+                        <div className="w-px h-8 bg-gray-200 dark:bg-gray-700" />
+                        <div className="text-center">
+                            <p className="text-2xl font-black bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">Daily</p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400 font-medium">Updates</p>
+                        </div>
+                        <div className="w-px h-8 bg-gray-200 dark:bg-gray-700" />
+                        <div className="text-center">
+                            <p className="text-2xl font-black bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">Free</p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400 font-medium">Always</p>
+                        </div>
+                    </div>
+
+                    <button
+                        onClick={() => navigate('/techblog')}
+                        className="group inline-flex items-center gap-3 bg-gradient-to-r from-violet-600 via-purple-600 to-pink-600 text-white px-8 py-4 rounded-2xl font-bold text-base shadow-xl hover:shadow-2xl hover:shadow-purple-500/30 hover:scale-105 transition-all duration-300"
+                    >
+                        <span>Explore All Jobs</span>
+                        <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center group-hover:translate-x-1 transition-transform">
+                            <ChevronRight className="w-4 h-4" />
+                        </div>
+                    </button>
+
+                    <p className="text-xs text-gray-400 dark:text-gray-600 mt-3">
+                        No login required to browse jobs
+                    </p>
+                </div>
+            </div>
+
+            <style>{`
+                @keyframes fade-up {
+                    from { opacity: 0; transform: translateY(16px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+                .fade-up {
+                    animation: fade-up 0.5s ease-out forwards;
+                    opacity: 0;
+                }
+            `}</style>
+        </section>
+    );
+};
+
+export default JobsHeroSection;

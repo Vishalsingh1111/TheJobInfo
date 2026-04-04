@@ -5,7 +5,7 @@ import Footer from '../components/Footer';
 import Homepromo from './Homepromo';
 import Homecontentcard from './Homecontentcard';
 import PostCard from './PostCard';
-// import ReelCard from './ReelCard';
+import ReelCard from './ReelCard';
 
 
 function Home() {
@@ -14,7 +14,7 @@ function Home() {
             <Navbar />
             <Banner />
             <Homecontentcard />
-            {/* <ReelCard /> */}
+            <ReelCard />
             <PostCard />
             <Homepromo />
             <Footer />

@@ -721,7 +721,7 @@ const JobsHeroSection = () => {
                         <div className="group inline-block relative">
                             <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl blur-xl opacity-0 group-hover:opacity-40 transition-opacity duration-500" />
                             <button
-                                onClick={() => navigate('/techblog')}
+                                onClick={() => navigate('/Job-Portal')}
                                 className="relative flex items-center gap-2 px-8 py-3.5 bg-gradient-to-r from-purple-500 to-pink-600 text-white rounded-2xl font-semibold text-lg shadow-md hover:shadow-2xl transition-all duration-300 transform hover:scale-105 overflow-hidden"
                             >
                                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700" />

@@ -330,12 +330,10 @@
 //         </div>
 //     );
 // };
-
-
 import React from 'react';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
-import { Code2, BookOpen, Map, Briefcase, Users, Target, Zap, Heart, Github, Twitter, Linkedin, Mail } from 'lucide-react';
+import { Code2, BookOpen, Map, Briefcase, Users, Target, Zap, Heart, Mail } from 'lucide-react';
 
 const About = () => {
     const stats = [
@@ -382,114 +380,135 @@ const About = () => {
     return (
         <>
             <Navbar />
-            <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
+            <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900 pt-20">
 
-                {/* ── Hero ── */}
-                <div className="relative bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 overflow-hidden">
-                    {/* Decorative blobs */}
+                {/* Hero */}
+                <div className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border-b border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden relative">
                     <div className="absolute top-0 right-0 w-96 h-96 bg-purple-400/10 dark:bg-purple-600/10 rounded-full blur-3xl pointer-events-none" />
                     <div className="absolute bottom-0 left-0 w-72 h-72 bg-pink-400/10 dark:bg-pink-600/10 rounded-full blur-3xl pointer-events-none" />
-
-                    <div className="container mx-auto px-4 py-20 max-w-5xl relative text-center">
-                        <div className="inline-flex items-center gap-2 bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 px-4 py-2 rounded-full text-sm font-bold mb-6">
-                            <Code2 className="w-4 h-4" /> About Dcoder
+                    <div className="container mx-auto px-4 py-16 max-w-5xl relative text-center">
+                        {/* Badge — matches ResourceGrid badge */}
+                        <div className="flex justify-center mb-6">
+                            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-100 to-pink-100 dark:from-purple-900/30 dark:to-pink-900/30 backdrop-blur-xl px-6 py-3 rounded-full border-2 border-purple-200 dark:border-purple-700 shadow-lg">
+                                <Code2 className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+                                <span className="text-purple-700 dark:text-purple-300 font-semibold text-sm">About Dcoder</span>
+                            </div>
                         </div>
-                        <h1 className="text-4xl md:text-6xl font-black text-gray-900 dark:text-white mb-6 leading-tight">
+                        {/* Heading — matches ResourceGrid h1: text-4xl md:text-5xl font-bold */}
+                        <h1 className="text-4xl md:text-5xl lg:text-5xl font-bold text-gray-800 dark:text-gray-100 mb-4 leading-tight">
                             We help you go from{' '}
-                            <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                            <span className="bg-gradient-to-r from-red-500 to-pink-600 bg-clip-text text-transparent">
                                 learner to hired
                             </span>
                         </h1>
-                        <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed">
+                        {/* Subtitle — matches ResourceGrid subtitle: text-lg md:text-xl text-gray-600 dark:text-gray-300 */}
+                        <p className="text-gray-600 dark:text-gray-300 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed">
                             Dcoder is a full-stack coding education platform built for college students, freshers, and professionals
                             who want to master DSA, explore tech, and land their dream job — all in one place.
                         </p>
                     </div>
                 </div>
 
-                {/* ── Stats ── */}
-                <div className="container mx-auto px-4 py-12 max-w-5xl">
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        {stats.map((stat, i) => (
-                            <div key={i} className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-6 text-center shadow-sm">
-                                <p className="text-3xl md:text-4xl font-black bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-1">{stat.number}</p>
-                                <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">{stat.label}</p>
-                            </div>
-                        ))}
+                {/* Stats — matches ResourceGrid stats bar */}
+                <div className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border-b border-gray-200 dark:border-gray-800 py-6">
+                    <div className="container mx-auto px-4">
+                        <div className="flex flex-wrap justify-center gap-8 md:gap-16">
+                            {stats.map((stat, i) => (
+                                <div key={i} className="text-center group cursor-pointer">
+                                    {/* Stat value — matches ResourceGrid: text-3xl font-bold bg-gradient-to-r */}
+                                    <p className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-400 dark:to-pink-400 bg-clip-text text-transparent group-hover:scale-110 transition-transform">
+                                        {stat.number}
+                                    </p>
+                                    {/* Stat label — matches ResourceGrid: text-gray-600 dark:text-gray-400 text-sm */}
+                                    <p className="text-gray-600 dark:text-gray-400 text-sm">{stat.label}</p>
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </div>
 
-                {/* ── Our Story ── */}
-                <div className="container mx-auto px-4 py-8 max-w-5xl">
-                    <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 overflow-hidden shadow-sm">
+                {/* Our Story */}
+                <div className="container mx-auto px-4 py-10 max-w-5xl">
+                    <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl border border-gray-300 dark:border-gray-700 overflow-hidden shadow-lg">
                         <div className="bg-gradient-to-r from-purple-500 to-pink-500 px-8 py-5 text-white">
-                            <h2 className="text-2xl font-bold">Our Story</h2>
+                            {/* Section heading — font-bold text-lg matches ResourceCard section headers */}
+                            <h2 className="text-xl font-bold">Our Story</h2>
                         </div>
-                        <div className="p-8 space-y-4 text-gray-700 dark:text-gray-300 leading-relaxed">
-                            <p>
+                        <div className="p-8 space-y-4">
+                            {/* Body text — matches ResourceCard description: text-gray-600 dark:text-gray-300 text-sm leading-relaxed */}
+                            <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
                                 Dcoder was born from a simple frustration — quality coding education, job updates, and career guidance were scattered across dozens of platforms. Students had to juggle multiple websites just to prepare for placements.
                             </p>
-                            <p>
+                            <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
                                 We decided to fix that. We built Dcoder as a single destination where you can learn DSA from scratch, read technical blogs, follow structured roadmaps, and discover the latest job openings — all without switching tabs.
                             </p>
-                            <p>
+                            <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
                                 Today, Dcoder serves tens of thousands of learners across India — from first-year college students writing their first program to experienced developers looking to switch roles. Our Telegram community keeps everyone connected, motivated, and informed.
                             </p>
-                            <p className="font-semibold text-gray-900 dark:text-white">
+                            <p className="text-sm font-semibold text-gray-800 dark:text-gray-100 leading-relaxed">
                                 Our mission is simple: make world-class tech education accessible, focused, and free.
                             </p>
                         </div>
                     </div>
                 </div>
 
-                {/* ── What We Offer ── */}
-                <div className="container mx-auto px-4 py-8 max-w-5xl">
-                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 text-center">What We Offer</h2>
+                {/* What We Offer */}
+                <div className="container mx-auto px-4 py-4 max-w-5xl">
+                    {/* Section title — matches ResourceGrid heading style */}
+                    <h2 className="text-4xl md:text-5xl font-bold text-gray-800 dark:text-gray-100 mb-6 text-center">
+                        What We <span className="bg-gradient-to-r from-red-500 to-pink-600 bg-clip-text text-transparent">Offer</span>
+                    </h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                         {offerings.map((item, i) => (
-                            <div key={i} className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 overflow-hidden shadow-sm group hover:shadow-md transition-shadow">
+                            <div key={i} className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl border border-gray-300 dark:border-gray-700 overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
                                 <div className={`bg-gradient-to-r ${item.color} p-5 text-white flex items-center gap-3`}>
                                     {item.icon}
-                                    <h3 className="font-bold text-lg">{item.title}</h3>
+                                    {/* Card title — matches ResourceCard h2: text-xl font-bold */}
+                                    <h3 className="text-xl font-bold">{item.title}</h3>
                                 </div>
-                                <p className="p-5 text-sm text-gray-600 dark:text-gray-400 leading-relaxed">{item.desc}</p>
+                                {/* Card body — matches ResourceCard p: text-gray-600 dark:text-gray-300 text-sm leading-relaxed */}
+                                <p className="p-5 text-sm text-gray-600 dark:text-gray-300 leading-relaxed">{item.desc}</p>
                             </div>
                         ))}
                     </div>
                 </div>
 
-                {/* ── Values ── */}
-                <div className="container mx-auto px-4 py-8 max-w-5xl">
-                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 text-center">What We Stand For</h2>
+                {/* Values */}
+                <div className="container mx-auto px-4 py-10 max-w-5xl">
+                    <h2 className="text-4xl md:text-5xl font-bold text-gray-800 dark:text-gray-100 mb-6 text-center">
+                        What We <span className="bg-gradient-to-r from-red-500 to-pink-600 bg-clip-text text-transparent">Stand For</span>
+                    </h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {values.map((v, i) => (
-                            <div key={i} className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-5 flex items-start gap-4 shadow-sm">
+                            <div key={i} className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl border border-gray-300 dark:border-gray-700 p-5 flex items-start gap-4 shadow-lg">
                                 <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white flex-shrink-0">
                                     {v.icon}
                                 </div>
                                 <div>
-                                    <h3 className="font-bold text-gray-900 dark:text-white mb-1">{v.title}</h3>
-                                    <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">{v.desc}</p>
+                                    {/* Value title — font-bold text-gray-800 dark:text-gray-100 */}
+                                    <h3 className="font-bold text-gray-800 dark:text-gray-100 mb-1">{v.title}</h3>
+                                    {/* Value desc — text-sm text-gray-600 dark:text-gray-300 */}
+                                    <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">{v.desc}</p>
                                 </div>
                             </div>
                         ))}
                     </div>
                 </div>
 
-                {/* ── Contact / CTA ── */}
-                <div className="container mx-auto px-4 py-12 max-w-5xl">
+                {/* CTA */}
+                <div className="container mx-auto px-4 py-10 max-w-5xl">
                     <div className="rounded-2xl overflow-hidden shadow-xl">
                         <div className="bg-gradient-to-r from-purple-600 to-pink-600 p-10 text-center text-white">
-                            <h3 className="text-2xl font-bold mb-2">Get in Touch</h3>
-                            <p className="text-purple-100 mb-6 text-sm max-w-xl mx-auto">
-                                Have a question, suggestion, or want to collaborate? We'd love to hear from you. Reach out via any of the channels below.
+                            <h3 className="text-xl font-bold mb-2">Get in Touch</h3>
+                            <p className="text-purple-100 mb-6 text-sm max-w-xl mx-auto leading-relaxed">
+                                Have a question, suggestion, or want to collaborate? We'd love to hear from you.
                             </p>
                             <div className="flex items-center justify-center gap-4 flex-wrap">
                                 <a href="https://t.me/dcoder21575" target="_blank" rel="noreferrer"
                                     className="flex items-center gap-2 bg-white/20 hover:bg-white/30 text-white px-5 py-2.5 rounded-xl font-semibold text-sm transition-all hover:scale-105">
                                     <Mail className="w-4 h-4" /> Telegram
                                 </a>
-                                <a href="mailto:contact@dcoder.in"
+                                <a href="mailto:dcodermail1@gmail.com"
                                     className="flex items-center gap-2 bg-white text-purple-600 px-5 py-2.5 rounded-xl font-semibold text-sm transition-all hover:scale-105 shadow-lg">
                                     <Mail className="w-4 h-4" /> Email Us
                                 </a>

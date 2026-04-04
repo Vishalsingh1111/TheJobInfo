@@ -136,7 +136,7 @@ const App = () => {
           {/* <Route path="/Login" element={<LoginPage />} /> */}
           <Route path="/Forgetpassword" element={<Forgetpassword />} />
           <Route path='/Pagenotfound' element={<Pagenotfound />} />
-          <Route path='/Technical-Blog' element={<Technicalblog />} />
+          <Route path='/Job-Portal' element={<Technicalblog />} />
           <Route path='/Post' element={<ContestSol />} />
           <Route path='/CS-Fundamental' element={<CSPage />} />
           <Route path='/DSA' element={<DSA />} />

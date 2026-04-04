@@ -118,9 +118,7 @@ function Footer() {
                                 {[
                                     { name: 'SDE Sheet', link: '/Sheet' },
                                     { name: 'CS Fundamental', link: '/CS-Fundamental' },
-                                    { name: 'Project Ideas', link: '/Project' },
-                                    { name: 'Jobs', link: '/Technical-Blog' },
-                                    { name: 'Contest Solutions', link: '/Contest-Solution' }
+                                    { name: 'Jobs', link: '/Job-Portal' },
                                 ].map((item, index) => (
                                     <li key={index}>
                                         <a
@@ -147,7 +145,6 @@ function Footer() {
                                     { name: 'Contact', link: '/Contact' },
                                     { name: 'Terms of Use', link: '/terms' },
                                     { name: 'Privacy Policy', link: '/privacy' },
-                                    { name: 'Careers', link: '/careers' }
                                 ].map((item, index) => (
                                     <li key={index}>
                                         <a

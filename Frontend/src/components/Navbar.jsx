@@ -478,14 +478,14 @@ const Navbar = () => {
                 { name: 'CS FUNDAMENTAL', href: '/CS-Fundamental', icon: <BookOpen className="w-4 h-4" /> },
             ]
         },
-        { name: 'JOBS', href: '/Technical-Blog' },
-        {
-            name: 'MORE',
-            icon: <Layers className="w-4 h-4" />,
-            dropdown: [
-                { name: 'CONTEST SOLUTION', href: '/Contest-Solution', icon: <Trophy className="w-4 h-4" /> },
-            ]
-        },
+        { name: 'JOBS', href: '/Job-Portal' },
+        // {
+        //     name: 'MORE',
+        //     icon: <Layers className="w-4 h-4" />,
+        //     dropdown: [
+        //         { name: 'CONTEST SOLUTION', href: '/Contest-Solution', icon: <Trophy className="w-4 h-4" /> },
+        //     ]
+        // },
     ];
 
     return (

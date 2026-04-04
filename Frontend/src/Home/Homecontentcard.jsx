@@ -245,11 +245,11 @@ const resources = [
         bgGradient: "from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20"
     },
     {
-        title: "Problems Solutions",
-        description: "Dive Deep into Tech Innovation with Our Amazing Solution.",
+        title: "Jobs/Internship",
+        description: "Get Jobs and Internships, also get certifications posts ",
         buttonText: "Try it free",
         icon: "💡",
-        link: "/Technical-Blog",
+        link: "/Job-Portal",
         tag: "Top Rated",
         tagColor: "from-yellow-500 to-orange-500",
         bgGradient: "from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20"

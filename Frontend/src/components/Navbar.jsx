@@ -573,9 +573,9 @@ const Navbar = () => {
                         </button>
 
                         {/* TechAI Card */}
-                        <div className="hidden sm:block">
+                        {/* <div className="hidden sm:block">
                             <TechAICard />
-                        </div>
+                        </div> */}
 
                         {/* Auth Section */}
                         {/* {authUser ? (

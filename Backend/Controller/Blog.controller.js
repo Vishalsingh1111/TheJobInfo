@@ -1,96 +1,218 @@
-// import Blog from "../Modal/Blog.modal.js";
+// // import Blog from "../Modal/Blog.modal.js";
 
-// export const getBlog = async (req, res) => {
+// // export const getBlog = async (req, res) => {
+// //     try {
+// //         const blog = await Blog.find();
+// //         res.status(200).json(blog);
+// //     } catch (error) {
+// //         console.log("Error", error);
+// //         res.status(500).json(error);
+// //     }
+// // };
+
+// // export const createBlog = async (req, res) => {
+// //     try {
+// //         const { id, header, code, image, code2, explanation2, code3, explanation3, explanation, category } = req.body;
+// //         const newBlog = new Blog({
+// //             id,
+// //             header,
+// //             code,
+// //             explanation,
+// //             code2,
+// //             explanation2,
+// //             code3,
+// //             explanation3,
+// //             category,
+// //             image,
+// //         });
+// //         await newBlog.save();
+// //         res.status(201).json({ message: "Created successfully" });
+// //     } catch (error) {
+// //         console.error("Error creating note:", error);
+// //         res.status(500).json({ error: "Error creating note" });
+// //     }
+// // };
+
+// // // Update a note by ID
+// // export const updateBlog = async (req, res) => {
+// //     const { id } = req.params;
+// //     const { header, code, explanation, code2, explanation2, code3, explanation3, image, category } = req.body;
+
+// //     try {
+// //         const updatedBlog = await Blog.findByIdAndUpdate(
+// //             id,
+// //             { header, code, explanation, code2, explanation2, code3, explanation3, image, category },
+// //             { new: true }
+// //         );
+
+// //         if (!updatedBlog) {
+// //             return res.status(404).json({ error: "Note not found" });
+// //         }
+
+// //         res.status(200).json({ message: "Updated successfully", updatedBlog });
+// //     } catch (error) {
+// //         console.error("Error updating note:", error);
+// //         res.status(500).json({ error: "Error updating note" });
+// //     }
+// // };
+
+// // export const deleteBlog = async (req, res) => {
+// //     const { id } = req.params;
+
+// //     try {
+// //         // Validate if the ID is valid
+// //         if (!id) {
+// //             return res.status(400).json({ error: "Invalid ID" });
+// //         }
+
+// //         const deletedBlog = await Blog.findByIdAndDelete(id);
+
+// //         if (!deletedBlog) {
+// //             return res.status(404).json({ error: "Note not found" });
+// //         }
+
+// //         res.status(200).json({ message: "Deleted successfully" });
+// //     } catch (error) {
+// //         console.error("Error deleting note:", error);
+// //         res.status(500).json({ error: "Error deleting note" });
+// //     }
+// // };
+
+
+// import Job from "../Modal/Blog.modal.js";
+
+// export const getJob = async (req, res) => {
 //     try {
-//         const blog = await Blog.find();
-//         res.status(200).json(blog);
+//         const jobs = await Job.find().sort({ id: -1 });
+//         res.status(200).json(jobs);
 //     } catch (error) {
 //         console.log("Error", error);
 //         res.status(500).json(error);
 //     }
 // };
 
-// export const createBlog = async (req, res) => {
+// export const createJob = async (req, res) => {
 //     try {
-//         const { id, header, code, image, code2, explanation2, code3, explanation3, explanation, category } = req.body;
-//         const newBlog = new Blog({
-//             id,
-//             header,
-//             code,
-//             explanation,
-//             code2,
-//             explanation2,
-//             code3,
-//             explanation3,
-//             category,
-//             image,
+//         const {
+//             id, title, company, location, salary, salaryNote, jobType, experience,
+//             category, website, applyLink, lastDate, aboutCompany, description,
+//             responsibilities, eligibility, requiredSkills, applyIf, dontApplyIf,
+//             selectionProcess, benefits, applySteps
+//         } = req.body;
+
+//         const newJob = new Job({
+//             id, title, company, location, salary, salaryNote, jobType, experience,
+//             category, website, applyLink, lastDate, aboutCompany, description,
+//             responsibilities, eligibility, requiredSkills, applyIf, dontApplyIf,
+//             selectionProcess, benefits, applySteps
 //         });
-//         await newBlog.save();
+
+//         await newJob.save();
 //         res.status(201).json({ message: "Created successfully" });
 //     } catch (error) {
-//         console.error("Error creating note:", error);
-//         res.status(500).json({ error: "Error creating note" });
+//         console.error("Error creating job:", error);
+//         res.status(500).json({ error: "Error creating job" });
 //     }
 // };
 
-// // Update a note by ID
-// export const updateBlog = async (req, res) => {
+// export const updateJob = async (req, res) => {
 //     const { id } = req.params;
-//     const { header, code, explanation, code2, explanation2, code3, explanation3, image, category } = req.body;
+//     const {
+//         title, company, location, salary, salaryNote, jobType, experience,
+//         category, website, applyLink, lastDate, aboutCompany, description,
+//         responsibilities, eligibility, requiredSkills, applyIf, dontApplyIf,
+//         selectionProcess, benefits, applySteps
+//     } = req.body;
 
 //     try {
-//         const updatedBlog = await Blog.findByIdAndUpdate(
+//         const updatedJob = await Job.findByIdAndUpdate(
 //             id,
-//             { header, code, explanation, code2, explanation2, code3, explanation3, image, category },
+//             {
+//                 title, company, location, salary, salaryNote, jobType, experience,
+//                 category, website, applyLink, lastDate, aboutCompany, description,
+//                 responsibilities, eligibility, requiredSkills, applyIf, dontApplyIf,
+//                 selectionProcess, benefits, applySteps
+//             },
 //             { new: true }
 //         );
 
-//         if (!updatedBlog) {
-//             return res.status(404).json({ error: "Note not found" });
+//         if (!updatedJob) {
+//             return res.status(404).json({ error: "Job not found" });
 //         }
 
-//         res.status(200).json({ message: "Updated successfully", updatedBlog });
+//         res.status(200).json({ message: "Updated successfully", updatedJob });
 //     } catch (error) {
-//         console.error("Error updating note:", error);
-//         res.status(500).json({ error: "Error updating note" });
+//         console.error("Error updating job:", error);
+//         res.status(500).json({ error: "Error updating job" });
 //     }
 // };
 
-// export const deleteBlog = async (req, res) => {
+// export const deleteJob = async (req, res) => {
 //     const { id } = req.params;
 
 //     try {
-//         // Validate if the ID is valid
 //         if (!id) {
 //             return res.status(400).json({ error: "Invalid ID" });
 //         }
 
-//         const deletedBlog = await Blog.findByIdAndDelete(id);
+//         const deletedJob = await Job.findByIdAndDelete(id);
 
-//         if (!deletedBlog) {
-//             return res.status(404).json({ error: "Note not found" });
+//         if (!deletedJob) {
+//             return res.status(404).json({ error: "Job not found" });
 //         }
 
 //         res.status(200).json({ message: "Deleted successfully" });
 //     } catch (error) {
-//         console.error("Error deleting note:", error);
-//         res.status(500).json({ error: "Error deleting note" });
+//         console.error("Error deleting job:", error);
+//         res.status(500).json({ error: "Error deleting job" });
 //     }
 // };
 
-
 import Job from "../Modal/Blog.modal.js";
+import cloudinary from "../config/cloudinary.config.js";
 
+// ── Helper: upload buffer to Cloudinary ───────────────────────────────────────
+const uploadToCloudinary = (buffer, originalname) => {
+    return new Promise((resolve, reject) => {
+        const publicId = `jobs/${Date.now()}-${originalname.replace(/\.[^/.]+$/, '')}`;
+        const stream = cloudinary.uploader.upload_stream(
+            {
+                folder: 'jobs',
+                public_id: publicId,
+                resource_type: 'image',
+                transformation: [{ width: 800, height: 450, crop: 'fill', quality: 'auto' }],
+            },
+            (error, result) => {
+                if (error) return reject(error);
+                resolve(result);
+            }
+        );
+        stream.end(buffer);
+    });
+};
+
+// ── Helper: delete image from Cloudinary ─────────────────────────────────────
+const deleteFromCloudinary = async (publicId) => {
+    if (!publicId) return;
+    try {
+        await cloudinary.uploader.destroy(publicId);
+    } catch (err) {
+        console.error('Cloudinary delete error:', err);
+    }
+};
+
+// ── GET all jobs ──────────────────────────────────────────────────────────────
 export const getJob = async (req, res) => {
     try {
         const jobs = await Job.find().sort({ id: -1 });
         res.status(200).json(jobs);
     } catch (error) {
-        console.log("Error", error);
-        res.status(500).json(error);
+        console.error("Error fetching jobs:", error);
+        res.status(500).json({ error: "Error fetching jobs" });
     }
 };
 
+// ── POST create job (with optional image) ─────────────────────────────────────
 export const createJob = async (req, res) => {
     try {
         const {
@@ -100,21 +222,34 @@ export const createJob = async (req, res) => {
             selectionProcess, benefits, applySteps
         } = req.body;
 
+        let imageUrl = '';
+        let imagePublicId = '';
+
+        // If an image file was uploaded via multer (req.file)
+        if (req.file) {
+            const result = await uploadToCloudinary(req.file.buffer, req.file.originalname);
+            imageUrl = result.secure_url;
+            imagePublicId = result.public_id;
+        }
+
         const newJob = new Job({
             id, title, company, location, salary, salaryNote, jobType, experience,
             category, website, applyLink, lastDate, aboutCompany, description,
             responsibilities, eligibility, requiredSkills, applyIf, dontApplyIf,
-            selectionProcess, benefits, applySteps
+            selectionProcess, benefits, applySteps,
+            imageUrl,
+            imagePublicId,
         });
 
         await newJob.save();
-        res.status(201).json({ message: "Created successfully" });
+        res.status(201).json({ message: "Created successfully", job: newJob });
     } catch (error) {
         console.error("Error creating job:", error);
         res.status(500).json({ error: "Error creating job" });
     }
 };
 
+// ── PUT update job (with optional new image) ──────────────────────────────────
 export const updateJob = async (req, res) => {
     const { id } = req.params;
     const {
@@ -125,20 +260,37 @@ export const updateJob = async (req, res) => {
     } = req.body;
 
     try {
+        const existingJob = await Job.findById(id);
+        if (!existingJob) {
+            return res.status(404).json({ error: "Job not found" });
+        }
+
+        let imageUrl = existingJob.imageUrl;
+        let imagePublicId = existingJob.imagePublicId;
+
+        // If a new image file was uploaded, replace the old one
+        if (req.file) {
+            // Delete old image from Cloudinary
+            if (existingJob.imagePublicId) {
+                await deleteFromCloudinary(existingJob.imagePublicId);
+            }
+            const result = await uploadToCloudinary(req.file.buffer, req.file.originalname);
+            imageUrl = result.secure_url;
+            imagePublicId = result.public_id;
+        }
+
         const updatedJob = await Job.findByIdAndUpdate(
             id,
             {
                 title, company, location, salary, salaryNote, jobType, experience,
                 category, website, applyLink, lastDate, aboutCompany, description,
                 responsibilities, eligibility, requiredSkills, applyIf, dontApplyIf,
-                selectionProcess, benefits, applySteps
+                selectionProcess, benefits, applySteps,
+                imageUrl,
+                imagePublicId,
             },
             { new: true }
         );
-
-        if (!updatedJob) {
-            return res.status(404).json({ error: "Job not found" });
-        }
 
         res.status(200).json({ message: "Updated successfully", updatedJob });
     } catch (error) {
@@ -147,20 +299,22 @@ export const updateJob = async (req, res) => {
     }
 };
 
+// ── DELETE job (also removes image from Cloudinary) ──────────────────────────
 export const deleteJob = async (req, res) => {
     const { id } = req.params;
 
     try {
-        if (!id) {
-            return res.status(400).json({ error: "Invalid ID" });
+        if (!id) return res.status(400).json({ error: "Invalid ID" });
+
+        const job = await Job.findById(id);
+        if (!job) return res.status(404).json({ error: "Job not found" });
+
+        // Delete image from Cloudinary before removing DB record
+        if (job.imagePublicId) {
+            await deleteFromCloudinary(job.imagePublicId);
         }
 
-        const deletedJob = await Job.findByIdAndDelete(id);
-
-        if (!deletedJob) {
-            return res.status(404).json({ error: "Job not found" });
-        }
-
+        await Job.findByIdAndDelete(id);
         res.status(200).json({ message: "Deleted successfully" });
     } catch (error) {
         console.error("Error deleting job:", error);

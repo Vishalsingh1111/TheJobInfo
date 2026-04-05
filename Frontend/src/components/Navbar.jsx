@@ -461,18 +461,18 @@ const Navbar = () => {
 
     const navLinks = [
         { name: 'HOME', href: '/' },
-        {
-            name: 'DSA SHEET',
-            icon: <Code className="w-4 h-4" />,
-            dropdown: [
-                { name: 'NEW UPDATED SHEET', href: '/New-Updated-Sheet', icon: <BookOpen className="w-4 h-4" /> },
-                { name: 'COMPANY WISE SHEET', href: '/Company-Wise-Sheet', icon: <Layers className="w-4 h-4" /> },
-                { name: 'TOP 50 DSA PROBLEMS', href: '/Top-50', icon: <Trophy className="w-4 h-4" /> },
-            ]
-        },
+        // {
+        //     name: 'DSA SHEET',
+        //     icon: <Code className="w-4 h-4" />,
+        //     dropdown: [
+        //         { name: 'NEW UPDATED SHEET', href: '/New-Updated-Sheet', icon: <BookOpen className="w-4 h-4" /> },
+        //         { name: 'COMPANY WISE SHEET', href: '/Company-Wise-Sheet', icon: <Layers className="w-4 h-4" /> },
+        //         { name: 'TOP 50 DSA PROBLEMS', href: '/Top-50', icon: <Trophy className="w-4 h-4" /> },
+        //     ]
+        // },
         {
             name: 'NOTES',
-            icon: <FileText className="w-4 h-4" />,
+            // icon: <FileText className="w-4 h-4" />,
             dropdown: [
                 { name: 'PROGRAMMING LANGUAGE', href: '/Languages', icon: <Code className="w-4 h-4" /> },
                 { name: 'CS FUNDAMENTAL', href: '/CS-Fundamental', icon: <BookOpen className="w-4 h-4" /> },
@@ -486,6 +486,8 @@ const Navbar = () => {
         //         { name: 'CONTEST SOLUTION', href: '/Contest-Solution', icon: <Trophy className="w-4 h-4" /> },
         //     ]
         // },
+        { name: 'ABOUT', href: '/About' },
+        { name: 'CONTACT', href: '/Contact' },
     ];
 
     return (

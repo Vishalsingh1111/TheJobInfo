@@ -389,7 +389,7 @@ function Footer() {
                                     <div className="bg-red-500/10 p-2 rounded-lg">
                                         <Globe className="w-4 h-4 text-red-500" />
                                     </div>
-                                    <span>https://dcoder-7vi1.onrender.com/</span>
+                                    <span>https://dcoder-7vi1.onrender.com</span>
                                 </div>
                             </div>
                         </div>
@@ -402,7 +402,7 @@ function Footer() {
                             </h3>
                             <ul className="space-y-3">
                                 {[
-                                    { name: 'SDE Sheet', link: '/Sheet' },
+
                                     { name: 'CS Fundamental', link: '/CS-Fundamental' },
                                     { name: 'Jobs', link: '/Job-Portal' },
                                 ].map((item, index) => (

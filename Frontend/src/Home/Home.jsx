@@ -3,7 +3,7 @@ import Navbar from '../components/Navbar';
 import Banner from './Banner';
 import Footer from '../components/Footer';
 import Homepromo from './Homepromo';
-import Homecontentcard from './Homecontentcard';
+// import Homecontentcard from './Homecontentcard';
 import PostCard from './PostCard';
 import ReelCard from './ReelCard';
 
@@ -13,7 +13,7 @@ function Home() {
         <>
             <Navbar />
             <Banner />
-            <Homecontentcard />
+            {/* <Homecontentcard /> */}
             <ReelCard />
             <PostCard />
             <Homepromo />

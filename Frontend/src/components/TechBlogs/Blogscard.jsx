@@ -305,19 +305,9 @@ const Jobcard = ({ item, onClick, index }) => {
                         {/* Icon / Image with Unique Position */}
                         <div className="mb-4 flex items-start justify-between">
                             <div className={`relative w-16 h-16 rounded-2xl overflow-hidden bg-gradient-to-br ${gradient} p-0.5 group-hover:scale-110 transition-transform duration-300 flex-shrink-0`}>
-                                {item.imageUrl && !imgError ? (
-                                    <img
-                                        src={item.imageUrl}
-                                        alt={item.company}
-                                        className="w-full h-full object-cover rounded-2xl"
-                                        onError={() => setImgError(true)}
-                                    />
-                                ) : (
-                                    <div className="w-full h-full bg-white dark:bg-gray-900 rounded-2xl flex items-center justify-center">
-                                        <Briefcase className={`w-8 h-8`} strokeWidth={2.5} style={{ color: 'transparent', background: `var(--tw-gradient-from, #6366f1)` }} />
-                                        <Briefcase className="w-7 h-7 text-gray-400 dark:text-gray-500" strokeWidth={2} />
-                                    </div>
-                                )}
+                                <div className="w-full h-full bg-transparentrounded-2xl flex items-center justify-center">
+                                    <Briefcase className="w-7 h-7 text-gray-100" strokeWidth={2} />
+                                </div>
                             </div>
 
                             {/* Job Number */}

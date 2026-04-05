@@ -1732,16 +1732,7 @@ const JobDetail = () => {
                             </a>
                         </div>
 
-                        {/* ── Job Image Banner (shown below hero if image exists) ── */}
-                        {item.imageUrl && (
-                            <div className="mt-5 rounded-2xl overflow-hidden shadow-lg max-h-64 md:max-h-80">
-                                <img
-                                    src={item.imageUrl}
-                                    alt={`${item.company} - ${item.title}`}
-                                    className="w-full h-full object-cover object-center"
-                                />
-                            </div>
-                        )}
+
 
                         {/* Meta chips */}
                         <div className="flex flex-wrap gap-2 mt-4">
@@ -1775,6 +1766,18 @@ const JobDetail = () => {
 
                         {/* ── LEFT / MAIN (8 cols) ── */}
                         <div className="lg:col-span-8 space-y-6">
+
+                            {/* ── Job Image Banner (shown below hero if image exists) ── */}
+                            {item.imageUrl && (
+                                <div className="mt-5 rounded-2xl shadow-lg flex justify-center overflow-visible">
+                                    <img
+                                        src={item.imageUrl}
+                                        alt={`${item.company} - ${item.title}`}
+                                        className="h-auto object-contain"
+                                        style={{ maxWidth: "none" }}
+                                    />
+                                </div>
+                            )}
 
                             {/* 1. About Company & Overview */}
                             <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 overflow-hidden shadow-sm">

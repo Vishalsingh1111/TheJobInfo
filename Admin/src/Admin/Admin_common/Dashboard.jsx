@@ -237,10 +237,10 @@ function AdminDashboard() {
         },
         {
             id: 'blogs',
-            label: 'Tech Blogs',
+            label: 'Jobs',
             icon: Bookmark,
             children: [
-                { label: 'Blog Management', action: () => setSelectedContent('TechBlog') }
+                { label: 'JobManagement', action: () => setSelectedContent('TechBlog') }
             ]
         },
         {
@@ -496,7 +496,7 @@ function AdminDashboard() {
                             { value: stats.users.total, label: 'Users', icon: Users },
                             { value: stats.sdeProblems.total, label: 'SDE Problems', icon: Code },
                             { value: stats.sheets.total, label: 'Sheets', icon: Package },
-                            { value: stats.blogs.total, label: 'Blogs', icon: FileText },
+                            { value: stats.blogs.total, label: 'Jobs', icon: FileText },
                             { value: stats.languages.cards, label: 'Lang Cards', icon: BookOpen },
                             { value: stats.instaPosts.total, label: 'Insta Posts', icon: ImageIcon }
                         ].map((item, idx) => {

@@ -83,7 +83,7 @@ function Footer() {
                                     <h1 className='text-2xl font-bold bg-gradient-to-r from-red-500 to-pink-600 bg-clip-text text-transparent'>
                                         DCODER
                                     </h1>
-                                    <p className='text-sm text-gray-400'>Interview Prep Hub</p>
+                                    <p className='text-sm text-gray-400'>Job & Interview Prep Hub</p>
                                 </div>
                             </div>
 
@@ -97,13 +97,13 @@ function Footer() {
                                     <div className="bg-red-500/10 p-2 rounded-lg">
                                         <Mail className="w-4 h-4 text-red-500" />
                                     </div>
-                                    <span>support@dcoder.com</span>
+                                    <span>dcodermail1@gmail.com</span>
                                 </div>
                                 <div className="flex items-center gap-3 text-sm">
                                     <div className="bg-red-500/10 p-2 rounded-lg">
                                         <Globe className="w-4 h-4 text-red-500" />
                                     </div>
-                                    <span>www.dcoder.com</span>
+                                    <span>https://dcoder-7vi1.onrender.com/</span>
                                 </div>
                             </div>
                         </div>
@@ -215,7 +215,7 @@ function Footer() {
                         {/* Copyright */}
                         <div className="text-center md:text-left">
                             <p className="text-gray-400 text-md">
-                                © 2025 <span className="text-white font-semibold">DCODER</span> All rights reserved.
+                                © 2026 <span className="text-white font-semibold">DCODER</span> All rights reserved.
                             </p>
                             <p className="text-gray-500 text-sm mt-1">
                                 Made with ❤️ for aspiring developers

@@ -56,7 +56,7 @@ function Banner() {
 
                 {/* CTA Buttons */}
                 <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12 animate-slide-up">
-                    <a href="#homecontentcard">
+                    <a href="/">
                         <button className="group bg-gradient-to-r from-red-500 to-pink-600 dark:from-red-500 dark:to-pink-600 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-2xl text-base sm:text-lg font-bold shadow-xl hover:shadow-2xl hover:shadow-red-500/50 dark:hover:shadow-pink-500/50 hover:scale-105 transition-all duration-300 flex items-center gap-3">
                             Get Started
                             <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 group-hover:translate-x-1 transition-transform" />

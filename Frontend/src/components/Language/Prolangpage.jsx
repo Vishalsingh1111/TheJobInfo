@@ -341,14 +341,14 @@ function Content() {
                         </div>
 
                         {/* Show More Button */}
-                        {filteredNotes.length > 0 && (
+                        {/* {filteredNotes.length > 0 && (
                             <div className="text-center mb-16">
                                 <button className="group inline-flex items-center gap-3 bg-gradient-to-r from-red-500 via-pink-500 to-purple-600 text-white px-10 py-5 rounded-2xl font-bold text-lg shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300">
                                     Show More Resources
                                     <TrendingUp className="w-6 h-6 group-hover:translate-y-[-2px] transition-transform" />
                                 </button>
                             </div>
-                        )}
+                        )} */}
                     </>
                 )}
             </div>

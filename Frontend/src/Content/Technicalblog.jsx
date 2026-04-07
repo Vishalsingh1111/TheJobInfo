@@ -1,7 +1,7 @@
 import React from 'react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
-import Techblog from '../components/TechBlogs/Techblog'
+import Techblog from '../components/Jobs/Jobblog'
 
 
 function Technicalblog() {

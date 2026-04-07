@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { ArrowRight, Sparkles, Zap } from 'lucide-react';
-import SearchForm from '../components/Common/Searchbar';
 
 function Banner() {
     return (

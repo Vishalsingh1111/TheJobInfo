@@ -3,8 +3,6 @@ import Navbar from '../components/Navbar';
 import Banner from './Banner';
 import Footer from '../components/Footer';
 import Homepromo from './Homepromo';
-// import Homecontentcard from './Homecontentcard';
-import PostCard from './PostCard';
 import ReelCard from './ReelCard';
 
 
@@ -15,7 +13,6 @@ function Home() {
             <Banner />
             {/* <Homecontentcard /> */}
             <ReelCard />
-            <PostCard />
             <Homepromo />
             <Footer />
         </>

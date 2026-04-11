@@ -11,14 +11,9 @@ import { fileURLToPath } from "url";
 
 // Route imports
 import jobRoutes from "./Route/Job.route.js";
-import userRoute from "./Route/User.route.js";
 import contactRoute from "./Route/Contact.route.js";
 import AdminRoute from "./Route/Admin.route.js";
 import newslatterRoute from './Route/Newslatter.route.js';
-
-
-// Controller imports
-import { googleLogin, googleCallback, googleCallbackRedirect } from './Controller/Googleuser.controller.js';
 
 
 
@@ -66,9 +61,6 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Google OAuth routes
-app.get("/auth/google", googleLogin);
-app.get("/auth/google/callback", googleCallback, googleCallbackRedirect);
 
 // Health check endpoint
 app.get('/health', (req, res) => {
@@ -103,7 +95,6 @@ mongoose.connection.on('error', (err) => {
 // API Routes
 
 app.use('/job', jobRoutes);
-app.use("/user", userRoute);
 app.use("/contact", contactRoute);
 app.use("/admin", AdminRoute);
 app.use("/newslatter", newslatterRoute);

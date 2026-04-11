@@ -1,174 +1,193 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import Jobcard from './Jobscard';
+import Jobcard, { SkeletonGrid } from './Jobscard';
+import FilterBar, {
+    CATEGORY_OPTIONS, LOCATION_OPTIONS,
+    EXPERIENCE_OPTIONS, SALARY_OPTIONS, SORT_OPTIONS
+} from '../Common/Filterbar';
 import Breadcrumb from '../Common/Breadcrumb';
 import { baseUrl } from "../../Baseurl";
-import Skeleton1 from "../Common/Skeleton";
-import { Search, SlidersHorizontal, Sparkles, BriefcaseBusiness } from "lucide-react";
+import {
+    BriefcaseBusiness, Sparkles, Briefcase, GraduationCap,
+    Rocket, Laptop, ChevronDown, ChevronUp, ArrowRight, Search
+} from "lucide-react";
+import { matchExperience, matchSalary } from '../Common/FilterHelpers';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
 
+const PAGE_SIZE = 20;
+
+const CATEGORY_TABS = [
+    { label: 'All Jobs', icon: Briefcase, color: 'from-purple-600 to-pink-600', route: '/Job-Portal', active: false },
+    { label: 'Freshers', icon: GraduationCap, color: 'from-green-500 to-emerald-600', route: '/Fresher-Jobs', active: false },
+    { label: 'Internships', icon: Rocket, color: 'from-orange-500 to-amber-600', route: '/Internships', active: false },
+    { label: 'Experienced', icon: BriefcaseBusiness, color: 'from-blue-500 to-indigo-600', route: '/Experienced-Jobs', active: true },
+];
+
 const ExperiencedJobs = () => {
     const [data, setData] = useState([]);
-    const [filteredData, setFilteredData] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+
     const [search, setSearch] = useState("");
-    const [sortBy, setSortBy] = useState("LATEST");
+    const [filterCategory, setFilterCategory] = useState(CATEGORY_OPTIONS[0]);
+    const [filterLocation, setFilterLocation] = useState(LOCATION_OPTIONS[0]);
+    const [filterSalary, setFilterSalary] = useState(SALARY_OPTIONS[0]);
+    const [filterExp, setFilterExp] = useState(EXPERIENCE_OPTIONS[0]);
+    const [sortBy, setSortBy] = useState(SORT_OPTIONS[0]);
+
     const navigate = useNavigate();
 
     useEffect(() => {
-        const getJobs = async () => {
-            try {
-                const res = await axios.get(`${baseUrl}/job`);
+        axios.get(`${baseUrl}/job`)
+            .then(res => {
                 const jobs = Array.isArray(res.data) ? res.data : [];
-                // Filter only Experienced jobs (exact match, not fresher/experienced combo)
-                const experiencedJobs = jobs.filter(job => {
+                setData(jobs.filter(job => {
                     const type = job.jobType?.toLowerCase() || '';
-                    return type === 'experienced' || (type.includes('experienced') && !type.includes('fresher'));
-                });
-                setData(experiencedJobs);
-                setFilteredData(experiencedJobs);
-                setLoading(false);
-            } catch (error) {
-                console.error("Error fetching data:", error);
-                setLoading(false);
-            }
-        };
-        getJobs();
+                    return type === 'experienced' || type === 'freshers/experienced' || (type.includes('experienced') && !type.includes('fresher'));
+                }));
+            })
+            .catch(console.error)
+            .finally(() => setLoading(false));
     }, []);
 
-    useEffect(() => {
-        let result = [...data];
+    useEffect(() => { setVisibleCount(PAGE_SIZE); }, [search, filterCategory, filterLocation, filterSalary, filterExp, sortBy]);
 
-        if (search) {
-            result = result.filter(item =>
-                item.title?.toLowerCase().includes(search.toLowerCase()) ||
-                item.company?.toLowerCase().includes(search.toLowerCase()) ||
-                item.description?.toLowerCase().includes(search.toLowerCase()) ||
-                item.location?.toLowerCase().includes(search.toLowerCase())
-            );
-        }
+    const filtered = useMemo(() => {
+        const q = search.toLowerCase();
+        return data.filter(j => {
+            const mS = !search || j.title?.toLowerCase().includes(q) || j.company?.toLowerCase().includes(q) || j.location?.toLowerCase().includes(q) || j.description?.toLowerCase().includes(q);
+            const mC = filterCategory === CATEGORY_OPTIONS[0] || j.category?.toLowerCase().includes(filterCategory.toLowerCase());
+            const mL = filterLocation === LOCATION_OPTIONS[0] || j.location?.toLowerCase().includes(filterLocation.toLowerCase());
+            return mS && mC && mL && matchSalary(j.salary || j.salaryNote, filterSalary) && matchExperience(j.experience, filterExp);
+        }).sort((a, b) => sortBy === SORT_OPTIONS[0] ? (b.id || 0) - (a.id || 0) : (a.id || 0) - (b.id || 0));
+    }, [data, search, filterCategory, filterLocation, filterSalary, filterExp, sortBy]);
 
-        if (sortBy === "LATEST") {
-            result.sort((a, b) => b.id - a.id);
-        } else if (sortBy === "OLDEST") {
-            result.sort((a, b) => a.id - b.id);
-        }
+    const visible = filtered.slice(0, visibleCount);
+    const hasMore = visibleCount < filtered.length;
+    const allShown = visibleCount >= filtered.length && visibleCount > PAGE_SIZE;
 
-        setFilteredData(result);
-    }, [search, sortBy, data]);
-
-    const handleCardClick = (id) => {
-        navigate(`/jobdetail/${id}`);
-    };
+    const go = (id) => { window.scrollTo({ top: 0, behavior: 'instant' }); navigate(`/jobdetail/${id}`); };
 
     return (
         <>
             <Navbar />
-            <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-950">
-                <div className="container mx-auto px-4 py-6">
+            <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
+                <div className="max-w-7xl mx-auto px-4 py-6">
                     <Breadcrumb />
 
-                    {/* Hero Header */}
-                    <div className="container mx-auto px-4 pt-2">
-                        <div className="text-center mb-6">
-                            <div className="inline-flex items-center gap-2 bg-white/80 dark:bg-gray-950 backdrop-blur-xl px-6 py-3 rounded-full border-2 border-blue-200 dark:border-blue-700 shadow-lg mb-4">
-                                <BriefcaseBusiness className="w-5 h-5 text-blue-600 dark:text-blue-400 animate-pulse" />
-                                <span className="text-blue-700 dark:text-blue-300 font-semibold">Experienced Roles</span>
-                                <Sparkles className="w-5 h-5 text-indigo-500 dark:text-indigo-400" />
-                            </div>
-                            <h1 className="text-4xl md:text-6xl font-bold text-gray-800 dark:text-gray-100 mb-2">
-                                Experienced <span className="bg-gradient-to-r from-blue-500 to-indigo-600 dark:from-blue-400 dark:to-indigo-500 bg-clip-text text-transparent">Jobs</span>
-                            </h1>
-                            <p className="text-gray-600 dark:text-gray-300 text-lg">
-                                Senior & mid-level openings for experienced professionals — updated daily.
-                            </p>
+                    {/* ── Hero ── */}
+                    <div className="text-center mb-8 pt-2">
+                        <div className="inline-flex items-center gap-2 bg-white dark:bg-gray-900 border-2 border-blue-200 dark:border-blue-700 px-6 py-2.5 rounded-full shadow-sm mb-4">
+                            <BriefcaseBusiness className="w-5 h-5 text-blue-600 dark:text-blue-400 animate-pulse" />
+                            <span className="text-base font-bold text-blue-700 dark:text-blue-300">Experienced Roles</span>
+                            <Sparkles className="w-4 h-4 text-indigo-500" />
                         </div>
-                    </div>
-
-                    {/* Search and Sort Row */}
-                    <div className="mb-12 max-w-6xl mx-auto">
-                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                            {/* Search Box */}
-                            <div className="lg:col-span-2">
-                                <div className="relative">
-                                    <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" />
-                                    <input
-                                        type="text"
-                                        placeholder="Search jobs, companies, locations..."
-                                        value={search}
-                                        onChange={(e) => setSearch(e.target.value)}
-                                        className="w-full pl-14 pr-6 py-5 rounded-2xl border-2 border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:outline-none focus:border-blue-500 dark:focus:border-blue-500 transition-all duration-300 font-medium"
-                                    />
-                                </div>
-                            </div>
-
-                            {/* Sort Selector */}
-                            <div className="relative">
-                                <SlidersHorizontal className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500 pointer-events-none z-10" />
-                                <select
-                                    value={sortBy}
-                                    onChange={(e) => setSortBy(e.target.value)}
-                                    className="w-full pl-14 pr-10 py-5 rounded-2xl border-2 border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:outline-none focus:border-blue-500 dark:focus:border-blue-500 transition-all duration-300 font-medium appearance-none cursor-pointer"
-                                    style={{
-                                        backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%239ca3af' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`,
-                                        backgroundPosition: 'right 1.5rem center',
-                                        backgroundRepeat: 'no-repeat',
-                                        backgroundSize: '1.5em 1.5em'
-                                    }}
-                                >
-                                    <option value="LATEST">Latest First</option>
-                                    <option value="OLDEST">Oldest First</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Results Indicator */}
-                    <div className="mb-8 text-center">
-                        <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                            <span className="text-2xl font-black text-transparent bg-gradient-to-r from-blue-500 to-indigo-600 bg-clip-text">
-                                {filteredData.length}
+                        <h1 className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white mb-3 leading-tight">
+                            Experienced{' '}
+                            <span className="bg-gradient-to-r from-blue-500 to-indigo-600 bg-clip-text text-transparent">
+                                Jobs
                             </span>
-                            <span className="ml-2">experienced jobs ready to explore</span>
+                        </h1>
+                        <p className="text-lg font-medium text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                            Senior & mid-level openings for experienced professionals — updated daily.
                         </p>
                     </div>
 
-                    {/* Content */}
+                    {/* ── Category Tabs ── */}
+                    <div className="flex flex-wrap justify-center gap-2 mb-8">
+                        {CATEGORY_TABS.map(tab => {
+                            const Icon = tab.icon;
+                            return (
+                                <button
+                                    key={tab.label}
+                                    onClick={() => !tab.active && navigate(tab.route)}
+                                    className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold border transition-all duration-200 ${tab.active
+                                        ? `bg-gradient-to-r ${tab.color} text-white border-transparent shadow-md`
+                                        : 'bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 hover:shadow-sm'
+                                        }`}
+                                >
+                                    <Icon className="w-4 h-4" />
+                                    {tab.label}
+                                    {!tab.active && <ArrowRight className="w-3.5 h-3.5 opacity-40" />}
+                                </button>
+                            );
+                        })}
+                    </div>
+
+                    {/* ── Filters ── */}
+                    <div className="mb-6">
+                        <FilterBar
+                            search={search} setSearch={setSearch}
+                            filterCategory={filterCategory} setFilterCategory={setFilterCategory}
+                            filterLocation={filterLocation} setFilterLocation={setFilterLocation}
+                            filterSalary={filterSalary} setFilterSalary={setFilterSalary}
+                            filterExp={filterExp} setFilterExp={setFilterExp}
+                            sortBy={sortBy} setSortBy={setSortBy}
+                            hideTypeFilter={true}
+                            accentColor="blue"
+                        />
+                    </div>
+
+                    {/* ── Results count ── */}
+                    <div className="flex items-center justify-between mb-6">
+                        <p className="text-base font-medium text-gray-600 dark:text-gray-400">
+                            Showing <span className="font-bold text-gray-900 dark:text-white">{Math.min(visibleCount, filtered.length)}</span> of{' '}
+                            <span className="font-bold text-gray-900 dark:text-white">{filtered.length}</span> experienced jobs
+                        </p>
+                        <div className="flex items-center gap-1.5">
+                            <span className="relative flex h-2.5 w-2.5">
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
+                                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500" />
+                            </span>
+                            <span className="text-sm font-bold text-green-600 dark:text-green-400">Updated Today</span>
+                        </div>
+                    </div>
+
+                    {/* ── Cards / Skeleton / Empty ── */}
                     {loading ? (
-                        <Skeleton1 />
+                        <SkeletonGrid count={8} />
+                    ) : filtered.length === 0 ? (
+                        <div className="text-center py-20 bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800">
+                            <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center">
+                                <Search className="w-10 h-10 text-blue-500 dark:text-blue-400" />
+                            </div>
+                            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">No experienced jobs found</h3>
+                            <p className="text-base font-medium text-gray-500 dark:text-gray-400">Try adjusting your search or filters</p>
+                        </div>
                     ) : (
                         <>
-                            {/* Cards Grid */}
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12 max-w-7xl mx-auto">
-                                {filteredData.map((item, index) => (
-                                    <Jobcard
-                                        key={item._id}
-                                        item={item}
-                                        index={index}
-                                        onClick={() => handleCardClick(item._id)}
-                                    />
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 mb-8">
+                                {visible.map((item, index) => (
+                                    <Jobcard key={item._id} item={item} index={index} onClick={() => go(item._id)} />
                                 ))}
                             </div>
 
-                            {/* Empty State */}
-                            {filteredData.length === 0 && (
-                                <div className="text-center py-20">
-                                    <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-br from-blue-100 to-indigo-100 dark:from-blue-900/20 dark:to-indigo-900/20 flex items-center justify-center">
-                                        <Search className="w-12 h-12 text-blue-500 dark:text-blue-400" />
-                                    </div>
-                                    <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">No experienced jobs found</h3>
-                                    <p className="text-gray-600 dark:text-gray-400">Try adjusting your search criteria</p>
-                                </div>
-                            )}
+                            <div className="flex justify-center pb-12">
+                                {hasMore && (
+                                    <button
+                                        onClick={() => setVisibleCount(v => v + PAGE_SIZE)}
+                                        className="flex items-center gap-2 px-8 py-3.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-2xl text-base font-bold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
+                                    >
+                                        Show More Experienced Jobs <ChevronDown className="w-5 h-5" />
+                                    </button>
+                                )}
+                                {allShown && !hasMore && (
+                                    <button
+                                        onClick={() => { setVisibleCount(PAGE_SIZE); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                                        className="flex items-center gap-2 px-8 py-3.5 bg-white dark:bg-gray-900 border-2 border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 rounded-2xl text-base font-bold hover:border-gray-300 dark:hover:border-gray-600 transition-all duration-300"
+                                    >
+                                        Show Less <ChevronUp className="w-5 h-5" />
+                                    </button>
+                                )}
+                            </div>
                         </>
                     )}
                 </div>
 
-                {/* Ambient Background Elements */}
-                <div className="fixed top-0 right-0 w-96 h-96 bg-blue-500/10 dark:bg-blue-500/5 rounded-full blur-3xl pointer-events-none"></div>
-                <div className="fixed bottom-0 left-0 w-96 h-96 bg-indigo-500/10 dark:bg-indigo-500/5 rounded-full blur-3xl pointer-events-none"></div>
+                <div className="fixed top-0 right-0 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl pointer-events-none" />
+                <div className="fixed bottom-0 left-0 w-96 h-96 bg-indigo-500/5 rounded-full blur-3xl pointer-events-none" />
             </div>
             <Footer />
         </>

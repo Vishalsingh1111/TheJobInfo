@@ -8,7 +8,6 @@ function Contact() {
     return (
         <>
             <Navbar />
-            {/* <FAQ /> */}
             <ContactForm />
             <Footer />
         </>

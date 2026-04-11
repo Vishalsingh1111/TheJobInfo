@@ -74,11 +74,11 @@ function Footer() {
                                         alt="Logo"
                                     />
                                 </div>
-                                <div>
-                                    <h1 className='text-2xl font-bold bg-gradient-to-r from-red-500 to-pink-600 bg-clip-text text-transparent'>
-                                        DCODER
-                                    </h1>
-                                    <p className='text-sm text-gray-400'>Job & Interview Prep Hub</p>
+                                <div className='flex flex-col'>
+                                    <span className="text-2xl font-semibold bg-gradient-to-r from-red-500 to-pink-600 bg-clip-text text-transparent" style={{ fontFamily: '"Quicksand", sans-serif', fontWeight: '900' }}>
+                                        THEJOBINFO
+                                    </span>
+                                    <span className='text-sm text-gray-600 dark:text-gray-400 justify-content mx-auto'>Powered by DCODER</span>
                                 </div>
                             </div>
 
@@ -98,7 +98,7 @@ function Footer() {
                                     <div className="bg-red-500/10 p-2 rounded-lg">
                                         <Globe className="w-4 h-4 text-red-500" />
                                     </div>
-                                    <span>https://dcoder-7vi1.onrender.com</span>
+                                    <span>https://thejobinfo.in</span>
                                 </div>
                             </div>
                         </div>
@@ -214,7 +214,7 @@ function Footer() {
                     <div className="flex flex-col md:flex-row justify-between items-center gap-6">
                         <div className="text-center md:text-left">
                             <p className="text-gray-400 text-md">
-                                © {new Date().getFullYear()} <span className="text-white font-semibold">DCODER</span> All rights reserved.
+                                © {new Date().getFullYear()} <span className="text-white font-semibold">THEJOBINFO</span> All rights reserved.
                             </p>
                             <p className="text-gray-500 text-sm mt-1">
                                 Made with ❤️ for aspiring developers

@@ -11,7 +11,7 @@ import {
 import { baseUrl } from '../Baseurl';
 
 const INSTAGRAM_LINK = 'https://www.instagram.com/dcoder75/';
-const TELEGRAM_LINK = 'https://t.me/dcoder21575';
+const TELEGRAM_LINK = 'https://t.me/dcoder75';
 
 const truncate = (text, len) => {
     if (!text) return '';

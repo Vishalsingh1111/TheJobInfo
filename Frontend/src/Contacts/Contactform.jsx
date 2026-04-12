@@ -47,7 +47,7 @@ const ContactForm = () => {
     const socialLinks = [
         {
             label: 'Telegram',
-            href: 'https://t.me/dcoder21575',
+            href: 'https://t.me/dcoder75',
             color: 'bg-sky-500 hover:bg-sky-600',
             icon: (
                 <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">

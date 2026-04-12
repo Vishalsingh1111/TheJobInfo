@@ -230,7 +230,7 @@ function Footer() {
                             <a href="#" className="group relative bg-white/5 hover:bg-blue-500 p-3 rounded-xl border border-gray-800 hover:border-blue-500 transition-all duration-300">
                                 <Twitter className="w-5 h-5 text-gray-400 group-hover:text-white transition-colors" />
                             </a>
-                            <a href="https://t.me/dcoder21575" className="group relative bg-white/5 hover:bg-blue-500 p-3 rounded-xl border border-gray-800 hover:border-blue-500 transition-all duration-300">
+                            <a href="https://t.me/dcoder75" className="group relative bg-white/5 hover:bg-blue-500 p-3 rounded-xl border border-gray-800 hover:border-blue-500 transition-all duration-300">
                                 <MessageCircle className="w-5 h-5 text-gray-400 group-hover:text-white transition-colors" />
                             </a>
                             <a href="https://www.youtube.com/@d-coder1898" className="group relative bg-white/5 hover:bg-red-600 p-3 rounded-xl border border-gray-800 hover:border-red-600 transition-all duration-300">

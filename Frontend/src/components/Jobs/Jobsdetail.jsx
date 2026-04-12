@@ -13,10 +13,10 @@ import {
     Zap, AlertCircle, Send, MessageCircle
 } from 'lucide-react';
 
-const TELEGRAM_LINK = 'https://t.me/dcoder21575';
+const TELEGRAM_LINK = 'https://t.me/dcoder75';
 const INSTAGRAM_LINK = 'https://www.instagram.com/dcoder75/';
-const WHATSAPP_WFH_LINK = 'https://t.me/dcoder21575';
-const WHATSAPP_GOVT_LINK = 'https://t.me/dcoder21575';
+const WHATSAPP_WFH_LINK = 'https://t.me/dcoder75';
+const WHATSAPP_GOVT_LINK = 'https://t.me/dcoder75';
 
 const JobDetail = () => {
     const { id } = useParams();
@@ -651,7 +651,7 @@ const JobDetail = () => {
                                         Get daily job alerts on Telegram — 10,000+ students already joined.
                                     </p>
                                     <a href={TELEGRAM_LINK} target="_blank" rel="noreferrer" className="flex items-center justify-center gap-2 w-full bg-sky-500 hover:bg-sky-600 text-white py-3 rounded-xl text-base font-bold transition-all">
-                                        <Send className="w-4 h-4" /> Join free — t.me/dcoder21575
+                                        <Send className="w-4 h-4" /> Join free
                                     </a>
                                 </div>
 

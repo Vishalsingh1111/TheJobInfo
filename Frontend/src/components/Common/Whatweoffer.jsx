@@ -108,7 +108,7 @@ const About = () => {
                                 className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-violet-600 to-purple-600 text-white rounded-xl text-sm font-semibold hover:shadow-lg hover:scale-105 transition-all">
                                 Browse Jobs <ArrowRight className="w-4 h-4" />
                             </a>
-                            <a href="https://t.me/dcoder21575" target="_blank" rel="noreferrer"
+                            <a href="https://t.me/dcoder75" target="_blank" rel="noreferrer"
                                 className="inline-flex items-center gap-2 px-6 py-3 bg-sky-500 hover:bg-sky-600 text-white rounded-xl text-sm font-semibold transition-all hover:scale-105">
                                 <Send className="w-4 h-4" /> Join Telegram
                             </a>
@@ -259,7 +259,7 @@ const About = () => {
                             Have a question, suggestion, job listing request, or want to collaborate? We'd love to hear from you.
                         </p>
                         <div className="flex items-center justify-center gap-3 flex-wrap">
-                            <a href="https://t.me/dcoder21575" target="_blank" rel="noreferrer"
+                            <a href="https://t.me/dcoder75" target="_blank" rel="noreferrer"
                                 className="inline-flex items-center gap-2 bg-white/20 hover:bg-white/30 text-white px-5 py-2.5 rounded-xl text-sm font-semibold transition-all hover:scale-105">
                                 <Send className="w-4 h-4" /> Telegram
                             </a>

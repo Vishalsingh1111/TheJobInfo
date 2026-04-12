@@ -193,7 +193,7 @@ const TermsAndConditions = () => {
                                 className="inline-flex items-center gap-2 bg-white text-purple-700 px-5 py-2.5 rounded-xl text-sm font-semibold hover:scale-105 transition-all shadow-md">
                                 <Mail className="w-4 h-4" /> dcodermail1@gmail.com
                             </a>
-                            <a href="https://t.me/dcoder21575" target="_blank" rel="noreferrer"
+                            <a href="https://t.me/dcoder75" target="_blank" rel="noreferrer"
                                 className="inline-flex items-center gap-2 bg-white/20 hover:bg-white/30 text-white px-5 py-2.5 rounded-xl text-sm font-semibold transition-all">
                                 <Send className="w-4 h-4" /> Telegram Community
                             </a>

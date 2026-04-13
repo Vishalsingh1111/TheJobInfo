@@ -1,7 +1,6 @@
 
 import React from 'react';
 import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import toast, { Toaster } from 'react-hot-toast';
@@ -285,7 +284,7 @@ const ContactForm = () => {
                     </div>
                 </div>
             </div>
-            <Footer />
+
         </>
     );
 };

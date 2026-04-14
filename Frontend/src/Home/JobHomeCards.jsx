@@ -190,11 +190,11 @@ const JobCard = ({ job, index, onClick }) => {
     return (
         <div
             onClick={onClick}
-            className="group cursor-pointer bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 overflow-hidden hover:shadow-xl hover:border-transparent transition-all duration-300 hover:-translate-y-1 flex flex-col h-full"
+            className="group cursor-pointer bg-white dark:bg-gray-900 rounded-2xl border border-gray-300 dark:border-gray-800 overflow-hidden hover:shadow-xl hover:border-transparent transition-all duration-300 hover:-translate-y-1 flex flex-col h-full"
         >
             {/* ── TOP: Full-width image / gradient panel ── */}
             <div
-                className={`relative bg-gradient-to-br ${bg} flex items-center justify-center overflow-hidden`}
+                className={`relative bg-gradient-to-br ${bg} flex items-center justify-center overflow-hidden border-b border-gray-300`}
                 style={{ minHeight: '180px' }}
             >
                 <div className="absolute -top-6 -right-6 w-28 h-28 rounded-full bg-white/10" />
@@ -250,12 +250,12 @@ const JobCard = ({ job, index, onClick }) => {
                 </h2>
 
                 {/* Description: text-base — matches JobDetail body text */}
-                <p className="text-base text-gray-600 dark:text-gray-400 leading-relaxed mb-4 line-clamp-2 flex-1">
+                <p className="text-base text-gray-600 dark:text-gray-400 leading-relaxed mb-2 line-clamp-2 flex-1">
                     {truncate(job.description, 100) || 'Exciting opportunity — click to view full details and apply.'}
                 </p>
 
                 {/* Detail chips: text-base font-medium — matches JobDetail chip style */}
-                <div className="space-y-2 mb-5">
+                <div className="space-y-1 mb-5">
                     {job.location && (
                         <div className="flex items-center gap-2 text-base font-medium text-gray-700 dark:text-gray-300">
                             <MapPin className="w-4 h-4 text-red-500 flex-shrink-0" />
@@ -281,11 +281,6 @@ const JobCard = ({ job, index, onClick }) => {
                         </div>
                     )}
                 </div>
-
-                {/* CTA button: text-base font-bold — matches JobDetail button style */}
-                <button className={`w-full flex items-center justify-center gap-2 py-3 bg-gradient-to-r ${bg} text-white rounded-xl text-base font-bold shadow-sm group-hover:shadow-md group-hover:scale-[1.02] transition-all duration-300`}>
-                    View Details <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-                </button>
             </div>
         </div >
     );

@@ -337,7 +337,7 @@ export const SkeletonJobCard = () => (
 
 // ─── Skeleton Grid ────────────────────────────────────────────────────────
 export const SkeletonGrid = ({ count = 8 }) => (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 mb-8">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-5 mb-8">
         {Array.from({ length: count }).map((_, i) => (
             <SkeletonJobCard key={i} />
         ))}
@@ -350,11 +350,11 @@ const Jobcard = ({ item, onClick, index }) => {
 
     return (
         <div onClick={onClick} className="group cursor-pointer h-full">
-            <div className="relative h-full bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 overflow-hidden hover:shadow-xl hover:border-transparent transition-all duration-300 hover:-translate-y-1 flex flex-col">
+            <div className="relative h-full bg-white dark:bg-gray-900 rounded-2xl border border-gray-300 dark:border-gray-800 overflow-hidden hover:shadow-xl hover:border-transparent transition-all duration-300 hover:-translate-y-1 flex flex-col">
 
                 {/* ── TOP: Full-width image panel ── */}
                 <div
-                    className={`relative bg-gradient-to-br ${gradient} flex items-center justify-center overflow-hidden flex-shrink-0`}
+                    className={`relative bg-gradient-to-br ${gradient} flex items-center justify-center overflow-hidden flex-shrink-0 border-b border-gray-300`}
                     style={{ minHeight: '176px' }}
                 >
                     {/* Decorative circles (show behind image) */}
@@ -415,12 +415,12 @@ const Jobcard = ({ item, onClick, index }) => {
                     </h3>
 
                     {/* Description — text-base font-medium */}
-                    <p className="text-base font-medium text-gray-600 dark:text-gray-400 mb-4 line-clamp-2 flex-1 leading-relaxed">
+                    <p className="text-base font-medium text-gray-600 dark:text-gray-400 mb-2 line-clamp-2 flex-1 leading-relaxed">
                         {truncateText(item.description, 100) || 'Click to view full details and apply for this position.'}
                     </p>
 
                     {/* Meta chips */}
-                    <div className="space-y-2 mb-4">
+                    <div className="space-y-1 mb-4">
                         {item.location && (
                             <div className="flex items-center gap-2 text-base font-medium text-gray-700 dark:text-gray-300">
                                 <MapPin className="w-4 h-4 text-red-500 flex-shrink-0" />
@@ -448,9 +448,9 @@ const Jobcard = ({ item, onClick, index }) => {
                     </div>
 
                     {/* CTA */}
-                    <button className={`w-full flex items-center justify-center gap-2 py-3 bg-gradient-to-r ${gradient} text-white rounded-xl text-base font-bold shadow-sm group-hover:shadow-md group-hover:scale-[1.02] transition-all duration-300`}>
+                    {/* <button className={`w-full flex items-center justify-center gap-2 py-3 bg-gradient-to-r ${gradient} text-white rounded-xl text-base font-bold shadow-sm group-hover:shadow-md group-hover:scale-[1.02] transition-all duration-300`}>
                         View Details <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                    </button>
+                    </button> */}
                 </div>
             </div>
         </div>

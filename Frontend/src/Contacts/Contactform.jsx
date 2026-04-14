@@ -233,7 +233,7 @@ const ContactForm = () => {
                                             <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1.5">Phone Number <span className="text-red-500">*</span></label>
                                             <input
                                                 type="tel"
-                                                placeholder="+91 98765 43210"
+                                                placeholder="+91 98XXXXXX10"
                                                 {...register('phonenumber', { required: 'Phone number is required' })}
                                                 className="w-full px-4 py-3 text-sm rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white placeholder:text-gray-400 focus:outline-none focus:border-purple-400 dark:focus:border-purple-500 transition-colors"
                                             />

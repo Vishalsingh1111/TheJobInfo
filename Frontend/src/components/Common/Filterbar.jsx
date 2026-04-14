@@ -108,7 +108,6 @@ const FilterBar = ({
                 <div className="flex items-center gap-1 text-sm font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500 mr-0.5 flex-shrink-0">
                     <Filter className="w-3.5 h-3.5" /> Filters:
                 </div>
-                <FilterDropdown label="Category" options={CATEGORY_OPTIONS} value={filterCategory} onChange={setFilterCategory} accentColor={accentColor} />
                 {!hideTypeFilter && (
                     <FilterDropdown label="Job Type" options={JOB_TYPE_OPTIONS} value={filterType} onChange={setFilterType} accentColor={accentColor} />
                 )}

@@ -67,7 +67,7 @@ const Navbar = () => {
 
     const navLinks = [
         { name: 'HOME', href: '/' },
-        { name: 'TRENDING JOBS', href: '/Job-Portal' },
+        // { name: 'TRENDING JOBS', href: '/Job-Portal' },
         {
             name: 'JOBS FOR',
             dropdown: [

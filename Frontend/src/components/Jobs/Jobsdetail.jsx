@@ -287,7 +287,7 @@ const JobDetail = () => {
                                 {/* 2. Job Overview table */}
                                 <div>
                                     <SectionLabel text="Job overview" />
-                                    <SectionTitle text="Position Details" />
+                                    <SectionTitle text="Job Details Table" />
                                     <div className="rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
                                         <table className="min-w-full divide-y divide-gray-100 dark:divide-gray-800">
                                             <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
@@ -298,7 +298,6 @@ const JobDetail = () => {
                                                     { label: 'Location', value: item.location },
                                                     { label: 'Job type', value: item.jobType },
                                                     { label: 'Experience', value: item.experience },
-                                                    { label: 'Website', value: item.website },
                                                     { label: 'Last date', value: item.lastDate },
                                                 ].filter(r => r.value).map((row, i) => (
                                                     <tr key={i} className="hover:bg-gray-50 dark:hover:bg-gray-800/40 transition-colors">

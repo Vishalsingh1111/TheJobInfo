@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Mail, Send, ArrowUp, Facebook, Twitter, Youtube, MessageCircle, ChevronRight, Globe } from 'lucide-react';
+import { Mail, Send, ArrowUp, Youtube, MessageCircle, ChevronRight, Globe, Instagram } from 'lucide-react';
 import { baseUrl } from '../Baseurl';
 
 function Footer() {
@@ -224,17 +224,23 @@ function Footer() {
                         {/* Social Links */}
                         <div className="flex items-center gap-3">
                             <span className="text-gray-400 text-sm mr-2">Follow us:</span>
-                            <a href="#" className="group relative bg-white/5 hover:bg-blue-600 p-3 rounded-xl border border-gray-800 hover:border-blue-600 transition-all duration-300">
-                                <Facebook className="w-5 h-5 text-gray-400 group-hover:text-white transition-colors" />
+
+                            <a href="https://t.me/dcoder75"
+                                target="_blank" rel="noopener noreferrer"
+                                className="group flex items-center justify-center bg-white/5 hover:bg-blue-500 p-3 rounded-xl border border-gray-800 hover:border-blue-500 transition-all duration-300">
+                                <MessageCircle className="w-5 h-5 text-gray-400 group-hover:text-white transition-colors duration-300" />
                             </a>
-                            <a href="#" className="group relative bg-white/5 hover:bg-blue-500 p-3 rounded-xl border border-gray-800 hover:border-blue-500 transition-all duration-300">
-                                <Twitter className="w-5 h-5 text-gray-400 group-hover:text-white transition-colors" />
+
+                            <a href="https://www.instagram.com/"
+                                target="_blank" rel="noopener noreferrer"
+                                className="group flex items-center justify-center bg-white/5 hover:bg-pink-600 p-3 rounded-xl border border-gray-800 hover:border-pink-600 transition-all duration-300">
+                                <Instagram className="w-5 h-5 text-gray-400 group-hover:text-white transition-colors duration-300" />
                             </a>
-                            <a href="https://t.me/dcoder75" className="group relative bg-white/5 hover:bg-blue-500 p-3 rounded-xl border border-gray-800 hover:border-blue-500 transition-all duration-300">
-                                <MessageCircle className="w-5 h-5 text-gray-400 group-hover:text-white transition-colors" />
-                            </a>
-                            <a href="https://www.youtube.com/@d-coder1898" className="group relative bg-white/5 hover:bg-red-600 p-3 rounded-xl border border-gray-800 hover:border-red-600 transition-all duration-300">
-                                <Youtube className="w-5 h-5 text-gray-400 group-hover:text-white transition-colors" />
+
+                            <a href="https://www.youtube.com/@d-coder1898"
+                                target="_blank" rel="noopener noreferrer"
+                                className="group flex items-center justify-center bg-white/5 hover:bg-red-600 p-3 rounded-xl border border-gray-800 hover:border-red-600 transition-all duration-300">
+                                <Youtube className="w-5 h-5 text-gray-400 group-hover:text-white transition-colors duration-300" />
                             </a>
                         </div>
                     </div>

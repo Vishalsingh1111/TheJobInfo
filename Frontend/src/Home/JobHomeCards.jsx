@@ -125,14 +125,14 @@ const FilterDropdown = ({ label, options, value, onChange }) => {
                 onClick={() => setOpen(o => !o)}
                 className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl border text-sm font-bold transition-all whitespace-nowrap ${active
                     ? 'bg-purple-600 text-white border-purple-600 shadow-sm'
-                    : 'bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-700'
+                    : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-700'
                     }`}
             >
                 <span className="max-w-[120px] truncate">{active ? value : label}</span>
                 <ChevronDown className={`w-3.5 h-3.5 flex-shrink-0 transition-transform ${open ? 'rotate-180' : ''}`} />
             </button>
             {open && (
-                <div className="absolute top-full mt-1.5 left-0 z-50 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-2xl py-1 min-w-[175px]">
+                <div className="absolute top-full mt-1.5 left-0 z-50 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-2xl py-1 min-w-[175px]">
                     {options.map(opt => (
                         <button
                             key={opt}
@@ -155,7 +155,7 @@ const FilterDropdown = ({ label, options, value, onChange }) => {
 // SKELETONS
 // ─────────────────────────────────────────────────────────────────────────────
 const SkeletonCard = () => (
-    <div className="animate-pulse bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 overflow-hidden">
+    <div className="animate-pulse bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-800 overflow-hidden">
         <div className="h-44 bg-gray-200 dark:bg-gray-800" />
         <div className="p-5 space-y-3">
             <div className="h-3 bg-gray-200 dark:bg-gray-800 rounded w-1/4" />
@@ -172,7 +172,7 @@ const SkeletonCard = () => (
 );
 
 const SkeletonInline = () => (
-    <div className="animate-pulse bg-white dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800 p-4 flex gap-3">
+    <div className="animate-pulse bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-800 p-4 flex gap-3">
         <div className="w-10 h-10 rounded-lg bg-gray-200 dark:bg-gray-800 flex-shrink-0" />
         <div className="flex-1 space-y-2">
             <div className="h-4 bg-gray-200 dark:bg-gray-800 rounded w-3/4" />
@@ -190,7 +190,7 @@ const JobCard = ({ job, index, onClick }) => {
     return (
         <div
             onClick={onClick}
-            className="group cursor-pointer bg-white dark:bg-gray-900 rounded-2xl border border-gray-300 dark:border-gray-800 overflow-hidden hover:shadow-xl hover:border-transparent transition-all duration-300 hover:-translate-y-1 flex flex-col h-full"
+            className="group cursor-pointer bg-white dark:bg-gray-800 rounded-2xl border border-gray-300 dark:border-gray-800 overflow-hidden hover:shadow-xl hover:border-transparent transition-all duration-300 hover:-translate-y-1 flex flex-col h-full"
         >
             {/* ── TOP: Full-width image / gradient panel ── */}
             <div
@@ -245,7 +245,7 @@ const JobCard = ({ job, index, onClick }) => {
                 </div>
 
                 {/* Title: text-xl font-bold — matches JobDetail h2/SectionTitle scale */}
-                <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2 line-clamp-2 leading-snug group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+                <h2 className="text-xl font-bold text-gray-800 dark:text-white mb-2 line-clamp-2 leading-snug group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
                     {job.title}
                 </h2>
 
@@ -294,7 +294,7 @@ const InlineJobCard = ({ job, index, onClick }) => {
     return (
         <div
             onClick={onClick}
-            className="group cursor-pointer bg-white dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800 p-4 flex items-center gap-4 hover:border-purple-200 dark:hover:border-purple-800 hover:shadow-md transition-all"
+            className="group cursor-pointer bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-800 p-4 flex items-center gap-4 hover:border-purple-200 dark:hover:border-purple-800 hover:shadow-md transition-all"
         >
             <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${bg} flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform overflow-hidden`}>
                 {job.imageUrl
@@ -304,16 +304,16 @@ const InlineJobCard = ({ job, index, onClick }) => {
             </div>
             <div className="flex-1 min-w-0">
                 {/* title: text-base font-bold — matches JobDetail inline job list */}
-                <p className="text-base font-bold text-gray-900 dark:text-white truncate group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">{job.title}</p>
+                <p className="text-base font-bold text-gray-800 dark:text-white truncate group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">{job.title}</p>
                 {/* meta: text-sm font-medium — matches JobDetail sub-text */}
-                <p className="text-sm font-medium text-gray-500 dark:text-gray-400 truncate mt-0.5">
+                <p className="text-sm font-medium text-gray-700 dark:text-gray-400 truncate mt-0.5">
                     {job.company}
                     {job.location ? ` · ${job.location}` : ''}
                     {job.salary ? ` · ${job.salary}` : ''}
                     {job.lastDate ? ` · Apply by ${job.lastDate}` : ''}
                 </p>
             </div>
-            <ArrowRight className="w-5 h-5 text-gray-400 dark:text-gray-500 group-hover:text-purple-500 group-hover:translate-x-0.5 transition-all flex-shrink-0" />
+            <ArrowRight className="w-5 h-5 text-gray-400 dark:text-gray-700 group-hover:text-purple-500 group-hover:translate-x-0.5 transition-all flex-shrink-0" />
         </div>
     );
 };
@@ -322,14 +322,14 @@ const InlineJobCard = ({ job, index, onClick }) => {
 // FEATURE CARD
 // ─────────────────────────────────────────────────────────────────────────────
 const FeatureCard = ({ icon: Icon, title, desc, color }) => (
-    <div className="group bg-white dark:bg-gray-900 rounded-2xl p-5 border border-gray-100 dark:border-gray-800 hover:shadow-lg transition-all duration-300">
+    <div className="group bg-white dark:bg-gray-800 rounded-2xl p-5 border border-gray-100 dark:border-gray-800 hover:shadow-lg transition-all duration-300">
         <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
             <Icon className="w-5 h-5 text-white" />
         </div>
         {/* title: text-base font-bold — matches JobDetail section sub-heading */}
-        <h3 className="text-base font-bold text-gray-900 dark:text-white mb-1.5">{title}</h3>
+        <h3 className="text-base font-bold text-gray-800 dark:text-white mb-1.5">{title}</h3>
         {/* desc: text-sm font-medium — matches JobDetail supporting text */}
-        <p className="text-sm font-medium text-gray-500 dark:text-gray-400 leading-relaxed">{desc}</p>
+        <p className="text-sm font-medium text-gray-700 dark:text-gray-400 leading-relaxed">{desc}</p>
     </div>
 );
 
@@ -429,7 +429,7 @@ const JobsHeroSection = () => {
                     </div>
 
                     {/* Hero heading: text-3xl md:text-4xl lg:text-5xl font-bold — unchanged, hero scale is intentional */}
-                    <h1 className="text-center text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-4 leading-tight">
+                    <h1 className="text-center text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 dark:text-white mb-4 leading-tight">
                         Fresh Jobs For Your{' '}
                         <span className="bg-gradient-to-r from-violet-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
                             Dream Career
@@ -463,7 +463,7 @@ const JobsHeroSection = () => {
                                 {/* stat value: text-2xl font-bold — matches JobDetail heading weight */}
                                 <p className={`text-2xl font-bold bg-gradient-to-r ${s.color} bg-clip-text text-transparent`}>{s.value}</p>
                                 {/* stat label: text-sm font-medium — matches JobDetail caption text */}
-                                <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mt-0.5">{s.label}</p>
+                                <p className="text-sm font-medium text-gray-700 dark:text-gray-400 mt-0.5">{s.label}</p>
                             </div>
                         ))}
                     </div>
@@ -478,7 +478,7 @@ const JobsHeroSection = () => {
                     <div className="lg:col-span-8">
 
                         {/* ── Search + Filters ── */}
-                        <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-4 mb-6 shadow-sm">
+                        <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-800 p-4 mb-6 shadow-sm">
 
                             {/* Search input */}
                             <div className="relative mb-3">
@@ -488,7 +488,7 @@ const JobsHeroSection = () => {
                                     placeholder="Search by job title, company, or location..."
                                     value={search}
                                     onChange={e => setSearch(e.target.value)}
-                                    className="w-full pl-11 pr-10 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white placeholder:text-gray-400 text-base font-medium focus:outline-none focus:border-purple-400 dark:focus:border-purple-500 transition-colors"
+                                    className="w-full pl-11 pr-10 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-white placeholder:text-gray-400 text-base font-medium focus:outline-none focus:border-purple-400 dark:focus:border-purple-500 transition-colors"
                                 />
                                 {search && (
                                     <button onClick={() => setSearch('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
@@ -500,10 +500,10 @@ const JobsHeroSection = () => {
                             {/* Filter dropdowns */}
                             <div className="flex items-center gap-2 flex-wrap">
                                 {/* filter label: text-sm font-bold uppercase — matches JobDetail SectionLabel */}
-                                <div className="flex items-center gap-1 text-sm font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500 mr-0.5 flex-shrink-0">
+                                <div className="flex items-center gap-1 text-sm font-bold uppercase tracking-widest text-gray-400 dark:text-gray-700 mr-0.5 flex-shrink-0">
                                     <Filter className="w-3.5 h-3.5" /> Filters:
                                 </div>
-                                <FilterDropdown label="Category" options={CATEGORY_OPTIONS} value={filterCategory} onChange={setFilterCategory} />
+
                                 <FilterDropdown label="Job Type" options={JOB_TYPE_OPTIONS} value={filterType} onChange={setFilterType} />
                                 <FilterDropdown label="Location" options={LOCATION_OPTIONS} value={filterLocation} onChange={setFilterLocation} />
                                 <FilterDropdown label="Salary" options={SALARY_OPTIONS} value={filterSalary} onChange={setFilterSalary} />
@@ -544,7 +544,7 @@ const JobsHeroSection = () => {
                         <div className="flex items-center justify-between mb-5">
                             {/* results text: text-base font-medium — matches JobDetail supporting text */}
                             <p className="text-base font-medium text-gray-600 dark:text-gray-400">
-                                Showing <span className="text-gray-900 dark:text-white font-bold">{filtered.length}</span> jobs
+                                Showing <span className="text-gray-800 dark:text-white font-bold">{filtered.length}</span> jobs
                                 {activeCount > 0 && <span className="ml-1">(filtered)</span>}
                             </p>
                         </div>
@@ -561,11 +561,11 @@ const JobsHeroSection = () => {
                                 ))}
                             </div>
                         ) : (
-                            <div className="text-center py-16 bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 mb-6">
+                            <div className="text-center py-16 bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-800 mb-6">
                                 <Search className="w-10 h-10 text-gray-300 dark:text-gray-600 mx-auto mb-3" />
                                 {/* empty state: text-xl font-bold + text-base font-medium — matches JobDetail not-found pattern */}
                                 <p className="text-xl font-bold text-gray-800 dark:text-gray-200 mb-2">No jobs found</p>
-                                <p className="text-base font-medium text-gray-500 dark:text-gray-400 mb-5">Try adjusting your search or filters</p>
+                                <p className="text-base font-medium text-gray-700 dark:text-gray-400 mb-5">Try adjusting your search or filters</p>
                                 <button onClick={clearAll} className="px-5 py-2.5 bg-purple-600 text-white rounded-xl text-base font-bold hover:bg-purple-700 transition-colors">
                                     Clear all filters
                                 </button>
@@ -574,9 +574,9 @@ const JobsHeroSection = () => {
 
                         {/* ── Inline block ── */}
                         {inlineJobs.length > 0 && (
-                            <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-5 mb-6">
+                            <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-800 p-5 mb-6">
                                 {/* section label: text-sm font-bold uppercase tracking-widest — matches JobDetail SectionLabel exactly */}
-                                <p className="text-sm font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-4">More off campus drives</p>
+                                <p className="text-sm font-bold uppercase tracking-widest text-gray-700 dark:text-gray-400 mb-4">More Available Jobs</p>
                                 <div className="space-y-2.5">
                                     {inlineJobs.map((job, i) => (
                                         <InlineJobCard key={job._id} job={job} index={i} onClick={() => go(job._id)} />
@@ -593,8 +593,6 @@ const JobsHeroSection = () => {
                             >
                                 Explore All Jobs <ArrowRight className="w-4 h-4" />
                             </button>
-                            {/* caption: text-sm font-medium — matches JobDetail small supporting text */}
-                            <p className="text-sm font-medium text-gray-500 dark:text-gray-500 mt-2">No login required · 100% free</p>
                         </div>
                     </div>
 
@@ -603,10 +601,10 @@ const JobsHeroSection = () => {
                         <div className="sticky top-6 space-y-5">
 
                             {/* Social */}
-                            <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 overflow-hidden">
+                            <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-800 overflow-hidden">
                                 <div className="px-5 py-3.5 bg-white dark:bg-gray-800/50 border-b border-gray-100 dark:border-gray-800">
                                     {/* sidebar header: text-sm font-bold uppercase tracking-widest — matches JobDetail sidebar label */}
-                                    <p className="text-sm font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400">Stay updated</p>
+                                    <p className="text-sm font-bold uppercase tracking-widest text-gray-700 dark:text-gray-400">Stay updated</p>
                                 </div>
                                 <div className="p-5 space-y-3">
                                     {/* sidebar body: text-base font-medium — matches JobDetail sidebar paragraph */}
@@ -628,9 +626,9 @@ const JobsHeroSection = () => {
                             </div>
 
                             {/* Latest jobs */}
-                            <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 overflow-hidden">
+                            <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-800 overflow-hidden">
                                 <div className="px-5 py-3.5 bg-white dark:bg-gray-800/50 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between">
-                                    <p className="text-sm font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400">Latest openings</p>
+                                    <p className="text-sm font-bold uppercase tracking-widest text-gray-700 dark:text-gray-400">Latest openings</p>
                                     <a href="/Job-Portal" className="text-sm font-bold text-purple-600 dark:text-purple-400 hover:underline flex items-center gap-0.5">
                                         All <ExternalLink className="w-3 h-3" />
                                     </a>
@@ -657,7 +655,7 @@ const JobsHeroSection = () => {
                                                     {/* sidebar job title: text-base font-bold — matches JobDetail sidebar list */}
                                                     <p className="text-base font-bold text-gray-800 dark:text-gray-200 truncate group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">{job.title}</p>
                                                     {/* sidebar job meta: text-sm font-medium */}
-                                                    <p className="text-sm font-medium text-gray-500 dark:text-gray-500 truncate mt-0.5">{job.company}{job.location ? ` · ${job.location}` : ''}</p>
+                                                    <p className="text-sm font-medium text-gray-700 dark:text-gray-700 truncate mt-0.5">{job.company}{job.location ? ` · ${job.location}` : ''}</p>
                                                 </div>
                                             </div>
                                         ))
@@ -683,13 +681,19 @@ const JobsHeroSection = () => {
                             </div>
 
                             {/* Quick links */}
-                            <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-5">
-                                <p className="text-sm font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-3">Quick links</p>
+                            <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-800 p-5">
+                                <p className="text-sm font-bold uppercase tracking-widest text-gray-600 dark:text-gray-700 mb-3">Quick links</p>
                                 <div className="space-y-1.5">
-                                    {['Internships', 'Government Jobs', 'IT/Software Jobs', 'Freshers Jobs'].map(link => (
-                                        <a key={link} href="/Job-Portal"
+                                    {[
+
+                                        { label: 'Internships', href: '/Internships' },
+                                        { label: 'Freshers Jobs', href: '/Fresher-Jobs' },
+                                        { label: 'Experienced Jobs', href: '/Experienced-Jobs' },
+                                        { label: 'IT/Software Jobs', href: '/Job-Portal' },
+                                    ].map(link => (
+                                        <a key={link.label} href={link.href}
                                             className="flex items-center gap-2 text-base font-medium text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors py-1">
-                                            <ArrowRight className="w-3.5 h-3.5 flex-shrink-0 text-gray-300 dark:text-gray-600" /> {link}
+                                            <ArrowRight className="w-3.5 h-3.5 flex-shrink-0 text-gray-300 dark:text-gray-600" /> {link.label}
                                         </a>
                                     ))}
                                 </div>
@@ -706,9 +710,9 @@ const JobsHeroSection = () => {
 
                     <div className="text-center mb-8">
                         {/* section eyebrow: text-sm font-bold uppercase tracking-widest — matches JobDetail SectionLabel */}
-                        <p className="text-sm font-bold uppercase tracking-widest text-purple-500 mb-2">Why choose us</p>
+                        <p className="text-2xl font-bold uppercase tracking-widest text-purple-500 mb-2">Why choose us</p>
                         {/* section heading: text-2xl font-bold — matches JobDetail SectionTitle */}
-                        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Everything you need to land your next job</h2>
+                        <h2 className="text-2xl font-bold text-gray-800 dark:text-white">Everything you need to land your next job</h2>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
@@ -721,9 +725,9 @@ const JobsHeroSection = () => {
                     {/* How to apply */}
                     <div className="bg-gray-50 dark:bg-gray-800/40 rounded-2xl p-7 mb-10">
                         <div className="text-center mb-7">
-                            <p className="text-sm font-bold uppercase tracking-widest text-purple-500 mb-1">Simple process</p>
+                            <p className="text-2xl font-bold uppercase tracking-widest text-purple-500 mb-1">Simple process</p>
                             {/* sub-section heading: text-xl font-bold — matches JobDetail mid-level heading */}
-                            <h2 className="text-xl font-bold text-gray-900 dark:text-white">Apply in 3 easy steps</h2>
+                            <h2 className="text-xl font-bold text-gray-800 dark:text-white">Apply in 3 easy steps</h2>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                             {[
@@ -735,7 +739,7 @@ const JobsHeroSection = () => {
                                     <div className="text-4xl font-black text-purple-100 dark:text-purple-900 flex-shrink-0 leading-none">{s.n}</div>
                                     <div>
                                         {/* step title: text-base font-bold */}
-                                        <h3 className="text-base font-bold text-gray-900 dark:text-white mb-1">{s.t}</h3>
+                                        <h3 className="text-base font-bold text-gray-800 dark:text-white mb-1">{s.t}</h3>
                                         {/* step desc: text-base font-medium */}
                                         <p className="text-base font-medium text-gray-600 dark:text-gray-400 leading-relaxed">{s.d}</p>
                                     </div>
@@ -746,7 +750,7 @@ const JobsHeroSection = () => {
 
                     {/* Disclaimer */}
                     {/* disclaimer: text-sm font-medium — matches JobDetail disclaimer text */}
-                    <p className="text-sm font-medium text-gray-500 dark:text-gray-500 text-center leading-relaxed max-w-3xl mx-auto border-t border-gray-100 dark:border-gray-800 pt-8">
+                    <p className="text-sm font-medium text-gray-700 dark:text-gray-700 text-center leading-relaxed max-w-3xl mx-auto border-t border-gray-100 dark:border-gray-800 pt-8">
                         <span className="font-bold text-gray-700 dark:text-gray-400">Disclaimer:</span> The recruitment information provided is for informational purposes only. Sourced from official company websites. We have no affiliation with any company and provide no recruitment guarantees. No fee is charged for this service.
                     </p>
                 </div>

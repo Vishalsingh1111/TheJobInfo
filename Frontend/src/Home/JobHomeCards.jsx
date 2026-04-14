@@ -294,9 +294,9 @@ const InlineJobCard = ({ job, index, onClick }) => {
     return (
         <div
             onClick={onClick}
-            className="group cursor-pointer bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-800 p-4 flex items-center gap-4 hover:border-purple-200 dark:hover:border-purple-800 hover:shadow-md transition-all"
+            className="group cursor-pointer bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-600 p-4 flex items-center gap-4 hover:border-purple-200  hover:shadow-md transition-all"
         >
-            <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${bg} flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform overflow-hidden`}>
+            <div className={`w-35 h-32 rounded-xl bg-gradient-to-br ${bg} flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform overflow-hidden`}>
                 {job.imageUrl
                     ? <img src={job.imageUrl} alt={job.company} className="w-full h-full object-cover" />
                     : <Briefcase className="w-5 h-5 text-white" />
@@ -308,12 +308,19 @@ const InlineJobCard = ({ job, index, onClick }) => {
                 {/* meta: text-sm font-medium — matches JobDetail sub-text */}
                 <p className="text-sm font-medium text-gray-700 dark:text-gray-400 truncate mt-0.5">
                     {job.company}
-                    {job.location ? ` · ${job.location}` : ''}
-                    {job.salary ? ` · ${job.salary}` : ''}
-                    {job.lastDate ? ` · Apply by ${job.lastDate}` : ''}
                 </p>
+                <p className="text-sm font-medium text-gray-700 dark:text-gray-400 truncate mt-0.5">
+                    {job.location ? `  ${job.location}` : ''}
+                </p>
+                <p className="text-sm font-medium text-gray-700 dark:text-gray-400 truncate mt-0.5">
+                    {job.salary ? ` ${job.salary}` : ''}
+                </p>
+                <p className="text-sm font-medium text-gray-700 dark:text-gray-400 truncate mt-0.5">
+                    {job.lastDate ? `  Apply by ${job.lastDate}` : ''}
+                </p>
+
             </div>
-            <ArrowRight className="w-5 h-5 text-gray-400 dark:text-gray-700 group-hover:text-purple-500 group-hover:translate-x-0.5 transition-all flex-shrink-0" />
+
         </div>
     );
 };
@@ -500,7 +507,7 @@ const JobsHeroSection = () => {
                             {/* Filter dropdowns */}
                             <div className="flex items-center gap-2 flex-wrap">
                                 {/* filter label: text-sm font-bold uppercase — matches JobDetail SectionLabel */}
-                                <div className="flex items-center gap-1 text-sm font-bold uppercase tracking-widest text-gray-400 dark:text-gray-700 mr-0.5 flex-shrink-0">
+                                <div className="flex items-center gap-1 text-sm font-bold uppercase tracking-widest text-gray-400 dark:text-gray-300 mr-0.5 flex-shrink-0">
                                     <Filter className="w-3.5 h-3.5" /> Filters:
                                 </div>
 
@@ -655,7 +662,7 @@ const JobsHeroSection = () => {
                                                     {/* sidebar job title: text-base font-bold — matches JobDetail sidebar list */}
                                                     <p className="text-base font-bold text-gray-800 dark:text-gray-200 truncate group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">{job.title}</p>
                                                     {/* sidebar job meta: text-sm font-medium */}
-                                                    <p className="text-sm font-medium text-gray-700 dark:text-gray-700 truncate mt-0.5">{job.company}{job.location ? ` · ${job.location}` : ''}</p>
+                                                    <p className="text-sm font-medium text-gray-700 dark:text-gray-300 truncate mt-0.5">{job.company}{job.location ? ` · ${job.location}` : ''}</p>
                                                 </div>
                                             </div>
                                         ))
@@ -682,7 +689,7 @@ const JobsHeroSection = () => {
 
                             {/* Quick links */}
                             <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-800 p-5">
-                                <p className="text-sm font-bold uppercase tracking-widest text-gray-600 dark:text-gray-700 mb-3">Quick links</p>
+                                <p className="text-sm font-bold uppercase tracking-widest text-gray-600 dark:text-gray-300 mb-3">Quick links</p>
                                 <div className="space-y-1.5">
                                     {[
 

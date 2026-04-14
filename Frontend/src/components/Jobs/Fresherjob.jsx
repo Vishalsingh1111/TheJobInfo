@@ -18,7 +18,7 @@ import { matchExperience, matchSalary } from '../Common/FilterHelpers';
 import Navbar from "../Navbar";
 import Footer from "../Footer";
 
-const PAGE_SIZE = 20;
+const PAGE_SIZE = 15;
 
 const CATEGORY_TABS = [
     { label: 'All Jobs', icon: Briefcase, color: 'from-purple-600 to-pink-600', route: '/Job-Portal', active: false },

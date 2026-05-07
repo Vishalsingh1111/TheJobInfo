@@ -294,12 +294,12 @@ const InlineJobCard = ({ job, index, onClick }) => {
     return (
         <div
             onClick={onClick}
-            className="group cursor-pointer bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-600 p-4 flex items-center gap-4 hover:border-purple-200  hover:shadow-md transition-all"
+            className="group cursor-pointer bg-white dark:bg-gray-800 rounded-xl border border-gray-300 dark:border-gray-600 p-4 flex items-center gap-4 hover:border-purple-200  hover:shadow-md transition-all"
         >
             <div className={`w-35 h-32 rounded-xl bg-gradient-to-br ${bg} flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform overflow-hidden`}>
                 {job.imageUrl
                     ? <img src={job.imageUrl} alt={job.company} className="w-full h-full object-cover" />
-                    : <Briefcase className="w-5 h-5 text-white" />
+                    : <div className='w-20 h-10 md:w-32 md:h-20 flex items-center justify-center'><Briefcase className="w-10 h-10 text-white" /></div>
                 }
             </div>
             <div className="flex-1 min-w-0">

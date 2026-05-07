@@ -68,11 +68,11 @@ function Footer() {
                             <div className="flex items-center gap-4">
                                 <div className="relative">
                                     <div className="absolute inset-0 rounded-full blur-lg opacity-50"></div>
-                                    <img
+                                    {/* <img
                                         src='./logo.png'
                                         className='relative w-20 h-20 rounded-full border-2 border-gray-200 shadow-xl'
                                         alt="Logo"
-                                    />
+                                    /> */}
                                 </div>
                                 <div className='flex flex-col'>
                                     <span className="text-2xl font-semibold bg-gradient-to-r from-red-500 to-pink-600 bg-clip-text text-transparent" style={{ fontFamily: '"Quicksand", sans-serif', fontWeight: '900' }}>

@@ -6,7 +6,7 @@ import AddAdmin from './Admin/Admin_authentications/Addadmin';
 import DashBoard from './Admin/Admin_common/Dashboard';
 // import { useadminAuth } from './Context/AuthProvider2';
 import { useAdminAuth } from './Context/AuthProvider2';
-
+import BlogForm from "./Admin/Blogs/BlogForm";
 
 function App() {
   const [authAdmin, setAuthAdmin] = useAdminAuth();
@@ -18,6 +18,7 @@ function App() {
           <Route path='/' element={authAdmin ? <DashBoard /> : <Navigate to="/Adminlogin" />}></Route>
           <Route path="/Adminlogin" element={<AdminloginPage />}></Route>
           <Route path="/AddAdmin" element={<AddAdmin />}></Route>
+          <Route path="/BlogForm" element={<BlogForm />}></Route>
 
         </Routes>
 

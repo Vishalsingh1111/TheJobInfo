@@ -15,7 +15,7 @@ import Internships from './components/Jobs/Internship';
 import Contactform from './Contacts/Contactform';
 import PrivacyPolicy from './components/Common/Privacy&Policy';
 import TermsAndConditions from './components/Common/TermsCondition';
-
+import BlogPage from './components/Blogs/BlogPage';
 
 
 const App = () => {
@@ -36,6 +36,7 @@ const App = () => {
           <Route path='/jobdetail/:id' element={<BlogDetail />} />
           <Route path='/privacy' element={<PrivacyPolicy />} />
           <Route path='/terms' element={<TermsAndConditions />} />
+          <Route path='/blogs' element={<BlogPage />} />
         </Routes>
         <Toaster />
       </div>

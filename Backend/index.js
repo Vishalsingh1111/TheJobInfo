@@ -14,6 +14,7 @@ import jobRoutes from "./Route/Job.route.js";
 import contactRoute from "./Route/Contact.route.js";
 import AdminRoute from "./Route/Admin.route.js";
 import newslatterRoute from './Route/Newslatter.route.js';
+import blog from "./Route/Blog.route.js";
 
 
 
@@ -98,6 +99,7 @@ app.use('/job', jobRoutes);
 app.use("/contact", contactRoute);
 app.use("/admin", AdminRoute);
 app.use("/newslatter", newslatterRoute);
+app.use("/blog", blog);
 
 
 

@@ -78,7 +78,7 @@ function Footer() {
                                     <span className="text-2xl font-semibold bg-gradient-to-r from-red-500 to-pink-600 bg-clip-text text-transparent" style={{ fontFamily: '"Quicksand", sans-serif', fontWeight: '900' }}>
                                         THEJOBINFO
                                     </span>
-                                    <span className='text-sm text-gray-600 dark:text-gray-400 justify-content mx-auto'>Powered by DCODER</span>
+
                                 </div>
                             </div>
 

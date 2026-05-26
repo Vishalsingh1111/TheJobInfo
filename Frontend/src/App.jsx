@@ -16,6 +16,7 @@ import Contactform from './Contacts/Contactform';
 import PrivacyPolicy from './components/Common/Privacy&Policy';
 import TermsAndConditions from './components/Common/TermsCondition';
 import BlogPage from './components/Blogs/BlogPage';
+import BlogDetails from './components/Blogs/BlogDetail';
 
 
 const App = () => {
@@ -36,7 +37,9 @@ const App = () => {
           <Route path='/jobdetail/:id' element={<BlogDetail />} />
           <Route path='/privacy' element={<PrivacyPolicy />} />
           <Route path='/terms' element={<TermsAndConditions />} />
+          {/* BLOGS */}
           <Route path='/blogs' element={<BlogPage />} />
+          <Route path='/blogs/:slug' element={<BlogDetails />} />
         </Routes>
         <Toaster />
       </div>

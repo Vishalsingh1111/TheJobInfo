@@ -21,32 +21,70 @@ const getPalette = (company) => {
 };
 
 // ── Auto Image — full card panel shown when no imageUrl ────────────────────
+// const AutoJobImageCompact = ({ title, company, location }) => {
+//     const p = getPalette(company);
+//     return (
+//         <div className="w-full h-full bg-white dark:bg-black flex flex-col items-center justify-center py-4 px-4 text-center">
+//             <p
+//                 className="text-sm font-bold uppercase tracking-wide mb-1 leading-tight"
+//                 style={{ color: p.company }}
+//             >
+//                 {company?.length > 20 ? company.slice(0, 20) + '…' : company}
+//             </p>
+//             <p
+//                 className="text-2xl font-bold leading-tight mb-1.5 line-clamp-2"
+//                 style={{ color: p.title }}
+//             >
+//                 {title?.length > 32 ? title.slice(0, 32) + '…' : title}
+//             </p>
+//             {location && (
+//                 <span
+//                     className="text-md font-medium flex items-center gap-1"
+//                     style={{ color: p.accent }}
+//                 >
+//                     <MapPin className="w-3 h-3" />
+//                     {location?.length > 12 ? location.slice(0, 12) + '…' : location}
+//                 </span>
+//             )}
+//             <span className="mt-2 text-md text-gray-300 dark:text-gray-600 font-semibold">
+//                 TheJobInfo
+//             </span>
+//         </div>
+//     );
+// };
+
 const AutoJobImageCompact = ({ title, company, location }) => {
-    const p = getPalette(company);
+    const GRADIENTS = [
+        'from-violet-500 to-purple-600',
+        'from-rose-500 to-pink-600',
+        'from-sky-500 to-blue-600',
+        'from-emerald-500 to-teal-600',
+        'from-orange-500 to-amber-600',
+        'from-fuchsia-500 to-pink-600',
+        'from-blue-500 to-cyan-600',
+        'from-green-500 to-emerald-600',
+    ];
+
+    const hash = [...(company || 'X')].reduce((a, c) => a + c.charCodeAt(0), 0);
+    const gradient = GRADIENTS[hash % GRADIENTS.length];
+
     return (
-        <div className="w-full h-full bg-white dark:bg-black flex flex-col items-center justify-center py-4 px-4 text-center">
-            <p
-                className="text-sm font-bold uppercase tracking-wide mb-1 leading-tight"
-                style={{ color: p.company }}
-            >
+        <div
+            className={`w-full h-full flex flex-col items-center justify-center py-4 px-4 text-center bg-gradient-to-br ${gradient}`}
+        >
+            <p className="text-sm font-bold uppercase tracking-wide mb-1 leading-tight text-white/70">
                 {company?.length > 20 ? company.slice(0, 20) + '…' : company}
             </p>
-            <p
-                className="text-2xl font-bold leading-tight mb-1.5 line-clamp-2"
-                style={{ color: p.title }}
-            >
+            <p className="text-2xl font-bold leading-tight mb-1.5 line-clamp-2 text-white">
                 {title?.length > 32 ? title.slice(0, 32) + '…' : title}
             </p>
             {location && (
-                <span
-                    className="text-md font-medium flex items-center gap-1"
-                    style={{ color: p.accent }}
-                >
+                <span className="text-md font-medium flex items-center gap-1 text-white/80">
                     <MapPin className="w-3 h-3" />
                     {location?.length > 12 ? location.slice(0, 12) + '…' : location}
                 </span>
             )}
-            <span className="mt-2 text-md text-gray-300 dark:text-gray-600 font-semibold">
+            <span className="mt-2 text-md font-semibold text-white/40">
                 TheJobInfo
             </span>
         </div>

@@ -56,15 +56,15 @@ export const AutoBlogImageCompact = ({ title, category, index }) => {
                 <BookOpen className="w-5 h-5 text-white" />
             </div>
 
-            <p className="text-white/75 text-xs font-bold uppercase tracking-widest mb-1 leading-tight">
+            <p className="text-white/75 text-sm font-bold uppercase tracking-widest mb-1 leading-tight">
                 {category?.length > 14
                     ? `${category.slice(0, 14)}…`
                     : category}
             </p>
 
-            <p className="text-white font-bold text-sm leading-snug line-clamp-2 drop-shadow px-1">
-                {title?.length > 38
-                    ? `${title.slice(0, 38)}…`
+            <p className="text-white font-bold text-md leading-snug line-clamp-2 drop-shadow px-1">
+                {title?.length > 24
+                    ? `${title.slice(0, 24)}…`
                     : title}
             </p>
 

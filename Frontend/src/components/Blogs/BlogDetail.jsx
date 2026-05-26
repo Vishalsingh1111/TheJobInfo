@@ -139,7 +139,7 @@ const ShareBar = ({ title, author }) => {
 
     return (
         <div className="flex flex-wrap items-center gap-2">
-            <span className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest mr-1">Share:</span>
+
             {socialLinks.map((s, i) => (
                 <a
                     key={i}
@@ -223,7 +223,7 @@ const PrevNextBar = ({ prev, next, onGo }) => (
 const RelatedBlogsGrid = ({ blogs, onGo }) => (
     <div className="mt-6">
         <div className="py-4 border-b border-gray-200 dark:border-gray-700 mb-5">
-            <h2 className="text-base font-bold text-gray-900 dark:text-white uppercase tracking-wide">Related Articles</h2>
+            <h2 className="text-lg font-bold text-gray-700 dark:text-white uppercase tracking-wide">Related Articles</h2>
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-6">
             {blogs.slice(0, 6).map((blog, i) => (
@@ -239,7 +239,7 @@ const RelatedBlogsGrid = ({ blogs, onGo }) => (
                             <AutoBlogImageCompact title={blog.title} category={blog.category} index={i} />
                         )}
                     </div>
-                    <p className="text-sm font-semibold text-gray-800 dark:text-gray-200 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors leading-snug line-clamp-2 mb-1">
+                    <p className="text-md font-semibold text-gray-800 dark:text-gray-200 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors leading-snug line-clamp-2 mb-1">
                         {blog.title}
                     </p>
                     {blog.category && (
@@ -539,7 +539,7 @@ const BlogDetail = () => {
                                                     {blog.tags.map(tag => (
                                                         <span
                                                             key={tag}
-                                                            className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 rounded-lg text-xs font-semibold"
+                                                            className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 rounded-lg text-md font-semibold"
                                                         >
                                                             <Tag className="w-3 h-3 text-yellow-500" /> {tag}
                                                         </span>
@@ -551,7 +551,7 @@ const BlogDetail = () => {
                                     )}
 
                                     {/* Disclaimer */}
-                                    <div className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed bg-gray-50 dark:bg-gray-800/40 border border-gray-100 dark:border-gray-700 rounded-xl p-4">
+                                    <div className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed bg-gray-50 dark:bg-gray-800/40 border border-gray-100 dark:border-gray-700 rounded-xl p-4">
                                         <span className="font-bold text-gray-600 dark:text-gray-300">Disclaimer: </span>
                                         The information in this article is for educational purposes only. For more details, please visit our{' '}
                                         <a href="/privacy-policy" className="text-purple-600 dark:text-purple-400 hover:underline font-semibold">Privacy Policy</a>.
@@ -583,10 +583,10 @@ const BlogDetail = () => {
                                 {/* Stay Updated */}
                                 <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl overflow-hidden">
                                     <div className="px-4 py-3 bg-gray-50 dark:bg-gray-800/60 border-b border-gray-100 dark:border-gray-700">
-                                        <p className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest">Stay Updated</p>
+                                        <p className="text-lg font-bold text-gray-600 dark:text-gray-400 uppercase tracking-widest">Stay Updated</p>
                                     </div>
                                     <div className="p-4 space-y-2.5">
-                                        <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
+                                        <p className="text-md text-gray-500 dark:text-gray-400 leading-relaxed">
                                             Get the latest interview tips, job alerts &amp; off-campus drives.
                                         </p>
                                         <a
@@ -612,14 +612,14 @@ const BlogDetail = () => {
                                 {/* Blog Categories */}
                                 <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl overflow-hidden">
                                     <div className="px-4 py-3 bg-gray-50 dark:bg-gray-800/60 border-b border-gray-100 dark:border-gray-700">
-                                        <p className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest">Categories</p>
+                                        <p className="text-lg font-bold text-gray-600 dark:text-gray-400 uppercase tracking-widest">Categories</p>
                                     </div>
                                     <div className="px-2 py-2">
                                         {['Interview Tips', 'DSA', 'System Design', 'HR Round', 'Resume Tips', 'Career Advice'].map(cat => (
                                             <a
                                                 key={cat}
                                                 href={`/blogs?category=${encodeURIComponent(cat)}`}
-                                                className="flex items-center gap-2 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/10 transition-colors px-3 py-2 rounded-xl"
+                                                className="flex items-center gap-2 text-md font-medium text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/10 transition-colors px-3 py-2 rounded-xl"
                                             >
                                                 <ArrowRight className="w-3 h-3 flex-shrink-0 text-gray-300 dark:text-gray-600" /> {cat}
                                             </a>
@@ -631,7 +631,7 @@ const BlogDetail = () => {
                                 {otherBlogs.length > 0 && (
                                     <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl overflow-hidden">
                                         <div className="px-4 py-3 bg-gray-50 dark:bg-gray-800/60 border-b border-gray-100 dark:border-gray-700">
-                                            <p className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest">Recent Articles</p>
+                                            <p className="text-lg font-bold text-gray-600 dark:text-gray-400 uppercase tracking-widest">Recent Articles</p>
                                         </div>
                                         <div className="divide-y divide-gray-50 dark:divide-gray-800">
                                             {otherBlogs.slice(0, 5).map((b, idx) => (
@@ -650,7 +650,7 @@ const BlogDetail = () => {
                                                         )}
                                                     </div>
                                                     <div className="flex-1 min-w-0">
-                                                        <p className="text-sm font-semibold text-gray-800 dark:text-gray-200 line-clamp-2 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors leading-snug">
+                                                        <p className="text-md font-semibold text-gray-800 dark:text-gray-200 line-clamp-2 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors leading-snug">
                                                             {b.title}
                                                         </p>
                                                         <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5 truncate">
@@ -661,7 +661,7 @@ const BlogDetail = () => {
                                             ))}
                                         </div>
                                         <div className="px-4 py-3 border-t border-gray-50 dark:border-gray-800">
-                                            <a href="/blogs" className="text-xs font-bold text-purple-600 dark:text-purple-400 hover:underline flex items-center gap-1">
+                                            <a href="/blogs" className="text-md font-bold text-purple-600 dark:text-purple-400 hover:underline flex items-center gap-1">
                                                 All articles <ArrowRight className="w-3 h-3" />
                                             </a>
                                         </div>
@@ -672,7 +672,7 @@ const BlogDetail = () => {
                                 {recentJobs.length > 0 && (
                                     <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl overflow-hidden">
                                         <div className="px-4 py-3 bg-gray-50 dark:bg-gray-800/60 border-b border-gray-100 dark:border-gray-700">
-                                            <p className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest">Latest Jobs</p>
+                                            <p className="text-lg font-bold text-gray-600 dark:text-gray-400 uppercase tracking-widest">Latest Jobs</p>
                                         </div>
                                         <div className="divide-y divide-gray-50 dark:divide-gray-800">
                                             {recentJobs.map((job, idx) => (
@@ -691,7 +691,7 @@ const BlogDetail = () => {
                                                         )}
                                                     </div>
                                                     <div className="flex-1 min-w-0">
-                                                        <p className="text-sm font-semibold text-gray-800 dark:text-gray-200 truncate group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+                                                        <p className="text-md font-semibold text-gray-800 dark:text-gray-200 truncate group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
                                                             {job.title}
                                                         </p>
                                                         <p className="text-xs text-gray-400 dark:text-gray-500 truncate mt-0.5">
@@ -707,7 +707,7 @@ const BlogDetail = () => {
                                             ))}
                                         </div>
                                         <div className="px-4 py-3 border-t border-gray-50 dark:border-gray-800">
-                                            <a href="/Job-Portal" className="text-xs font-bold text-purple-600 dark:text-purple-400 hover:underline flex items-center gap-1">
+                                            <a href="/Job-Portal" className="text-md font-bold text-purple-600 dark:text-purple-400 hover:underline flex items-center gap-1">
                                                 See all jobs <ArrowRight className="w-3 h-3" />
                                             </a>
                                         </div>
@@ -716,8 +716,8 @@ const BlogDetail = () => {
 
                                 {/* Telegram CTA */}
                                 <div className="p-4 bg-gradient-to-br from-sky-50 to-blue-50 dark:from-sky-900/20 dark:to-blue-900/20 border border-sky-100 dark:border-sky-800/40 rounded-2xl">
-                                    <p className="text-sm font-bold text-gray-800 dark:text-gray-200 mb-1">10,000+ students joined!</p>
-                                    <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed mb-3">
+                                    <p className="text-md font-bold text-gray-800 dark:text-gray-200 mb-1">10,000+ students joined!</p>
+                                    <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed mb-3">
                                         Daily job alerts, off-campus drives &amp; interview tips on Telegram.
                                     </p>
                                     <a

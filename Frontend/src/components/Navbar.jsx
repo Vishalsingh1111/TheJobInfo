@@ -76,6 +76,7 @@ const Navbar = () => {
             ]
         },
         { name: 'INTERNSHIPS', href: '/Internships' },
+        { name: 'INTERVIEW GUIDES', href: '/Blogs' },
         { name: 'ABOUT', href: '/About' },
         { name: 'CONTACT', href: '/Contact' },
     ];
@@ -98,9 +99,7 @@ const Navbar = () => {
                                 >
                                     THEJOBINFO
                                 </span>
-                                <span className="text-xs text-gray-600 dark:text-gray-400 text-center">
-                                    Powered by DCODER
-                                </span>
+
                             </div>
                         </a>
 

@@ -20,7 +20,7 @@ import {
 // API: GET /job  → array of jobs
 
 const TELEGRAM_LINK = 'https://t.me/dcoder75';
-const INSTAGRAM_LINK = 'https://www.instagram.com/dcoder75/';
+const INSTAGRAM_LINK = 'https://www.instagram.com/thejob.info/';
 
 const GRADIENTS_BLOG = [
     'from-violet-500 to-purple-600',

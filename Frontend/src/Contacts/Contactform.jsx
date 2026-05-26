@@ -56,7 +56,7 @@ const ContactForm = () => {
         },
         {
             label: 'Instagram',
-            href: 'https://www.instagram.com/dcoder75/',
+            href: 'https://www.instagram.com/thejob.info/',
             color: 'bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600',
             icon: (
                 <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">

@@ -117,6 +117,7 @@ function Footer() {
                                     { name: 'Job for fresher', link: '/Fresher-Jobs' },
                                     { name: 'Job for Experienced', link: '/Experienced-Jobs' },
                                     { name: 'Internship', link: '/Internships' },
+                                    { name: 'Interview Guide', link: '/Blogs' },
                                 ].map((item, index) => (
                                     <li key={index}>
                                         <a
@@ -231,7 +232,7 @@ function Footer() {
                                 <MessageCircle className="w-5 h-5 text-gray-400 group-hover:text-white transition-colors duration-300" />
                             </a>
 
-                            <a href="https://www.instagram.com/"
+                            <a href="https://www.instagram.com/thejob.info/"
                                 target="_blank" rel="noopener noreferrer"
                                 className="group flex items-center justify-center bg-white/5 hover:bg-pink-600 p-3 rounded-xl border border-gray-800 hover:border-pink-600 transition-all duration-300">
                                 <Instagram className="w-5 h-5 text-gray-400 group-hover:text-white transition-colors duration-300" />

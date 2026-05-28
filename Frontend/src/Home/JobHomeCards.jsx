@@ -13,7 +13,7 @@ import {
 import { baseUrl } from '../Baseurl';
 import HeroBlog from './HeroBlog';
 
-const INSTAGRAM_LINK = 'https://www.instagram.com/dcoder75/';
+const INSTAGRAM_LINK = 'https://www.instagram.com/thejob.info/';
 const TELEGRAM_LINK = 'https://t.me/dcoder75';
 
 const truncate = (text, len) => {

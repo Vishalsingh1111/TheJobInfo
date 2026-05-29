@@ -1,3 +1,5 @@
+
+
 import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -68,7 +70,11 @@ const ExperiencedJobs = () => {
     const hasMore = visibleCount < filtered.length;
     const allShown = visibleCount >= filtered.length && visibleCount > PAGE_SIZE;
 
-    const go = (id) => { window.scrollTo({ top: 0, behavior: 'instant' }); navigate(`/jobdetail/${id}`); };
+    // ✅ FIXED: pass full job object, use slug with _id fallback
+    const go = (job) => {
+        window.scrollTo({ top: 0, behavior: 'instant' });
+        navigate(`/jobdetail/${job.slug || job._id}`);
+    };
 
     return (
         <>
@@ -159,8 +165,9 @@ const ExperiencedJobs = () => {
                     ) : (
                         <>
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-5 mb-8">
+                                {/* ✅ FIXED: pass item object, not item._id */}
                                 {visible.map((item, index) => (
-                                    <Jobcard key={item._id} item={item} index={index} onClick={() => go(item._id)} />
+                                    <Jobcard key={item._id} item={item} index={index} onClick={() => go(item)} />
                                 ))}
                             </div>
 

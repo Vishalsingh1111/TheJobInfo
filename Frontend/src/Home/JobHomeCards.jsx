@@ -1,6 +1,4 @@
 
-
-
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -8,7 +6,8 @@ import {
     Briefcase, MapPin, IndianRupee, Clock, ArrowRight,
     Search, X, ChevronDown, Send, TrendingUp,
     Zap, Users, Star, Globe,
-    Flame, Bell, CheckCircle, ExternalLink, Filter
+    Flame, Bell, CheckCircle, ExternalLink, Filter,
+    CalendarDays
 } from 'lucide-react';
 import { baseUrl } from '../Baseurl';
 import HeroBlog from './HeroBlog';
@@ -19,6 +18,16 @@ const TELEGRAM_LINK = 'https://t.me/dcoder75';
 const truncate = (text, len) => {
     if (!text) return '';
     return text.length <= len ? text : text.slice(0, len) + '...';
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+// FORMAT DATE — shows "12 Jan 2025" or falls back gracefully
+// ─────────────────────────────────────────────────────────────────────────────
+const formatDate = (raw) => {
+    if (!raw) return null;
+    const d = new Date(raw);
+    if (isNaN(d.getTime())) return null;
+    return d.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -235,6 +244,9 @@ const SkeletonCard = () => (
 const JobCard = ({ job, index, onClick }) => {
     const { bg } = CARD_GRADS[index % CARD_GRADS.length];
 
+    // ✅ resolve posted date — try createdAt, postedAt, postedDate, date fields
+    const postedDate = formatDate(job.createdAt || job.postedAt || job.postedDate || job.date);
+
     return (
         <div
             onClick={onClick}
@@ -271,6 +283,15 @@ const JobCard = ({ job, index, onClick }) => {
                         <TrendingUp className="w-3.5 h-3.5" /> Hot
                     </span>
                 </div>
+
+                {/* ✅ Posted date badge — bottom-left of image */}
+                {postedDate && (
+                    <div className="absolute bottom-3 left-3 z-10">
+                        <span className="flex items-center gap-1 text-xs font-semibold px-2.5 py-1 bg-black/50 backdrop-blur-sm text-white rounded-full">
+                            <CalendarDays className="w-3 h-3" /> {postedDate}
+                        </span>
+                    </div>
+                )}
             </div>
 
             {/* ── BOTTOM: details ── */}
@@ -330,6 +351,10 @@ const JobCard = ({ job, index, onClick }) => {
 // ─────────────────────────────────────────────────────────────────────────────
 const InlineJobCard = ({ job, index, onClick }) => {
     const { bg } = CARD_GRADS[index % CARD_GRADS.length];
+
+    // ✅ resolve posted date
+    const postedDate = formatDate(job.createdAt || job.postedAt || job.postedDate || job.date);
+
     return (
         <div
             onClick={onClick}
@@ -356,12 +381,10 @@ const InlineJobCard = ({ job, index, onClick }) => {
                 {job.location && (
                     <p className="text-sm font-medium text-gray-700 dark:text-gray-400 truncate mt-0.5">{job.location}</p>
                 )}
-                {job.salary && (
-                    <p className="text-sm font-medium text-gray-700 dark:text-gray-400 truncate mt-0.5">{job.salary}</p>
-                )}
-                {job.lastDate && (
-                    <p className="text-sm font-medium text-gray-700 dark:text-gray-400 truncate mt-0.5">
-                        Apply by {job.lastDate}
+                {/* ✅ Posted date row */}
+                {postedDate && (
+                    <p className="flex items-center gap-1 text-xs font-medium text-gray-400 dark:text-gray-500 mt-1">
+                        <CalendarDays className="w-3 h-3" /> Posted {postedDate}
                     </p>
                 )}
             </div>
@@ -456,9 +479,10 @@ const JobsHeroSection = () => {
         setSortBy(SORT_OPTIONS[0]);
     };
 
-    const go = (id) => {
+    // ✅ FIXED: pass full job object, use slug with _id fallback
+    const go = (job) => {
         window.scrollTo({ top: 0, behavior: 'instant' });
-        navigate(`/jobdetail/${id}`);
+        navigate(`/jobdetail/${job.slug || job._id}`);
     };
 
     return (
@@ -579,8 +603,9 @@ const JobsHeroSection = () => {
                             </div>
                         ) : featuredJobs.length > 0 ? (
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-6">
+                                {/* ✅ FIXED: pass full job object */}
                                 {featuredJobs.map((job, i) => (
-                                    <JobCard key={job._id} job={job} index={i} onClick={() => go(job._id)} />
+                                    <JobCard key={job._id} job={job} index={i} onClick={() => go(job)} />
                                 ))}
                             </div>
                         ) : (
@@ -599,8 +624,9 @@ const JobsHeroSection = () => {
                             <div>
                                 <p className="text-lg font-bold uppercase text-gray-700 dark:text-gray-400 mb-2">More Available Jobs</p>
                                 <div className="space-y-3.5 py-4 border-t border-gray-300 dark:border-gray-700">
+                                    {/* ✅ FIXED: pass full job object */}
                                     {inlineJobs.map((job, i) => (
-                                        <InlineJobCard key={job._id} job={job} index={i} onClick={() => go(job._id)} />
+                                        <InlineJobCard key={job._id} job={job} index={i} onClick={() => go(job)} />
                                     ))}
                                 </div>
                             </div>
@@ -664,12 +690,20 @@ const JobsHeroSection = () => {
                                             </div>
                                         ))
                                         : allJobs.slice(0, 7).map(job => (
-                                            <div key={job._id} onClick={() => go(job._id)}
+                                            // ✅ FIXED: pass full job object
+                                            <div key={job._id} onClick={() => go(job)}
                                                 className="flex items-start gap-3 px-5 py-3.5 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors group">
                                                 <div className="w-2.5 h-2.5 rounded-full bg-green-400 border-2 border-green-500 flex-shrink-0 mt-1.5" />
                                                 <div className="flex-1 min-w-0">
                                                     <p className="text-base font-bold text-gray-800 dark:text-gray-200 truncate group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">{job.title}</p>
                                                     <p className="text-sm font-medium text-gray-700 dark:text-gray-300 truncate mt-0.5">{job.company}{job.location ? ` · ${job.location}` : ''}</p>
+                                                    {/* ✅ Date in sidebar list */}
+                                                    {formatDate(job.createdAt || job.postedAt || job.postedDate || job.date) && (
+                                                        <p className="flex items-center gap-1 text-xs text-gray-400 dark:text-gray-500 mt-0.5">
+                                                            <CalendarDays className="w-3 h-3" />
+                                                            {formatDate(job.createdAt || job.postedAt || job.postedDate || job.date)}
+                                                        </p>
+                                                    )}
                                                 </div>
                                             </div>
                                         ))

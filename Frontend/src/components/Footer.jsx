@@ -410,7 +410,7 @@ function Footer() {
 
                             {/* Instagram */}
                             <a
-                                href="https://www.instagram.com/thejob.info/"
+                                href="https://www.instagram.com/the.job.info/"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 aria-label="Instagram"

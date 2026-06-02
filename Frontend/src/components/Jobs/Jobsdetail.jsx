@@ -16,9 +16,9 @@ import {
 } from 'lucide-react';
 
 const TELEGRAM_LINK = 'https://t.me/dcoder75';
-const INSTAGRAM_LINK = 'https://www.instagram.com/thejob.info/';
-const WHATSAPP_WFH_LINK = 'https://t.me/dcoder75';
-const WHATSAPP_GOVT_LINK = 'https://t.me/dcoder75';
+const INSTAGRAM_LINK = 'https://www.instagram.com/the.job.info/';
+const WHATSAPP_WFH_LINK = 'https://whatsapp.com/channel/0029VbCAzTsHbFVBi9mt5E10';
+const WHATSAPP_GOVT_LINK = 'https://whatsapp.com/channel/0029VbCAzTsHbFVBi9mt5E10';
 
 const formatDate = (dateStr) => {
     if (!dateStr) return '';

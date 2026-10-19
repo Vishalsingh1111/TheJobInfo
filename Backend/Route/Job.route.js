@@ -2,7 +2,7 @@
 
 import express from "express";
 import multer from "multer";
-import { getJob, getJobBySlug, createJob, updateJob, deleteJob } from "../Controller/Job.controller.js";
+import { getJob, getJobBySlug, createJob, updateJob, deleteJob, healthCheck } from "../Controller/Job.controller.js";
 
 const router = express.Router();
 
@@ -22,6 +22,9 @@ const upload = multer({
 
 // GET all jobs
 router.get('/', getJob);
+
+// Health check 
+router.get('/health', healthCheck);
 
 // GET single job by slug  ← NEW
 router.get('/slug/:slug', getJobBySlug);

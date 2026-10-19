@@ -180,3 +180,12 @@ export const deleteJob = async (req, res) => {
         res.status(500).json({ error: "Error deleting job" });
     }
 };
+
+// ── GET health check ) ──────────────
+export const healthCheck = (req, res) => {
+    res.status(200).json({
+        status: "ok",
+        uptime: process.uptime(),
+        timestamp: new Date().toISOString(),
+    });
+};

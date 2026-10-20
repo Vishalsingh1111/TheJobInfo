@@ -16,6 +16,7 @@ import AdminRoute from "./Route/Admin.route.js";
 import newslatterRoute from './Route/Newslatter.route.js';
 import blog from "./Route/Blog.route.js";
 
+import { startFreehireCron } from "./Controller/Freehire.cron.js";
 
 
 // Load environment variables
@@ -92,6 +93,8 @@ mongoose.connection.on('disconnected', () => {
 mongoose.connection.on('error', (err) => {
     console.error('❌ MongoDB error:', err);
 });
+
+startFreehireCron();
 
 // API Routes
 

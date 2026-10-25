@@ -16,9 +16,10 @@ const CONFIG = {
 
     // Only look at recent postings. Keep these SHORTER than expireAfterDays so a job that was deleted
     // after its retention period is older than this window and never gets re-imported.
-    postedWithinDays: Number(process.env.FREEHIRE_POSTED_WITHIN_DAYS || 4),
-    popularPostedWithinDays: Number(process.env.FREEHIRE_POPULAR_POSTED_WITHIN_DAYS || 14), // popular companies post less often, so look further back
-    expireAfterDays: Number(process.env.FREEHIRE_EXPIRE_DAYS || 50),   // each job stays this long after it was imported
+    postedWithinDays: Number(process.env.FREEHIRE_POSTED_WITHIN_DAYS || 2),
+    popularPostedWithinDays: Number(process.env.FREEHIRE_POPULAR_POSTED_WITHIN_DAYS || 2),  // the API works in whole days, so 2 days = the 48-hour window
+    maxAgeHours: Number(process.env.FREEHIRE_MAX_AGE_HOURS || 48),     // exact cut-off on top of the days filter: older postings are ignored
+    expireAfterDays: Number(process.env.FREEHIRE_EXPIRE_DAYS || 30),   // each job stays this long after it was imported
 
     // "Popular companies" = the list in popularCompanies.js (TCS, Infosys, Google, Microsoft ...).
     popularFirst: process.env.FREEHIRE_POPULAR_FIRST !== "false",   // set FREEHIRE_POPULAR_FIRST=false to turn popular-first off
@@ -54,7 +55,7 @@ const CATEGORY_LABEL = {};
 for (const [label, cats] of Object.entries(CATEGORY_GROUPS)) cats.forEach((c) => (CATEGORY_LABEL[c] = label));
 const TECH_CATEGORIES = Object.keys(CATEGORY_LABEL);
 
-
+// ── Job Type = your dropdown: "Freshers/ Experienced" | "Freshers" | "Experienced" | "Internship" | "Part-Time" ──
 // Fallback used only if Gemini returns something outside the list.
 const SENIOR_LEVELS = new Set(["middle", "senior", "lead", "staff", "principal", "c_level"]);
 export function resolveJobType(e = {}) {
@@ -432,8 +433,12 @@ export function mapJob(j, id, content) {
 
 // Tech only (the category filter already narrows the query; this is a safety net).
 // Must have an apply link and must not be closed.
+const isFresh = (j) => {
+    const t = Date.parse(j.posted_at);
+    return Number.isNaN(t) || Date.now() - t <= CONFIG.maxAgeHours * 3600000; // unknown date -> keep
+};
 const isUsable = (j) =>
-    j.public_slug && j.title && j.url && !j.closed_at && (!j.is_tech || j.is_tech === "tech");
+    j.public_slug && j.title && j.url && !j.closed_at && isFresh(j) && (!j.is_tech || j.is_tech === "tech");
 
 const IMPORTED = { externalId: { $exists: true, $ne: null } };
 

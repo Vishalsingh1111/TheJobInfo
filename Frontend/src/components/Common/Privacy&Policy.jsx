@@ -158,12 +158,6 @@ const PrivacyPolicy = () => {
                 {/* ── HERO ── */}
                 <div className="bg-gray-50 dark:bg-gray-950">
                     <div className="max-w-4xl mx-auto px-4 py-14 text-center">
-                        <div className="flex justify-center mb-5">
-                            <span className="inline-flex items-center gap-2 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 px-5 py-2 rounded-full text-sm font-medium text-blue-700 dark:text-blue-300">
-                                <Shield className="w-4 h-4" />
-                                Privacy Policy
-                            </span>
-                        </div>
                         <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-4 leading-tight">
                             Your Privacy{' '}
                             <span className="bg-gradient-to-r from-violet-600 to-pink-600 bg-clip-text text-transparent">

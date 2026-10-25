@@ -181,13 +181,6 @@ const BlogPage = () => {
                 <div className="bg-transparent dark:bg-transparent">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 md:py-8">
 
-                        <div className="flex justify-center mb-4">
-                            <span className="inline-flex items-center gap-2 bg-purple-50 dark:bg-purple-900/30 border border-purple-200 dark:border-purple-700 px-5 py-2 rounded-full text-sm font-bold text-purple-700 dark:text-purple-300">
-                                <Flame className="w-4 h-4 text-orange-500 animate-pulse" />
-                                Interview Preparation Hub
-                            </span>
-                        </div>
-
                         <h1 className="text-center text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-3 leading-tight">
                             Master Your{' '}
                             <span className="bg-gradient-to-r from-violet-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">

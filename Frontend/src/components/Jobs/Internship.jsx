@@ -82,11 +82,6 @@ const InternshipJobs = () => {
 
                     {/* ── Hero ── */}
                     <div className="text-center mb-8 pt-2">
-                        <div className="inline-flex items-center gap-2 bg-white dark:bg-gray-900 border-2 border-orange-200 dark:border-orange-700 px-6 py-2.5 rounded-full shadow-sm mb-4">
-                            <Rocket className="w-5 h-5 text-orange-600 dark:text-orange-400 animate-pulse" />
-                            <span className="text-base font-bold text-orange-700 dark:text-orange-300">Internship Opportunities</span>
-                            <Sparkles className="w-4 h-4 text-amber-500" />
-                        </div>
                         <h1 className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white mb-3 leading-tight">
                             Latest{' '}
                             <span className="bg-gradient-to-r from-orange-500 to-amber-600 bg-clip-text text-transparent">

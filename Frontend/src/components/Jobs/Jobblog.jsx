@@ -83,11 +83,6 @@ const Jobboard = () => {
 
                 {/* ── Hero ── */}
                 <div className="text-center mb-8 pt-2">
-                    <div className="inline-flex items-center gap-2 bg-white dark:bg-gray-900 border-2 border-purple-200 dark:border-purple-700 px-6 py-2.5 rounded-full shadow-sm mb-4">
-                        <Flame className="w-5 h-5 text-purple-600 dark:text-purple-400 animate-pulse" />
-                        <span className="text-base font-bold text-purple-700 dark:text-purple-300">Off Campus Drives</span>
-                        <Sparkles className="w-4 h-4 text-pink-500" />
-                    </div>
                     <h1 className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white mb-3 leading-tight">
                         Latest{' '}
                         <span className="bg-gradient-to-r from-red-500 to-pink-600 bg-clip-text text-transparent">

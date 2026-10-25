@@ -82,11 +82,6 @@ const FreshersJobs = () => {
 
                     {/* ── Hero ── */}
                     <div className="text-center mb-8 pt-2">
-                        <div className="inline-flex items-center gap-2 bg-white dark:bg-gray-900 border-2 border-green-200 dark:border-green-700 px-6 py-2.5 rounded-full shadow-sm mb-4">
-                            <GraduationCap className="w-5 h-5 text-green-600 dark:text-green-400 animate-pulse" />
-                            <span className="text-base font-bold text-green-700 dark:text-green-300">Fresher Opportunities</span>
-                            <Sparkles className="w-4 h-4 text-emerald-500" />
-                        </div>
                         <h1 className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white mb-3 leading-tight">
                             Freshers{' '}
                             <span className="bg-gradient-to-r from-green-500 to-emerald-600 bg-clip-text text-transparent">

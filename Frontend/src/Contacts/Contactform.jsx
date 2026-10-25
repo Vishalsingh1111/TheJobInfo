@@ -85,12 +85,6 @@ const ContactForm = () => {
                 {/* ── HERO ── */}
                 <div className="bg-gray-50 dark:bg-gray-950 pt-16">
                     <div className="max-w-5xl mx-auto px-4 py-14 text-center">
-                        <div className="flex justify-center mb-5">
-                            <span className="inline-flex items-center gap-2 bg-purple-50 dark:bg-purple-900/30 border border-purple-200 dark:border-purple-700 px-5 py-2 rounded-full text-sm font-medium text-purple-700 dark:text-purple-300">
-                                <MessageSquare className="w-4 h-4" />
-                                Contact Us
-                            </span>
-                        </div>
                         <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-4 leading-tight">
                             Get In{' '}
                             <span className="bg-gradient-to-r from-violet-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">

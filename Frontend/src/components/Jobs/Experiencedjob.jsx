@@ -85,11 +85,6 @@ const ExperiencedJobs = () => {
 
                     {/* ── Hero ── */}
                     <div className="text-center mb-8 pt-2">
-                        <div className="inline-flex items-center gap-2 bg-white dark:bg-gray-900 border-2 border-blue-200 dark:border-blue-700 px-6 py-2.5 rounded-full shadow-sm mb-4">
-                            <BriefcaseBusiness className="w-5 h-5 text-blue-600 dark:text-blue-400 animate-pulse" />
-                            <span className="text-base font-bold text-blue-700 dark:text-blue-300">Experienced Roles</span>
-                            <Sparkles className="w-4 h-4 text-indigo-500" />
-                        </div>
                         <h1 className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white mb-3 leading-tight">
                             Experienced{' '}
                             <span className="bg-gradient-to-r from-blue-500 to-indigo-600 bg-clip-text text-transparent">

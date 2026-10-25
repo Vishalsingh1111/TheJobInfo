@@ -491,12 +491,7 @@ const JobsHeroSection = () => {
             {/* ══ HERO ══ */}
             <div className="bg-gray-50 dark:bg-gray-950 pt-16">
                 <div className="max-w-7xl mx-auto px-4 py-12 md:py-16">
-                    <div className="flex justify-center mb-5">
-                        <span className="inline-flex items-center gap-2 bg-purple-50 dark:bg-purple-900/30 border border-purple-200 dark:border-purple-700 px-5 py-2 rounded-full text-sm font-bold text-purple-700 dark:text-purple-300">
-                            <Flame className="w-4 h-4 text-orange-500 animate-pulse" />
-                            Latest Job Opportunities
-                        </span>
-                    </div>
+
                     <h1 className="text-center text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 dark:text-white mb-4 leading-tight">
                         Fresh Jobs For Your{' '}
                         <span className="bg-gradient-to-r from-violet-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
@@ -515,7 +510,7 @@ const JobsHeroSection = () => {
                     </div>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-3 max-w-xl mx-auto">
                         {[
-                            { label: 'Jobs Listed', value: '100+', color: 'from-violet-600 to-purple-600' },
+                            { label: 'Jobs Listed', value: loading ? '200+' : `${allJobs.length}`, color: 'from-violet-600 to-purple-600' },
                             { label: 'Companies', value: '50+', color: 'from-sky-600 to-blue-600' },
                             { label: 'Daily Updates', value: 'Daily', color: 'from-emerald-600 to-teal-600' },
                             { label: 'Cost', value: 'Free', color: 'from-orange-600 to-amber-600' },

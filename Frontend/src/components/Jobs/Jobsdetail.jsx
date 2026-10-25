@@ -1,5 +1,4 @@
 
-
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -20,6 +19,8 @@ const INSTAGRAM_LINK = 'https://www.instagram.com/coder.sync/';
 const WHATSAPP_WFH_LINK = 'https://t.me/dcoder75';
 const WHATSAPP_GOVT_LINK = 'https://t.me/dcoder75';
 
+
+
 const formatDate = (dateStr) => {
     if (!dateStr) return '';
     const d = new Date(dateStr);
@@ -29,6 +30,50 @@ const formatDate = (dateStr) => {
 
 // ── Helper: get the URL identifier (slug preferred, fallback _id) ─────────────
 const getJobIdentifier = (job) => job?.slug || job?._id;
+
+// ── Helper: clean role for sharing ────────────────────────────────────────────
+// "S&P Global Recruitment 2026 | Analyst II, Information Security | Experienced Candidates"
+//   → "Analyst II, Information Security"
+const getCleanRole = (title) => {
+    if (!title) return '';
+    const parts = title.split('|').map(p => p.trim()).filter(Boolean);
+    if (parts.length >= 3) return parts[1];
+    if (parts.length === 2) {
+        const noise = /(recruitment|hiring|drive|off campus|20\d{2}|experienced candidates|freshers?)/i;
+        const good = parts.filter(p => !noise.test(p));
+        return good[0] || parts[1];
+    }
+    return title.trim();
+};
+
+
+// ── Helper: public job URL (picks the current site URL automatically) ─────────
+const getShareUrl = (job) => `${window.location.origin}/jobdetail/${getJobIdentifier(job)}`;
+
+// ── Helper: build the exact share message from the Job Details Table ──────────
+const buildShareMessage = (job) => {
+    const lines = [
+        `${job.company || 'Company'} is Hiring :—`,
+        '————————————————————-',
+        '',
+    ];
+
+    if (job.company) lines.push(`Company: ${job.company}`);
+    const role = getCleanRole(job.title);
+    if (role) lines.push(`Role : ${role}`);
+    if (job.salary) lines.push(`Salary: ${job.salary}`);
+    if (job.location) lines.push(`Location : ${job.location}`);
+    if (job.jobType) lines.push(`Job Type : ${job.jobType}`);
+    if (job.experience) lines.push(`Experience: ${job.experience}`);
+    if (job.lastDate) lines.push(`Last Date: ${job.lastDate}`);
+    const posted = formatDate(job.createdAt);
+    if (posted) lines.push(`Posted On: ${posted}`);
+
+    lines.push('');
+    lines.push(`Apply Link: ${getShareUrl(job)}`);
+
+    return lines.join('\n');
+};
 
 // ─────────────────────────────────────────────────────────────────────────────
 // GRADIENTS
@@ -136,55 +181,67 @@ const TableOfContents = ({ sections }) => {
 };
 
 // ── Share Bar ─────────────────────────────────────────────────────────────────
-const ShareBar = ({ title, company, jobType }) => {
+
+const ShareBar = ({ item }) => {
     const [copied, setCopied] = useState(false);
-    const shareUrl = window.location.href;
-    const shareText = `${title} at ${company}${jobType ? ` (${jobType})` : ''} – Apply now!`;
+
+    const shareUrl = getShareUrl(item);
+    const fullMessage = buildShareMessage(item);
+    const enc = encodeURIComponent;
 
     const handleNativeShare = async () => {
         if (navigator.share) {
             try {
-                await navigator.share({ title: `${title} – ${company}`, text: shareText, url: shareUrl });
+                await navigator.share({ text: fullMessage });
             } catch (e) { }
         }
     };
 
-    const copyLink = () => {
-        navigator.clipboard.writeText(shareUrl);
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
+    const copyMessage = async () => {
+        try {
+            await navigator.clipboard.writeText(fullMessage);
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
+        } catch (e) { }
     };
-
-    const enc = encodeURIComponent;
 
     return (
         <div className="flex flex-wrap items-center gap-2">
+            {/* Facebook – accepts only the link (Facebook ignores pre-filled text) */}
             <a href={`https://www.facebook.com/sharer/sharer.php?u=${enc(shareUrl)}`} target="_blank" rel="noreferrer"
                 className="w-8 h-8 rounded flex items-center justify-center bg-[#1877f2] hover:opacity-80 text-white transition-opacity" aria-label="Share on Facebook">
                 <Facebook className="w-3.5 h-3.5" />
             </a>
-            <a href={`https://twitter.com/intent/tweet?url=${enc(shareUrl)}&text=${enc(shareText)}`} target="_blank" rel="noreferrer"
+            {/* Twitter / X – exact message */}
+            <a href={`https://twitter.com/intent/tweet?text=${enc(fullMessage)}`} target="_blank" rel="noreferrer"
                 className="w-8 h-8 rounded flex items-center justify-center bg-[#1da1f2] hover:opacity-80 text-white transition-opacity" aria-label="Share on Twitter">
                 <Twitter className="w-3.5 h-3.5" />
             </a>
-            <a href={`https://www.linkedin.com/shareArticle?mini=true&url=${enc(shareUrl)}&title=${enc(title)}&summary=${enc(shareText)}`} target="_blank" rel="noreferrer"
+            {/* LinkedIn – opens the post box with the exact message */}
+            <a href={`https://www.linkedin.com/feed/?shareActive=true&text=${enc(fullMessage)}`} target="_blank" rel="noreferrer"
                 className="w-8 h-8 rounded flex items-center justify-center bg-[#0077b5] hover:opacity-80 text-white transition-opacity" aria-label="Share on LinkedIn">
                 <Linkedin className="w-3.5 h-3.5" />
             </a>
-            <a href={`https://t.me/share/url?url=${enc(shareUrl)}&text=${enc(shareText)}`} target="_blank" rel="noreferrer"
+
+            {/* Telegram – invisible url so only the bottom "Apply Link" shows */}
+            <a href={`https://t.me/share/url?url=%E2%80%8B&text=${enc(fullMessage)}`} target="_blank" rel="noreferrer"
                 className="w-8 h-8 rounded flex items-center justify-center bg-[#0088cc] hover:opacity-80 text-white transition-opacity" aria-label="Share on Telegram">
                 <Send className="w-3.5 h-3.5" />
             </a>
-            <a href={`https://api.whatsapp.com/send?text=${enc(shareText + '\n' + shareUrl)}`} target="_blank" rel="noreferrer"
+
+            {/* WhatsApp – exact message */}
+            <a href={`https://wa.me/?text=${enc(fullMessage)}`} target="_blank" rel="noreferrer"
                 className="w-8 h-8 rounded flex items-center justify-center bg-[#25d366] hover:opacity-80 text-white transition-opacity" aria-label="Share on WhatsApp">
                 <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
                 </svg>
             </a>
-            <button onClick={copyLink}
-                className="w-8 h-8 rounded flex items-center justify-center bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-300 transition-colors" aria-label="Copy link">
+            {/* Copy – copies the exact message */}
+            <button onClick={copyMessage}
+                className="w-8 h-8 rounded flex items-center justify-center bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-300 transition-colors" aria-label="Copy job details">
                 <Link2 className="w-3.5 h-3.5" />
             </button>
+            {/* Native share (mobile) – exact message */}
             {navigator.share && (
                 <button onClick={handleNativeShare}
                     className="px-3 h-8 rounded flex items-center gap-1.5 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 text-md font-bold transition-colors border border-gray-200 dark:border-gray-700">
@@ -798,7 +855,7 @@ const JobDetail = () => {
 
                                     {/* Share */}
                                     <div>
-                                        <ShareBar title={item.title} company={item.company} jobType={item.jobType} />
+                                        <ShareBar item={item} />
                                     </div>
 
                                 </div>

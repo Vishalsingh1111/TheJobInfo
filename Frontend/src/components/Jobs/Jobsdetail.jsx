@@ -951,7 +951,7 @@ const JobDetail = () => {
                                     {(item.description || responsibilities.length > 0) && !hiddenSections.has('responsibilities') && (
                                         <>
                                             <div id="toc-responsibilities" className="scroll-mt-8">
-                                                {item.description && (
+                                                {item.description && !item.summary && (
                                                     <>
                                                         <SectionTitle text={`What does a ${item.title} do?`} />
                                                         <p className="text-md text-gray-600 dark:text-gray-400 leading-relaxed mb-4">{item.description}</p>

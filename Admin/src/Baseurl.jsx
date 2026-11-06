@@ -1,3 +1,1 @@
-export const baseUrl = `https://dcoder-backend.onrender.com`
-
-//export const baseUrl = `http://localhost:5173`
+export const baseUrl = process.env.REACT_APP_API_BASE_URL || "https://dcoder-backend.onrender.com";

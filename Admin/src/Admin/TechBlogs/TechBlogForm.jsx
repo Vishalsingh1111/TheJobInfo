@@ -366,9 +366,9 @@ export default function JobManagement() {
 
     if (loading && jobs.length === 0) {
         return (
-            <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-950 dark:via-gray-950 dark:to-gray-950 flex items-center justify-center">
+            <div className="min-h-screen bg-gradient-to-br from-blue-50 via-sky-50 to-teal-50 dark:from-gray-950 dark:via-gray-950 dark:to-gray-950 flex items-center justify-center">
                 <div className="text-center">
-                    <div className="inline-block animate-spin rounded-full h-16 w-16 border-4 border-purple-200 dark:border-purple-800 border-t-purple-600 dark:border-t-purple-400 mb-4"></div>
+                    <div className="inline-block animate-spin rounded-full h-16 w-16 border-4 border-teal-200 dark:border-teal-800 border-t-teal-600 dark:border-t-teal-400 mb-4"></div>
                     <p className="text-gray-600 dark:text-gray-400 text-lg">Loading jobs...</p>
                 </div>
             </div>
@@ -447,11 +447,11 @@ export default function JobManagement() {
     );
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-950 dark:via-gray-950 dark:to-gray-950 py-8 px-4">
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-sky-50 to-teal-50 dark:from-gray-950 dark:via-gray-950 dark:to-gray-950 py-8 px-4">
             <div className="container mx-auto max-w-7xl">
 
                 {/* Header */}
-                <div className="bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-700 dark:to-purple-700 text-white rounded-2xl p-8 mb-8 shadow-xl">
+                <div className="bg-gradient-to-r from-blue-600 to-teal-600 dark:from-blue-700 dark:to-teal-700 text-white rounded-2xl p-8 mb-8 shadow-xl">
                     <div className="flex flex-col md:flex-row justify-between items-center gap-4">
                         <div>
                             <h1 className="text-4xl font-bold mb-2 flex items-center gap-3">
@@ -480,7 +480,7 @@ export default function JobManagement() {
                 {/* Stats */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                     <StatCard icon={BookOpen} label="Total Jobs" value={stats.totalJobs} color="border-blue-500" />
-                    <StatCard icon={Briefcase} label="Categories" value={stats.categories.length} color="border-purple-500" />
+                    <StatCard icon={Briefcase} label="Categories" value={stats.categories.length} color="border-teal-500" />
                     <StatCard icon={TrendingUp} label="Recent (30 days)" value={stats.recentJobs} color="border-green-500" />
                 </div>
 
@@ -569,12 +569,12 @@ export default function JobManagement() {
                                                 </td>
                                                 <td className="px-6 py-4">
                                                     <div className="flex items-center gap-3">
-                                                        <div className="w-10 h-10 bg-gradient-to-br from-blue-400 to-purple-400 rounded-lg flex items-center justify-center text-white">
+                                                        <div className="w-10 h-10 bg-gradient-to-br from-blue-400 to-teal-400 rounded-lg flex items-center justify-center text-white">
                                                             <Briefcase className="w-5 h-5" />
                                                         </div>
                                                         <div className="max-w-xs">
                                                             <p className="font-semibold text-gray-800 dark:text-gray-100 line-clamp-1">{job.title}</p>
-                                                            <p className="text-xs text-purple-600 dark:text-purple-400 font-medium">{job.company}</p>
+                                                            <p className="text-xs text-teal-600 dark:text-teal-400 font-medium">{job.company}</p>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -590,7 +590,7 @@ export default function JobManagement() {
                                                     <span className="px-3 py-1 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 rounded-full text-xs font-bold">{job.jobType || '—'}</span>
                                                 </td>
                                                 <td className="px-6 py-4 whitespace-nowrap">
-                                                    <span className="px-3 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-400 rounded-full text-xs font-bold">{job.category}</span>
+                                                    <span className="px-3 py-1 bg-teal-100 dark:bg-teal-900/30 text-teal-800 dark:text-teal-400 rounded-full text-xs font-bold">{job.category}</span>
                                                 </td>
                                                 <td className="px-6 py-4 whitespace-nowrap">
                                                     {job.applyLink ? (
@@ -647,7 +647,7 @@ export default function JobManagement() {
             {(showAddModal || showEditModal) && (
                 <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4 overflow-y-auto">
                     <div className="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-6xl my-8 shadow-2xl">
-                        <div className="sticky top-0 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-700 dark:to-purple-700 text-white p-6 flex justify-between items-center z-10 rounded-t-2xl">
+                        <div className="sticky top-0 bg-gradient-to-r from-blue-600 to-teal-600 dark:from-blue-700 dark:to-teal-700 text-white p-6 flex justify-between items-center z-10 rounded-t-2xl">
                             <h2 className="text-2xl font-bold flex items-center gap-2">
                                 {showEditModal ? <Edit className="w-6 h-6" /> : <Plus className="w-6 h-6" />}
                                 {showEditModal ? 'Edit Job' : 'Add New Job'}
@@ -763,9 +763,9 @@ export default function JobManagement() {
                             </div>
 
                             {/* Role & Responsibilities */}
-                            <div className="border-2 border-purple-200 dark:border-purple-800 rounded-xl p-6 bg-purple-50/50 dark:bg-purple-900/10">
+                            <div className="border-2 border-teal-200 dark:border-teal-800 rounded-xl p-6 bg-teal-50/50 dark:bg-teal-900/10">
                                 <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100 mb-4 flex items-center gap-2">
-                                    <Zap className="w-5 h-5 text-purple-600" /> Role & Responsibilities
+                                    <Zap className="w-5 h-5 text-teal-600" /> Role & Responsibilities
                                 </h3>
                                 <div className="space-y-4">
                                     <div>
@@ -827,7 +827,7 @@ export default function JobManagement() {
                                 <button type="button" onClick={() => { setShowAddModal(false); setShowEditModal(false); resetImageState(); }} className="flex-1 px-6 py-3 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 font-bold transition-colors">
                                     Cancel
                                 </button>
-                                <button type="submit" disabled={submitting} className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-700 dark:to-purple-700 text-white px-6 py-3 rounded-xl hover:shadow-xl font-bold transition-all transform hover:scale-105 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100">
+                                <button type="submit" disabled={submitting} className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-teal-600 dark:from-blue-700 dark:to-teal-700 text-white px-6 py-3 rounded-xl hover:shadow-xl font-bold transition-all transform hover:scale-105 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100">
                                     {submitting ? (
                                         <>
                                             <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -909,7 +909,7 @@ export default function JobManagement() {
                                                         <span className="px-2 py-0.5 bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 rounded text-xs font-bold">#{job.id}</span>
                                                         <span className="font-semibold text-gray-800 dark:text-gray-100 truncate">{job.title}</span>
                                                         <span className="text-gray-500 dark:text-gray-400 truncate">{job.company}</span>
-                                                        <span className="ml-auto px-2 py-0.5 bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 rounded text-xs">{job.category}</span>
+                                                        <span className="ml-auto px-2 py-0.5 bg-teal-100 dark:bg-teal-900/40 text-teal-700 dark:text-teal-300 rounded text-xs">{job.category}</span>
                                                     </div>
                                                 ))}
                                             </div>
@@ -972,7 +972,7 @@ export default function JobManagement() {
             {showViewModal && selectedJob && (
                 <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4 overflow-y-auto">
                     <div className="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-3xl my-8 shadow-2xl max-h-[90vh] overflow-y-auto">
-                        <div className="sticky top-0 bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6 flex justify-between items-center z-10 rounded-t-2xl">
+                        <div className="sticky top-0 bg-gradient-to-r from-blue-600 to-teal-600 text-white p-6 flex justify-between items-center z-10 rounded-t-2xl">
                             <div>
                                 <h2 className="text-xl font-bold">{selectedJob.title}</h2>
                                 <p className="text-blue-200 text-sm">{selectedJob.company} · {selectedJob.location}</p>
@@ -1001,7 +1001,7 @@ export default function JobManagement() {
                             </div>
                             {selectedJob.description && <div><p className="font-bold text-gray-800 dark:text-white mb-2">Description</p><p className="text-sm text-gray-600 dark:text-gray-400">{selectedJob.description}</p></div>}
                             {selectedJob.applyLink && (
-                                <a href={selectedJob.applyLink} target="_blank" rel="noreferrer" className="flex items-center justify-center gap-2 w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-xl font-bold hover:scale-105 transition-all shadow-lg">
+                                <a href={selectedJob.applyLink} target="_blank" rel="noreferrer" className="flex items-center justify-center gap-2 w-full bg-gradient-to-r from-blue-600 to-teal-600 text-white py-3 rounded-xl font-bold hover:scale-105 transition-all shadow-lg">
                                     Apply Now <ExternalLink className="w-4 h-4" />
                                 </a>
                             )}

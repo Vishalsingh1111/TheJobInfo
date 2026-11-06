@@ -1,406 +1,188 @@
-
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
-import {
-    BookOpen, Search, X, ChevronDown, ArrowRight,
-    Loader2, Flame, Filter, RefreshCw
-} from 'lucide-react';
+import { BookOpen, Search, Loader2 } from 'lucide-react';
 import BlogCard, { SkeletonBlogCard } from './BlogCard';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
 import Breadcrumb from '../Common/Breadcrumb';
+import SocialFollowCard from '../Common/SocialFollowCard';
+import AdSlot from '../AdSlot';
 import { baseUrl } from '../../Baseurl';
 
-
-
-const CATEGORIES = [
-    'All', 'Interview Tips', 'DSA', 'System Design',
-    'HR Round', 'Resume Tips', 'Aptitude', 'Coding Interview', 'Career Advice',
-];
-const DIFFICULTIES = ['All', 'Beginner', 'Intermediate', 'Advanced'];
-const SORT_OPTIONS = [
-    { value: 'newest', label: 'Newest First' },
-    { value: 'oldest', label: 'Oldest First' },
-    { value: 'popular', label: 'Most Popular' },
-    { value: 'read-time-asc', label: 'Quick Reads' },
-    { value: 'read-time-desc', label: 'Long Reads' },
-];
+const CATEGORIES = ['All', 'Interview Tips', 'HR Round', 'DSA', 'System Design', 'Resume Tips', 'Aptitude'];
 const LIMIT = 20;
+const CARD_GRADIENTS = [
+    'from-blue-600 to-sky-500', 'from-teal-600 to-cyan-500', 'from-blue-600 to-sky-500',
+    'from-blue-600 to-sky-500', 'from-emerald-600 to-teal-500', 'from-cyan-600 to-teal-500',
+    'from-emerald-600 to-teal-500',
+];
 
-// ── Filter Dropdown ───────────────────────────────────────────────────────────
-const FilterDropdown = ({ label, options, value, onChange }) => {
-    const [open, setOpen] = useState(false);
-    const ref = useRef(null);
-
-    useEffect(() => {
-        const handler = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false); };
-        document.addEventListener('mousedown', handler);
-        return () => document.removeEventListener('mousedown', handler);
-    }, []);
-
-    const isObj = typeof options[0] === 'object';
-    const defaultVal = isObj ? options[0].value : options[0];
-    const active = value !== defaultVal;
-    const displayLabel = isObj
-        ? (options.find(o => o.value === value)?.label || label)
-        : (active ? value : label);
-
-    return (
-        <div ref={ref} className="relative">
-            <button
-                onClick={() => setOpen(o => !o)}
-                className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl border text-sm font-bold transition-all whitespace-nowrap ${active
-                    ? 'bg-purple-600 text-white border-purple-600 shadow-sm'
-                    : 'bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-purple-400 dark:hover:border-purple-600'
-                    }`}
-            >
-                <span className="max-w-[130px] truncate">{displayLabel}</span>
-                <ChevronDown className={`w-3.5 h-3.5 flex-shrink-0 transition-transform ${open ? 'rotate-180' : ''}`} />
-            </button>
-            {open && (
-                <div className="absolute top-full mt-1.5 left-0 z-50 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-2xl py-1 min-w-[180px]">
-                    {options.map(opt => {
-                        const optVal = isObj ? opt.value : opt;
-                        const optLabel = isObj ? opt.label : opt;
-                        return (
-                            <button
-                                key={optVal}
-                                onClick={() => { onChange(optVal); setOpen(false); }}
-                                className={`w-full text-left px-4 py-2.5 text-sm transition-colors ${value === optVal
-                                    ? 'text-purple-600 dark:text-purple-400 font-bold bg-purple-50 dark:bg-purple-900/20'
-                                    : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'
-                                    }`}
-                            >
-                                {optLabel}
-                            </button>
-                        );
-                    })}
-                </div>
-            )}
-        </div>
-    );
-};
-
-// ── Main BlogPage ─────────────────────────────────────────────────────────────
-const BlogPage = () => {
+export default function BlogPage() {
     const navigate = useNavigate();
     const [searchParams, setSearchParams] = useSearchParams();
-
-    // Blog data
     const [blogs, setBlogs] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [loadingMore, setLoadingMore] = useState(false);
     const [total, setTotal] = useState(0);
-    const [hasMore, setHasMore] = useState(false);
     const [page, setPage] = useState(1);
-    const [error, setError] = useState(null);
-
-    // Filters — read from URL on mount
+    const [error, setError] = useState('');
     const [searchInput, setSearchInput] = useState(searchParams.get('search') || '');
     const [search, setSearch] = useState(searchParams.get('search') || '');
     const [category, setCategory] = useState(searchParams.get('category') || 'All');
-    const [difficulty, setDifficulty] = useState(searchParams.get('difficulty') || 'All');
-    const [sort, setSort] = useState(searchParams.get('sort') || 'newest');
 
-    // ── Fetch blogs ───────────────────────────────────────────────────────────
-    const fetchBlogs = useCallback(async (pageNum = 1, append = false) => {
+    const fetchBlogs = useCallback(async (pageNum = 1) => {
         try {
-            if (pageNum === 1) setLoading(true);
-            else setLoadingMore(true);
-            setError(null);
-
-            const params = { page: pageNum, limit: LIMIT, sort };
+            setLoading(true);
+            setError('');
+            const params = { page: pageNum, limit: LIMIT, sort: 'newest' };
             if (search) params.search = search;
             if (category !== 'All') params.category = category;
-            if (difficulty !== 'All') params.difficulty = difficulty;
-
-            const res = await axios.get(`${baseUrl}/blog`, { params });
-            const { blogs: newBlogs, total: t, pages } = res.data;
-
-            setBlogs(prev => append ? [...prev, ...newBlogs] : newBlogs);
-            setTotal(t);
-            setHasMore(pageNum < pages);
-        } catch (err) {
-            console.error(err);
+            const { data } = await axios.get(`${baseUrl}/blog`, { params });
+            const nextBlogs = Array.isArray(data.blogs) ? data.blogs : [];
+            setBlogs(nextBlogs);
+            setTotal(Number(data.total) || 0);
+        } catch (requestError) {
+            console.error(requestError);
             setError('Failed to load articles. Please try again.');
         } finally {
             setLoading(false);
-            setLoadingMore(false);
         }
-    }, [search, category, difficulty, sort]);
+    }, [search, category]);
 
-    // Reset & fetch whenever filters change
     useEffect(() => {
         setPage(1);
         setBlogs([]);
-        fetchBlogs(1, false);
+        fetchBlogs(1);
     }, [fetchBlogs]);
 
-    // Sync filters → URL params
     useEffect(() => {
-        const p = {};
-        if (search) p.search = search;
-        if (category !== 'All') p.category = category;
-        if (difficulty !== 'All') p.difficulty = difficulty;
-        if (sort !== 'newest') p.sort = sort;
-        setSearchParams(p, { replace: true });
-    }, [search, category, difficulty, sort]); // eslint-disable-line react-hooks/exhaustive-deps
+        const next = {};
+        if (search) next.search = search;
+        if (category !== 'All') next.category = category;
+        setSearchParams(next, { replace: true });
+    }, [search, category, setSearchParams]);
 
-    const handleLoadMore = () => {
-        const next = page + 1;
-        setPage(next);
-        fetchBlogs(next, true);
+    const handleSearch = (event) => {
+        event.preventDefault();
+        setSearch(searchInput.trim());
     };
-
-    const handleSearch = (e) => { e.preventDefault(); setSearch(searchInput); };
-    const clearSearch = () => { setSearchInput(''); setSearch(''); };
-    const handleCat = (v) => setCategory(v);
-    const handleDiff = (v) => setDifficulty(v);
-    const handleSort = (v) => setSort(v);
-    const clearAll = () => { clearSearch(); setCategory('All'); setDifficulty('All'); setSort('newest'); };
-
-    const activeFilters = [
-        category !== 'All' && { label: category, clear: () => handleCat('All') },
-        difficulty !== 'All' && { label: difficulty, clear: () => handleDiff('All') },
-        search && { label: `"${search}"`, clear: clearSearch },
-    ].filter(Boolean);
-
+    const clearSearch = () => {
+        setSearchInput('');
+        setSearch('');
+    };
     const go = (slug) => {
         window.scrollTo({ top: 0, behavior: 'instant' });
         navigate(`/blogs/${slug}`);
     };
+    const goToPage = (nextPage) => {
+        if (nextPage < 1 || nextPage > Math.ceil(total / LIMIT) || nextPage === page) return;
+        setPage(nextPage);
+        fetchBlogs(nextPage);
+    };
+    const featured = blogs[0];
+    const remaining = blogs.slice(featured ? 1 : 0);
 
     return (
         <>
             <Navbar />
-            <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
-                <Breadcrumb />
-
-                {/* ── Hero Banner ── */}
-                <div className="bg-transparent dark:bg-transparent">
-                    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 md:py-8">
-
-                        <h1 className="text-center text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-3 leading-tight">
-                            Master Your{' '}
-                            <span className="bg-gradient-to-r from-violet-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
-                                Interview Skills
-                            </span>
-                        </h1>
-                        <p className="text-center text-base sm:text-lg text-gray-500 dark:text-gray-400 max-w-2xl mx-auto mb-8">
-                            Expert guides on DSA, System Design, HR rounds, Resume building and more — crafted for placement success
-                        </p>
-
-                        {/* Search */}
-                        <form onSubmit={handleSearch} className="max-w-2xl mx-auto mb-1">
-                            <div className="relative">
-                                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
-                                <input
-                                    type="text"
-                                    value={searchInput}
-                                    onChange={e => setSearchInput(e.target.value)}
-                                    placeholder="Search topics, tags, keywords…"
-                                    className="w-full pl-12 pr-28 py-3.5 sm:py-4 rounded-2xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 text-sm sm:text-base font-medium focus:outline-none focus:border-purple-400 dark:focus:border-purple-500 transition-colors shadow-sm"
-                                />
-                                {searchInput && (
-                                    <button
-                                        type="button"
-                                        onClick={clearSearch}
-                                        className="absolute right-[5.5rem] top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 p-1"
-                                    >
-                                        <X className="w-4 h-4" />
-                                    </button>
-                                )}
-                                <button
-                                    type="submit"
-                                    className="absolute right-2 top-1/2 -translate-y-1/2 px-4 sm:px-5 py-2 sm:py-2.5 bg-purple-600 hover:bg-purple-700 active:bg-purple-800 text-white rounded-xl text-sm font-bold transition-colors"
-                                >
-                                    Search
-                                </button>
-                            </div>
-                        </form>
-
-                    </div>
-                </div>
-
-                {/* ── Main Content ── */}
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
-
-                    {/* ── Filter bar ── */}
-                    <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-4">
-
-                        {/* Filter label */}
-                        <div className="flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500">
-                            <Filter className="w-3.5 h-3.5" /> Filters:
-                        </div>
-
-                        {/* Category Dropdown */}
-                        <FilterDropdown
-                            label="Category"
-                            options={CATEGORIES}
-                            value={category}
-                            onChange={handleCat}
-                        />
-
-                        {/* Difficulty Dropdown */}
-                        <FilterDropdown
-                            label="Difficulty"
-                            options={DIFFICULTIES}
-                            value={difficulty}
-                            onChange={handleDiff}
-                        />
-
-                        {/* Sort Dropdown */}
-                        <FilterDropdown
-                            label="Sort by"
-                            options={SORT_OPTIONS}
-                            value={sort}
-                            onChange={handleSort}
-                        />
-
-                        {/* Active Category Pill */}
-                        {category && category !== 'All' && (
-                            <span className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold px-3 py-1.5 bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800 rounded-full">
-                                {category}
-
-                                <button
-                                    onClick={() => handleCat('All')}
-                                    className="hover:text-purple-900 dark:hover:text-white"
-                                >
-                                    <X className="w-3 h-3" />
-                                </button>
-                            </span>
-                        )}
-
-                        {/* Active Difficulty Pill */}
-                        {difficulty && difficulty !== 'All' && (
-                            <span className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold px-3 py-1.5 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800 rounded-full">
-                                {difficulty}
-
-                                <button
-                                    onClick={() => handleDiff('All')}
-                                    className="hover:text-blue-900 dark:hover:text-white"
-                                >
-                                    <X className="w-3 h-3" />
-                                </button>
-                            </span>
-                        )}
-
-                        {/* Active Sort Pill */}
-                        {sort && sort !== 'newest' && (
-                            <span className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold px-3 py-1.5 bg-orange-50 dark:bg-orange-900/20 text-orange-700 dark:text-orange-300 border border-orange-200 dark:border-orange-800 rounded-full">
-                                {sort}
-
-                                <button
-                                    onClick={() => handleSort('newest')}
-                                    className="hover:text-orange-900 dark:hover:text-white"
-                                >
-                                    <X className="w-3 h-3" />
-                                </button>
-                            </span>
-                        )}
-
-                        {/* Clear All */}
-                        {(category !== 'All' || difficulty !== 'All' || sort !== 'newest') && (
-                            <button
-                                onClick={clearAll}
-                                className="flex items-center gap-1 px-3 py-2 rounded-xl text-xs sm:text-sm font-bold text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 border border-red-100 dark:border-red-900/40 transition-colors"
-                            >
-                                <X className="w-3 h-3" /> Clear all
-                            </button>
-                        )}
-
-                        {/* Total Articles */}
-                        <div className="ml-auto text-sm font-medium text-gray-500 dark:text-gray-400">
-                            {!loading && (
-                                <>
-                                    <span className="text-gray-900 dark:text-white font-bold">
-                                        {total}
-                                    </span>{' '}
-                                    articles
-                                </>
-                            )}
-                        </div>
-                    </div>
-
-
-                    {/* Error state */}
-                    {error && !loading && (
-                        <div className="text-center py-16 bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800">
-                            <p className="text-base text-red-500 dark:text-red-400 mb-4">
-                                {error}
+            <main className="min-h-screen bg-[#f3f8fb] dark:bg-gray-950">
+                <div className="relative overflow-hidden bg-[#f3f8fb] dark:bg-gray-950">
+                    <div className="relative mx-auto max-w-7xl px-4 pb-7 pt-1 sm:px-6">
+                        <Breadcrumb />
+                        <section className="page-hero-enter pb-1 pt-5 text-center sm:pt-7">
+                            <h1 className="text-3xl font-extrabold tracking-tight text-slate-950 dark:text-white sm:text-4xl lg:text-5xl">
+                                Master your <span className="bg-gradient-to-r from-blue-600 to-emerald-600 bg-clip-text text-transparent">interview skills</span>
+                            </h1>
+                            <p className="mx-auto mt-2 max-w-2xl text-sm leading-6 text-slate-600 dark:text-gray-300 sm:text-base">
+                                Interview articles on DSA, system design, HR rounds and resume building, written to help you prepare for placements and hiring rounds.
                             </p>
-
-                            <button
-                                onClick={() => fetchBlogs(1)}
-                                className="inline-flex items-center gap-2 px-5 py-2.5 bg-purple-600 text-white rounded-xl text-sm font-bold hover:bg-purple-700 transition-colors"
-                            >
-                                <RefreshCw className="w-4 h-4" /> Try Again
-                            </button>
-                        </div>
-                    )}
-
-
-                    {/* Blog Grid */}
-                    {loading ? (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5">
-                            {[...Array(8)].map((_, i) => <SkeletonBlogCard key={i} />)}
-                        </div>
-                    ) : !error && blogs.length === 0 ? (
-                        <div className="text-center py-20 bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800">
-                            <BookOpen className="w-12 h-12 text-gray-200 dark:text-gray-700 mx-auto mb-4" />
-                            <p className="text-lg font-bold text-gray-800 dark:text-gray-200 mb-2">No articles found</p>
-                            <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">Try adjusting your search or filters</p>
-                            <button
-                                onClick={clearAll}
-                                className="px-6 py-2.5 bg-purple-600 text-white rounded-xl text-sm font-bold hover:bg-purple-700 transition-colors"
-                            >
-                                Clear all filters
-                            </button>
-                        </div>
-                    ) : !error ? (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5">
-                            {blogs.map((blog, i) => (
-                                <BlogCard key={blog._id} blog={blog} index={i} onClick={() => go(blog.slug)} />
-                            ))}
-                        </div>
-                    ) : null}
-
-                    {/* Load more skeleton rows while appending */}
-                    {loadingMore && (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5 mt-5">
-                            {[...Array(4)].map((_, i) => <SkeletonBlogCard key={`more-${i}`} />)}
-                        </div>
-                    )}
-
-                    {/* Load More button */}
-                    {hasMore && !loading && !error && (
-                        <div className="flex justify-center mt-10">
-                            <button
-                                onClick={handleLoadMore}
-                                disabled={loadingMore}
-                                className="flex items-center gap-2 px-8 py-3.5 bg-gradient-to-r from-violet-600 to-purple-600 text-white rounded-2xl font-bold text-sm shadow-lg hover:shadow-xl hover:scale-[1.03] active:scale-100 transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed disabled:scale-100"
-                            >
-                                {loadingMore ? (
-                                    <><Loader2 className="w-4 h-4 animate-spin" /> Loading…</>
-                                ) : (
-                                    <>Load More Articles <ArrowRight className="w-4 h-4" /></>
-                                )}
-                            </button>
-                        </div>
-                    )}
-
-                    {/* End of results */}
-                    {!hasMore && !loading && !error && blogs.length > 0 && (
-                        <div className="text-center mt-10 text-sm text-gray-400 dark:text-gray-600 font-medium">
-                            You've seen all {total} articles
-                        </div>
-                    )}
+                            <form onSubmit={handleSearch} className="mx-auto mt-5 max-w-xl">
+                                <div className="relative rounded-2xl border border-slate-200 bg-white p-1.5 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+                                    <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
+                                    <input
+                                        value={searchInput}
+                                        onChange={event => setSearchInput(event.target.value)}
+                                        placeholder="Search topics, tags, keywords"
+                                        aria-label="Search Interview Articles"
+                                        className="w-full rounded-xl bg-transparent py-2.5 pl-10 pr-28 text-sm text-slate-800 outline-none placeholder:text-slate-500 dark:text-white dark:placeholder:text-gray-400"
+                                    />
+                                    {searchInput && <button type="button" onClick={clearSearch} aria-label="Clear search" className="absolute right-[5.6rem] top-1/2 -translate-y-1/2 px-2 text-slate-500">×</button>}
+                                    <button type="submit" className="absolute right-1.5 top-1/2 -translate-y-1/2 rounded-xl bg-gradient-to-r from-blue-600 to-emerald-600 px-4 py-2.5 text-sm font-bold text-white">Search</button>
+                                </div>
+                            </form>
+                        </section>
+                    </div>
                 </div>
-            </div >
+
+                <div className="mx-auto max-w-7xl px-4 pb-12 pt-3 sm:px-6">
+                    <div className="mb-5 flex flex-wrap items-center gap-2">
+                        <span className="mr-1 text-[11px] font-extrabold uppercase tracking-widest text-slate-500 dark:text-gray-400">Topics</span>
+                        {CATEGORIES.map(topic => (
+                            <button key={topic} type="button" onClick={() => setCategory(topic)} aria-pressed={category === topic}
+                                className={`rounded-full border px-3.5 py-2 text-xs font-bold transition-colors ${category === topic ? 'border-transparent bg-gradient-to-r from-blue-600 to-emerald-600 text-white shadow-sm' : 'border-slate-200 bg-white text-slate-700 hover:border-blue-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 dark:hover:border-blue-600'}`}>
+                                {topic}
+                            </button>
+                        ))}
+                        <p className="ml-auto text-xs font-medium text-slate-500 dark:text-gray-400"><strong className="text-slate-900 dark:text-white">{loading ? '…' : total}</strong> articles</p>
+                    </div>
+
+                    {error && !loading && <div role="alert" className="mb-5 rounded-2xl border border-red-200 bg-white p-5 text-sm text-red-600 dark:border-red-900 dark:bg-gray-900">{error}<button onClick={() => fetchBlogs(1)} className="ml-3 font-bold underline">Try again</button></div>}
+
+                    <div className="grid items-start gap-6 lg:grid-cols-12 lg:gap-7">
+                        <section className="min-w-0 space-y-5 lg:col-span-8" aria-label="Interview Articles">
+                            {loading ? (
+                                <div className="grid gap-4 sm:grid-cols-2">{[...Array(5)].map((_, index) => <SkeletonBlogCard key={index} />)}</div>
+                            ) : !error && !blogs.length ? (
+                                <div className="rounded-2xl border border-slate-200 bg-white p-12 text-center dark:border-gray-800 dark:bg-gray-900"><BookOpen className="mx-auto mb-3 h-10 w-10 text-slate-300" /><h2 className="font-bold text-slate-900 dark:text-white">No articles found</h2><p className="mt-1 text-sm text-slate-500">Try a different topic or search.</p></div>
+                            ) : featured ? (
+                                <>
+                                    <button type="button" onClick={() => go(featured.slug)} className="grid w-full overflow-hidden rounded-3xl border border-slate-200 bg-white text-left shadow-sm transition hover:shadow-md dark:border-gray-800 dark:bg-gray-900 md:min-h-[250px] md:grid-cols-2">
+                                        <div className="relative flex min-h-56 flex-col justify-between overflow-hidden bg-gradient-to-br from-blue-600 to-sky-500 p-5 text-white sm:p-6">
+                                            <div aria-hidden="true" className="absolute inset-0 opacity-25" style={{ backgroundImage: 'radial-gradient(rgba(255,255,255,.8) 1px, transparent 1px)', backgroundSize: '14px 14px' }} />
+                                            <div className="absolute -bottom-16 -right-12 h-52 w-52 rounded-full bg-white/15" />
+                                            <div className="relative flex items-center justify-between">
+                                                <span className="inline-flex items-center gap-2 text-[11px] font-extrabold uppercase tracking-[.18em]"><span className="grid h-8 w-8 place-items-center rounded-lg bg-white text-slate-900"><BookOpen className="h-4 w-4" /></span> Interview article</span>
+                                                <span className="rounded-full bg-white px-3 py-1 text-[11px] font-bold text-blue-700">Featured</span>
+                                            </div>
+                                            <div className="relative"><p className="text-3xl font-extrabold sm:text-4xl">{featured.category || 'Interview tips'}</p><div className="mt-5 flex gap-2"><span className="rounded-full bg-white px-3 py-1 text-[11px] font-bold text-slate-900">{featured.difficulty || 'Beginner'}</span><span className="rounded-full bg-black/20 px-3 py-1 text-[11px] font-semibold">{featured.readTime || 8} min read</span></div></div>
+                                        </div>
+                                        <div className="flex flex-col justify-center p-5 sm:p-6">
+                                            <p className="mb-2 text-xs font-bold text-blue-700 dark:text-blue-300">{featured.category || 'Interview tips'} · {featured.difficulty || 'Beginner'}</p>
+                                            <h2 className="text-xl font-extrabold leading-tight text-slate-950 dark:text-white sm:text-2xl">{featured.title}</h2>
+                                            <p className="mt-2 line-clamp-3 text-sm leading-5 text-slate-600 dark:text-gray-300">{featured.excerpt || featured.content?.replace(/<[^>]*>/g, '').slice(0, 180)}</p>
+                                            <p className="mt-3 text-xs text-slate-500 dark:text-gray-400">By {featured.author || 'TheJobInfo Team'} · {featured.readTime || 8} min read</p>
+                                        </div>
+                                    </button>
+                                    <div className="grid gap-4 sm:grid-cols-2">
+                                        {remaining.map((blog, index) => <BlogCard key={blog._id} blog={blog} index={index + 1} variant="guide" onClick={() => go(blog.slug)} />)}
+                                    </div>
+                                </>
+                            ) : null}
+
+                            {total > LIMIT && !loading && !error && <nav className="flex justify-center gap-2 pt-2" aria-label="Guide pages">
+                                {Array.from({ length: Math.min(Math.ceil(total / LIMIT), 3) }, (_, index) => index + 1).map(number => <button key={number} type="button" onClick={() => goToPage(number)} aria-current={page === number ? 'page' : undefined} className={`h-10 min-w-10 rounded-xl border px-3 text-sm font-bold ${page === number ? 'border-transparent bg-gradient-to-r from-blue-600 to-emerald-600 text-white' : 'border-slate-200 bg-white text-slate-800 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200'}`}>{number}</button>)}
+                                {Math.ceil(total / LIMIT) > 3 && <span className="px-2 py-2 text-sm text-slate-500">…</span>}
+                                <button type="button" disabled={page >= Math.ceil(total / LIMIT)} onClick={() => goToPage(page + 1)} className="rounded-xl border border-slate-200 bg-white px-4 text-sm font-bold text-slate-800 disabled:opacity-40 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200">Next</button>
+                            </nav>}
+                        </section>
+
+                        <aside className="space-y-4 lg:col-span-4">
+                            <SocialFollowCard />
+                            <section className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-gray-800 dark:bg-gray-900">
+                                <h2 className="mb-3 text-base font-extrabold text-slate-900 dark:text-white">Popular articles</h2>
+                                <div className="space-y-3">{blogs.slice(1, 5).map(blog => <button key={blog._id} onClick={() => go(blog.slug)} className="block text-left text-sm font-semibold leading-5 text-slate-800 hover:text-blue-700 dark:text-gray-200 dark:hover:text-blue-300">{blog.title}</button>)}</div>
+                                {!blogs.length && <p className="text-sm text-slate-500">New articles will appear here.</p>}
+                            </section>
+                            <section className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-gray-800 dark:bg-gray-900">
+                                <h2 className="text-base font-extrabold text-slate-900 dark:text-white">Looking for a job?</h2><p className="mt-1 text-sm leading-5 text-slate-600 dark:text-gray-300">Browse current openings for freshers and professionals.</p>
+                                <button onClick={() => navigate('/Job-Portal')} className="mt-3 w-full rounded-xl border border-slate-200 py-2.5 text-sm font-bold text-blue-700 hover:bg-blue-50 dark:border-gray-700 dark:text-blue-300 dark:hover:bg-gray-800">View jobs</button>
+                            </section>
+                            <AdSlot name="blogSidebar" />
+                        </aside>
+                    </div>
+                </div>
+            </main>
             <Footer />
         </>
     );
-};
-
-export default BlogPage;
+}

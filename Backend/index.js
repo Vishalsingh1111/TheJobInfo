@@ -3,9 +3,8 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
-import session from "express-session";
-import passport from "passport";
-import bodyParser from "body-parser";
+import helmet from "helmet";
+import rateLimit from "express-rate-limit";
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -15,11 +14,11 @@ import contactRoute from "./Route/Contact.route.js";
 import AdminRoute from "./Route/Admin.route.js";
 import newslatterRoute from './Route/Newslatter.route.js';
 import blog from "./Route/Blog.route.js";
+import visitorRoute from "./Route/Visitor.route.js";
 
 import { startFreehireCron } from "./Controller/Freehire.cron.js";
 
 
-// Load environment variables
 dotenv.config();
 
 // Get __dirname equivalent in ES modules
@@ -28,40 +27,71 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = process.env.PORT || 4000;
-const URI = process.env.MongoDBURI;
-const SESSION_SECRET = process.env.SESSION_SECRET;
+const URI = process.env.MONGO_URI || process.env.MongoDBURI;
+const allowedOrigins = new Set(
+    (process.env.CORS_ORIGINS || [
+        "https://dcoder-7vi1.onrender.com",
+        "https://dcoder-admin-page.onrender.com",
+        "https://thejobinfo.in",
+        "https://www.thejobinfo.in",
+        "https://admin.thejobinfo.in",
+        "http://localhost:5173",
+        "http://localhost:3000",
+    ].join(","))
+        .split(",")
+        .map((origin) => origin.trim())
+        .filter(Boolean)
+);
+
+app.set("trust proxy", 1);
+app.use(helmet());
 
 // CORS configuration - MUST be before other middleware
 app.use(cors({
-    origin: '*', // In production, specify your frontend URL
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    origin(origin, callback) {
+        const isLocalDevelopmentOrigin = process.env.NODE_ENV !== "production" && (() => {
+            try {
+                const parsedOrigin = new URL(origin);
+                return parsedOrigin.protocol === "http:" &&
+                    ["localhost", "127.0.0.1"].includes(parsedOrigin.hostname);
+            } catch {
+                return false;
+            }
+        })();
+        if (!origin || allowedOrigins.has(origin) || isLocalDevelopmentOrigin) {
+            return callback(null, true);
+        }
+        return callback(new Error("Origin is not allowed by CORS"));
+    },
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
 }));
 
-// Body parser with increased limits for file uploads - MUST be before routes
-app.use(express.json({ limit: '50mb' }));
-app.use(express.urlencoded({ limit: '50mb', extended: true }));
-app.use(bodyParser.json({ limit: '50mb' }));
-app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+app.use(express.json({ limit: '1mb' }));
+app.use(express.urlencoded({ limit: '1mb', extended: true }));
 
-// Serve static files from uploads directory - CRITICAL for file access
-// app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-
-// Session settings
-app.use(session({
-    secret: SESSION_SECRET || 'your-secret-key-here',
-    resave: false,
-    saveUninitialized: true,
-    cookie: {
-        secure: process.env.NODE_ENV === 'production', // true in production with HTTPS
-        maxAge: 24 * 60 * 60 * 1000 // 24 hours
-    }
-}));
-
-// Setup passport
-app.use(passport.initialize());
-app.use(passport.session());
+const loginLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    limit: 10,
+    standardHeaders: "draft-7",
+    legacyHeaders: false,
+    message: { error: "Too many login attempts. Try again later." },
+});
+const publicPostLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    limit: 20,
+    standardHeaders: "draft-7",
+    legacyHeaders: false,
+    message: { error: "Too many requests. Try again later." },
+});
+const visitorLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    limit: 300,
+    standardHeaders: "draft-7",
+    legacyHeaders: false,
+    message: { error: "Too many visitor-count requests. Try again later." },
+});
 
 
 // Health check endpoint
@@ -73,6 +103,11 @@ app.get('/health', (req, res) => {
         mongodb: mongoose.connection.readyState === 1 ? 'Connected' : 'Disconnected'
     });
 });
+
+app.use("/admin/adminlogin", loginLimiter);
+app.use("/admin/login", loginLimiter);
+app.use("/contact/contactinfo", publicPostLimiter);
+app.use("/newslatter/subscribe", publicPostLimiter);
 
 // Connect to MongoDB
 mongoose.connect(URI)
@@ -103,6 +138,8 @@ app.use("/contact", contactRoute);
 app.use("/admin", AdminRoute);
 app.use("/newslatter", newslatterRoute);
 app.use("/blog", blog);
+app.use("/visitor", visitorLimiter, visitorRoute);
+app.use("/visitor", visitorRoute);
 
 
 

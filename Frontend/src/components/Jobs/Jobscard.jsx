@@ -1,70 +1,29 @@
 
 import React from 'react';
-import { Briefcase, MapPin, Clock, IndianRupee, Users, Calendar } from 'lucide-react';
-
-const truncateText = (text, length) => {
-    if (!text) return '';
-    if (text.length <= length) return text;
-    return text.slice(0, length) + '...';
-};
-
-// ── Date formatter ─────────────────────────────────────────────────────────
-const formatDate = (dateStr) => {
-    if (!dateStr) return '';
-    const d = new Date(dateStr);
-    if (isNaN(d)) return '';
-    return d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
-};
+import { MapPin, ArrowRight } from 'lucide-react';
+import { isJobRecent } from '../Common/jobDateHelpers';
 
 // ── Gradients ──────────────────────────────────────────────────────────────
 const GRADIENTS = [
-    { gradient: 'from-red-500 to-orange-600' },
-    { gradient: 'from-green-500 to-emerald-600' },
-    { gradient: 'from-yellow-500 to-amber-600' },
-    { gradient: 'from-blue-500 to-cyan-600' },
-    { gradient: 'from-purple-600 to-pink-600' },
-    { gradient: 'from-orange-500 to-red-500' },
-    { gradient: 'from-teal-500 to-cyan-600' },
-    { gradient: 'from-indigo-600 to-purple-600' },
+    { gradient: 'from-emerald-600 to-green-700' },
+    { gradient: 'from-emerald-600 to-cyan-600' },
+    { gradient: 'from-blue-600 to-sky-500' },
+    { gradient: 'from-blue-600 to-sky-600' },
+    { gradient: 'from-teal-600 to-cyan-500' },
+    { gradient: 'from-teal-600 to-cyan-700' },
 ];
 
-// ── Auto generated image when no imageUrl ─────────────────────────────────
-const AutoJobImageCompact = ({ title, company, location }) => {
-    const CARD_GRADIENTS = [
-        'from-violet-500 to-purple-600',
-        'from-rose-500 to-pink-600',
-        'from-sky-500 to-blue-600',
-        'from-emerald-500 to-teal-600',
-        'from-orange-500 to-amber-600',
-        'from-fuchsia-500 to-pink-600',
-        'from-blue-500 to-cyan-600',
-        'from-green-500 to-emerald-600',
-    ];
-
-    const hash = [...(company || 'X')].reduce((a, c) => a + c.charCodeAt(0), 0);
-    const gradient = CARD_GRADIENTS[hash % CARD_GRADIENTS.length];
-
-    return (
-        <div
-            className={`w-full h-full flex flex-col items-center justify-center py-4 px-4 text-center bg-gradient-to-br ${gradient}`}
-        >
-            <p className="text-sm font-bold uppercase tracking-wide mb-1 leading-tight text-white/70">
-                {company?.length > 20 ? company.slice(0, 20) + '…' : company}
-            </p>
-            <p className="text-2xl font-bold leading-tight mb-1.5 line-clamp-2 text-white">
-                {title?.length > 32 ? title.slice(0, 32) + '…' : title}
-            </p>
-            {location && (
-                <span className="text-md font-medium flex items-center gap-1 text-white/80">
-                    <MapPin className="w-3 h-3" />
-                    {location?.length > 12 ? location.slice(0, 12) + '…' : location}
-                </span>
-            )}
-            <span className="mt-2 text-md font-semibold text-white/40">
-                TheJobInfo
-            </span>
-        </div>
-    );
+const formatTimeAgo = (dateValue) => {
+    if (!dateValue) return 'today';
+    const postedAt = new Date(dateValue).getTime();
+    if (!Number.isFinite(postedAt)) return 'recently';
+    const hours = Math.max(0, Math.floor((Date.now() - postedAt) / 3600000));
+    if (hours < 1) return 'just now';
+    if (hours < 24) return `${hours} hour${hours === 1 ? '' : 's'} ago`;
+    const days = Math.floor(hours / 24);
+    if (days === 1) return 'yesterday';
+    if (days < 7) return `${days} days ago`;
+    return new Date(postedAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
 };
 
 // ── Shimmer skeleton ───────────────────────────────────────────────────────
@@ -123,7 +82,7 @@ export const SkeletonJobCard = () => (
 );
 
 export const SkeletonGrid = ({ count = 8 }) => (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-5 mb-8">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-8">
         {Array.from({ length: count }).map((_, i) => (
             <SkeletonJobCard key={i} />
         ))}
@@ -133,104 +92,38 @@ export const SkeletonGrid = ({ count = 8 }) => (
 // ── Main Jobcard ───────────────────────────────────────────────────────────
 const Jobcard = ({ item, onClick, index }) => {
     const { gradient } = GRADIENTS[index % GRADIENTS.length];
+    const isRecent = isJobRecent(item);
+    const workMode = item.workMode || (/remote|work from home|wfh/i.test(item.location || '') ? 'Remote' : 'Onsite');
+    const posted = formatTimeAgo(item.postedAt || item.createdAt);
 
     return (
-        <div onClick={onClick} className="group cursor-pointer h-full">
-            <div className="relative h-full bg-white dark:bg-gray-900 rounded-2xl border border-gray-300 dark:border-gray-800 overflow-hidden hover:shadow-xl hover:border-transparent transition-all duration-300 hover:-translate-y-1 flex flex-col">
-
-                {/* ── TOP: image panel ── */}
-                <div
-                    className="relative flex items-center justify-center overflow-hidden flex-shrink-0 border-b border-gray-200 dark:border-gray-700"
-                    style={{ minHeight: '176px' }}
-                >
-                    {item.imageUrl ? (
-                        <>
-                            <div className={`absolute inset-0 bg-gradient-to-br ${gradient}`} />
-                            <div className="absolute -top-6 -right-6 w-28 h-28 rounded-full bg-white/10 pointer-events-none" />
-                            <div className="absolute -bottom-8 -left-8 w-32 h-32 rounded-full bg-white/10 pointer-events-none" />
-                            <img
-                                src={item.imageUrl}
-                                alt={item.company}
-                                className="w-full h-full object-cover absolute inset-0"
-                                onError={e => { e.target.style.display = 'none'; }}
-                            />
-                        </>
-                    ) : (
-                        <AutoJobImageCompact
-                            title={item.title}
-                            company={item.company}
-                            location={item.location}
-                        />
-                    )}
-
-                    {/* Hot badge */}
-                    <div className="absolute top-3 right-3 z-10">
-                        <span className="flex items-center gap-1 text-xs font-bold px-2.5 py-1.5 bg-orange-500 text-white rounded-full shadow-lg">
-                            🔥 Hot
-                        </span>
-                    </div>
-
-                    {/* Posted date badge — bottom left of image */}
-                    {item.createdAt && (
-                        <div className="absolute bottom-3 left-3 z-10">
-                            <span className="flex items-center gap-1 text-xs font-semibold px-2 py-1 bg-black/50 backdrop-blur-sm text-white rounded-full">
-                                <Calendar className="w-3 h-3" />
-                                {formatDate(item.createdAt)}
-                            </span>
-                        </div>
-                    )}
+        <article onClick={onClick} onKeyDown={event => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); onClick(); } }} role="link" tabIndex={0} className="group h-full cursor-pointer overflow-hidden rounded-2xl border border-slate-200 bg-white transition duration-300 hover:-translate-y-1 hover:border-blue-200 hover:shadow-xl dark:border-gray-800 dark:bg-gray-900 dark:hover:border-blue-800">
+            <div className={`relative min-h-[225px] overflow-hidden bg-gradient-to-br ${gradient} p-5 text-white`}>
+                <div aria-hidden="true" className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(rgba(255,255,255,.8) 1px, transparent 1px)', backgroundSize: '16px 16px' }} />
+                <div aria-hidden="true" className="absolute -right-5 -top-14 h-36 w-36 rounded-full border-[24px] border-white/10" />
+                <div className="relative flex items-center gap-2">
+                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-lg font-black text-blue-700 shadow">{(item.company || 'C').slice(0, 1).toUpperCase()}</span>
+                    <span className="min-w-0 flex-1 truncate text-sm font-bold">{item.company}</span>
+                    {isRecent && <span className="rounded-full bg-white px-3 py-1 text-xs font-bold text-orange-600">New</span>}
                 </div>
-
-                {/* ── BOTTOM: content ── */}
-                <div className="p-5 flex flex-col flex-1">
-                    <div className="flex items-center justify-between mb-1">
-                        <p className={`text-sm font-bold uppercase tracking-widest bg-gradient-to-r ${gradient} bg-clip-text text-transparent truncate`}>
-                            {item.company}
-                        </p>
-                        {item.jobType && (
-                            <span className="text-sm font-semibold text-green-500 border border-green-200 dark:border-green-800 px-2 py-0.5 rounded-full flex-shrink-0 ml-2">
-                                {item.jobType}
-                            </span>
-                        )}
-                    </div>
-
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 line-clamp-2 leading-snug group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors duration-300">
-                        {item.title}
-                    </h3>
-
-                    <p className="text-base font-medium text-gray-600 dark:text-gray-400 mb-2 line-clamp-2 flex-1 leading-relaxed">
-                        {truncateText(item.description, 100) || 'Click to view full details and apply for this position.'}
-                    </p>
-
-                    <div className="space-y-1 mb-4">
-                        {item.location && (
-                            <div className="flex items-center gap-2 text-base font-medium text-gray-700 dark:text-gray-300">
-                                <MapPin className="w-4 h-4 text-red-500 flex-shrink-0" />
-                                <span className="truncate">{item.location}</span>
-                            </div>
-                        )}
-                        {item.salary && (
-                            <div className="flex items-center gap-2 text-base font-bold text-green-700 dark:text-green-400">
-                                <IndianRupee className="w-4 h-4 flex-shrink-0" />
-                                <span>{item.salary}</span>
-                            </div>
-                        )}
-                        {item.experience && (
-                            <div className="flex items-center gap-2 text-base font-medium text-blue-600 dark:text-blue-400">
-                                <Users className="w-4 h-4 flex-shrink-0" />
-                                <span>{item.experience}</span>
-                            </div>
-                        )}
-                        {item.lastDate && (
-                            <div className="flex items-center gap-2 text-base font-medium text-gray-700 dark:text-gray-300">
-                                <Clock className="w-4 h-4 text-orange-400 flex-shrink-0" />
-                                <span>Apply by <span className="text-red-600 dark:text-red-400 font-bold">{item.lastDate}</span></span>
-                            </div>
-                        )}
-                    </div>
+                <p className="relative mt-8 text-[11px] font-extrabold uppercase tracking-[0.2em] text-white/85">We are hiring</p>
+                <h2 className="relative mt-2 line-clamp-2 text-xl font-extrabold leading-snug text-white">{item.title}</h2>
+                <div className="relative mt-4 flex flex-wrap gap-1.5">
+                    {[item.jobType, item.city || item.location, workMode].filter(Boolean).slice(0, 3).map((tag, tagIndex) => <span key={`${tag}-${tagIndex}`} className="rounded-full bg-black/20 px-2.5 py-1 text-[11px] font-semibold text-white">{tag}</span>)}
                 </div>
             </div>
-        </div>
+
+            <div className="flex min-h-[168px] flex-col p-5">
+                <h3 className="line-clamp-2 text-lg font-extrabold text-slate-900 transition-colors group-hover:text-blue-700 dark:text-white dark:group-hover:text-blue-300">{item.title}</h3>
+                <p className="mt-2 flex items-center gap-2 text-sm text-slate-600 dark:text-gray-300"><MapPin className="h-4 w-4 shrink-0 text-blue-600" /><span className="truncate">{item.city || item.location || 'India'} · {workMode}</span></p>
+                {item.experience && <p className="mt-1.5 text-sm text-slate-600 dark:text-gray-400">Experience: {item.experience}</p>}
+                <p className="mt-1 text-sm text-slate-600 dark:text-gray-400">Salary: {item.salary || item.salaryNote || 'Not disclosed'}</p>
+                <div className="mt-auto flex items-center justify-between border-t border-slate-100 pt-3 text-xs text-slate-500 dark:border-gray-700 dark:text-gray-400">
+                    <span>Posted {posted}</span>
+                    <span className="font-bold text-blue-700 dark:text-blue-300">View details <ArrowRight className="ml-1 inline h-3.5 w-3.5" /></span>
+                </div>
+            </div>
+        </article>
     );
 };
 

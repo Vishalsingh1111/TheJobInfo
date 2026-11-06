@@ -102,9 +102,9 @@ const ShowContactMsg = () => {
 
     if (loading && messages.length === 0) {
         return (
-            <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-950 dark:via-gray-950 dark:to-gray-950 flex items-center justify-center">
+            <div className="min-h-screen bg-gradient-to-br from-blue-50 via-sky-50 to-teal-50 dark:from-gray-950 dark:via-gray-950 dark:to-gray-950 flex items-center justify-center">
                 <div className="text-center">
-                    <div className="inline-block animate-spin rounded-full h-16 w-16 border-4 border-purple-200 dark:border-purple-800 border-t-purple-600 dark:border-t-purple-400 mb-4"></div>
+                    <div className="inline-block animate-spin rounded-full h-16 w-16 border-4 border-teal-200 dark:border-teal-800 border-t-teal-600 dark:border-t-teal-400 mb-4"></div>
                     <p className="text-gray-600 dark:text-gray-400 text-lg">Loading messages...</p>
                 </div>
             </div>
@@ -112,10 +112,10 @@ const ShowContactMsg = () => {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-950 dark:via-gray-950 dark:to-gray-950 py-8 px-4">
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-sky-50 to-teal-50 dark:from-gray-950 dark:via-gray-950 dark:to-gray-950 py-8 px-4">
             <div className="container mx-auto max-w-7xl">
                 {/* Header */}
-                <div className="bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-700 dark:to-purple-700 text-white rounded-2xl p-8 mb-8 shadow-xl">
+                <div className="bg-gradient-to-r from-blue-600 to-teal-600 dark:from-blue-700 dark:to-teal-700 text-white rounded-2xl p-8 mb-8 shadow-xl">
                     <div className="flex flex-col md:flex-row justify-between items-center gap-4">
                         <div>
                             <h1 className="text-4xl font-bold mb-2 flex items-center gap-3">
@@ -145,14 +145,14 @@ const ShowContactMsg = () => {
                 </div>
 
                 {/* Stats */}
-                <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border-l-4 border-purple-500 mb-8 transform hover:scale-105 transition-all duration-300">
+                <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border-l-4 border-teal-500 mb-8 transform hover:scale-105 transition-all duration-300">
                     <div className="flex items-center justify-between">
                         <div>
                             <p className="text-gray-600 dark:text-gray-400 text-sm font-medium mb-1">Total Messages</p>
                             <p className="text-3xl font-bold text-gray-800 dark:text-gray-100">{messages.length}</p>
                         </div>
-                        <div className="p-4 rounded-full bg-purple-100 dark:opacity-20">
-                            <MessageSquare className="w-8 h-8 text-purple-500" />
+                        <div className="p-4 rounded-full bg-teal-100 dark:opacity-20">
+                            <MessageSquare className="w-8 h-8 text-teal-500" />
                         </div>
                     </div>
                 </div>
@@ -254,7 +254,7 @@ const ShowContactMsg = () => {
                                                 </td>
                                                 <td className="px-6 py-4 whitespace-nowrap">
                                                     <div className="flex items-center gap-2">
-                                                        <Phone className="w-4 h-4 text-purple-600 dark:text-purple-400" />
+                                                        <Phone className="w-4 h-4 text-teal-600 dark:text-teal-400" />
                                                         <span className="text-sm text-gray-700 dark:text-gray-300">
                                                             {message.phonenumber}
                                                         </span>
@@ -327,7 +327,7 @@ const ShowContactMsg = () => {
             {showViewModal && selectedMessage && (
                 <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
                     <div className="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-2xl shadow-2xl">
-                        <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6 flex justify-between items-center rounded-t-2xl">
+                        <div className="bg-gradient-to-r from-blue-600 to-teal-600 text-white p-6 flex justify-between items-center rounded-t-2xl">
                             <h2 className="text-2xl font-bold">Message Details</h2>
                             <button
                                 onClick={() => setShowViewModal(false)}
@@ -359,9 +359,9 @@ const ShowContactMsg = () => {
                                     </p>
                                 </div>
 
-                                <div className="bg-purple-50 dark:bg-purple-900/20 rounded-xl p-4">
+                                <div className="bg-teal-50 dark:bg-teal-900/20 rounded-xl p-4">
                                     <div className="flex items-center gap-2 mb-2">
-                                        <Phone className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+                                        <Phone className="w-5 h-5 text-teal-600 dark:text-teal-400" />
                                         <p className="font-bold text-gray-800 dark:text-gray-100">Phone</p>
                                     </div>
                                     <p className="text-gray-700 dark:text-gray-300">

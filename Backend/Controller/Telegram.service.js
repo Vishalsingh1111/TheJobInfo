@@ -1,6 +1,20 @@
 
+import { isPopularCompany } from "./Popularcompanies.js";
+
 const formatDate = (d) =>
     new Date(d).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
+
+export function shouldPostToTelegram(job) {
+    return Boolean(job?.forceTelegram)
+        || (job?.level === "fresher" && isPopularCompany(job?.company));
+}
+
+export function getTelegramSkipReason(job) {
+    if (job?.forceTelegram) return "";
+    if (!isPopularCompany(job?.company)) return "company is not on the popular list";
+    if (job?.level !== "fresher") return "job level is not fresher";
+    return "";
+}
 
 const getCleanRole = (title) => {
     let t = String(title || "").trim();
@@ -31,9 +45,18 @@ export const buildMessage = (job) => {
 };
 
 export const postJobToTelegram = async (job) => {
+    const reason = getTelegramSkipReason(job);
+    if (reason) {
+        console.log(`[telegram] skipped: ${reason}`);
+        return { skipped: true, reason };
+    }
+
     const token = process.env.TELEGRAM_BOT_TOKEN;
     const chatId = process.env.TELEGRAM_CHANNEL_ID;
-    if (!token || !chatId || token === "your_token_here") return; // not set up -> silently skip
+    if (!token || !chatId || token === "your_token_here") {
+        console.log("[telegram] skipped: bot credentials are not configured");
+        return { skipped: true, reason: "bot credentials are not configured" };
+    }
     try {
         const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
             method: "POST",
@@ -41,8 +64,10 @@ export const postJobToTelegram = async (job) => {
             body: JSON.stringify({ chat_id: chatId, text: buildMessage(job) }),
             signal: AbortSignal.timeout(15000),
         });
-        if (!res.ok) console.error("Telegram post failed:", await res.text());
+        if (!res.ok) throw new Error(`Telegram API responded ${res.status}: ${await res.text()}`);
+        return { sent: true };
     } catch (err) {
         console.error("Telegram post failed:", err.cause?.code || err.message);
+        throw err;
     }
 };

@@ -5,8 +5,11 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon index.js"
+    "test": "node --test",
+    "start": "nodemon index.js",
+    "create:admin": "node scripts/createAdmin.js",
+    "reset:admin-password": "node scripts/resetAdminPassword.js",
+    "seed:articles": "node scripts/seedArticles.js"
   },
   "repository": {
     "type": "git",

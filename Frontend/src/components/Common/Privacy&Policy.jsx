@@ -1,16 +1,15 @@
 
 
-import React, { useState } from 'react';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
 import {
     Shield, Eye, Lock, Database, Cookie, Mail,
-    RefreshCw, UserCheck, ChevronDown, ExternalLink, Send
+    RefreshCw, UserCheck, ExternalLink, Send
 } from 'lucide-react';
+import { siteConfig } from '../../siteConfig';
 
 const PrivacyPolicy = () => {
-    const lastUpdated = 'April 4, 2026';
-    const [openIndex, setOpenIndex] = useState(null);
+    const lastUpdated = siteConfig.policyUpdated;
 
     const sections = [
         {
@@ -20,11 +19,11 @@ const PrivacyPolicy = () => {
             content: [
                 {
                     subtitle: 'Information You Provide',
-                    text: 'When you register or sign in using Google OAuth, we collect your name, email address, and profile picture as provided by Google. We do not store your Google password.'
+                    text: 'If you submit the contact form, we receive the name, email address, optional phone number, and message you provide. If you subscribe to job alerts, we receive your email address.'
                 },
                 {
                     subtitle: 'Usage Information',
-                    text: 'We automatically collect information about how you interact with our platform — pages you visit, content you access, features you use, and time spent on the platform. This helps us improve your experience.'
+                    text: 'Our hosting provider may process standard request and device information, such as IP address and browser details, to deliver and protect the website.'
                 },
                 {
                     subtitle: 'Device & Technical Data',
@@ -34,20 +33,20 @@ const PrivacyPolicy = () => {
         },
         {
             icon: Eye,
-            color: 'from-violet-500 to-purple-600',
+            color: 'from-blue-500 to-teal-600',
             title: '2. How We Use Your Information',
             content: [
                 {
                     subtitle: 'To Provide & Improve Services',
-                    text: 'We use your information to operate the platform, personalize your experience, and improve our content, features, and job listings.'
+                    text: 'We use submitted contact details to respond to messages and subscriber email addresses to provide the requested newsletter.'
                 },
                 {
                     subtitle: 'To Communicate With You',
-                    text: 'We may send you important updates about the platform, new features, or relevant job opportunities. You can opt out of non-essential communications at any time.'
+                    text: 'Visitors do not need an account to browse public listings. Contact us to request deletion of a message or newsletter subscription.'
                 },
                 {
                     subtitle: 'For Analytics',
-                    text: 'We use aggregated, anonymized data to understand how our platform is used and make informed decisions about future improvements.'
+                    text: 'We do not claim to use analytics unless an analytics service is enabled and disclosed here.'
                 },
             ],
         },
@@ -62,7 +61,7 @@ const PrivacyPolicy = () => {
                 },
                 {
                     subtitle: 'Service Providers',
-                    text: 'We may share data with trusted third-party service providers (such as hosting, analytics, or authentication providers) who assist us in operating the platform. These providers are contractually bound to protect your data.'
+                    text: 'Hosting, database, and email providers may process information as needed to operate the site and respond to requests. Employer application pages have their own privacy practices.'
                 },
                 {
                     subtitle: 'Legal Requirements',
@@ -72,31 +71,31 @@ const PrivacyPolicy = () => {
         },
         {
             icon: Cookie,
-            color: 'from-orange-500 to-amber-600',
+            color: 'from-teal-500 to-cyan-600',
             title: '4. Cookies & Tracking',
             content: [
                 {
                     subtitle: 'What Are Cookies',
-                    text: 'Cookies are small text files stored on your device. We use them to keep you logged in, remember your preferences, and analyze platform usage.'
+                    text: 'The site may store theme or consent preferences in local storage. Public job browsing does not require an account.'
                 },
                 {
                     subtitle: 'Types of Cookies We Use',
-                    text: 'We use essential cookies (required for login and basic functionality), analytics cookies (to understand usage patterns), and preference cookies (to remember your settings like dark mode).'
+                    text: 'The site is preparing for Google AdSense, but ad placements are disabled by default. If enabled, Google and its partners may use cookies or similar technologies for advertising, subject to your settings and applicable consent requirements.'
                 },
                 {
                     subtitle: 'Managing Cookies',
-                    text: 'You can control or disable cookies through your browser settings. Note that disabling essential cookies may affect the functionality of the platform.'
+                    text: 'You can manage cookies in your browser. You can also review Google ad personalization settings and opt out of personalized advertising through Google Ads Settings and industry opt-out tools.'
                 },
             ],
         },
         {
             icon: Lock,
-            color: 'from-rose-500 to-pink-600',
+            color: 'from-teal-500 to-cyan-600',
             title: '5. Data Security',
             content: [
                 {
                     subtitle: 'Our Security Measures',
-                    text: 'We implement industry-standard security practices including HTTPS encryption, secure authentication via Google OAuth, and regular security reviews to protect your data.'
+                    text: 'We use reasonable technical and organizational safeguards. No internet transmission or storage method can be guaranteed completely secure.'
                 },
                 {
                     subtitle: 'No Guarantee',
@@ -115,7 +114,7 @@ const PrivacyPolicy = () => {
                 },
                 {
                     subtitle: 'Deletion',
-                    text: 'You may request deletion of your account and associated personal data at any time by contacting us. We will process your request within a reasonable timeframe.'
+                    text: `You can request deletion of contact messages or a newsletter subscription by emailing ${siteConfig.email}. We will verify and process requests as required by law.`
                 },
                 {
                     subtitle: 'Data Portability',
@@ -125,7 +124,7 @@ const PrivacyPolicy = () => {
         },
         {
             icon: Shield,
-            color: 'from-fuchsia-500 to-pink-600',
+            color: 'from-emerald-500 to-cyan-600',
             title: "7. Children's Privacy",
             content: [
                 {
@@ -153,137 +152,90 @@ const PrivacyPolicy = () => {
     return (
         <>
             <Navbar />
-            <div className="min-h-screen bg-gray-50 dark:bg-gray-950 pt-16">
-
-                {/* ── HERO ── */}
-                <div className="bg-gray-50 dark:bg-gray-950">
-                    <div className="max-w-4xl mx-auto px-4 py-14 text-center">
-                        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-4 leading-tight">
-                            Your Privacy{' '}
-                            <span className="bg-gradient-to-r from-violet-600 to-pink-600 bg-clip-text text-transparent">
-                                Matters to Us
-                            </span>
-                        </h1>
-                        <p className="text-base text-gray-500 dark:text-gray-400 max-w-xl mx-auto leading-relaxed mb-4">
-                            This Privacy Policy explains how we collect, use, and protect your information when you use our platform.
-                        </p>
-                        <p className="text-xs text-gray-400 dark:text-gray-500">
-                            Last updated: <span className="font-semibold text-gray-600 dark:text-gray-400">{lastUpdated}</span>
-                        </p>
+            <main className="min-h-screen bg-[#f3f8fb] pt-20 dark:bg-slate-950">
+                <header className="page-hero-enter relative isolate overflow-hidden border-b border-blue-100/80 bg-[#f3f8fb] dark:border-gray-800 dark:bg-gray-950">
+                    <div className="mx-auto grid max-w-6xl items-end gap-8 px-4 py-12 sm:px-6 sm:py-16 lg:grid-cols-[1fr_auto]">
+                        <div className="max-w-3xl">
+                            <span className="inline-flex rounded-full border border-blue-200 bg-white/80 px-3 py-1 text-xs font-bold uppercase tracking-[0.16em] text-blue-700 dark:border-blue-800 dark:bg-slate-900/80 dark:text-blue-300">Privacy & data</span>
+                            <h1 className="mt-5 text-4xl font-extrabold tracking-tight text-gray-950 dark:text-white sm:text-5xl">Your privacy <span className="bg-gradient-to-r from-blue-600 to-emerald-600 bg-clip-text text-transparent">matters</span></h1>
+                            <p className="mt-4 max-w-2xl text-base leading-relaxed text-gray-600 dark:text-gray-300 sm:text-lg">Learn what information we handle, why we use it, and the choices available to you when using TheJobInfo.</p>
+                        </div>
+                        <div className="rounded-2xl border border-white/80 bg-white/80 px-5 py-4 shadow-sm backdrop-blur dark:border-gray-800 dark:bg-gray-900/80">
+                            <p className="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">Last updated</p>
+                            <p className="mt-1 text-sm font-bold text-gray-900 dark:text-white">{lastUpdated}</p>
+                        </div>
                     </div>
-                </div>
+                </header>
 
-                {/* ── QUICK NAV ── */}
-                <div className="bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 sticky top-0 z-30">
-                    <div className="max-w-4xl mx-auto px-4">
-                        <div className="flex gap-1 overflow-x-auto py-3 no-scrollbar">
+                <div className="mx-auto grid min-w-0 max-w-6xl gap-6 px-4 py-8 sm:px-6 sm:py-12 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10">
+                    <aside className="h-fit min-w-0 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900 lg:sticky lg:top-24">
+                        <p className="mb-3 text-xs font-bold uppercase tracking-[0.14em] text-gray-500 dark:text-gray-400">On this page</p>
+                        <nav aria-label="Privacy policy sections" className="flex min-w-0 gap-2 overflow-x-auto pb-1 lg:flex-col lg:overflow-visible">
                             {navItems.map((item, i) => (
-                                <button
-                                    key={i}
-                                    onClick={() => {
-                                        const el = document.getElementById(`section-${i}`);
-                                        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                                    }}
-                                    className="flex-shrink-0 text-xs font-medium px-3.5 py-1.5 rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
-                                >
+                                <a key={item} href={`#section-${i}`} className="shrink-0 rounded-lg px-3 py-2 text-sm font-medium text-gray-600 transition hover:bg-blue-50 hover:text-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:text-gray-300 dark:hover:bg-blue-950/40 dark:hover:text-blue-300">
                                     {item}
-                                </button>
+                                </a>
                             ))}
-                        </div>
-                    </div>
-                </div>
+                        </nav>
+                    </aside>
 
-                <div className="max-w-4xl mx-auto px-4 py-10 space-y-3">
-
-                    {/* ── SECTIONS ── */}
-                    {sections.map((section, i) => {
-                        const Icon = section.icon;
-                        const isOpen = openIndex === i;
-                        return (
-                            <div
-                                key={i}
-                                id={`section-${i}`}
-                                className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 overflow-hidden shadow-sm"
-                            >
-                                {/* Header — clickable to expand */}
-                                <button
-                                    onClick={() => setOpenIndex(isOpen ? null : i)}
-                                    className="w-full flex items-center justify-between px-6 py-5 text-left"
-                                >
-                                    <div className="flex items-center gap-3">
-                                        <div className={`w-9 h-9 rounded-xl bg-gradient-to-br ${section.color} flex items-center justify-center flex-shrink-0`}>
-                                            <Icon className="w-4.5 h-4.5 text-white" />
-                                        </div>
-                                        <h2 className="text-base font-semibold text-gray-900 dark:text-white">{section.title}</h2>
-                                    </div>
-                                    <ChevronDown className={`w-4 h-4 text-gray-400 flex-shrink-0 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
-                                </button>
-
-                                {/* Content */}
-                                {isOpen && (
-                                    <div className="px-6 pb-6 border-t border-gray-50 dark:border-gray-800">
-                                        <div className="pt-5 space-y-5">
-                                            {section.content.map((block, j) => (
-                                                <div key={j} className="flex gap-3">
-                                                    <div className={`w-1 rounded-full bg-gradient-to-b ${section.color} flex-shrink-0 self-stretch`} />
-                                                    <div>
-                                                        <p className="text-sm font-semibold text-gray-800 dark:text-gray-200 mb-1">{block.subtitle}</p>
-                                                        <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">{block.text}</p>
+                    <div className="min-w-0 space-y-6">
+                        {sections.map((section, i) => {
+                            const Icon = section.icon;
+                            return (
+                                <section key={section.title} id={`section-${i}`} className="scroll-mt-28 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm transition-shadow hover:shadow-md dark:border-gray-800 dark:bg-gray-900 sm:p-6">
+                                    <div className="flex items-start gap-4">
+                                        <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br ${section.color} text-white shadow-sm`}>
+                                            <Icon className="h-5 w-5" />
+                                        </span>
+                                        <div className="min-w-0 flex-1">
+                                            <h2 className="text-lg font-bold text-gray-900 dark:text-white">{section.title}</h2>
+                                            <div className="mt-4 space-y-5">
+                                                {section.content.map((block) => (
+                                                    <div key={block.subtitle} className="border-l-2 border-blue-200 pl-4 dark:border-blue-800">
+                                                        <h3 className="text-sm font-bold text-gray-800 dark:text-gray-200">{block.subtitle}</h3>
+                                                        <p className="mt-1 text-sm leading-7 text-gray-600 dark:text-gray-300 sm:text-base">{block.text}</p>
                                                     </div>
-                                                </div>
-                                            ))}
+                                                ))}
+                                            </div>
                                         </div>
                                     </div>
-                                )}
-                            </div>
-                        );
-                    })}
+                                </section>
+                            );
+                        })}
 
-                    {/* ── MONETIZATION: Advertise With Us ── */}
-                    <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-6 shadow-sm">
-                        <div className="flex items-start gap-4">
-                            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center flex-shrink-0">
-                                <ExternalLink className="w-5 h-5 text-white" />
+                        <section className="rounded-2xl border border-amber-200/80 bg-amber-50/70 p-5 dark:border-amber-900/60 dark:bg-amber-950/20 sm:p-6">
+                            <div className="flex items-start gap-4">
+                                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-amber-500 text-white"><ExternalLink className="h-5 w-5" /></span>
+                                <div className="min-w-0">
+                                    <h2 className="text-lg font-bold text-gray-900 dark:text-white">Third-party advertising</h2>
+                                    <p className="mt-3 text-sm leading-7 text-gray-600 dark:text-gray-300 sm:text-base">Ad placements are disabled by default. If advertising is later enabled, Google AdSense and its partners may use cookies and similar technologies for ad delivery and personalization under their own privacy policies and applicable consent requirements.</p>
+                                    <p className="mt-3 text-sm leading-7 text-gray-600 dark:text-gray-300 sm:text-base">
+                                        You can opt out of personalized advertising through{' '}
+                                        <a href="https://www.google.com/settings/ads" target="_blank" rel="noreferrer" className="font-semibold text-blue-700 underline decoration-blue-300 underline-offset-4 dark:text-blue-300">Google Ads Settings</a>
+                                        {' '}or the{' '}
+                                        <a href="https://www.networkadvertising.org/choices/" target="_blank" rel="noreferrer" className="font-semibold text-blue-700 underline decoration-blue-300 underline-offset-4 dark:text-blue-300">NAI opt-out page</a>.
+                                    </p>
+                                </div>
                             </div>
-                            <div className="flex-1">
-                                <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-1">Third-Party Advertising</h3>
-                                <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed mb-3">
-                                    We may display third-party advertisements on our platform served by trusted advertising networks including Google AdSense. These ad partners may use cookies and similar technologies to serve ads based on your interests. We do not share personally identifiable information with these ad networks.
-                                </p>
-                                <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
-                                    You can opt out of personalized advertising by visiting{' '}
-                                    <a href="https://www.google.com/settings/ads" target="_blank" rel="noreferrer" className="text-purple-600 dark:text-purple-400 hover:underline font-medium">
-                                        Google Ads Settings
-                                    </a>
-                                    {' '}or the{' '}
-                                    <a href="https://www.networkadvertising.org/choices/" target="_blank" rel="noreferrer" className="text-purple-600 dark:text-purple-400 hover:underline font-medium">
-                                        NAI opt-out page
-                                    </a>.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+                        </section>
 
-                    {/* ── CONTACT CTA ── */}
-                    <div className="bg-gradient-to-r from-violet-600 to-purple-600 rounded-2xl p-8 text-center shadow-lg">
-                        <Mail className="w-8 h-8 text-white/80 mx-auto mb-3" />
-                        <h3 className="text-lg font-bold text-white mb-2">Questions About Your Privacy?</h3>
-                        <p className="text-white/70 text-sm mb-5 max-w-md mx-auto leading-relaxed">
-                            If you have any questions or concerns about this Privacy Policy, reach out — we're happy to help.
-                        </p>
-                        <div className="flex items-center justify-center gap-3 flex-wrap">
-                            <a href="mailto:dcodermail1@gmail.com"
-                                className="inline-flex items-center gap-2 bg-white text-purple-700 px-5 py-2.5 rounded-xl text-sm font-semibold hover:scale-105 transition-all shadow-md">
-                                <Mail className="w-4 h-4" /> dcodermail1@gmail.com
-                            </a>
-                            <a href="https://t.me/dcoder75" target="_blank" rel="noreferrer"
-                                className="inline-flex items-center gap-2 bg-white/20 hover:bg-white/30 text-white px-5 py-2.5 rounded-xl text-sm font-semibold transition-all">
-                                <Send className="w-4 h-4" /> Telegram
-                            </a>
-                        </div>
+                        <section className="rounded-2xl bg-gradient-to-br from-blue-700 via-teal-700 to-emerald-700 p-6 text-white shadow-lg shadow-blue-950/15 sm:p-8">
+                            <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+                                <div className="max-w-xl">
+                                    <p className="text-sm font-bold text-white/80">We’re here to help</p>
+                                    <h2 className="mt-1 text-2xl font-bold">Questions about your privacy?</h2>
+                                    <p className="mt-2 text-sm leading-relaxed text-white/75">Contact us with any questions or concerns about this Privacy Policy.</p>
+                                </div>
+                                <div className="flex flex-wrap gap-3">
+                                    <a href={`mailto:${siteConfig.email}`} className="inline-flex items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-sm font-bold text-blue-700 transition hover:bg-blue-50"><Mail className="h-4 w-4" />{siteConfig.email}</a>
+                                    {siteConfig.telegram && <a href={siteConfig.telegram} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-xl border border-white/30 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-white/10"><Send className="h-4 w-4" />Telegram</a>}
+                                </div>
+                            </div>
+                        </section>
                     </div>
                 </div>
-            </div>
+            </main>
             <Footer />
         </>
     );

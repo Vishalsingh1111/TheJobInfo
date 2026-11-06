@@ -2,37 +2,31 @@ import React from 'react';
 import { useAdminAuth } from '../../Context/AuthProvider2';
 
 import { useNavigate } from 'react-router-dom';
-import toast from 'react-hot-toast';
+import { LogOut } from 'lucide-react';
 
 function Logout() {
-    const [authAdmin, setAuthAdmin] = useAdminAuth();
+    const [, setAuthAdmin] = useAdminAuth();
 
     const navigate = useNavigate();
 
     const handleLogout = () => {
         try {
 
+            localStorage.removeItem('Admins');
             setAuthAdmin(null);
-
-            localStorage.removeItem("Admins");
-
-            toast.success("Logout Successfully");
-            setTimeout(() => {
-                navigate('/Adminlogin');
-                window.location.reload();
-            }, 1000);
-        } catch (error) {
-            toast.error("Error: " + error.message);
+            navigate('/login', { replace: true });
+        } catch {
+            navigate('/login', { replace: true });
         }
     };
 
     return (
         <div>
             <button
-                className="pl-5 flex items-center gap-3 w-full p-3 rounded-lg bg-red-500 hover:bg-red-600 text-white transition-colors "
+                className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold text-teal-600 transition-colors hover:bg-teal-50 dark:text-teal-400 dark:hover:bg-teal-950/30"
                 onClick={handleLogout}
             >
-                Logout
+                <LogOut className="h-4 w-4" /> Sign out
             </button>
         </div>
     );

@@ -22,8 +22,16 @@ export function startFreehireCron() {
         return;
     }
 
-    // Each run adds up to 2 new tech jobs (FREEHIRE_JOBS_PER_RUN) and removes imported jobs older than 30 days.
+    // Each run imports at most one tech job and removes jobs that have reached their expiry date.
     cron.schedule(schedule, () => syncFreehireJobs(), { timezone: "Asia/Kolkata" });
+    cron.schedule("0 2 * * *", async () => {
+        try {
+            const result = await Job.deleteMany({ expiresAt: { $lte: new Date() } });
+            console.log(`[jobs] removed ${result.deletedCount || 0} expired job(s)`);
+        } catch (error) {
+            console.error("[jobs] expired-job cleanup failed:", error.message);
+        }
+    }, { timezone: "Asia/Kolkata" });
 
     setTimeout(async () => {
         try {

@@ -1,271 +1,166 @@
-import React from 'react';
-import Navbar from '../Navbar';
-import Footer from '../Footer';
-import {
-    Briefcase, MapPin, Users, Target, Zap, Heart,
-    Mail, Send, CheckCircle, ArrowRight, Globe,
-    TrendingUp, Bell, Star, Clock, Building2,
-    ExternalLink, Flame
-} from 'lucide-react';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { Link } from "react-router-dom";
+import { ArrowRight, BriefcaseBusiness, CheckCircle2, Compass, MapPin, ShieldCheck } from "lucide-react";
+import Navbar from "../Navbar";
+import Footer from "../Footer";
+import { baseUrl } from "../../Baseurl";
+import { siteConfig } from "../../siteConfig";
+import { useSeo } from "../../hooks/useSeo";
 
 const About = () => {
+    const [stats, setStats] = useState(null);
 
-    const stats = [
-        { number: '100+', label: 'Jobs Listed', color: 'from-violet-600 to-purple-600' },
-        { number: '50+', label: 'Companies', color: 'from-sky-600 to-blue-600' },
-        { number: '10K+', label: 'Community Members', color: 'from-emerald-600 to-teal-600' },
-        { number: 'Free', label: 'Always Free', color: 'from-orange-600 to-amber-600' },
-    ];
+    useEffect(() => {
+        axios.get(`${baseUrl}/job/stats`)
+            .then(({ data }) => setStats(data))
+            .catch((error) => console.error("Could not load live job statistics:", error.message));
+    }, []);
 
-    const offerings = [
-        {
-            icon: Briefcase,
-            color: 'from-violet-500 to-purple-600',
-            title: 'Off-Campus Job Drives',
-            desc: 'Latest off-campus drives, fresher jobs, and internships — curated daily for college students and working professionals across India.',
-        },
-        {
-            icon: Bell,
-            color: 'from-sky-500 to-blue-600',
-            title: 'Instant Job Alerts',
-            desc: 'Join our Telegram community and get notified the moment a new job is posted — never miss an application deadline again.',
-        },
-        {
-            icon: Target,
-            color: 'from-emerald-500 to-teal-600',
-            title: 'Smart Job Filters',
-            desc: 'Filter by category, job type, location, salary range, and experience level. Find exactly the jobs that match your profile.',
-        },
-        {
-            icon: Globe,
-            color: 'from-orange-500 to-amber-600',
-            title: 'Pan-India Coverage',
-            desc: 'Jobs from all major cities — Hyderabad, Bengaluru, Pune, Mumbai, Delhi, Chennai, Noida, Kolkata, and fully remote opportunities.',
-        },
+    const faqs = [
+        ["Does TheJobInfo recruit candidates?", "No. TheJobInfo shares job information. Applications are submitted to the employer, and hiring decisions are made by that employer."],
+        ["Does it cost anything to apply through TheJobInfo?", "TheJobInfo does not charge candidates to browse listings. Do not pay a person who claims they can guarantee a job or interview."],
+        ["How are listings collected?", "Listings may be added by an administrator or collected from a third-party job feed. Check the employer's own application page for current details before applying."],
     ];
-
-    const values = [
-        {
-            icon: Target,
-            color: 'from-violet-500 to-purple-600',
-            title: 'Curated & Verified',
-            desc: 'Every job listing is sourced directly from official company career pages. No spam, no fake listings — only real opportunities.'
+    useSeo({
+        title: "About",
+        description: "Who runs TheJobInfo, how listings are collected, and how candidates can use the site safely.",
+        jsonLd: {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: faqs.map(([question, answer]) => ({
+                "@type": "Question",
+                name: question,
+                acceptedAnswer: { "@type": "Answer", text: answer },
+            })),
         },
-        {
-            icon: Zap,
-            color: 'from-sky-500 to-blue-600',
-            title: 'Updated Daily',
-            desc: 'The job market moves fast. Our team updates listings every single day so you always have access to the freshest opportunities.'
-        },
-        {
-            icon: Users,
-            color: 'from-emerald-500 to-teal-600',
-            title: 'Community First',
-            desc: 'Our Telegram community of 10,000+ students helps each other with opportunities, interview tips, and career guidance.'
-        },
-        {
-            icon: Heart,
-            color: 'from-rose-500 to-pink-600',
-            title: '100% Free',
-            desc: 'Quality job discovery should not have a price tag. Every feature on our platform is completely free for every user, forever.'
-        },
-    ];
-
-    const teamValues = [
-        'Transparency in all job listings',
-        'No fake or misleading job posts',
-        'Respect for user privacy',
-        'Daily content updates',
-        'Free access for all students',
-        'Active community support',
-    ];
+    });
 
     return (
         <>
             <Navbar />
-            <div className="min-h-screen bg-gray-50 dark:bg-gray-950 pt-16">
-
-                {/* ── HERO ── */}
-                <div className="bg-gray-50 dark:bg-gray-950 ">
-                    <div className="max-w-5xl mx-auto px-4 py-14 text-center">
-                        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-5 leading-tight">
-                            We help you go from{' '}
-                            <span className="bg-gradient-to-r from-violet-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
-                                learner to hired
-                            </span>
-                        </h1>
-                        <p className="text-base text-gray-500 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed mb-8">
-                            A dedicated job discovery platform built for college students, freshers, and professionals who want to find their next opportunity — updated daily, completely free.
-                        </p>
-                        <div className="flex items-center justify-center gap-3 flex-wrap">
-                            <a href="/Job-Portal"
-                                className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-violet-600 to-purple-600 text-white rounded-xl text-sm font-semibold hover:shadow-lg hover:scale-105 transition-all">
-                                Browse Jobs <ArrowRight className="w-4 h-4" />
-                            </a>
-                            <a href="https://t.me/dcoder75" target="_blank" rel="noreferrer"
-                                className="inline-flex items-center gap-2 px-6 py-3 bg-sky-500 hover:bg-sky-600 text-white rounded-xl text-sm font-semibold transition-all hover:scale-105">
-                                <Send className="w-4 h-4" /> Join Telegram
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                {/* ── STATS ── */}
-                <div className="bg-gray-50 dark:bg-gray-950 py-8">
-                    <div className="max-w-5xl mx-auto px-4">
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                            {stats.map((s, i) => (
-                                <div key={i} className="text-center p-5 bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700">
-                                    <p className={`text-2xl md:text-3xl font-bold bg-gradient-to-r ${s.color} bg-clip-text text-transparent`}>{s.number}</p>
-                                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{s.label}</p>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </div>
-
-                <div className="max-w-5xl mx-auto px-4 py-10 space-y-6">
-
-                    {/* ── OUR STORY ── */}
-                    <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 overflow-hidden shadow-sm">
-                        <div className="px-6 py-5 border-b border-gray-50 dark:border-gray-800">
-                            <p className="text-xs font-semibold uppercase tracking-widest text-purple-500">Our story</p>
-                            <h2 className="text-xl font-bold text-gray-900 dark:text-white mt-1">Why we built this</h2>
-                        </div>
-                        <div className="p-6 space-y-4">
-                            <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-                                Job hunting for freshers and college students in India is unnecessarily painful. Opportunities are scattered across dozens of websites, Telegram groups, and LinkedIn posts — most of which are either outdated, fake, or buried under noise.
-                            </p>
-                            <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-                                We built this platform to change that. One clean, fast, updated-daily destination where you can find real off-campus drives, fresher jobs, and internships — filtered exactly to your needs.
-                            </p>
-                            <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-                                Today, we serve thousands of job seekers every month. Our Telegram community keeps everyone connected, motivated, and notified the moment new opportunities drop.
-                            </p>
-                            <div className="flex items-center gap-2 pt-2">
-                                <Flame className="w-4 h-4 text-orange-500" />
-                                <p className="text-sm font-semibold text-gray-900 dark:text-white">Our mission: make job discovery accessible, honest, and free.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* ── WHAT WE OFFER ── */}
-                    <div>
-                        <div className="text-center mb-6">
-                            <p className="text-xs font-semibold uppercase tracking-widest text-purple-500 mb-1">What we offer</p>
-                            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Everything in one place</h2>
-                        </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {offerings.map((item, i) => {
-                                const Icon = item.icon;
-                                return (
-                                    <div key={i} className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-5 hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5">
-                                        <div className="flex items-start gap-4">
-                                            <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${item.color} flex items-center justify-center flex-shrink-0`}>
-                                                <Icon className="w-5 h-5 text-white" />
-                                            </div>
-                                            <div>
-                                                <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-1">{item.title}</h3>
-                                                <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">{item.desc}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    </div>
-
-                    {/* ── OUR VALUES ── */}
-                    <div>
-                        <div className="text-center mb-6">
-                            <p className="text-xs font-semibold uppercase tracking-widest text-purple-500 mb-1">Our values</p>
-                            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">What we stand for</h2>
-                        </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {values.map((v, i) => {
-                                const Icon = v.icon;
-                                return (
-                                    <div key={i} className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-5 flex items-start gap-4 hover:shadow-md transition-all">
-                                        <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${v.color} flex items-center justify-center flex-shrink-0`}>
-                                            <Icon className="w-5 h-5 text-white" />
-                                        </div>
-                                        <div>
-                                            <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-1">{v.title}</h3>
-                                            <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">{v.desc}</p>
-                                        </div>
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    </div>
-
-                    {/* ── COMMITMENTS ── */}
-                    <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-6 shadow-sm">
-                        <p className="text-xs font-semibold uppercase tracking-widest text-purple-500 mb-4">Our commitments</p>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                            {teamValues.map((val, i) => (
-                                <div key={i} className="flex items-center gap-2.5">
-                                    <CheckCircle className="w-4 h-4 text-emerald-500 flex-shrink-0" />
-                                    <span className="text-sm text-gray-600 dark:text-gray-400">{val}</span>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* ── ADVERTISE WITH US (monetization) ── */}
-                    <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 overflow-hidden shadow-sm">
-                        <div className="px-6 py-5 border-b border-gray-50 dark:border-gray-800">
-                            <p className="text-xs font-semibold uppercase tracking-widest text-amber-500 mb-1">Partnerships & Advertising</p>
-                            <h2 className="text-xl font-bold text-gray-900 dark:text-white">Advertise with us</h2>
-                        </div>
-                        <div className="p-6">
-                            <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed mb-5">
-                                Our platform reaches thousands of actively job-seeking freshers, students, and professionals every month. If you're a company looking to reach this audience — whether to promote job drives, products, or services — we'd love to work with you.
-                            </p>
-                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-                                {[
-                                    { label: 'Monthly Visitors', value: '50K+', color: 'from-violet-500 to-purple-600' },
-                                    { label: 'Telegram Members', value: '10K+', color: 'from-sky-500 to-blue-600' },
-                                    { label: 'Job Listings/Month', value: '100+', color: 'from-emerald-500 to-teal-600' },
-                                ].map((m, i) => (
-                                    <div key={i} className={`bg-gradient-to-br ${m.color} rounded-xl p-4 text-center`}>
-                                        <p className="text-2xl font-bold text-white">{m.value}</p>
-                                        <p className="text-xs text-white/80 mt-0.5">{m.label}</p>
-                                    </div>
-                                ))}
-                            </div>
-                            <div className="flex flex-wrap gap-3">
-                                <a href="mailto:dcodermail1@gmail.com"
-                                    className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-violet-600 to-purple-600 text-white rounded-xl text-sm font-semibold hover:shadow-lg hover:scale-105 transition-all">
-                                    <Mail className="w-4 h-4" /> Get in touch
-                                </a>
-                                <p className="self-center text-xs text-gray-400 dark:text-gray-500">
-                                    We also display Google AdSense ads to help keep the platform free.
+            <main className="min-h-screen overflow-hidden bg-[#f3f8fb] pt-20 dark:bg-gray-950">
+                <section className="page-hero-enter relative isolate">
+                    <div className="mx-auto max-w-6xl px-4 pb-14 pt-10 sm:px-6 sm:pt-14">
+                        <div className="grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
+                            <div className="max-w-2xl">
+                                <span className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-white/80 px-3 py-1 text-xs font-bold uppercase tracking-[0.16em] text-blue-700 shadow-sm dark:border-blue-800 dark:bg-slate-900/80 dark:text-blue-300">
+                                    <Compass className="h-3.5 w-3.5" /> About TheJobInfo
+                                </span>
+                                <h1 className="mt-5 text-4xl font-extrabold leading-tight tracking-tight text-gray-950 dark:text-white sm:text-5xl">
+                                    Find your next <span className="bg-gradient-to-r from-blue-600 via-teal-600 to-emerald-600 bg-clip-text text-transparent">opportunity.</span>
+                                </h1>
+                                <p className="mt-5 max-w-xl text-base leading-relaxed text-gray-600 dark:text-gray-300 sm:text-lg">
+                                    A job-discovery and career-guidance website sharing fresher, experienced, and internship listings—with clear links to employer application pages.
                                 </p>
+                                <div className="mt-7 flex flex-wrap gap-3">
+                                <Link to="/Job-Portal" className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-emerald-600 px-5 py-3 text-sm font-bold text-white shadow-lg shadow-teal-700/20 transition hover:-translate-y-0.5 hover:shadow-xl">
+                                    Explore jobs <ArrowRight className="h-4 w-4" />
+                                </Link>
+                                <Link to="/Contact" className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-5 py-3 text-sm font-bold text-gray-700 shadow-sm transition hover:border-teal-200 hover:text-teal-700 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 dark:hover:border-teal-800 dark:hover:text-teal-300">
+                                    Contact us
+                                </Link>
+                                </div>
+                            </div>
+
+                            <div className="relative overflow-hidden rounded-3xl border border-blue-100 bg-white/80 p-6 shadow-xl shadow-blue-950/[0.05] backdrop-blur dark:border-gray-800 dark:bg-gray-900/80 sm:p-8">
+                                <div aria-hidden="true" className="absolute -right-12 -top-14 h-40 w-40 rounded-full bg-emerald-100/70 blur-3xl dark:bg-blue-800/20" />
+                                <div className="relative">
+                                    <p className="text-xs font-bold uppercase tracking-[0.16em] text-blue-700 dark:text-blue-300">A clearer way to explore work</p>
+                                    <h2 className="mt-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Useful information. Direct applications.</h2>
+                                    <div className="mt-6 space-y-3">
+                                        {[
+                                            ["Job discovery", "Browse opportunities for freshers, experienced candidates, and interns."],
+                                            ["Career guidance", "Explore preparation resources alongside job information."],
+                                            ["Employer applications", "Follow the original application link to confirm details and apply."],
+                                        ].map(([title, description], index) => (
+                                            <div key={title} className="flex items-start gap-3 rounded-xl border border-gray-100 bg-white/80 p-3.5 dark:border-gray-800 dark:bg-gray-950/60">
+                                                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-blue-100 text-xs font-extrabold text-blue-700 dark:bg-blue-900/50 dark:text-blue-300">{String(index + 1).padStart(2, "0")}</span>
+                                                <div>
+                                                    <p className="text-sm font-bold text-gray-900 dark:text-white">{title}</p>
+                                                    <p className="mt-1 text-sm leading-relaxed text-gray-600 dark:text-gray-400">{description}</p>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    {/* ── CONTACT CTA ── */}
-                    <div className="bg-gradient-to-r from-violet-600 to-purple-600 rounded-2xl p-8 text-center shadow-lg">
-                        <h3 className="text-xl font-bold text-white mb-2">Get in Touch</h3>
-                        <p className="text-white/70 text-sm mb-6 max-w-lg mx-auto leading-relaxed">
-                            Have a question, suggestion, job listing request, or want to collaborate? We'd love to hear from you.
-                        </p>
-                        <div className="flex items-center justify-center gap-3 flex-wrap">
-                            <a href="https://t.me/dcoder75" target="_blank" rel="noreferrer"
-                                className="inline-flex items-center gap-2 bg-white/20 hover:bg-white/30 text-white px-5 py-2.5 rounded-xl text-sm font-semibold transition-all hover:scale-105">
-                                <Send className="w-4 h-4" /> Telegram
-                            </a>
-                            <a href="mailto:dcodermail1@gmail.com"
-                                className="inline-flex items-center gap-2 bg-white text-purple-700 px-5 py-2.5 rounded-xl text-sm font-semibold hover:scale-105 transition-all shadow-md">
-                                <Mail className="w-4 h-4" /> Email Us
-                            </a>
+                        <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
+                            {[
+                                { icon: BriefcaseBusiness, label: "Active job listings", value: stats ? stats.total.toLocaleString() : "Explore opportunities" },
+                                { icon: Compass, label: "Hiring companies", value: stats ? stats.distinctCompanies.toLocaleString() : "Across industries" },
+                                { icon: MapPin, label: "Based in", value: siteConfig.location },
+                            ].map(({ icon: Icon, label, value }) => (
+                                <div key={label} className="rounded-2xl border border-gray-200/80 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md dark:border-gray-800 dark:bg-gray-900">
+                                    <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300">
+                                        <Icon className="h-5 w-5" />
+                                    </div>
+                                    <p className="text-xl font-extrabold tracking-tight text-gray-900 dark:text-white">{value}</p>
+                                    <p className="mt-1 text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">{label}</p>
+                                </div>
+                            ))}
                         </div>
                     </div>
+                </section>
 
+                <div className="mx-auto grid max-w-6xl gap-6 px-4 pb-20 sm:px-6 lg:grid-cols-[1.2fr_0.8fr]">
+                    <section className="rounded-3xl border border-gray-200/80 bg-white p-6 shadow-xl shadow-slate-900/[0.04] dark:border-gray-800 dark:bg-gray-900 sm:p-8">
+                        <div className="mb-5 flex items-center gap-3">
+                            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-sky-500 to-sky-600 text-white"><Compass className="h-5 w-5" /></div>
+                            <div>
+                                <p className="text-xs font-bold uppercase tracking-[0.16em] text-teal-600 dark:text-teal-300">Our approach</p>
+                                <h2 className="text-2xl font-extrabold tracking-tight text-gray-900 dark:text-white">How we work</h2>
+                            </div>
+                        </div>
+                        <p className="leading-relaxed text-gray-600 dark:text-gray-300">
+                            TheJobInfo is run by {siteConfig.founder} in {siteConfig.location}. Listings can be submitted by an administrator or imported from a job feed. We share the information available to us and direct applicants to the employer; vacancies and requirements can change after publication.
+                        </p>
+                        <p className="mt-4 leading-relaxed text-gray-600 dark:text-gray-300">
+                            Some job summaries and preparation guides are AI-assisted using details from the source posting. They are editorial guidance, not employer-authored requirements; confirm important facts on the employer's current posting and report inaccuracies to us.
+                        </p>
+                        <div className="mt-6 space-y-3">
+                            {[
+                                "We are a job-information platform, not a recruiter.",
+                                "Employers manage applications and make hiring decisions.",
+                                "Review the employer's current posting before sharing personal information.",
+                            ].map((item) => (
+                                <div key={item} className="flex items-start gap-3 rounded-xl bg-gray-50 p-3 dark:bg-gray-800/70">
+                                    <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-emerald-500" />
+                                    <p className="text-sm leading-relaxed text-gray-700 dark:text-gray-200">{item}</p>
+                                </div>
+                            ))}
+                        </div>
+                        <p className="mt-5 text-sm leading-relaxed text-gray-500 dark:text-gray-400">
+                            Report inaccurate or closed listings through our <Link className="font-semibold text-teal-700 underline decoration-teal-300 underline-offset-4 dark:text-teal-300" to="/Contact">contact page</Link>. Advertising may support the site if enabled; it does not provide guaranteed placement.
+                        </p>
+                    </section>
+
+                    <section className="rounded-3xl border border-gray-200/80 bg-white p-6 shadow-xl shadow-slate-900/[0.04] dark:border-gray-800 dark:bg-gray-900 sm:p-8" aria-labelledby="about-faqs">
+                        <div className="mb-5 flex items-center gap-3">
+                            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white"><ShieldCheck className="h-5 w-5" /></div>
+                            <div>
+                                <p className="text-xs font-bold uppercase tracking-[0.16em] text-teal-600 dark:text-teal-300">Good to know</p>
+                                <h2 id="about-faqs" className="text-2xl font-extrabold tracking-tight text-gray-900 dark:text-white">Frequently asked</h2>
+                            </div>
+                        </div>
+                        <div className="space-y-3">
+                            {faqs.map(([question, answer]) => (
+                                <details key={question} className="group rounded-xl border border-gray-200 bg-gray-50/70 p-4 transition-colors open:border-teal-200 open:bg-teal-50/50 dark:border-gray-700 dark:bg-gray-800/60 dark:open:border-teal-900 dark:open:bg-teal-950/20">
+                                    <summary className="cursor-pointer list-none pr-5 font-semibold leading-relaxed text-gray-900 marker:hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 dark:text-gray-100">
+                                        {question}
+                                    </summary>
+                                    <p className="mt-3 border-t border-gray-200 pt-3 text-sm leading-relaxed text-gray-600 dark:border-gray-700 dark:text-gray-300">{answer}</p>
+                                </details>
+                            ))}
+                        </div>
+                        <p className="mt-6 border-t border-gray-100 pt-4 text-xs leading-relaxed text-gray-500 dark:border-gray-800 dark:text-gray-400">
+                            Founder and editor: {siteConfig.founder}. <a className="font-semibold text-teal-700 underline underline-offset-2 dark:text-teal-300" href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>
+                        </p>
+                    </section>
                 </div>
-            </div>
+            </main>
             <Footer />
         </>
     );

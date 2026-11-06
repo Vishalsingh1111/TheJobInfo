@@ -1,10 +1,28 @@
 import Admin from "../Modal/Admin.modal.js";
 import bcryptjs from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import { createHash, timingSafeEqual } from 'node:crypto';
+
+const safePlaintextMatch = (submitted, stored) => {
+    const submittedBuffer = Buffer.from(String(submitted));
+    const storedBuffer = Buffer.from(String(stored));
+    return submittedBuffer.length === storedBuffer.length && timingSafeEqual(submittedBuffer, storedBuffer);
+};
+const safeSha256Match = (submitted, stored) => {
+    if (!/^[a-f0-9]{64}$/i.test(String(stored))) return false;
+    const expected = Buffer.from(String(stored), "hex");
+    const actual = createHash("sha256").update(String(submitted)).digest();
+    return expected.length === actual.length && timingSafeEqual(expected, actual);
+};
 
 // Create new admin
 export const addnewadmin = async (req, res) => {
     try {
-        const { username, password } = req.body;
+        const username = String(req.body.username || '').trim();
+        const password = String(req.body.password || '');
+        if (!username || username.length > 100 || password.length < 12 || password.length > 200) {
+            return res.status(400).json({ message: "Username and a password of 12-200 characters are required" });
+        }
         const admindetail = await Admin.findOne({ username });
         if (admindetail) {
             return res.status(400).json({ message: "Username already exists" });
@@ -32,22 +50,44 @@ export const addnewadmin = async (req, res) => {
 // Login
 export const adminlogin = async (req, res) => {
     try {
-        const { username, password } = req.body;
-        const admin = await Admin.findOne({ username });
+        const username = String(req.body.username || '').trim();
+        const password = String(req.body.password || '');
+        const secret = process.env.JWT_SECRET;
+        if (!secret) return res.status(503).json({ message: "Admin authentication is not configured" });
+        if (!username || !password || password.length > 200) {
+            return res.status(400).json({ message: "Username and password are required" });
+        }
+        const admin = await Admin.findOne({ username }).select("+password");
 
-        if (!admin || !(await bcryptjs.compare(password, admin.password))) {
-            return res.status(400).json({ message: "Invalid username or password" });
+        if (!admin) {
+            return res.status(401).json({ message: "Invalid username or password" });
         }
 
-        res.status(200).json({
-            message: "Login Successful",
-            admin: {
-                _id: admin._id,
-                // username: admin.username,
+        let validPassword = false;
+        try {
+            validPassword = await bcryptjs.compare(password, admin.password);
+        } catch {
+            validPassword = safePlaintextMatch(password, admin.password);
+        }
+        if (!validPassword && !/^\$2[aby]\$/.test(admin.password || '')) {
+            validPassword = safePlaintextMatch(password, admin.password) || safeSha256Match(password, admin.password);
+            if (validPassword) {
+                admin.password = await bcryptjs.hash(password, 12);
+                await admin.save();
             }
-        });
+        }
+        if (!validPassword) {
+            return res.status(401).json({ message: "Invalid username or password" });
+        }
+
+        const token = jwt.sign(
+            { role: "admin" },
+            secret,
+            { subject: String(admin._id), expiresIn: process.env.ADMIN_TOKEN_TTL || "8h" }
+        );
+        return res.status(200).json({ token });
     } catch (error) {
-        console.error("Error: " + error.message);
+        console.error("Admin login failed:", error.message);
         res.status(500).json({ message: "Internal error" });
     }
 };
@@ -55,7 +95,7 @@ export const adminlogin = async (req, res) => {
 // Get user details
 export const admindetails = async (req, res) => {
     try {
-        const admin = await Admin.find();
+        const admin = await Admin.find().select('-password');
         res.status(200).json(admin);
     } catch (error) {
         console.error("Error fetching users:", error);

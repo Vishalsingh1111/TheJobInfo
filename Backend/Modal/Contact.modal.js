@@ -14,8 +14,10 @@ const contactSchema = mongoose.Schema({
         required: true
     },
     phonenumber: {
-        type: Number,
-        required: true
+        type: String,
+        required: false,
+        trim: true,
+        match: /^\d{10,15}$/
     },
     message: {
         type: String,

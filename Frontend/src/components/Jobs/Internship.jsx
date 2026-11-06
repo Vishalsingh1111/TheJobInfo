@@ -5,39 +5,39 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Jobcard, { SkeletonGrid } from './Jobscard';
 import FilterBar, {
-    CATEGORY_OPTIONS, LOCATION_OPTIONS,
+    CATEGORY_OPTIONS, LOCATION_OPTIONS, getActiveJobLocations, matchesJobLocation,
     EXPERIENCE_OPTIONS, SALARY_OPTIONS, SORT_OPTIONS
 } from '../Common/Filterbar';
 import Breadcrumb from '../Common/Breadcrumb';
 import { baseUrl } from "../../Baseurl";
 import {
-    Rocket, Sparkles, Briefcase, GraduationCap,
-    BriefcaseBusiness, Laptop, ChevronDown, ChevronUp, ArrowRight, Search
+    ChevronDown, ChevronUp, Search
 } from "lucide-react";
-import { matchExperience, matchSalary } from '../Common/FilterHelpers';
+import { getLevelJobCount, getRecentLevelJobCount, matchExperience, matchSalary } from '../Common/FilterHelpers';
+import { useSeo } from '../../hooks/useSeo';
+import useJobPageFilters from "./useJobPageFilters";
 import Navbar from "../Navbar";
 import Footer from "../Footer";
+import JobLocationLinks from "./JobLocationLinks";
+import JobCategoryLinks from "./JobCategoryLinks";
+import AdSlot from "../AdSlot";
+import JobPrepFaq from "./JobPrepFaq";
+import JobCategoryTabs from "./JobCategoryTabs";
 
-const PAGE_SIZE = 15;
-
-const CATEGORY_TABS = [
-    { label: 'All Jobs', icon: Briefcase, color: 'from-purple-600 to-pink-600', route: '/Job-Portal', active: false },
-    { label: 'Freshers', icon: GraduationCap, color: 'from-green-500 to-emerald-600', route: '/Fresher-Jobs', active: false },
-    { label: 'Internships', icon: Rocket, color: 'from-orange-500 to-amber-600', route: '/Internships', active: true },
-    { label: 'Experienced', icon: BriefcaseBusiness, color: 'from-blue-500 to-indigo-600', route: '/Experienced-Jobs', active: false },
-];
+const PAGE_SIZE = 6;
 
 const InternshipJobs = () => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [stats, setStats] = useState(null);
+    const [statsError, setStatsError] = useState(false);
     const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
-    const [search, setSearch] = useState("");
-    const [filterCategory, setFilterCategory] = useState(CATEGORY_OPTIONS[0]);
-    const [filterLocation, setFilterLocation] = useState(LOCATION_OPTIONS[0]);
-    const [filterSalary, setFilterSalary] = useState(SALARY_OPTIONS[0]);
-    const [filterExp, setFilterExp] = useState(EXPERIENCE_OPTIONS[0]);
-    const [sortBy, setSortBy] = useState(SORT_OPTIONS[0]);
+    const {
+        search, setSearch, filterCategory, setFilterCategory,
+        filterLocation, setFilterLocation, filterSalary, setFilterSalary,
+        filterExp, setFilterExp, sortBy, setSortBy, isFiltered,
+    } = useJobPageFilters();
 
     const navigate = useNavigate();
 
@@ -45,10 +45,16 @@ const InternshipJobs = () => {
         axios.get(`${baseUrl}/job`)
             .then(res => {
                 const jobs = Array.isArray(res.data) ? res.data : [];
-                setData(jobs.filter(j => j.jobType?.toLowerCase().includes('internship')));
+                setData(jobs.filter(j => j.level === 'internship'));
             })
             .catch(console.error)
             .finally(() => setLoading(false));
+    }, []);
+    useEffect(() => {
+        axios.get(`${baseUrl}/job/stats`).then((response) => setStats(response.data)).catch((error) => {
+            setStatsError(true);
+            console.error('Could not load job counts:', error);
+        });
     }, []);
 
     useEffect(() => { setVisibleCount(PAGE_SIZE); }, [search, filterCategory, filterLocation, filterSalary, filterExp, sortBy]);
@@ -58,14 +64,22 @@ const InternshipJobs = () => {
         return data.filter(j => {
             const mS = !search || j.title?.toLowerCase().includes(q) || j.company?.toLowerCase().includes(q) || j.location?.toLowerCase().includes(q) || j.description?.toLowerCase().includes(q);
             const mC = filterCategory === CATEGORY_OPTIONS[0] || j.category?.toLowerCase().includes(filterCategory.toLowerCase());
-            const mL = filterLocation === LOCATION_OPTIONS[0] || j.location?.toLowerCase().includes(filterLocation.toLowerCase());
+            const mL = filterLocation === LOCATION_OPTIONS[0]
+                || matchesJobLocation(j, filterLocation);
             return mS && mC && mL && matchSalary(j.salary || j.salaryNote, filterSalary) && matchExperience(j.experience, filterExp);
         }).sort((a, b) => sortBy === SORT_OPTIONS[0] ? (b.id || 0) - (a.id || 0) : (a.id || 0) - (b.id || 0));
     }, [data, search, filterCategory, filterLocation, filterSalary, filterExp, sortBy]);
 
     const visible = filtered.slice(0, visibleCount);
+    const locationOptions = useMemo(
+        () => [...new Set([...LOCATION_OPTIONS, ...getActiveJobLocations(data)])],
+        [data]
+    );
     const hasMore = visibleCount < filtered.length;
     const allShown = visibleCount >= filtered.length && visibleCount > PAGE_SIZE;
+    const activeCount = getLevelJobCount(stats, 'internship');
+    const recentCount = getRecentLevelJobCount(stats, 'internship');
+    useSeo({ title: "Internship Jobs", description: "Browse current internship and graduate trainee opportunities.", robots: filtered.length && !isFiltered ? "index, follow" : "noindex, follow" });
 
     // ✅ FIXED: pass full job object, use slug with _id fallback
     const go = (job) => {
@@ -73,46 +87,36 @@ const InternshipJobs = () => {
         navigate(`/jobdetail/${job.slug || job._id}`);
     };
 
+    const selectLocation = (location) => {
+        setFilterLocation(location);
+        document.getElementById('job-page-results')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+
     return (
         <>
             <Navbar />
-            <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
-                <div className="max-w-7xl mx-auto px-4 py-6">
+            <div className="relative min-h-screen bg-[#f3f8fb] dark:bg-gray-950">
+                <div className="relative mx-auto max-w-7xl px-4 py-6 sm:px-6">
                     <Breadcrumb />
 
                     {/* ── Hero ── */}
-                    <div className="text-center mb-8 pt-2">
+                    <div className="page-hero-enter text-center mb-8 pt-2">
                         <h1 className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white mb-3 leading-tight">
-                            Latest{' '}
-                            <span className="bg-gradient-to-r from-orange-500 to-amber-600 bg-clip-text text-transparent">
-                                Internships
+                            Internship{' '}
+                            <span className="bg-gradient-to-r from-teal-500 to-cyan-600 bg-clip-text text-transparent">
+                                Jobs
                             </span>
                         </h1>
                         <p className="text-lg font-medium text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-                            Paid & unpaid internship openings at top companies — updated daily.
+                            Roles for students and trainees. This page lists current internship openings.
+                        </p>
+                        <p className="mt-3 text-sm text-gray-500 dark:text-gray-400">
+                            {stats ? `${activeCount} active internships · ${recentCount} added in the last 48 hours` : statsError ? "Job counts are temporarily unavailable." : "Loading job counts…"}
                         </p>
                     </div>
 
                     {/* ── Category Tabs ── */}
-                    <div className="flex flex-wrap justify-center gap-2 mb-8">
-                        {CATEGORY_TABS.map(tab => {
-                            const Icon = tab.icon;
-                            return (
-                                <button
-                                    key={tab.label}
-                                    onClick={() => !tab.active && navigate(tab.route)}
-                                    className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold border transition-all duration-200 ${tab.active
-                                        ? `bg-gradient-to-r ${tab.color} text-white border-transparent shadow-md`
-                                        : 'bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 hover:shadow-sm'
-                                        }`}
-                                >
-                                    <Icon className="w-4 h-4" />
-                                    {tab.label}
-                                    {!tab.active && <ArrowRight className="w-3.5 h-3.5 opacity-40" />}
-                                </button>
-                            );
-                        })}
-                    </div>
+                    <JobCategoryTabs />
 
                     {/* ── Filters ── */}
                     <div className="mb-6">
@@ -125,11 +129,14 @@ const InternshipJobs = () => {
                             sortBy={sortBy} setSortBy={setSortBy}
                             hideTypeFilter={true}
                             accentColor="orange"
+                            locationOptions={locationOptions}
                         />
                     </div>
 
+                    <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-12">
+                    <section className="lg:col-span-8">
                     {/* ── Results count ── */}
-                    <div className="flex items-center justify-between mb-6">
+                    <div id="job-page-results" className="flex items-center justify-between mb-6 scroll-mt-24">
                         <p className="text-base font-medium text-gray-600 dark:text-gray-400">
                             Showing <span className="font-bold text-gray-900 dark:text-white">{Math.min(visibleCount, filtered.length)}</span> of{' '}
                             <span className="font-bold text-gray-900 dark:text-white">{filtered.length}</span> internships
@@ -139,13 +146,13 @@ const InternshipJobs = () => {
                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
                                 <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500" />
                             </span>
-                            <span className="text-sm font-bold text-green-600 dark:text-green-400">Updated Today</span>
+                            <span className="text-sm font-bold text-green-600 dark:text-green-400">Check employer page for current availability</span>
                         </div>
                     </div>
 
                     {/* ── Cards / Skeleton / Empty ── */}
                     {loading ? (
-                        <SkeletonGrid count={8} />
+                        <SkeletonGrid count={PAGE_SIZE} />
                     ) : filtered.length === 0 ? (
                         <div className="text-center py-20 bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800">
                             <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-orange-50 dark:bg-orange-900/20 flex items-center justify-center">
@@ -153,21 +160,23 @@ const InternshipJobs = () => {
                             </div>
                             <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">No internships found</h3>
                             <p className="text-base font-medium text-gray-500 dark:text-gray-400">Try adjusting your search or filters</p>
+                            <JobCategoryLinks />
                         </div>
                     ) : (
                         <>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-5 mb-8">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-8">
                                 {/* ✅ FIXED: pass full item object, not item._id */}
                                 {visible.map((item, index) => (
                                     <Jobcard key={item._id} item={item} index={index} onClick={() => go(item)} />
                                 ))}
                             </div>
+                            {!isFiltered && visible.length > 0 && <AdSlot name="jobList" />}
 
-                            <div className="flex justify-center pb-12">
+                            <div className="flex justify-center pb-4">
                                 {hasMore && (
                                     <button
                                         onClick={() => setVisibleCount(v => v + PAGE_SIZE)}
-                                        className="flex items-center gap-2 px-8 py-3.5 bg-gradient-to-r from-orange-500 to-amber-600 text-white rounded-2xl text-base font-bold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
+                                        className="flex items-center gap-2 px-8 py-3.5 bg-gradient-to-r from-teal-500 to-cyan-600 text-white rounded-2xl text-base font-bold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
                                     >
                                         Show More Internships <ChevronDown className="w-5 h-5" />
                                     </button>
@@ -183,6 +192,14 @@ const InternshipJobs = () => {
                             </div>
                         </>
                     )}
+                    </section>
+                    <div className="lg:col-span-4">
+                        <JobLocationLinks jobs={data} selectedLocation={filterLocation} onSelect={selectLocation} categoryLabel="Internship jobs" selectedCategory={filterCategory} onSelectCategory={setFilterCategory} />
+                    </div>
+                    <div className="lg:col-span-8 lg:col-start-1">
+                        <JobPrepFaq level="internship" />
+                    </div>
+                    </div>
                 </div>
 
                 <div className="fixed top-0 right-0 w-96 h-96 bg-orange-500/5 rounded-full blur-3xl pointer-events-none" />

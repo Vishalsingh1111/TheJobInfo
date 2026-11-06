@@ -9,16 +9,17 @@ import { useAdminAuth } from './Context/AuthProvider2';
 import BlogForm from "./Admin/Blogs/BlogForm";
 
 function App() {
-  const [authAdmin, setAuthAdmin] = useAdminAuth();
+  const [authAdmin] = useAdminAuth();
   return (
     <Router>
 
-      <div className="min-h-screen bg-black text-white pb-20">
+      <div className="admin-theme min-h-screen">
         <Routes>
-          <Route path='/' element={authAdmin ? <DashBoard /> : <Navigate to="/Adminlogin" />}></Route>
-          <Route path="/Adminlogin" element={<AdminloginPage />}></Route>
-          <Route path="/AddAdmin" element={<AddAdmin />}></Route>
-          <Route path="/BlogForm" element={<BlogForm />}></Route>
+          <Route path='/' element={authAdmin?.token ? <DashBoard /> : <Navigate to="/login" replace />}></Route>
+          <Route path="/login" element={authAdmin?.token ? <Navigate to="/" replace /> : <AdminloginPage />}></Route>
+          <Route path="/Adminlogin" element={<Navigate to="/login" replace />}></Route>
+          <Route path="/AddAdmin" element={authAdmin?.token ? <AddAdmin /> : <Navigate to="/login" replace />}></Route>
+          <Route path="/BlogForm" element={authAdmin?.token ? <BlogForm /> : <Navigate to="/login" replace />}></Route>
 
         </Routes>
 
@@ -30,7 +31,6 @@ function App() {
 }
 
 export default App;
-
 
 
 

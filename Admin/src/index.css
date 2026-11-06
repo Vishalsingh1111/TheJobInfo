@@ -2,13 +2,151 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+:root {
+  --app-font: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+html {
+  font-family: var(--app-font);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: black;
-  color: white;
+  color-scheme: light;
+}
+
+html.dark {
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  font-family: var(--app-font);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: #f3f8fb;
+  color: #1e293b;
+}
+
+html.dark body {
+  background-color: #080f18;
+  color: #e2e8f0;
+}
+
+html.dark [class*="dark:bg-gray-950"],
+html.dark [class*="dark:bg-slate-950"],
+html.dark [class*="dark:bg-blue-950"],
+html.dark [class*="dark:bg-sky-950"] {
+  background-color: #050505 !important;
+}
+
+html.dark [class*="dark:bg-gray-900"],
+html.dark [class*="dark:bg-slate-900"],
+html.dark [class*="dark:bg-blue-900"],
+html.dark [class*="dark:bg-sky-900"] {
+  background-color: #0b0b0b !important;
+}
+
+html.dark [class*="dark:bg-gray-800"],
+html.dark [class*="dark:bg-slate-800"],
+html.dark [class*="dark:bg-blue-800"],
+html.dark [class*="dark:bg-sky-800"] {
+  background-color: #151515 !important;
+}
+
+html.dark [class*="dark:bg-gray-700"],
+html.dark [class*="dark:bg-slate-700"],
+html.dark [class*="dark:bg-blue-700"],
+html.dark [class*="dark:bg-sky-700"] {
+  background-color: #222 !important;
+}
+
+html.dark [class*="dark:bg-gray-600"],
+html.dark [class*="dark:bg-slate-600"],
+html.dark [class*="dark:bg-blue-600"],
+html.dark [class*="dark:bg-sky-600"] {
+  background-color: #303030 !important;
+}
+
+html.dark [class*="dark:from-"],
+html.dark [class*="dark:via-"],
+html.dark [class*="dark:to-"] {
+  --tw-gradient-from: #111 var(--tw-gradient-from-position) !important;
+  --tw-gradient-via: #101010 var(--tw-gradient-via-position) !important;
+  --tw-gradient-to: #090909 var(--tw-gradient-to-position) !important;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-via), var(--tw-gradient-to) !important;
+}
+
+.admin-theme {
+  min-height: 100vh;
+  background: #f3f8fb;
+  color: #1e293b;
+}
+
+.admin-theme [class*="min-h-screen"][class*="bg-slate-50"],
+.admin-theme [class*="min-h-screen"][class*="bg-gray-50"] {
+  background-color: #f3f8fb;
+}
+
+.admin-theme [class*="min-h-screen"][class*="bg-gradient-to-br"] {
+  background-image: linear-gradient(125deg, #e8f7f8 0%, #f2f9fb 58%, #e9f6f2 100%);
+}
+
+.admin-theme [class*="bg-gradient-to-r"][class*="from-blue-600"][class*="to-teal-600"] {
+  background-image: linear-gradient(110deg, #036b86 0%, #0f766e 100%);
+}
+
+.admin-theme [class*="rounded-xl"][class*="bg-white"],
+.admin-theme [class*="rounded-2xl"][class*="bg-white"],
+.admin-theme [class*="rounded-3xl"][class*="bg-white"] {
+  border-color: #dce8ee;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.045);
+}
+
+.admin-theme input:not([type="checkbox"]):not([type="radio"]),
+.admin-theme select,
+.admin-theme textarea {
+  border-radius: 0.75rem;
+  border-color: #d7e2e9;
+}
+
+.admin-theme input:focus,
+.admin-theme select:focus,
+.admin-theme textarea:focus {
+  border-color: #0f9b91;
+  outline-color: #0f9b91;
+  box-shadow: 0 0 0 3px rgba(15, 155, 145, 0.12);
+}
+
+html.dark .admin-theme {
+  background: #080f18;
+  color: #e2e8f0;
+}
+
+html.dark .admin-theme [class*="min-h-screen"][class*="bg-gradient-to-br"] {
+  background-color: #000;
+  background-image: none;
+}
+
+html.dark .admin-theme [class*="bg-gradient-to-r"][class*="from-blue-600"][class*="to-teal-600"] {
+  background-image: linear-gradient(110deg, #07546a 0%, #115e59 100%);
+}
+
+html.dark .admin-theme [class*="rounded-2xl"][class*="bg-gradient-to-r"][class*="from-blue-600"][class*="to-teal-600"],
+html.dark .admin-theme [class*="rounded-2xl"][class*="bg-gradient-to-br"][class*="from-blue-700"] {
+  background-color: #000;
+  background-image: none;
+}
+
+html.dark .admin-theme [class*="rounded-xl"][class*="bg-white"],
+html.dark .admin-theme [class*="rounded-2xl"][class*="bg-white"],
+html.dark .admin-theme [class*="rounded-3xl"][class*="bg-white"] {
+  border-color: #253744;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
+}
+
+html.dark .admin-theme input:not([type="checkbox"]):not([type="radio"]),
+html.dark .admin-theme select,
+html.dark .admin-theme textarea {
+  border-color: #334653;
 }

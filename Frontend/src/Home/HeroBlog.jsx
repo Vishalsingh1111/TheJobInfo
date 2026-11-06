@@ -6,7 +6,7 @@ import { BookOpen, ArrowRight, Flame } from 'lucide-react';
 import BlogCard, { SkeletonBlogCard } from '../components/Blogs/BlogCard';
 import { baseUrl } from '../Baseurl';
 
-const LIMIT = 4;
+const LIMIT = 3;
 
 const HeroBlog = () => {
     const navigate = useNavigate();
@@ -46,7 +46,7 @@ const HeroBlog = () => {
     };
 
     return (
-        <section className="bg-gray-50 dark:bg-gray-950 pt-5">
+        <section className="bg-transparent pt-5">
             {/* ── Error ── */}
             {error && !loading && (
                 <div className="text-center py-10">
@@ -56,7 +56,7 @@ const HeroBlog = () => {
 
                     <button
                         onClick={fetchBlogs}
-                        className="px-5 py-2 bg-purple-600 text-white rounded-xl text-sm font-bold hover:bg-purple-700 transition-colors"
+                        className="px-5 py-2 bg-blue-600 text-white rounded-xl text-sm font-bold hover:bg-blue-700 transition-colors"
                     >
                         Retry
                     </button>
@@ -65,7 +65,7 @@ const HeroBlog = () => {
 
             {/* ── Loading Skeleton ── */}
             {loading ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-8">
                     {[...Array(LIMIT)].map((_, i) => (
                         <SkeletonBlogCard key={i} />
                     ))}
@@ -89,12 +89,13 @@ const HeroBlog = () => {
 
                 <>
                     {/* ── Blog Grid ── */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-8">
                         {blogs.map((blog, i) => (
                             <BlogCard
                                 key={blog._id}
                                 blog={blog}
                                 index={i}
+                                variant="guide"
                                 onClick={() => go(blog.slug)}
                             />
                         ))}
@@ -104,9 +105,9 @@ const HeroBlog = () => {
                     <div className="flex justify-center">
                         <button
                             onClick={() => navigate('/blogs')}
-                            className="flex items-center gap-2 px-8 py-3.5 bg-gradient-to-r from-violet-600 to-purple-600 text-white rounded-2xl font-bold text-sm shadow-lg hover:shadow-xl hover:scale-[1.03] active:scale-100 transition-all duration-300"
+                            className="flex items-center gap-2 px-8 py-3.5 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-2xl font-bold text-sm shadow-lg hover:shadow-xl hover:scale-[1.03] active:scale-100 transition-all duration-300"
                         >
-                            View More Blogs
+                            View all articles
                             <ArrowRight className="w-4 h-4" />
                         </button>
                     </div>

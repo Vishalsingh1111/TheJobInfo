@@ -1,7 +1,20 @@
 
 import express from "express";
 import multer from "multer";
-import { getJob, getJobBySlug, createJob, updateJob, deleteJob, healthCheck, triggerSync } from "../Controller/Job.controller.js";
+import {
+    getJob,
+    getJobBySlug,
+    getJobById,
+    getRelatedJobs,
+    getJobStats,
+    getJobSitemap,
+    createJob,
+    updateJob,
+    deleteJob,
+    healthCheck,
+    triggerSync,
+} from "../Controller/Job.controller.js";
+import { requireAdmin } from "../Middleware/auth.js";
 
 const router = express.Router();
 
@@ -24,6 +37,10 @@ router.get('/', getJob);
 
 // Health check
 router.get('/health', healthCheck);
+router.get('/stats', getJobStats);
+router.get('/sitemap', getJobSitemap);
+router.get('/related/:slug', getRelatedJobs);
+router.get('/id/:id', getJobById);
 
 // GET single job by slug  ← NEW
 router.get('/slug/:slug', getJobBySlug);
@@ -32,12 +49,12 @@ router.get('/slug/:slug', getJobBySlug);
 router.post('/sync', triggerSync);
 
 // POST create new job  (multipart/form-data, image field = "image")
-router.post('/', upload.single('image'), createJob);
+router.post('/', requireAdmin, upload.single('image'), createJob);
 
 // PUT update job by MongoDB _id  (multipart/form-data, image field = "image")
-router.put("/:id", upload.single('image'), updateJob);
+router.put("/:id", requireAdmin, upload.single('image'), updateJob);
 
 // DELETE job by MongoDB _id
-router.delete("/:id", deleteJob);
+router.delete("/:id", requireAdmin, deleteJob);
 
 export default router;

@@ -56,7 +56,24 @@ export const matchSalary = (jobSalaryStr, filterOpt) => {
         '₹8–12 LPA': { min: 8, max: 12 },
         '₹12+ LPA': { min: 12, max: 999 },
     };
+
     const bucket = buckets[filterOpt];
     if (!bucket) return true;
     return jobSal.min <= bucket.max && jobSal.max >= bucket.min;
+};
+
+export const getLevelJobCount = (stats, level) => {
+    const counts = stats?.byLevel || {};
+    if (level === "all") return Number(stats?.total) || 0;
+    if (level === "fresher") return (Number(counts.fresher) || 0) + (Number(counts.dual) || 0);
+    if (level === "experienced") return (Number(counts.experienced) || 0) + (Number(counts.dual) || 0);
+    return Number(counts[level]) || 0;
+};
+
+export const getRecentLevelJobCount = (stats, level) => {
+    const counts = stats?.addedLast48HoursByLevel || {};
+    if (level === "all") return Number(stats?.addedLast48Hours) || 0;
+    if (level === "fresher") return (Number(counts.fresher) || 0) + (Number(counts.dual) || 0);
+    if (level === "experienced") return (Number(counts.experienced) || 0) + (Number(counts.dual) || 0);
+    return Number(counts[level]) || 0;
 };

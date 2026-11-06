@@ -41,13 +41,13 @@ const EMPTY_FORM = {
 
 const FONT_COLORS = [
     { label: 'Default', value: '#111827' },
-    { label: 'Purple', value: '#7c3aed' },
+    { label: 'Deep Teal', value: '#0f766e' },
     { label: 'Blue', value: '#2563eb' },
     { label: 'Green', value: '#16a34a' },
     { label: 'Red', value: '#dc2626' },
     { label: 'Orange', value: '#ea580c' },
     { label: 'Gray', value: '#6b7280' },
-    { label: 'Pink', value: '#db2777' },
+    { label: 'Cyan', value: '#0891b2' },
     { label: 'Teal', value: '#0d9488' },
     { label: 'Amber', value: '#d97706' },
 ];
@@ -56,9 +56,9 @@ const HIGHLIGHT_COLORS = [
     { label: 'Yellow', value: '#fef08a' },
     { label: 'Green', value: '#bbf7d0' },
     { label: 'Blue', value: '#bfdbfe' },
-    { label: 'Pink', value: '#fbcfe8' },
+    { label: 'Cyan', value: '#a5f3fc' },
     { label: 'Orange', value: '#fed7aa' },
-    { label: 'Purple', value: '#e9d5ff' },
+    { label: 'Teal', value: '#99f6e4' },
     { label: 'None', value: 'transparent' },
 ];
 
@@ -70,7 +70,7 @@ const ToolbarBtn = ({ onClick, title, active, children }) => (
         className={`
             flex items-center justify-center w-7 h-7 rounded-md text-xs transition-all flex-shrink-0
             ${active
-                ? 'bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 ring-1 ring-purple-300 dark:ring-purple-700'
+                ? 'bg-teal-100 dark:bg-teal-900/40 text-teal-700 dark:text-teal-300 ring-1 ring-teal-300 dark:ring-teal-700'
                 : 'text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600 hover:text-gray-900 dark:hover:text-white'}
         `}
     >
@@ -158,7 +158,7 @@ const HeadingDropdown = () => {
                                 document.execCommand('formatBlock', false, `<${opt.tag}>`);
                                 setOpen(false);
                             }}
-                            className={`w-full text-left px-4 py-2.5 hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-colors dark:text-gray-200 ${opt.cls}`}
+                            className={`w-full text-left px-4 py-2.5 hover:bg-teal-50 dark:hover:bg-teal-900/20 transition-colors dark:text-gray-200 ${opt.cls}`}
                         >
                             {opt.label}
                         </button>
@@ -256,7 +256,7 @@ const RichContentEditor = ({ value, onChange, minHeight = 400 }) => {
         const sel = window.getSelection();
         const text = sel?.toString() || 'Your quote here...';
         insertHTML(
-            `<blockquote style="background:#f5f3ff;border-left:4px solid #7c3aed;padding:12px 16px;border-radius:0 10px 10px 0;margin:14px 0;color:#5b21b6;font-style:italic;">${text}</blockquote><p><br></p>`
+            `<blockquote style="background:#f0fdfa;border-left:4px solid #0f766e;padding:12px 16px;border-radius:0 10px 10px 0;margin:14px 0;color:#115e59;font-style:italic;">${text}</blockquote><p><br></p>`
         );
     };
 
@@ -290,7 +290,7 @@ const RichContentEditor = ({ value, onChange, minHeight = 400 }) => {
             trigger={
                 <span className="flex flex-col items-center gap-0.5">
                     <Palette className="w-3.5 h-3.5" />
-                    <span className="w-3.5 h-0.5 rounded-full bg-purple-500" />
+                    <span className="w-3.5 h-0.5 rounded-full bg-teal-500" />
                 </span>
             }
         />,
@@ -389,7 +389,7 @@ const RichContentEditor = ({ value, onChange, minHeight = 400 }) => {
                         type="button"
                         onMouseDown={(e) => { e.preventDefault(); setPreview(p => !p); }}
                         className={`flex items-center gap-1.5 h-6 px-2.5 rounded-lg text-xs font-bold transition-all border ${preview
-                            ? 'bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-700'
+                            ? 'bg-teal-100 dark:bg-teal-900/40 text-teal-700 dark:text-teal-300 border-teal-200 dark:border-teal-700'
                             : 'border-gray-300 dark:border-gray-600 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
                             }`}
                     >
@@ -418,9 +418,9 @@ const RichContentEditor = ({ value, onChange, minHeight = 400 }) => {
                             prose-headings:font-bold prose-h1:text-2xl prose-h2:text-xl prose-h3:text-lg
                             prose-p:leading-relaxed prose-p:text-gray-600 dark:prose-p:text-gray-400
                             prose-strong:text-gray-800 dark:prose-strong:text-gray-200
-                            prose-code:text-purple-600 dark:prose-code:text-purple-400 prose-code:bg-purple-50 dark:prose-code:bg-purple-900/20 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:before:content-none prose-code:after:content-none
-                            prose-blockquote:border-l-4 prose-blockquote:border-purple-400 prose-blockquote:not-italic
-                            prose-a:text-purple-600 dark:prose-a:text-purple-400
+                            prose-code:text-teal-600 dark:prose-code:text-teal-400 prose-code:bg-teal-50 dark:prose-code:bg-teal-900/20 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:before:content-none prose-code:after:content-none
+                            prose-blockquote:border-l-4 prose-blockquote:border-teal-400 prose-blockquote:not-italic
+                            prose-a:text-teal-600 dark:prose-a:text-teal-400
                         "
                         dangerouslySetInnerHTML={{ __html: value || '<p class="text-gray-400 italic">Nothing to preview yet...</p>' }}
                     />
@@ -518,14 +518,14 @@ const Label = ({ children, required }) => (
 
 const Input = ({ className = '', ...props }) => (
     <input
-        className={`w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-800 dark:text-white placeholder:text-gray-400 text-sm font-medium focus:outline-none focus:border-purple-400 dark:focus:border-purple-500 focus:ring-2 focus:ring-purple-100 dark:focus:ring-purple-900/20 transition-all ${className}`}
+        className={`w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-800 dark:text-white placeholder:text-gray-400 text-sm font-medium focus:outline-none focus:border-teal-400 dark:focus:border-teal-500 focus:ring-2 focus:ring-teal-100 dark:focus:ring-teal-900/20 transition-all ${className}`}
         {...props}
     />
 );
 
 const Select = ({ children, className = '', ...props }) => (
     <select
-        className={`w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-800 dark:text-white text-sm font-medium focus:outline-none focus:border-purple-400 dark:focus:border-purple-500 focus:ring-2 focus:ring-purple-100 dark:focus:ring-purple-900/20 transition-all ${className}`}
+        className={`w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-800 dark:text-white text-sm font-medium focus:outline-none focus:border-teal-400 dark:focus:border-teal-500 focus:ring-2 focus:ring-teal-100 dark:focus:ring-teal-900/20 transition-all ${className}`}
         {...props}
     >
         {children}
@@ -534,7 +534,7 @@ const Select = ({ children, className = '', ...props }) => (
 
 const Textarea = ({ className = '', ...props }) => (
     <textarea
-        className={`w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-800 dark:text-white placeholder:text-gray-400 text-sm font-medium focus:outline-none focus:border-purple-400 dark:focus:border-purple-500 focus:ring-2 focus:ring-purple-100 dark:focus:ring-purple-900/20 transition-all resize-y ${className}`}
+        className={`w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-800 dark:text-white placeholder:text-gray-400 text-sm font-medium focus:outline-none focus:border-teal-400 dark:focus:border-teal-500 focus:ring-2 focus:ring-teal-100 dark:focus:ring-teal-900/20 transition-all resize-y ${className}`}
         {...props}
     />
 );
@@ -610,7 +610,7 @@ const BlogForm = ({ initial, onSave, onCancel, saving }) => {
                         required
                     />
                     <p className="text-xs text-gray-400 dark:text-gray-600 mt-1">
-                        URL: /blog/<span className="font-mono text-purple-500">{form.slug || 'your-slug'}</span>
+                        URL: /blog/<span className="font-mono text-teal-500">{form.slug || 'your-slug'}</span>
                     </p>
                 </div>
             </div>
@@ -687,12 +687,12 @@ const BlogForm = ({ initial, onSave, onCancel, saving }) => {
             <div>
                 <Label>Cover Image</Label>
                 <div className="flex flex-col sm:flex-row gap-4 items-start">
-                    <label className="flex-1 flex flex-col items-center justify-center border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl py-6 px-4 cursor-pointer hover:border-purple-400 dark:hover:border-purple-600 hover:bg-purple-50 dark:hover:bg-purple-900/10 transition-all group">
+                    <label className="flex-1 flex flex-col items-center justify-center border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl py-6 px-4 cursor-pointer hover:border-teal-400 dark:hover:border-teal-600 hover:bg-teal-50 dark:hover:bg-teal-900/10 transition-all group">
                         <input type="file" accept="image/*" onChange={handleImage} className="sr-only" />
-                        <div className="w-10 h-10 rounded-xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center mb-2 group-hover:bg-purple-100 dark:group-hover:bg-purple-900/30 transition-colors">
-                            <BookOpen className="w-5 h-5 text-gray-400 group-hover:text-purple-500 transition-colors" />
+                        <div className="w-10 h-10 rounded-xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center mb-2 group-hover:bg-teal-100 dark:group-hover:bg-teal-900/30 transition-colors">
+                            <BookOpen className="w-5 h-5 text-gray-400 group-hover:text-teal-500 transition-colors" />
                         </div>
-                        <p className="text-sm font-semibold text-gray-600 dark:text-gray-400 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+                        <p className="text-sm font-semibold text-gray-600 dark:text-gray-400 group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">
                             Click to upload image
                         </p>
                         <p className="text-xs text-gray-400 dark:text-gray-600 mt-0.5">PNG, JPG, WEBP up to 5MB</p>
@@ -757,7 +757,7 @@ const BlogForm = ({ initial, onSave, onCancel, saving }) => {
                 <button
                     type="submit"
                     disabled={saving}
-                    className="flex-1 py-3 rounded-xl bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 text-white text-sm font-bold flex items-center justify-center gap-2 disabled:opacity-60 transition-all shadow-lg shadow-purple-200 dark:shadow-purple-900/30"
+                    className="flex-1 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-teal-600 hover:from-blue-700 hover:to-teal-700 text-white text-sm font-bold flex items-center justify-center gap-2 disabled:opacity-60 transition-all shadow-lg shadow-teal-200 dark:shadow-teal-900/30"
                 >
                     {saving ? (
                         <><Loader2 className="w-4 h-4 animate-spin" /> Saving...</>
@@ -947,7 +947,7 @@ const AdminBlog = () => {
                         {/* Back button */}
                         <button
                             onClick={goBack}
-                            className="flex items-center gap-2 mb-6 text-sm font-bold text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
+                            className="flex items-center gap-2 mb-6 text-sm font-bold text-gray-600 dark:text-gray-400 hover:text-teal-600 dark:hover:text-teal-400 transition-colors"
                         >
                             <ArrowLeft className="w-4 h-4" /> Back to Blog Manager
                         </button>
@@ -955,7 +955,7 @@ const AdminBlog = () => {
                         <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm">
                             {/* Form header */}
                             <div className="flex items-center gap-3 mb-6 pb-5 border-b border-gray-100 dark:border-gray-700">
-                                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center flex-shrink-0">
+                                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-teal-600 flex items-center justify-center flex-shrink-0">
                                     <BookOpen className="w-5 h-5 text-white" />
                                 </div>
                                 <div>
@@ -1009,7 +1009,7 @@ const AdminBlog = () => {
                                 </button>
                                 <button
                                     onClick={() => setView('create')}
-                                    className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 text-white rounded-xl text-sm font-bold shadow-lg shadow-purple-200 dark:shadow-purple-900/30 transition-all"
+                                    className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-blue-600 to-teal-600 hover:from-blue-700 hover:to-teal-700 text-white rounded-xl text-sm font-bold shadow-lg shadow-teal-200 dark:shadow-teal-900/30 transition-all"
                                 >
                                     <Plus className="w-4 h-4" /> New Blog Post
                                 </button>
@@ -1024,7 +1024,7 @@ const AdminBlog = () => {
                                 value={search}
                                 onChange={e => setSearch(e.target.value)}
                                 placeholder="Search by title or category..."
-                                className="w-full pl-11 pr-10 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-800 dark:text-white text-sm focus:outline-none focus:border-purple-400 dark:focus:border-purple-500 transition-all"
+                                className="w-full pl-11 pr-10 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-800 dark:text-white text-sm focus:outline-none focus:border-teal-400 dark:focus:border-teal-500 transition-all"
                             />
                             {search && (
                                 <button onClick={() => setSearch('')} className="absolute right-3 top-1/2 -translate-y-1/2 w-6 h-6 flex items-center justify-center text-gray-400 hover:text-gray-600 transition-colors">
@@ -1036,7 +1036,7 @@ const AdminBlog = () => {
                         {/* States */}
                         {loading ? (
                             <div className="flex flex-col items-center justify-center py-24 gap-3">
-                                <Loader2 className="w-8 h-8 animate-spin text-purple-600" />
+                                <Loader2 className="w-8 h-8 animate-spin text-teal-600" />
                                 <p className="text-sm text-gray-400 dark:text-gray-600 font-medium">Loading blogs...</p>
                             </div>
                         ) : filtered.length === 0 ? (
@@ -1049,7 +1049,7 @@ const AdminBlog = () => {
                                 {!search && (
                                     <button
                                         onClick={() => setView('create')}
-                                        className="mt-4 flex items-center gap-2 px-5 py-2.5 bg-purple-600 hover:bg-purple-700 text-white rounded-xl text-sm font-bold mx-auto transition-colors"
+                                        className="mt-4 flex items-center gap-2 px-5 py-2.5 bg-teal-600 hover:bg-teal-700 text-white rounded-xl text-sm font-bold mx-auto transition-colors"
                                     >
                                         <Plus className="w-4 h-4" /> Create Blog
                                     </button>
@@ -1060,14 +1060,14 @@ const AdminBlog = () => {
                                 {filtered.map((blog, idx) => (
                                     <div
                                         key={blog._id}
-                                        className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-4 flex flex-col sm:flex-row gap-4 hover:border-purple-200 dark:hover:border-purple-800 hover:shadow-sm transition-all"
+                                        className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-4 flex flex-col sm:flex-row gap-4 hover:border-teal-200 dark:hover:border-teal-800 hover:shadow-sm transition-all"
                                     >
                                         {/* Thumbnail */}
                                         <div className="w-full sm:w-20 h-14 rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-700 flex-shrink-0">
                                             {blog.imageUrl ? (
                                                 <img src={blog.imageUrl} alt={blog.title} className="w-full h-full object-cover" />
                                             ) : (
-                                                <div className={`w-full h-full bg-gradient-to-br ${['from-violet-500 to-purple-600', 'from-rose-500 to-pink-600', 'from-sky-500 to-blue-600', 'from-emerald-500 to-teal-600'][idx % 4]
+                                                <div className={`w-full h-full bg-gradient-to-br ${['from-blue-500 to-teal-600', 'from-teal-500 to-cyan-600', 'from-sky-500 to-blue-600', 'from-emerald-500 to-teal-600'][idx % 4]
                                                     } flex items-center justify-center`}>
                                                     <BookOpen className="w-5 h-5 text-white" />
                                                 </div>
@@ -1077,7 +1077,7 @@ const AdminBlog = () => {
                                         {/* Info */}
                                         <div className="flex-1 min-w-0">
                                             <div className="flex flex-wrap gap-1.5 mb-1">
-                                                <span className="text-xs font-bold text-purple-600 dark:text-purple-400 uppercase tracking-wide">
+                                                <span className="text-xs font-bold text-teal-600 dark:text-teal-400 uppercase tracking-wide">
                                                     {blog.category}
                                                 </span>
                                                 {blog.featured && (

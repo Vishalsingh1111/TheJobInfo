@@ -10,6 +10,7 @@ import {
     toggleBlogField,
     bulkUploadBlogs,
 } from '../Controller/Blog.controller.js';
+import { requireAdmin } from '../Middleware/auth.js';
 
 const router = express.Router();
 
@@ -29,11 +30,11 @@ router.get('/', getAllBlogs);                        // GET /api/blog?page=1&lim
 router.get('/slug/:slug', getBlogBySlug);            // GET /api/blog/slug/my-blog-title
 
 // ── Admin routes ──────────────────────────────────────────────────────────────
-router.get('/admin/all', getAllBlogsAdmin);           // GET /api/blog/admin/all
-router.post('/', upload.single('image'), createBlog);                        // POST /api/blog
-router.put('/:id', upload.single('image'), updateBlog);                      // PUT  /api/blog/:id
-router.delete('/:id', deleteBlog);                   // DELETE /api/blog/:id
-router.patch('/:id/toggle/:field', toggleBlogField); // PATCH /api/blog/:id/toggle/published
-router.post('/bulk-upload', bulkUploadBlogs);  // Bulk upload blogs
+router.get('/admin/all', requireAdmin, getAllBlogsAdmin);
+router.post('/', requireAdmin, upload.single('image'), createBlog);
+router.put('/:id', requireAdmin, upload.single('image'), updateBlog);
+router.delete('/:id', requireAdmin, deleteBlog);
+router.patch('/:id/toggle/:field', requireAdmin, toggleBlogField);
+router.post('/bulk-upload', requireAdmin, bulkUploadBlogs);
 
 export default router;

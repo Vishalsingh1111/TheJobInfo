@@ -9,33 +9,43 @@ import {
 } from 'lucide-react';
 
 const GRADIENTS = [
-    'from-violet-500 to-purple-600',
-    'from-rose-500 to-pink-600',
+    'from-blue-500 to-teal-600',
+    'from-teal-500 to-cyan-600',
     'from-sky-500 to-blue-600',
     'from-emerald-500 to-teal-600',
-    'from-orange-500 to-amber-600',
-    'from-fuchsia-500 to-pink-600',
+    'from-cyan-600 to-teal-500',
+    'from-emerald-500 to-cyan-600',
     'from-blue-500 to-cyan-600',
     'from-green-500 to-emerald-600',
 ];
 
+const GUIDE_GRADIENTS = [
+    'from-blue-600 to-cyan-500',
+    'from-emerald-600 to-teal-500',
+    'from-blue-600 to-sky-500',
+    'from-cyan-600 to-blue-500',
+    'from-emerald-600 to-teal-500',
+    'from-cyan-600 to-teal-500',
+    'from-teal-600 to-cyan-500',
+];
+
 export const CATEGORY_COLORS = {
     'Interview Tips':
-        'bg-purple-50 text-purple-700 border-purple-200 dark:bg-purple-900/20 dark:text-purple-300 dark:border-purple-800',
+        'bg-teal-50 text-teal-700 border-teal-200 dark:bg-teal-900/20 dark:text-teal-300 dark:border-teal-800',
     DSA:
         'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-900/20 dark:text-blue-300 dark:border-blue-800',
     'System Design':
         'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-900/20 dark:text-emerald-300 dark:border-emerald-800',
     'HR Round':
-        'bg-pink-50 text-pink-700 border-pink-200 dark:bg-pink-900/20 dark:text-pink-300 dark:border-pink-800',
+        'bg-cyan-50 text-cyan-700 border-cyan-200 dark:bg-cyan-900/20 dark:text-cyan-300 dark:border-cyan-800',
     'Resume Tips':
-        'bg-orange-50 text-orange-700 border-orange-200 dark:bg-orange-900/20 dark:text-orange-300 dark:border-orange-800',
+        'bg-teal-50 text-teal-700 border-teal-200 dark:bg-teal-900/20 dark:text-teal-300 dark:border-teal-800',
     Aptitude:
-        'bg-yellow-50 text-yellow-700 border-yellow-200 dark:bg-yellow-900/20 dark:text-yellow-300 dark:border-yellow-800',
+        'bg-cyan-50 text-cyan-700 border-cyan-200 dark:bg-cyan-900/20 dark:text-cyan-300 dark:border-cyan-800',
     'Coding Interview':
         'bg-cyan-50 text-cyan-700 border-cyan-200 dark:bg-cyan-900/20 dark:text-cyan-300 dark:border-cyan-800',
     'Career Advice':
-        'bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-900/20 dark:text-rose-300 dark:border-rose-800',
+        'bg-teal-50 text-teal-700 border-teal-200 dark:bg-teal-900/20 dark:text-teal-300 dark:border-teal-800',
 };
 
 export const DIFF_COLORS = {
@@ -167,12 +177,45 @@ export const SkeletonBlogCard = () => (
 );
 
 // ── Main BlogCard ─────────────────────────────────────────────────────────────
-const BlogCard = ({ blog, index, onClick }) => {
+const BlogCard = ({ blog, index, onClick, variant }) => {
     const gradient = GRADIENTS[index % GRADIENTS.length];
 
     const catColor =
         CATEGORY_COLORS[blog.category] ||
         'bg-gray-50 text-gray-600 border-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600';
+
+    if (variant === 'guide') {
+        const date = blog.createdAt && !Number.isNaN(new Date(blog.createdAt).getTime())
+            ? new Date(blog.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
+            : '';
+        const gradient = GUIDE_GRADIENTS[index % GUIDE_GRADIENTS.length];
+        return (
+            <button type="button" onClick={onClick} className="group flex h-full w-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:border-gray-800 dark:bg-gray-900">
+                <div className={`relative flex min-h-[155px] flex-col justify-between overflow-hidden bg-gradient-to-br ${gradient} p-4 text-white`}>
+                    {blog.imageUrl && <img src={blog.imageUrl} alt="" aria-hidden="true" className="absolute inset-0 h-full w-full object-cover" onError={(event) => { event.currentTarget.style.display = 'none'; }} />}
+                    <div aria-hidden="true" className={`absolute inset-0 ${blog.imageUrl ? 'bg-gradient-to-br from-slate-950/55 via-slate-950/15 to-slate-950/60' : ''}`} />
+                    <div aria-hidden="true" className="absolute inset-0 opacity-25" style={{ backgroundImage: 'radial-gradient(rgba(255,255,255,.8) 1px, transparent 1px)', backgroundSize: '14px 14px' }} />
+                    <div className="absolute -bottom-12 -right-8 h-36 w-36 rounded-full bg-white/15" />
+                    <span className="relative z-10 inline-flex items-center gap-2 text-[10px] font-extrabold uppercase tracking-[.17em]"><span className="grid h-8 w-8 place-items-center rounded-lg bg-white text-slate-900 shadow-sm"><BookOpen className="h-4 w-4" /></span> Interview article</span>
+                    <div className="relative z-10">
+                        <p className="text-2xl font-extrabold leading-tight">{blog.category || 'Interview tips'}</p>
+                        <div className="mt-3 flex flex-wrap gap-1.5">
+                            <span className="rounded-full bg-white px-2.5 py-1 text-[10px] font-bold text-slate-900">{blog.difficulty || 'Beginner'}</span>
+                            <span className="rounded-full bg-black/20 px-2.5 py-1 text-[10px] font-bold text-white">{blog.readTime || 8} min read</span>
+                        </div>
+                    </div>
+                </div>
+                <div className="flex flex-1 flex-col p-4">
+                    <h3 className="line-clamp-2 text-base font-extrabold leading-snug text-slate-900 transition-colors group-hover:text-blue-700 dark:text-white dark:group-hover:text-blue-300">{blog.title}</h3>
+                    <p className="mt-1.5 line-clamp-2 min-h-10 flex-1 text-sm leading-5 text-slate-600 dark:text-gray-300">{blog.excerpt}</p>
+                    <div className="mt-3 flex items-center justify-between gap-2 border-t border-slate-100 pt-3 dark:border-gray-800">
+                        <span className="truncate text-xs text-slate-500 dark:text-gray-400">By {blog.author || 'TheJobInfo Team'}{date ? ` · ${date}` : ''}</span>
+                        <span className={`shrink-0 text-xs font-bold ${DIFF_COLORS[blog.difficulty] || 'text-emerald-600 dark:text-emerald-400'}`}>{blog.difficulty || 'Beginner'}</span>
+                    </div>
+                </div>
+            </button>
+        );
+    }
 
     return (
         <div onClick={onClick} className="group cursor-pointer h-full">
@@ -242,7 +285,7 @@ const BlogCard = ({ blog, index, onClick }) => {
                         </span>
                     </div>
 
-                    <h3 className="text-base font-bold text-gray-900 dark:text-white mb-2 line-clamp-2 leading-snug group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors duration-300">
+                    <h3 className="text-base font-bold text-gray-900 dark:text-white mb-2 line-clamp-2 leading-snug group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors duration-300">
                         {blog.title}
                     </h3>
 
@@ -276,7 +319,7 @@ const BlogCard = ({ blog, index, onClick }) => {
                             </span>
                         </div>
 
-                        <span className="flex items-center gap-1 text-xs font-bold text-purple-600 dark:text-purple-400 group-hover:gap-2 transition-all">
+                        <span className="flex items-center gap-1 text-xs font-bold text-teal-600 dark:text-teal-400 group-hover:gap-2 transition-all">
                             Read
                             <ChevronRight className="w-3.5 h-3.5" />
                         </span>

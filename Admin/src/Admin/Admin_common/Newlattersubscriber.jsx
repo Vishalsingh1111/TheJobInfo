@@ -103,9 +103,9 @@ const Subscribers = () => {
 
     if (loading && subscribers.length === 0) {
         return (
-            <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-950 dark:via-gray-950 dark:to-gray-950 flex items-center justify-center">
+            <div className="min-h-screen bg-gradient-to-br from-blue-50 via-sky-50 to-teal-50 dark:from-gray-950 dark:via-gray-950 dark:to-gray-950 flex items-center justify-center">
                 <div className="text-center">
-                    <div className="inline-block animate-spin rounded-full h-16 w-16 border-4 border-purple-200 dark:border-purple-800 border-t-purple-600 dark:border-t-purple-400 mb-4"></div>
+                    <div className="inline-block animate-spin rounded-full h-16 w-16 border-4 border-teal-200 dark:border-teal-800 border-t-teal-600 dark:border-t-teal-400 mb-4"></div>
                     <p className="text-gray-600 dark:text-gray-400 text-lg">Loading subscribers...</p>
                 </div>
             </div>
@@ -113,10 +113,10 @@ const Subscribers = () => {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-950 dark:via-gray-950 dark:to-gray-950 py-8 px-4">
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-sky-50 to-teal-50 dark:from-gray-950 dark:via-gray-950 dark:to-gray-950 py-8 px-4">
             <div className="container mx-auto max-w-6xl">
                 {/* Header */}
-                <div className="bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-700 dark:to-purple-700 text-white rounded-2xl p-8 mb-8 shadow-xl">
+                <div className="bg-gradient-to-r from-blue-600 to-teal-600 dark:from-blue-700 dark:to-teal-700 text-white rounded-2xl p-8 mb-8 shadow-xl">
                     <div className="flex flex-col md:flex-row justify-between items-center gap-4">
                         <div>
                             <h1 className="text-4xl font-bold mb-2 flex items-center gap-3">

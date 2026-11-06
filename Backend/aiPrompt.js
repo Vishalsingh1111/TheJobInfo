@@ -31,12 +31,12 @@ Return JSON with these keys:
 {
   "seoTitle": "max 60 characters, role + company + location",
   "metaDescription": "max 155 characters, plain and factual",
-  "summary": "110-180 words. What the role is, what the team or company does (only if stated), who it suits, and what the reader should check before applying.",
-  "whatYouWillDo": ["4-8 short bullets rewritten from the description. Empty array if the description is too thin."],
-  "skillsRequired": ["only skills mentioned in the data"],
+  "summary": "110-180 words. What the role is, the team or company context (only if stated), who it suits, and the practical details explicitly present in the listing. Do not copy the opening 200 characters of the source.",
+  "whatYouWillDo": ["4-8 short bullets rewritten from the description when it contains enough detail; otherwise an empty array."],
+  "skillsRequired": ["only skills explicitly present in the data; use an empty array when none are stated"],
   "eligibility": { "education": "", "experience": "", "batch": "", "other": "" },
   "selectionProcess": ["only if the data states rounds, otherwise empty array"],
-  "whoShouldApply": "2-3 sentences describing the kind of candidate this fits, derived from the requirements.",
+  "whoShouldApply": "2-3 sentences describing the kind of candidate this fits, derived from the role and requirements.",
   "specialNote": "1-2 sentences of genuinely useful context from the data (for example hybrid policy, team focus, level of seniority). Empty string if there is nothing real to say.",
   "prepGuide": {
     "overview": "2-3 sentences on how to prepare for a role like this. Label as general guidance.",
@@ -46,21 +46,32 @@ Return JSON with these keys:
     "commonMistakes": ["3-5 mistakes candidates commonly make for this kind of role"]
   },
   "faqs": [
-    { "question": "Question text", "answer": "15-70 word answer grounded in the source facts." }
+    { "question": "Question text", "answer": "15-70 word answer grounded in the source facts. Do not pad an answer with missing-information disclaimers." }
   ]
 }
+
+Return 4-6 FAQs, using only facts that can be answered from the data (role, company, location, work mode, stated experience, salary, skills, or application route). Never invent details or pad answers with filler.
 `;
 
 export function buildAiUserPrompt(facts = {}, validationError = "") {
   const content = { ...facts };
   const description = String(content.description_text || content.description || "").trim() || "No description provided.";
+  const minimumExperience = content.experience_years_min;
+  const maximumExperience = content.experience_years_max;
+  const experience = minimumExperience != null && maximumExperience != null
+    ? `${minimumExperience}-${maximumExperience} years`
+    : minimumExperience != null
+      ? `At least ${minimumExperience} years`
+      : maximumExperience != null
+        ? `Up to ${maximumExperience} years`
+        : String(content.experience || "").trim() || "Not stated";
   let prompt = USER_TEMPLATE
     .replace(/\{\{company\}\}/g, String(content.company || "").trim() || "Unknown company")
     .replace(/\{\{title\}\}/g, String(content.title || "").trim() || "Role")
     .replace(/\{\{location\}\}/g, String(content.location || "").trim() || "Not stated")
     .replace(/\{\{workMode\}\}/g, String(content.work_mode || content.workMode || "").trim() || "Not stated")
     .replace(/\{\{level\}\}/g, String(content.level || "").trim() || "Not stated")
-    .replace(/\{\{experience\}\}/g, String(content.experience_years_min ?? content.experience ?? "").trim() || "Not stated")
+    .replace(/\{\{experience\}\}/g, experience)
     .replace(/\{\{salary\}\}/g, String(content.salary_text || content.salary || "").trim() || "Not stated")
     .replace(/\{\{skills\}\}/g, Array.isArray(content.skills) ? content.skills.join(", ") : String(content.skills || "").trim() || "Not stated")
     .replace(/\{\{postedAt\}\}/g, String(content.posted_at || content.postedAt || "").trim() || "Not stated")

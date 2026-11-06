@@ -82,24 +82,33 @@ test("city aliases normalize consistently", () => {
 });
 
 test("import quality gate rejects invalid apply links, old jobs, and placeholder content", () => {
+    const answer = "The source listing names this role and provides relevant information for candidates. Review the employer's linked page for the current details before submitting an application.";
     const base = {
         company: "Example",
         title: "Engineer",
         applyLink: "https://example.com/careers",
-        description: "A useful role description ".repeat(8),
-        summary: "A useful role summary for this role and its intended candidates. It explains the work and who may be suited to it in clear detail.",
+        description: "",
+        summary: "This software engineering role focuses on developing and maintaining application features for the team described in the listing. The work includes translating product needs into reliable code, collaborating with colleagues, and improving existing systems. It may suit candidates whose experience matches the stated requirements and who can demonstrate the listed skills through practical examples. The source also describes responsibilities related to code quality, testing, and troubleshooting, giving applicants useful context about the day-to-day work. Candidates can compare the stated location, work arrangement, experience expectations, and required technologies with their own circumstances before deciding whether to apply. The listing names the employer and provides an application route, while details not included in the source should be confirmed directly through that route. Preparation suggestions below are general guidance and do not describe confirmed employer interview stages.",
         responsibilities: "Build features\nReview code\nWrite tests\nFix defects",
-        requiredSkills: "JavaScript\nReact\nGit",
-        prepGuide: { topicsToRevise: ["JavaScript", "React", "HTTP", "Testing"] },
-        faqs: [{ question: "How to apply?", answer: "Use the application link." }],
+        requiredSkills: "JavaScript\nReact",
+        prepGuide: { overview: "General preparation guidance.", topicsToRevise: ["JavaScript", "React", "HTTP", "Testing"] },
+        faqs: [
+            { question: "Who posted this role?", answer },
+            { question: "Where is the role located?", answer },
+            { question: "What skills are listed?", answer },
+            { question: "How can candidates apply?", answer },
+        ],
+        contentProvider: "gemini",
+        aiStatus: "ok",
+        aiModelUsed: "gemini-test",
         postedAt: new Date(),
         is_tech: "tech",
         level: "fresher",
     };
     assert.equal(validateImportedJob(base), null);
-    assert.equal(validateImportedJob({ ...base, faqs: [] }), null);
+    assert.equal(validateImportedJob({ ...base, faqs: [] }), "FAQ list must contain 4-6 items");
     assert.equal(validateImportedJob({ ...base, applyLink: "javascript:alert(1)" }), "invalid apply link");
-    assert.equal(validateImportedJob({ ...base, description: "placeholder content" }), "AI description is too short");
+    assert.equal(validateImportedJob({ ...base, description: "placeholder content" }), "placeholder description");
     assert.equal(validateImportedJob({ ...base, postedAt: new Date(Date.now() - 49 * 60 * 60 * 1000) }), "posting older than 48 hours");
     assert.equal(validateImportedJob({
         ...base,

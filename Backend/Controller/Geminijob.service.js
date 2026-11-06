@@ -43,6 +43,13 @@ function parseRetryMs(msg) {
 }
 const isRateLimit = (err) =>
     err?.status === 429 || err?.code === 429 || /\b429\b|rate limit|quota|RESOURCE_EXHAUSTED/i.test(String(err?.message));
+const isInvalidModelOutput = (err) =>
+    err instanceof SyntaxError || /The AI (?:returned|response)|AI response is missing/i.test(String(err?.message));
+function shouldRetry(err, attempt) {
+    if (isInvalidModelOutput(err)) return attempt < 2;
+    const status = err?.status ?? err?.code;
+    return attempt < MAX_ATTEMPTS && (isRateLimit(err) || !status || Number(status) >= 500);
+}
 const blockFor = (err) =>
     Date.now() + Math.min(Math.max(parseRetryMs(err?.message) ?? (/per day|daily/i.test(String(err?.message)) ? 3600e3 : 60e3), 30e3), 24 * 3600e3);
 
@@ -120,11 +127,36 @@ function toPrepGuide(v) {
     return {
         overview: toParagraphs(guide.overview),
         topicsToRevise: toArray(guide.topicsToRevise),
+        commonQuestions: toArray(guide.commonQuestions),
         expectedRounds: toArray(guide.expectedRounds),
         projectIdeas: toArray(guide.projectIdeas),
         commonMistakes: toArray(guide.commonMistakes),
         plan30Days: toArray(guide.plan30Days),
     };
+}
+
+function toEligibility(value) {
+    if (value && typeof value === "object" && !Array.isArray(value)) {
+        return Object.entries(value)
+            .map(([label, detail]) => `${label}: ${cleanLine(detail || "")}`)
+            .filter((entry) => entry.split(":").slice(1).join(":").trim())
+            .join("\n\n");
+    }
+    return toList(value);
+}
+
+function wordCount(value) {
+    return String(value || "").trim().split(/\s+/).filter(Boolean).length;
+}
+
+function normalizeForSimilarity(value) {
+    return String(value || "").toLowerCase().replace(/[\W_]+/g, " ").trim();
+}
+
+function summaryCopiesSource(summary, source) {
+    const sourcePrefix = normalizeForSimilarity(String(source || "").slice(0, 200));
+    if (sourcePrefix.length < 80) return false;
+    return normalizeForSimilarity(summary).includes(sourcePrefix);
 }
 
 function pickOption(value, options, fallback) {
@@ -175,7 +207,13 @@ export function normalizeExperience(v, fallback) {
 export function normalizeContent(raw, fb) {
     const experience = normalizeExperience(raw.experience, fb.experience);
     const lastDate = cleanLine(raw.lastDate || "");
+    const rawResponsibilities = raw.whatYouWillDo ?? raw.responsibilities;
+    const rawSkills = raw.skillsRequired ?? raw.requiredSkills;
+    const rawEligibility = raw.eligibility;
+    const sourceDescription = String(fb.description || fb.description_text || "");
     const out = {
+        seoTitle: cleanLine(raw.seoTitle || "").slice(0, 60),
+        metaDescription: cleanLine(raw.metaDescription || "").slice(0, 155),
         title: cleanTitle(raw.title, fb.company, fb.role),
         jobType: pickOption(raw.jobType, JOB_TYPES, fb.jobType),
         experience,
@@ -184,49 +222,59 @@ export function normalizeContent(raw, fb) {
         lastDate: !lastDate || MISSING_INFO.test(lastDate) ? "" : lastDate,
         summary: toParagraphs(raw.summary),
         prepGuide: toPrepGuide(raw.prepGuide),
+        specialNote: toParagraphs(raw.specialNote),
         salaryNote: toParagraphs(raw.salaryNote),
         aboutCompany: toParagraphs(raw.aboutCompany),
         description: toParagraphs(raw.description),
-        responsibilities: toList(raw.responsibilities),
-        eligibility: toList(raw.eligibility),
-        requiredSkills: toList(raw.requiredSkills),
-        applyIf: toList(raw.applyIf),
+        responsibilities: toList(rawResponsibilities),
+        eligibility: toEligibility(rawEligibility),
+        requiredSkills: toList(rawSkills),
+        applyIf: toList(raw.whoShouldApply ?? raw.applyIf),
         selectionProcess: toList(raw.selectionProcess),
         benefits: toList(raw.benefits),
-        applySteps: toList(raw.applySteps),
+        applySteps: toList(raw.applySteps || [
+            "Review the role details and requirements on this page.",
+            "Select Apply Now to open the application link.",
+            "Complete the requested information on the employer's application page.",
+            "Submit your application through that page.",
+        ]),
         prepTips: toArray(raw.prepTips),
         faqs: toFaqs(raw.faqs),
     };
 
-    // If cleaning removed everything from a softer field, fill it with a safe, general line built from known facts.
-    const company = fb.company || "the company";
-    const role = out.title || fb.role || "this role";
-    const where = fb.location ? ` in ${fb.location}` : "";
     if (!out.salaryNote && fb.salary && fb.salary !== "Not disclosed") out.salaryNote = `The source posting lists the salary as ${fb.salary}.`;
-    if (!out.aboutCompany && fb.company && fb.role) out.aboutCompany = `${company} has posted an opening for ${role}${where}.`;
-    if (!out.applyIf) out.applyIf = "You have the skills and experience listed on this page.\n\nYou are interested in working as " + role + " at " + company + ".";
-    if (!out.selectionProcess) out.selectionProcess = "Typical process (not confirmed by the employer): application review, a role-related discussion, and a possible HR conversation.";
 
-    // Fields a job page cannot live without. If Gemini left one empty, the job is rejected and retried later.
-    const required = ["title", "description", "summary", "responsibilities", "requiredSkills", "applySteps"];
+    const required = ["title", "summary", "applyIf"];
     const missing = required.filter((k) => !out[k]);
     const listItems = (value) => String(value || "").split(/\n+/).map((part) => part.trim()).filter(Boolean);
     const uniqueItems = (items) => new Set(items.map((item) => item.toLowerCase())).size === items.length;
-    const hasPlaceholder = (value) => /\blorem(?: ipsum)?\b|\bn\/a\b/i.test(String(value || ""));
-    const summarySentences = out.summary.split(/[.!?]+/).filter((part) => part.trim()).length;
-    if (out.summary.length < 120 || summarySentences < 2 || summarySentences > 3) {
-        missing.push("summary (2-3 sentences, at least 120 characters)");
+    const hasPlaceholder = (value) => /\b(?:not available|not specified|not disclosed|to be updated|lorem(?: ipsum)?|n\/a)\b/i.test(String(value || ""));
+    if (wordCount(out.summary) < 110 || wordCount(out.summary) > 180) {
+        missing.push("summary (110-180 words)");
     }
-    if (listItems(out.responsibilities).length < 4) missing.push("at least 4 responsibilities");
-    if (listItems(out.requiredSkills).length < 3) missing.push("at least 3 requiredSkills");
-    if (out.faqs.length > 6) missing.push("faqs (at most 6)");
-    if (out.faqs.some((faq) => faq.question.length < 8 || !faq.answer)) {
-        missing.push("FAQ questions and answers");
+    if (summaryCopiesSource(out.summary, sourceDescription)) {
+        missing.push("summary must not copy the opening of the source description");
+    }
+    if (/\b(?:P-\s*\d{3,}|Req(?:uisition)?\s*(?:ID\b|#\s*[\w-]+|:\s*[\w-]+)|Req\s+\d{3,})/i.test(JSON.stringify(out))) {
+        missing.push("internal requisition code");
+    }
+    if (sourceDescription.trim().length >= 300 && listItems(out.responsibilities).length < 3) {
+        missing.push("at least 3 responsibilities for a sufficiently detailed source");
+    }
+    if (!out.prepGuide.overview || out.prepGuide.topicsToRevise.length < 4) {
+        missing.push("prep guide overview and at least 4 revision topics");
+    }
+    if (out.faqs.length < 4 || out.faqs.length > 6) {
+        missing.push("4-6 FAQs");
+    }
+    if (out.faqs.some((faq) => faq.question.length < 8 || wordCount(faq.answer) < 15 || wordCount(faq.answer) > 70)) {
+        missing.push("FAQ questions and 15-70 word answers");
     }
     if (!uniqueItems(out.faqs.map((faq) => faq.question))) missing.push("duplicate FAQ questions");
     const arrays = [
         out.prepTips,
         out.prepGuide.topicsToRevise,
+        out.prepGuide.commonQuestions,
         out.prepGuide.expectedRounds,
         out.prepGuide.projectIdeas,
         out.prepGuide.commonMistakes,
@@ -236,6 +284,7 @@ export function normalizeContent(raw, fb) {
     if (arrays.some((items) => !uniqueItems(items))) missing.push("duplicate list items");
     if (hasPlaceholder(JSON.stringify(out))) missing.push("placeholder text");
     if (missing.length) throw new Error(`The AI response is missing: ${missing.join(", ")}`);
+    out.aboutCompany = out.aboutCompany || "";
     return out;
 }
 
@@ -322,8 +371,10 @@ async function askGemini(facts, validationError) {
             model: MODEL(),
             contents: prompt,
             config: {
+                systemInstruction: SYSTEM_INSTRUCTION,
                 responseMimeType: "application/json",
                 responseSchema: JOB_CONTENT_SCHEMA,
+                temperature: 0.3,
             },
         });
         return extractGeminiText(response);
@@ -334,59 +385,13 @@ async function askGemini(facts, validationError) {
         system_instruction: SYSTEM_INSTRUCTION,
         input: prompt,
         config: {
+            systemInstruction: SYSTEM_INSTRUCTION,
             responseMimeType: "application/json",
             responseSchema: JOB_CONTENT_SCHEMA,
+            temperature: 0.3,
         },
     });
     return extractGeminiText(interaction);
-}
-
-export async function generateJobExtras(facts) {
-    if (!process.env.GROQ_API_KEY) throw new Error("GROQ_API_KEY is missing; using source-based FAQs without Groq preparation content");
-    if (Date.now() < groqBlockedUntil) throw new Error("Groq is rate-limited; using source-based FAQs without Groq preparation content");
-
-    let lastErr = new Error("Groq did not return valid preparation content");
-    for (let attempt = 1; attempt <= 2; attempt++) {
-        try {
-            const completion = await (await getGroqClient()).chat.completions.create({
-                model: GROQ_MODEL(),
-                messages: [
-                    { role: "system", content: SYSTEM_INSTRUCTION },
-                    { role: "user", content: buildPrompt(facts) },
-                ],
-                response_format: { type: "json_object" },
-                max_completion_tokens: 5000,
-                temperature: 0.3,
-            });
-            const choice = completion.choices?.[0];
-            const text = choice?.message?.content;
-            if (!text || !String(text).trim()) {
-                throw new Error(`Groq returned an empty response (finish_reason: ${choice?.finish_reason ?? "none"})`);
-            }
-            const raw = extractJson(text);
-            const prepGuide = toPrepGuide(raw.prepGuide);
-            const prepTips = toArray(raw.prepTips);
-            const faqs = toFaqs(raw.faqs);
-            if (prepGuide.topicsToRevise.length < 4 || prepTips.length < 3) {
-                throw new Error("Groq returned incomplete job-preparation content");
-            }
-            return {
-                prepGuide,
-                prepTips,
-                faqs: faqs.length ? faqs.slice(0, 6) : createFactBasedFaqs(facts),
-            };
-        } catch (error) {
-            lastErr = error;
-            if (isRateLimit(error)) {
-                groqBlockedUntil = blockFor(error);
-                throw error;
-            }
-            const status = error?.status ?? error?.code;
-            if (status && status < 500 || attempt === 2) break;
-            await sleep(1000 * attempt);
-        }
-    }
-    throw lastErr;
 }
 
 async function askGroqJobContent(facts, validationError = "") {
@@ -416,62 +421,65 @@ export async function generateJobContent(facts, fallbacks) {
         location: facts.location,
         salary: facts.salary_text,
         skills: facts.skills,
+        description: facts.description_text,
     };
-
-    if (!process.env.GEMINI_API_KEY || Date.now() < geminiBlockedUntil) {
-        console.warn(`[ai] Gemini unavailable; posting source-based details${process.env.GEMINI_API_KEY ? " while its rate limit cools down" : " (GEMINI_API_KEY is missing)"}`);
-        return buildBasicContent(facts, fb);
-    }
 
     let validationFeedback = "";
     let lastErr = new Error("Gemini did not return valid job content");
-    for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
-        try {
-            const content = normalizeContent(extractJson(await askGemini(facts, validationFeedback)), fb);
-            content.contentProvider = "gemini";
-            content.aiStatus = "ok";
-            content.aiModelUsed = MODEL();
-            content.aiAttempts = attempt;
-            content.aiGeneratedAt = new Date();
-            console.log(`[ai] core job content written by Gemini (${MODEL()})`);
-            return content;
-        } catch (err) {
-            lastErr = err;
-            validationFeedback = `Your previous JSON failed validation: ${err.message}. Return corrected strict JSON satisfying every required core field and minimum length.`;
-            console.warn(`[gemini] attempt ${attempt}/${MAX_ATTEMPTS} failed: ${err.message}`);
-            if (isRateLimit(err)) {
-                geminiBlockedUntil = blockFor(err);
-                break;
+    let totalAttempts = 0;
+    let lastModelUsed = "";
+    if (!process.env.GEMINI_API_KEY) {
+        lastErr = new Error("GEMINI_API_KEY is missing");
+    } else if (Date.now() < geminiBlockedUntil) {
+        lastErr = new Error("Gemini is rate-limited");
+    } else {
+        for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+            try {
+                totalAttempts += 1;
+                lastModelUsed = MODEL();
+                const content = normalizeContent(extractJson(await askGemini(facts, validationFeedback)), fb);
+                content.contentProvider = "gemini";
+                content.aiStatus = "ok";
+                content.aiModelUsed = MODEL();
+                content.aiAttempts = totalAttempts;
+                content.aiGeneratedAt = new Date();
+                console.log(`[ai] core job content written by Gemini (${MODEL()})`);
+                return content;
+            } catch (err) {
+                lastErr = err;
+                validationFeedback = `Your previous JSON failed validation: ${err.message}. Return corrected strict JSON satisfying every required core field and minimum length.`;
+                console.warn(`[gemini] attempt ${attempt}/${MAX_ATTEMPTS} failed: ${err.message}`);
+                if (isRateLimit(err)) {
+                    geminiBlockedUntil = blockFor(err);
+                }
+                if (!shouldRetry(err, attempt)) break;
+                await sleep(1000 * (2 ** (attempt - 1)));
             }
-            const status = err?.status ?? err?.code;
-            const retryable = !status || status >= 500;
-            if (!retryable || attempt === MAX_ATTEMPTS) break;
-            await sleep(2000 * attempt);
         }
     }
     if (process.env.GROQ_API_KEY && Date.now() >= groqBlockedUntil) {
         let groqFeedback = "";
         for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
             try {
+                totalAttempts += 1;
+                lastModelUsed = GROQ_MODEL();
                 const content = normalizeContent(extractJson(await askGroqJobContent(facts, groqFeedback)), fb);
                 content.contentProvider = "groq";
                 content.aiStatus = "ok";
                 content.aiModelUsed = GROQ_MODEL();
-                content.aiAttempts = attempt;
+                content.aiAttempts = totalAttempts;
                 content.aiGeneratedAt = new Date();
                 console.warn(`[ai] Gemini failed; used Groq fallback for ${facts.title}`);
                 return content;
             } catch (err) {
+                lastErr = err;
                 groqFeedback = `Your previous JSON failed validation: ${err.message}. Return corrected strict JSON satisfying every required core field and minimum length.`;
                 console.warn(`[groq] attempt ${attempt}/${MAX_ATTEMPTS} failed: ${err.message}`);
                 if (isRateLimit(err)) {
                     groqBlockedUntil = blockFor(err);
-                    break;
                 }
-                const status = err?.status ?? err?.code;
-                const retryable = !status || status >= 500;
-                if (!retryable || attempt === MAX_ATTEMPTS) break;
-                await sleep(2000 * attempt);
+                if (!shouldRetry(err, attempt)) break;
+                await sleep(1000 * (2 ** (attempt - 1)));
             }
         }
     }
@@ -479,8 +487,9 @@ export async function generateJobContent(facts, fallbacks) {
     console.warn(`[ai] Gemini core generation failed; posting source-based details: ${lastErr.message}`);
     const fallback = buildBasicContent(facts, fb);
     fallback.aiStatus = "failed";
-    fallback.aiModelUsed = "basic";
-    fallback.aiAttempts = MAX_ATTEMPTS;
+    fallback.aiModelUsed = lastModelUsed;
+    fallback.aiAttempts = totalAttempts;
+    fallback.aiError = lastErr.message;
     fallback.aiGeneratedAt = new Date();
     return fallback;
 }

@@ -1,6 +1,6 @@
 import Job from "../Modal/Job.modal.js";
 import sanitizeHtml from "sanitize-html";
-import { createFactBasedFaqs, generateJobContent, generateJobExtras } from "./Geminijob.service.js";
+import { generateJobContent } from "./Geminijob.service.js";
 import { isPopularCompany } from "./Popularcompanies.js";
 import { getTelegramSkipReason, postJobToTelegram, shouldPostToTelegram } from "./Telegram.service.js";
 import {
@@ -379,9 +379,16 @@ function buildFacts(j, location, salary) {
         title: j.title,
         company,
         location,
-        salary_text: salary,
+        salary_text: salary === "Not disclosed" ? null : salary,
         applyLink: cleanApplyLink(j.url),
         work_mode: j.work_mode || null,
+        level: deriveJobLevel({
+            title: j.title,
+            employment_type: e.employment_type || j.employment_type,
+            seniority: e.seniority || j.seniority,
+            experience_years_min: e.experience_years_min,
+            experience_years_max: e.experience_years_max,
+        }),
         employment_type: e.employment_type || null,
         seniority: e.seniority || null,
         experience_years_min: e.experience_years_min ?? null,
@@ -400,7 +407,7 @@ function buildFacts(j, location, salary) {
     };
 }
 
-// Gemini writes core listing content; Grok enrichment is optional and cannot block publication.
+// Gemini generates the full listing; Groq is used only if Gemini generation fails.
 async function enrich(j) {
     const e = j.enrichment || {};
     const facts = buildFacts(j, formatLocation(j), formatSalary(e));
@@ -409,14 +416,7 @@ async function enrich(j) {
         experience: formatExperience(e),
         category: CATEGORY_LABEL[e.category] || "Software Engineering",
     };
-    const content = await generateJobContent(facts, fallbacks);
-    try {
-        Object.assign(content, await generateJobExtras(facts));
-    } catch (error) {
-        console.warn(`[grok] optional enrichment failed for "${j.public_slug}": ${error.message}`);
-        content.faqs = createFactBasedFaqs(facts);
-    }
-    return content;
+    return generateJobContent(facts, fallbacks);
 }
 
 async function findDuplicate(doc) {
@@ -457,6 +457,7 @@ export function mapJob(j, id, content) {
         experience_years_max: j.enrichment?.experience_years_max,
     });
     const postedAt = j.posted_at ? new Date(j.posted_at) : new Date();
+    const salary = formatSalary(j.enrichment);
     const jobType = level === "internship"
         ? "Internship"
         : level === "experienced"
@@ -471,7 +472,7 @@ export function mapJob(j, id, content) {
         title: content.title,
         company,
         location,
-        salary: formatSalary(j.enrichment),   // "10-12 LPA", or "Not disclosed" when the API has no salary
+        salary: salary === "Not disclosed" ? "" : salary,
         salaryNote: content.salaryNote,
         jobType,
         experience: content.experience,
@@ -484,6 +485,9 @@ export function mapJob(j, id, content) {
         responsibilities: content.responsibilities,
         eligibility: content.eligibility,
         requiredSkills: content.requiredSkills,
+        seoTitle: content.seoTitle,
+        metaDescription: content.metaDescription,
+        specialNote: content.specialNote,
         applyIf: content.applyIf,
         selectionProcess: content.selectionProcess,
         benefits: content.benefits,
@@ -498,6 +502,11 @@ export function mapJob(j, id, content) {
         dedupeKey: createDedupeKey({ company, title: content.title, city }),
         expiresAt: new Date(postedAt.getTime() + CONFIG.expireAfterDays * 86400000),
         contentProvider: content.contentProvider,
+        aiStatus: content.aiStatus,
+        aiModelUsed: content.aiModelUsed,
+        aiAttempts: content.aiAttempts,
+        aiError: content.aiError,
+        aiGeneratedAt: content.aiGeneratedAt,
         imageUrl: "",
         imagePublicId: "",
 

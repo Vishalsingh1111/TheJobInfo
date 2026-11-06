@@ -51,6 +51,9 @@ const jobSchema = mongoose.Schema({
     workMode: { type: String, enum: ['Onsite', 'Hybrid', 'Remote'], required: false },
     level: { type: String, enum: ['fresher', 'experienced', 'internship', 'dual'], required: false, index: true },
     summary: { type: String, required: false },
+    seoTitle: { type: String, required: false, maxlength: 60 },
+    metaDescription: { type: String, required: false, maxlength: 155 },
+    specialNote: { type: String, required: false },
     prepTips: { type: [String], required: false },
     prepGuide: { type: mongoose.Schema.Types.Mixed, required: false },
     faqs: {

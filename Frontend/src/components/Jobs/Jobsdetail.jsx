@@ -165,6 +165,7 @@ export function buildSections(job) {
         { id: "summary", anchor: "toc-summary", label: "Role summary", visible: hasText(job.summary) },
         { id: "responsibilities", anchor: "toc-responsibilities", label: "Role & Responsibilities", visible: hasText(job.description) || hasList(job.responsibilities) },
         { id: "eligibility", anchor: "toc-eligibility", label: "Eligibility & Skills", visible: hasList(job.eligibility) || hasList(job.requiredSkills) },
+        { id: "specialNote", anchor: "toc-special-note", label: "Special note", visible: hasText(job.specialNote) },
         { id: "applyIf", anchor: "toc-applyif", label: "Who Should Apply", visible: hasList(job.applyIf) },
         { id: "selectionProcess", anchor: "toc-selection", label: "Selection Process", visible: hasList(job.selectionProcess) },
         { id: "benefits", anchor: "toc-benefits", label: `Benefits at ${job.company}`, visible: hasList(job.benefits) },
@@ -958,6 +959,16 @@ const JobDetail = () => {
                                                     </>
                                                 )}
 
+                                                {item.specialNote && !hiddenSections.has("specialNote") && (
+                                                    <>
+                                                        <section id="toc-special-note" className="scroll-mt-8">
+                                                            <SectionTitle text="Special note" />
+                                                            <p className="text-md leading-relaxed text-gray-600 dark:text-gray-300">{item.specialNote}</p>
+                                                        </section>
+                                                        <Divider />
+                                                    </>
+                                                )}
+
                                                 {prepTips.length > 0 && (
                                                     <>
                                                         <section aria-labelledby="prep-tips-heading">
@@ -1119,6 +1130,7 @@ const JobDetail = () => {
                                                 {prepGuide.overview && <p className="mb-4 text-md leading-relaxed text-gray-600 dark:text-gray-300">{prepGuide.overview}</p>}
                                                 {[
                                                     ["Topics to revise", prepGuide.topicsToRevise],
+                                                    ["Common question topics", prepGuide.commonQuestions],
                                                     ["Project ideas", prepGuide.projectIdeas],
                                                     ["Common mistakes", prepGuide.commonMistakes],
                                                 ].filter(([, values]) => Array.isArray(values) && values.length > 0).map(([title, values]) => (

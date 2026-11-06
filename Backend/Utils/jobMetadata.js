@@ -188,18 +188,29 @@ export function validateImportedJob(job, now = Date.now()) {
         return "invalid apply link";
     }
     if (job.is_tech === false || (job.is_tech && job.is_tech !== "tech")) return "not a tech role";
+    const words = (value) => String(value || "").trim().split(/\s+/).filter(Boolean).length;
+    const countItems = (value) => Array.isArray(value)
+        ? value.length
+        : String(value || "").split(/\n+/).map((part) => part.trim()).filter(Boolean).length;
     if (job.contentProvider !== "basic") {
-        if (job.description && job.description.length < 120) return "AI description is too short";
-        if (String(job.summary || "").length < 120) return "AI summary is missing or too short";
-        const countItems = (value) => Array.isArray(value)
-            ? value.length
-            : String(value || "").split(/\n+/).map((part) => part.trim()).filter(Boolean).length;
-        if (countItems(job.responsibilities) < 4) return "fewer than 4 responsibilities";
-        if (countItems(job.requiredSkills) < 3) return "fewer than 3 required skills";
+        if (words(job.summary) < 110 || words(job.summary) > 180) return "AI summary must be 110-180 words";
+        if (job.aiStatus !== "ok") return "AI generation did not succeed";
+        if (!String(job.aiModelUsed || "").trim()) return "AI model is missing";
+        if (String(job.aiError || "").trim()) return "AI generation recorded an error";
+        if (!job.prepGuide || !String(job.prepGuide.overview || "").trim() || countItems(job.prepGuide.topicsToRevise) < 4) {
+            return "AI preparation guide is incomplete";
+        }
+        if (countItems(job.responsibilities) > 0 && countItems(job.responsibilities) < 3) {
+            return "fewer than 3 responsibilities";
+        }
     }
     if (/lorem ipsum|insert (?:text|description)|placeholder/i.test(job.description || "")) return "placeholder description";
-    if (!Array.isArray(job.faqs) || job.faqs.length > 6) return "invalid FAQ list";
-    if (job.faqs.some((faq) => !String(faq.question || "").trim() || !String(faq.answer || "").trim())) return "FAQ question or answer is empty";
+    if (job.contentProvider !== "basic") {
+        if (!Array.isArray(job.faqs) || job.faqs.length < 4 || job.faqs.length > 6) return "FAQ list must contain 4-6 items";
+        if (job.faqs.some((faq) => !String(faq.question || "").trim() || words(faq.answer) < 15 || words(faq.answer) > 70)) {
+            return "FAQ answer must contain 15-70 words";
+        }
+    }
     if (job.postedAt) {
         const postedAt = new Date(job.postedAt).getTime();
         if (!Number.isFinite(postedAt) || postedAt < now - 48 * 60 * 60 * 1000) return "posting older than 48 hours";

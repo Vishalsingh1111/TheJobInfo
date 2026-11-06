@@ -662,23 +662,39 @@ export async function syncFreehireJobs() {
         const seen = new Set();
         let scanned = 0;
         let aiSkipped = 0;
+        const funnel = { fetched: 0, freshness: 0, popular: 0, duplicate: 0, quota: 0, aiSuccess: 0, published: 0, telegramSent: 0 };
+        const rejections = new Map();
         for (const plan of plans) {
             if (ready.length >= CONFIG.jobsPerRun) break;
             const r = await findCandidates(plan, CONFIG.jobsPerRun - ready.length + EXTRA_CANDIDATES, seen);
             scanned += r.scanned;
+            funnel.fetched += r.scanned;
             for (const j of r.items) {
                 if (ready.length >= CONFIG.jobsPerRun) break;
                 try {
                     if (plan.mixFallback) console.log(`[freehire] mix fallback: using popular ${otherKind} candidate`);
-                    ready.push({ j, plan: plan.label, content: await enrich(j) });
+                    const content = await enrich(j);
+                    if (content?.contentProvider === "basic") {
+                        rejections.set(j.public_slug, "AI fallback used raw source content");
+                        throw new Error("AI fallback used raw source content");
+                    }
+                    ready.push({ j, plan: plan.label, content });
+                    funnel.aiSuccess += 1;
                     failedAt.delete(j.public_slug);
                 } catch (err) {
                     aiSkipped++;
+                    rejections.set(j.public_slug, err.message || "AI generation failed");
                     failedAt.set(j.public_slug, Date.now());
                     console.error(`[freehire] skipped "${j.public_slug}": ${err.message}`);
                 }
             }
         }
+        if (rejections.size) {
+            for (const [slug, reason] of rejections.entries()) {
+                console.log(`[freehire-funnel] rejected ${slug}: ${reason}`);
+            }
+        }
+        console.log(`[freehire-funnel] fetched=${funnel.fetched} freshness=${funnel.freshness} popular=${funnel.popular} duplicate=${funnel.duplicate} quota=${funnel.quota} aiSuccess=${funnel.aiSuccess} published=${funnel.published} telegramSent=${funnel.telegramSent}`);
 
         let inserted = 0;
         if (ready.length) {
@@ -695,11 +711,18 @@ export async function syncFreehireJobs() {
                 });
                 if (reason) {
                     console.log(`[freehire] skipped "${record.j.public_slug}": ${reason}`);
+                    rejections.set(record.j.public_slug, reason);
+                    continue;
+                }
+                if (record.content?.contentProvider === "basic") {
+                    console.log(`[freehire] raw-content fallback rejected "${record.j.public_slug}"`);
+                    rejections.set(record.j.public_slug, "AI fallback used raw source content");
                     continue;
                 }
                 const duplicate = await findDuplicate(doc);
                 if (duplicate) {
                     console.log(`[freehire] duplicate skipped "${record.j.public_slug}" (matches ${duplicate._id})`);
+                    rejections.set(record.j.public_slug, `duplicate of ${duplicate._id}`);
                     continue;
                 }
                 docs.push(doc);
@@ -710,11 +733,13 @@ export async function syncFreehireJobs() {
                 try {
                     const res = await Job.insertMany(docs, { ordered: false });
                     inserted = res.length;
+                    funnel.published = inserted;
                     res.forEach((job) => {
                         if (!shouldPostToTelegram(job)) {
                             console.log(`[telegram] skipped: ${getTelegramSkipReason(job)}`);
                             return;
                         }
+                        funnel.telegramSent += 1;
                         void postJobToTelegram(job).catch((error) =>
                             console.error("[freehire] Telegram post failed:", error.message)
                         );

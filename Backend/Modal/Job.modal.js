@@ -57,6 +57,11 @@ const jobSchema = mongoose.Schema({
         type: [{ question: String, answer: String }],
         required: false,
     },
+    aiStatus: { type: String, enum: ['pending', 'ok', 'failed'], default: 'pending', index: true },
+    aiModelUsed: { type: String, required: false },
+    aiAttempts: { type: Number, default: 0 },
+    aiError: { type: String, required: false },
+    aiGeneratedAt: { type: Date, required: false },
     forceTelegram: { type: Boolean, default: false },
     customSections: {
         type: [customSectionSchema],

@@ -125,12 +125,12 @@ export function withDerivedJobLevel(job = {}) {
     return level ? { ...job, level } : job;
 }
 
-export function selectPreferredJobLevel(history, fresherRatio = 0.9) {
+export function selectPreferredJobLevel(history, fresherRatio = 0.8) {
     const classified = (Array.isArray(history) ? history : [])
         .map((job) => typeof job === "string" ? job : job?.level)
-        .filter((level) => level === "fresher" || level === "experienced");
+        .filter((level) => level === "fresher" || level === "internship" || level === "experienced");
     if (!classified.length) return "fresher";
-    const fresherShare = classified.filter((level) => level === "fresher").length / classified.length;
+    const fresherShare = classified.filter((level) => level === "fresher" || level === "internship").length / classified.length;
     return fresherShare < fresherRatio ? "fresher" : "experienced";
 }
 
@@ -152,7 +152,7 @@ export function createCandidateSearchPlans(preferredLevel, publishMode = "popula
             popular: true,
             targetLevel: preferredLevel,
         },
-        !popularOnly && {
+        {
             label: `any company, ${preferredLevel}`,
             seniority: seniority[preferredLevel],
             popular: false,
@@ -162,6 +162,13 @@ export function createCandidateSearchPlans(preferredLevel, publishMode = "popula
             label: `mix fallback: popular company, ${otherLevel}`,
             seniority: seniority[otherLevel],
             popular: true,
+            targetLevel: otherLevel,
+            mixFallback: true,
+        },
+        {
+            label: `mix fallback: any company, ${otherLevel}`,
+            seniority: seniority[otherLevel],
+            popular: false,
             targetLevel: otherLevel,
             mixFallback: true,
         },

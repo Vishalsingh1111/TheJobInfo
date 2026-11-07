@@ -16,12 +16,6 @@ import {
 } from "../Utils/jobMetadata.js";
 
 const BASE_URL = process.env.OPENAPI_BASE_URL || "https://freehire.me/api/v1/jobs/search";
-const configuredFresherRatio = Number(process.env.FRESHER_RATIO ?? 0.9);
-const fresherRatioSetting = Number.isFinite(configuredFresherRatio)
-    && configuredFresherRatio >= 0
-    && configuredFresherRatio <= 1
-    ? configuredFresherRatio
-    : 0.9;
 const configuredMixWindow = Number.parseInt(process.env.MIX_WINDOW || "50", 10);
 const mixWindowSetting = Number.isInteger(configuredMixWindow) && configuredMixWindow > 0
     ? configuredMixWindow
@@ -48,8 +42,8 @@ const CONFIG = {
     popularPageSize: 100,                                           // the popular search reads big pages (freehire max is 100), because only some jobs are on the list
     popularMaxPages: 3,                                             // 3 x 100 = up to 300 recent jobs checked per popular search
 
-    // Keep imported jobs close to a 90/10 fresher/experienced split.
-    fresherShare: Number.isFinite(fresherRatioSetting) ? Math.min(1, Math.max(0, fresherRatioSetting)) : 0.9,
+    // Keep imported fresher and internship jobs near 80% of the rolling mix.
+    fresherShare: 0.8,
     mixWindow: Number.isFinite(mixWindowSetting) ? Math.max(1, mixWindowSetting) : 50,
 
     delayMs: 1000,
@@ -563,7 +557,7 @@ const levelMatchesTarget = (job, targetLevel) => {
         experience_years_max: enrichment.experience_years_max,
     });
     return targetLevel === "fresher"
-        ? detected === "fresher" || detected === "dual"
+        ? detected === "fresher" || detected === "internship" || detected === "dual"
         : detected === "experienced" || detected === "dual";
 };
 
@@ -660,7 +654,7 @@ export async function syncFreehireJobs() {
         const preferredLevel = kind;
         const otherKind = fresher ? "experienced" : "fresher";
 
-        // Try the preferred level first. A level-mix fallback may only use a popular company.
+        // Prefer popular companies, then widen to other companies before switching levels.
         const plans = createCandidateSearchPlans(preferredLevel, CONFIG.publishMode, CONFIG.popularFirst);
 
         console.log(`[freehire] looking for a ${kind} job (target fresher ratio ${Math.round(CONFIG.fresherShare * 100)}%)`);
@@ -681,7 +675,7 @@ export async function syncFreehireJobs() {
             for (const j of r.items) {
                 if (ready.length >= CONFIG.jobsPerRun) break;
                 try {
-                    if (plan.mixFallback) console.log(`[freehire] mix fallback: using popular ${otherKind} candidate`);
+                    if (plan.mixFallback) console.log(`[freehire] mix fallback: using ${plan.popular ? "popular" : "any-company"} ${plan.targetLevel} candidate`);
                     const content = await enrich(j);
                     if (content?.contentProvider === "basic") {
                         rejections.set(j.public_slug, "AI fallback used raw source content");

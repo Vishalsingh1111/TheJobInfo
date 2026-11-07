@@ -10,7 +10,7 @@ import {
 } from "../Controller/Geminijob.service.js";
 import Job from "../Modal/Job.modal.js";
 import { createCandidateSearchPlans, selectPreferredJobLevel, validateImportedJob } from "../Utils/jobMetadata.js";
-import { shouldPostToTelegram } from "../Controller/Telegram.service.js";
+import { buildMessage, shouldPostToTelegram } from "../Controller/Telegram.service.js";
 import { mapJob } from "../Controller/Freehiresync.service.js";
 
 const generatedContent = {
@@ -48,43 +48,67 @@ const generatedContent = {
     ],
 };
 
-test("the 90/10 mix favors whichever level is below its target", () => {
-    assert.equal(selectPreferredJobLevel([], 0.9), "fresher");
+test("the 80/20 mix counts internships with freshers", () => {
+    assert.equal(selectPreferredJobLevel([]), "fresher");
     assert.equal(selectPreferredJobLevel(
-        [...Array(44).fill({ level: "fresher" }), ...Array(6).fill({ level: "experienced" })],
-        0.9,
+        [...Array(30).fill({ level: "fresher" }), ...Array(6).fill({ level: "internship" }), ...Array(14).fill({ level: "experienced" })],
     ), "fresher");
     assert.equal(selectPreferredJobLevel(
-        [...Array(45).fill({ level: "fresher" }), ...Array(5).fill({ level: "experienced" })],
-        0.9,
+        [...Array(36).fill({ level: "fresher" }), ...Array(4).fill({ level: "internship" }), ...Array(10).fill({ level: "experienced" })],
     ), "experienced");
 });
 
-test("the rolling mix simulation stays near 90% fresher over 100 runs", () => {
+test("the rolling mix simulation stays near 80% fresher and internship over 100 runs", () => {
     const history = [];
     for (let run = 0; run < 100; run += 1) {
-        const target = selectPreferredJobLevel(history.slice(-50), 0.9);
-        history.push(target);
+        const target = selectPreferredJobLevel(history.slice(-50));
+        history.push(target === "fresher" && history.filter((level) => level === "fresher").length % 4 === 0
+            ? "internship"
+            : target);
     }
 
-    const fresherShare = history.filter((level) => level === "fresher").length / history.length;
-    assert.ok(fresherShare >= 0.89 && fresherShare <= 0.91, `expected about 90% fresher, got ${fresherShare * 100}%`);
+    const fresherShare = history.filter((level) => level === "fresher" || level === "internship").length / history.length;
+    assert.ok(fresherShare >= 0.79 && fresherShare <= 0.81, `expected about 80% fresher and internship, got ${fresherShare * 100}%`);
 });
 
-test("popular_only candidate plans never search non-popular companies", () => {
-    for (const level of ["fresher", "experienced"]) {
-        const plans = createCandidateSearchPlans(level, "popular_only", false);
-        assert.ok(plans.length > 0);
-        assert.ok(plans.every((plan) => plan.popular));
-        assert.equal(plans.at(-1).mixFallback, true);
-    }
+test("popular-only mode falls back to non-popular companies before changing levels", () => {
+    const plans = createCandidateSearchPlans("fresher", "popular_only", true);
+    assert.equal(plans[0].popular, true);
+    assert.equal(plans[0].targetLevel, "fresher");
+    assert.equal(plans[1].popular, false);
+    assert.equal(plans[1].targetLevel, "fresher");
+    assert.equal(plans[2].popular, true);
+    assert.equal(plans[2].targetLevel, "experienced");
+    assert.equal(plans[3].popular, false);
 });
 
-test("Telegram requires popular-company fresher jobs unless explicitly forced", () => {
+test("Telegram posts popular freshers, remote freshers, internships, or explicitly forced jobs", () => {
     assert.equal(shouldPostToTelegram({ company: "Google", level: "fresher" }), true);
     assert.equal(shouldPostToTelegram({ company: "Google", level: "experienced" }), false);
     assert.equal(shouldPostToTelegram({ company: "Unknown Startup", level: "fresher" }), false);
+    assert.equal(shouldPostToTelegram({ company: "Unknown Startup", level: "fresher", workMode: "Remote" }), true);
+    assert.equal(shouldPostToTelegram({ company: "Unknown Startup", level: "fresher", location: "Work from home" }), true);
+    assert.equal(shouldPostToTelegram({ company: "Unknown Startup", level: "internship" }), true);
     assert.equal(shouldPostToTelegram({ company: "Unknown Startup", level: "experienced", forceTelegram: true }), true);
+});
+
+test("Telegram details omit the hiring headline and posting dates", () => {
+    const message = buildMessage({
+        _id: "job-id",
+        slug: "software-engineer-example",
+        company: "Example",
+        title: "Software Engineer",
+        salary: "10 LPA",
+        location: "Remote",
+        jobType: "Freshers",
+        experience: "Fresher",
+        lastDate: "31 Dec 2026",
+        createdAt: new Date("2026-11-07T00:00:00.000Z"),
+    });
+
+    assert.match(message, /Company: Example/);
+    assert.match(message, /Role : Software Engineer/);
+    assert.doesNotMatch(message, /is Hiring|Last Date|Posted On|2026/);
 });
 
 test("the prompt's generated fields map into persisted job fields", () => {

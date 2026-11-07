@@ -1,18 +1,20 @@
 
 import { isPopularCompany } from "./Popularcompanies.js";
 
-const formatDate = (d) =>
-    new Date(d).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
+const isRemote = (job) =>
+    job?.workMode === "Remote" || /\b(?:remote|work from home|wfh)\b/i.test(String(job?.location || ""));
 
 export function shouldPostToTelegram(job) {
     return Boolean(job?.forceTelegram)
-        || (job?.level === "fresher" && isPopularCompany(job?.company));
+        || job?.level === "internship"
+        || (job?.level === "fresher" && (isPopularCompany(job?.company) || isRemote(job)));
 }
 
 export function getTelegramSkipReason(job) {
     if (job?.forceTelegram) return "";
-    if (!isPopularCompany(job?.company)) return "company is not on the popular list";
-    if (job?.level !== "fresher") return "job level is not fresher";
+    if (job?.level === "internship") return "";
+    if (job?.level !== "fresher") return "job level is not eligible for Telegram";
+    if (!isPopularCompany(job?.company) && !isRemote(job)) return "job is neither from a popular company nor remote";
     return "";
 }
 
@@ -29,7 +31,7 @@ const getCleanRole = (title) => {
 };
 
 export const buildMessage = (job) => {
-    const lines = [`${job.company || "Company"} is Hiring :—`, "————————————————————-", ""];
+    const lines = [];
     if (job.company) lines.push(`Company: ${job.company}`);
     const role = getCleanRole(job.title);
     if (role) lines.push(`Role : ${role}`);
@@ -37,8 +39,6 @@ export const buildMessage = (job) => {
     if (job.location) lines.push(`Location : ${job.location}`);
     if (job.jobType) lines.push(`Job Type : ${job.jobType}`);
     if (job.experience) lines.push(`Experience: ${job.experience}`);
-    if (job.lastDate) lines.push(`Last Date: ${job.lastDate}`);
-    if (job.createdAt) lines.push(`Posted On: ${formatDate(job.createdAt)}`);
     const site = String(process.env.SITE_URL || "").replace(/\/+$/, "");
     lines.push("", `Apply Link: ${site}/jobdetail/${job.slug || job._id}`);
     return lines.join("\n");

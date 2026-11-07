@@ -1,18 +1,19 @@
 
 
-import { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Jobcard, { SkeletonGrid } from './Jobscard';
 import FilterBar, {
-    LOCATION_OPTIONS, getActiveJobLocations
+    CATEGORY_OPTIONS, LOCATION_OPTIONS, getActiveJobLocations, matchesJobLocation,
+    EXPERIENCE_OPTIONS, SALARY_OPTIONS, SORT_OPTIONS
 } from '../Common/Filterbar';
 import Breadcrumb from '../Common/Breadcrumb';
 import { baseUrl } from "../../Baseurl";
 import {
-    ChevronDown, Search
+    ChevronDown, ChevronUp, Search
 } from "lucide-react";
-import { getLevelJobCount, getRecentLevelJobCount } from '../Common/FilterHelpers';
+import { getLevelJobCount, getRecentLevelJobCount, matchExperience, matchSalary } from '../Common/FilterHelpers';
 import { useSeo } from '../../hooks/useSeo';
 import useJobPageFilters from "./useJobPageFilters";
 import Navbar from '../Navbar';
@@ -22,13 +23,15 @@ import JobCategoryLinks from "./JobCategoryLinks";
 import AdSlot from "../AdSlot";
 import JobPrepFaq from "./JobPrepFaq";
 import JobCategoryTabs from "./JobCategoryTabs";
-import usePaginatedJobs from "./usePaginatedJobs";
 
 const PAGE_SIZE = 6;
 
 const ExperiencedJobs = () => {
+    const [data, setData] = useState([]);
+    const [loading, setLoading] = useState(true);
     const [stats, setStats] = useState(null);
     const [statsError, setStatsError] = useState(false);
+    const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
     const {
         search, setSearch, filterCategory, setFilterCategory,
@@ -37,12 +40,16 @@ const ExperiencedJobs = () => {
     } = useJobPageFilters();
 
     const navigate = useNavigate();
-    const {
-        jobs: data, total, loading, refreshing, loadingMore, hasMore, loadMore, error,
-    } = usePaginatedJobs({
-        search, category: filterCategory, location: filterLocation, salary: filterSalary,
-        experience: filterExp, sort: sortBy, level: "experienced",
-    });
+
+    useEffect(() => {
+        axios.get(`${baseUrl}/job`)
+            .then(res => {
+                const jobs = Array.isArray(res.data) ? res.data : [];
+                setData(jobs.filter(job => job.level === 'experienced' || job.level === 'dual'));
+            })
+            .catch(console.error)
+            .finally(() => setLoading(false));
+    }, []);
     useEffect(() => {
         axios.get(`${baseUrl}/job/stats`).then((response) => setStats(response.data)).catch((error) => {
             setStatsError(true);
@@ -50,18 +57,29 @@ const ExperiencedJobs = () => {
         });
     }, []);
 
-    const visible = data;
+    useEffect(() => { setVisibleCount(PAGE_SIZE); }, [search, filterCategory, filterLocation, filterSalary, filterExp, sortBy]);
+
+    const filtered = useMemo(() => {
+        const q = search.toLowerCase();
+        return data.filter(j => {
+            const mS = !search || j.title?.toLowerCase().includes(q) || j.company?.toLowerCase().includes(q) || j.location?.toLowerCase().includes(q) || j.description?.toLowerCase().includes(q);
+            const mC = filterCategory === CATEGORY_OPTIONS[0] || j.category?.toLowerCase().includes(filterCategory.toLowerCase());
+            const mL = filterLocation === LOCATION_OPTIONS[0]
+                || matchesJobLocation(j, filterLocation);
+            return mS && mC && mL && matchSalary(j.salary || j.salaryNote, filterSalary) && matchExperience(j.experience, filterExp);
+        }).sort((a, b) => sortBy === SORT_OPTIONS[0] ? (b.id || 0) - (a.id || 0) : (a.id || 0) - (b.id || 0));
+    }, [data, search, filterCategory, filterLocation, filterSalary, filterExp, sortBy]);
+
+    const visible = filtered.slice(0, visibleCount);
     const locationOptions = useMemo(
-        () => [...new Set([
-            ...LOCATION_OPTIONS,
-            ...getActiveJobLocations(data),
-            ...(stats?.byCity || []).map(({ city }) => city),
-        ])],
-        [data, stats]
+        () => [...new Set([...LOCATION_OPTIONS, ...getActiveJobLocations(data)])],
+        [data]
     );
+    const hasMore = visibleCount < filtered.length;
+    const allShown = visibleCount >= filtered.length && visibleCount > PAGE_SIZE;
     const activeCount = getLevelJobCount(stats, 'experienced');
     const recentCount = getRecentLevelJobCount(stats, 'experienced');
-    useSeo({ title: "Experienced Jobs", description: "Browse current experienced and mid-career job listings.", robots: total && !isFiltered ? "index, follow" : "noindex, follow" });
+    useSeo({ title: "Experienced Jobs", description: "Browse current experienced and mid-career job listings.", robots: filtered.length && !isFiltered ? "index, follow" : "noindex, follow" });
 
     // ✅ FIXED: pass full job object, use slug with _id fallback
     const go = (job) => {
@@ -120,8 +138,8 @@ const ExperiencedJobs = () => {
                     {/* ── Results count ── */}
                     <div id="job-page-results" className="flex items-center justify-between mb-6 scroll-mt-24">
                         <p className="text-base font-medium text-gray-600 dark:text-gray-400">
-                            Showing <span className="font-bold text-gray-900 dark:text-white">{visible.length}</span> of{' '}
-                            <span className="font-bold text-gray-900 dark:text-white">{total}</span> experienced jobs
+                            Showing <span className="font-bold text-gray-900 dark:text-white">{Math.min(visibleCount, filtered.length)}</span> of{' '}
+                            <span className="font-bold text-gray-900 dark:text-white">{filtered.length}</span> experienced jobs
                         </p>
                         <div className="flex items-center gap-1.5">
                             <span className="relative flex h-2.5 w-2.5">
@@ -133,11 +151,9 @@ const ExperiencedJobs = () => {
                     </div>
 
                     {/* ── Cards / Skeleton / Empty ── */}
-                    {error && <p role="alert" className="mb-4 text-sm text-red-600">{error}</p>}
-                    {refreshing && <p role="status" className="mb-3 text-sm text-gray-500">Updating results…</p>}
                     {loading ? (
                         <SkeletonGrid count={PAGE_SIZE} />
-                    ) : visible.length === 0 ? (
+                    ) : filtered.length === 0 ? (
                         <div className="text-center py-20 bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800">
                             <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center">
                                 <Search className="w-10 h-10 text-blue-500 dark:text-blue-400" />
@@ -159,11 +175,18 @@ const ExperiencedJobs = () => {
                             <div className="flex justify-center pb-4">
                                 {hasMore && (
                                     <button
-                                        onClick={loadMore}
-                                        disabled={loadingMore || refreshing}
+                                        onClick={() => setVisibleCount(v => v + PAGE_SIZE)}
                                         className="flex items-center gap-2 px-8 py-3.5 bg-gradient-to-r from-blue-500 to-sky-600 text-white rounded-2xl text-base font-bold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
                                     >
-                                        {loadingMore ? "Loading…" : "Show More Experienced Jobs"} <ChevronDown className="w-5 h-5" />
+                                        Show More Experienced Jobs <ChevronDown className="w-5 h-5" />
+                                    </button>
+                                )}
+                                {allShown && !hasMore && (
+                                    <button
+                                        onClick={() => { setVisibleCount(PAGE_SIZE); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                                        className="flex items-center gap-2 px-8 py-3.5 bg-white dark:bg-gray-900 border-2 border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 rounded-2xl text-base font-bold hover:border-gray-300 dark:hover:border-gray-600 transition-all duration-300"
+                                    >
+                                        Show Less <ChevronUp className="w-5 h-5" />
                                     </button>
                                 )}
                             </div>
@@ -171,7 +194,7 @@ const ExperiencedJobs = () => {
                     )}
                     </section>
                     <div className="lg:col-span-4">
-                        <JobLocationLinks jobs={data} selectedLocation={filterLocation} onSelect={selectLocation} categoryLabel="Experienced jobs" selectedCategory={filterCategory} onSelectCategory={setFilterCategory} byCity={stats?.byCity} byCategory={stats?.byCategory} />
+                        <JobLocationLinks jobs={data} selectedLocation={filterLocation} onSelect={selectLocation} categoryLabel="Experienced jobs" selectedCategory={filterCategory} onSelectCategory={setFilterCategory} />
                     </div>
                     <div className="lg:col-span-8 lg:col-start-1">
                         <JobPrepFaq level="experienced" />

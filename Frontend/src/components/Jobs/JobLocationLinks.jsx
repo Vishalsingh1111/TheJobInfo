@@ -1,16 +1,11 @@
+import React from "react";
 import { ArrowRight } from "lucide-react";
 import { getActiveJobLocations, matchesJobLocation } from "../Common/Filterbar";
 import SocialFollowCard from "../Common/SocialFollowCard";
 
-export default function JobLocationLinks({ jobs, selectedLocation, onSelect, categoryLabel = 'Jobs', onSelectCategory, selectedCategory, byCity = [], byCategory = [] }) {
-    const locations = [...new Set([
-        ...getActiveJobLocations(jobs),
-        ...byCity.map(({ city }) => city).filter((city) => city && city !== "Other"),
-    ])].sort((a, b) => a.localeCompare(b));
-    const categories = (byCategory.length
-        ? byCategory.map(({ category }) => category)
-        : [...new Set(jobs.map((job) => String(job.category || '').trim()).filter(Boolean))]
-    )
+export default function JobLocationLinks({ jobs, selectedLocation, onSelect, categoryLabel = 'Jobs', onSelectCategory, selectedCategory }) {
+    const locations = getActiveJobLocations(jobs);
+    const categories = [...new Set(jobs.map((job) => String(job.category || '').trim()).filter(Boolean))]
         .sort((left, right) => left.localeCompare(right))
         .slice(0, 6);
 
@@ -34,8 +29,7 @@ export default function JobLocationLinks({ jobs, selectedLocation, onSelect, cat
                             >
                                 <span>{categoryLabel} in {location}</span>
                                 <span className="ml-auto text-xs text-gray-500 dark:text-gray-400">
-                                    {byCity.find((entry) => entry.city === location)?.count
-                                        ?? jobs.filter((job) => matchesJobLocation(job, location)).length}
+                                    {jobs.filter((job) => matchesJobLocation(job, location)).length}
                                 </span>
                                 <ArrowRight className="h-3.5 w-3.5 flex-shrink-0 opacity-50" />
                             </button>

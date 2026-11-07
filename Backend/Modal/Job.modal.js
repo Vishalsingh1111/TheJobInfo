@@ -131,10 +131,6 @@ jobSchema.pre("validate", function sanitizeCustomSections(next) {
 
 jobSchema.index({ createdAt: -1 });
 jobSchema.index({ company: 1 });
-jobSchema.index({ level: 1, id: -1 });
-jobSchema.index({ city: 1, id: -1 });
-jobSchema.index({ category: 1, id: -1 });
-jobSchema.index({ workMode: 1, id: -1 });
 jobSchema.index({ title: "text", company: "text" });
 
 const Job = mongoose.model("Job", jobSchema);

@@ -14,6 +14,9 @@ import {
     withDerivedJobLevel,
 } from "../Utils/jobMetadata.js";
 
+let jobStatsCache = null;
+let jobStatsCacheAt = 0;
+
 // ── Helper: generate slug from title + company + id ──────────────────────────
 const generateSlug = (title, company, id) => {
     const base = `${title}-${company}-${id}`
@@ -60,33 +63,77 @@ export const getJob = async (req, res) => {
     try {
         const now = new Date();
         const query = {
-            $or: [
-                { expiresAt: { $exists: false } },
-                { expiresAt: null },
-                { expiresAt: { $gte: now } },
-            ],
+            $and: [{
+                $or: [
+                    { expiresAt: { $exists: false } },
+                    { expiresAt: null },
+                    { expiresAt: { $gte: now } },
+                ],
+            }],
         };
-        const { level, city, workMode, q, category, company, sort, experience, salary } = req.query;
+        const { level, city, location, workMode, q, category, company, sort, experience, experienceFilter, salary, salaryFilter, type } = req.query;
         const requestedLevel = level && level !== "all" ? String(level) : null;
         if (requestedLevel) {
             const acceptedLevels = requestedLevel === "fresher" || requestedLevel === "experienced"
                 ? [requestedLevel, "dual"]
                 : [requestedLevel];
-            query.level = { $in: [...acceptedLevels, null, ""] };
+            query.$and.push({
+                $or: [
+                    { level: { $in: acceptedLevels } },
+                    { level: { $exists: false } },
+                    { level: null },
+                    { level: "" },
+                ],
+            });
         }
         if (city) query.city = normalizeCity(city);
+        if (location) {
+            const value = String(location).slice(0, 100);
+            const locationRegex = new RegExp(value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i");
+            const normalizedLocation = normalizeCity(value);
+            query.$and.push({
+                $or: [
+                    { location: locationRegex },
+                    ...(normalizedLocation !== "Other" ? [{ city: normalizedLocation }] : []),
+                ],
+            });
+        }
         if (workMode) query.workMode = workMode;
-        if (category) query.category = category;
+        if (category) query.category = { $regex: String(category).slice(0, 100).replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), $options: "i" };
         if (company) query.company = { $regex: String(company).slice(0, 100).replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), $options: "i" };
         if (experience) query.experience = { $regex: String(experience).slice(0, 100).replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), $options: "i" };
-        if (salary === "disclosed") query.salary = { $exists: true, $nin: ["", "Not disclosed"] };
+        if (salary === "disclosed") {
+            query.$and.push({
+                $or: [
+                    { salary: { $exists: true, $nin: ["", "Not disclosed"] } },
+                    { salaryNote: { $exists: true, $nin: ["", "Not disclosed"] } },
+                ],
+            });
+        }
+        if (type) {
+            const typeValue = String(type).slice(0, 100);
+            if (/^(?:work from home|wfh|remote)$/i.test(typeValue)) {
+                query.$and.push({
+                    $or: [
+                        { workMode: "Remote" },
+                        { location: { $regex: "remote|work from home|wfh", $options: "i" } },
+                    ],
+                });
+            } else {
+                query.jobType = { $regex: typeValue.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), $options: "i" };
+            }
+        }
         if (q) {
             const term = String(q).slice(0, 100).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-            query.$and = [
-                { $or: [{ title: { $regex: term, $options: "i" } }, { company: { $regex: term, $options: "i" } }] },
-            ];
+            query.$and.push({
+                $or: [
+                    { title: { $regex: term, $options: "i" } },
+                    { company: { $regex: term, $options: "i" } },
+                    { location: { $regex: term, $options: "i" } },
+                    { description: { $regex: term, $options: "i" } },
+                ],
+            });
         }
-
         const sortMap = { newest: { createdAt: -1 }, oldest: { createdAt: 1 }, title: { title: 1 } };
         const sortBy = sortMap[sort] || { id: -1 };
         const pagination = parseJobListPagination(req.query);
@@ -103,26 +150,240 @@ export const getJob = async (req, res) => {
             const jobs = await Job.find(query).sort(sortBy);
             return res.status(200).json(serializeJobs(jobs));
         }
-        if (requestedLevel) {
-            const matchingJobs = serializeJobs(await Job.find(query).sort(sortBy));
-            const jobs = matchingJobs.slice(pagination.skip, pagination.skip + pagination.limit);
+        const experienceRanges = {
+            "Fresher (0)": [0, 0],
+            "Up to 1 Year": [0, 1],
+            "Up to 2 Years": [0, 2],
+            "1-3 Years": [1, 3],
+            "2-5 Years": [2, 5],
+            "3-5 Years": [3, 5],
+            "5+ Years": [5, 99],
+        };
+        const salaryRanges = {
+            "Under ₹3 LPA": [0, 3],
+            "₹3–5 LPA": [3, 5],
+            "₹5–8 LPA": [5, 8],
+            "₹8–12 LPA": [8, 12],
+            "₹12+ LPA": [12, 999],
+        };
+        if (pagination) {
+            const stages = [{ $match: query }];
+            if (requestedLevel || experienceRanges[experienceFilter] || salaryRanges[salaryFilter]) {
+                stages.push({
+                    $set: {
+                        _jobText: {
+                            $toLower: {
+                                $concat: [
+                                    { $ifNull: ["$title", ""] }, " ",
+                                    { $ifNull: ["$jobType", ""] }, " ",
+                                    { $ifNull: ["$employment_type", ""] }, " ",
+                                    { $ifNull: ["$seniority", ""] },
+                                ],
+                            },
+                        },
+                        _jobTypeText: { $toLower: { $ifNull: ["$jobType", ""] } },
+                        _experienceValues: {
+                            $map: {
+                                input: {
+                                    $regexFindAll: {
+                                        input: { $replaceAll: { input: { $ifNull: ["$experience", ""] }, find: ",", replacement: "" } },
+                                        regex: "\\d+(?:\\.\\d+)?",
+                                    },
+                                },
+                                as: "match",
+                                in: { $convert: { input: "$$match.match", to: "double", onError: null, onNull: null } },
+                            },
+                        },
+                        _salaryValues: {
+                            $map: {
+                                input: {
+                                    $regexFindAll: {
+                                        input: {
+                                            $replaceAll: {
+                                                input: {
+                                                    $cond: [
+                                                        { $eq: [{ $ifNull: ["$salary", ""] }, ""] },
+                                                        { $ifNull: ["$salaryNote", ""] },
+                                                        "$salary",
+                                                    ],
+                                                },
+                                                find: ",",
+                                                replacement: "",
+                                            },
+                                        },
+                                        regex: "\\d+(?:\\.\\d+)?",
+                                    },
+                                },
+                                as: "match",
+                                in: {
+                                    $let: {
+                                        vars: { amount: { $convert: { input: "$$match.match", to: "double", onError: null, onNull: null } } },
+                                        in: {
+                                            $cond: [
+                                                {
+                                                    $regexMatch: {
+                                                        input: {
+                                                            $cond: [
+                                                                { $eq: [{ $ifNull: ["$salary", ""] }, ""] },
+                                                                { $ifNull: ["$salaryNote", ""] },
+                                                                "$salary",
+                                                            ],
+                                                        },
+                                                        regex: "month",
+                                                        options: "i",
+                                                    },
+                                                },
+                                                { $divide: [{ $multiply: ["$$amount", 12] }, 100000] },
+                                                "$$amount",
+                                            ],
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                });
+                stages.push({
+                    $set: {
+                        _experienceMin: {
+                            $cond: [
+                                { $gt: [{ $size: "$_experienceValues" }, 0] },
+                                { $arrayElemAt: ["$_experienceValues", 0] },
+                                { $cond: [{ $regexMatch: { input: { $ifNull: ["$experience", ""] }, regex: "fresher", options: "i" } }, 0, null] },
+                            ],
+                        },
+                        _experienceMax: {
+                            $cond: [
+                                { $gt: [{ $size: "$_experienceValues" }, 1] },
+                                { $arrayElemAt: ["$_experienceValues", 1] },
+                                { $cond: [
+                                    { $gt: [{ $size: "$_experienceValues" }, 0] },
+                                    { $arrayElemAt: ["$_experienceValues", 0] },
+                                    { $cond: [{ $regexMatch: { input: { $ifNull: ["$experience", ""] }, regex: "fresher", options: "i" } }, 0, null] },
+                                ] },
+                            ],
+                        },
+                        _salaryMin: {
+                            $cond: [
+                                { $gt: [{ $size: "$_salaryValues" }, 1] },
+                                { $min: "$_salaryValues" },
+                                { $cond: [
+                                    { $gt: [{ $size: "$_salaryValues" }, 0] },
+                                    0,
+                                    null,
+                                ] },
+                            ],
+                        },
+                        _salaryMax: {
+                            $cond: [
+                                { $gt: [{ $size: "$_salaryValues" }, 1] },
+                                { $max: "$_salaryValues" },
+                                { $cond: [
+                                    { $gt: [{ $size: "$_salaryValues" }, 0] },
+                                    { $arrayElemAt: ["$_salaryValues", 0] },
+                                    null,
+                                ] },
+                            ],
+                        },
+                    },
+                });
+                if (requestedLevel) {
+                    stages.push({
+                        $set: {
+                            _effectiveLevel: {
+                                $ifNull: [
+                                    { $cond: [{ $in: ["$level", [null, ""]] }, null, "$level"] },
+                                    {
+                                        $switch: {
+                                            branches: [
+                                                { case: { $regexMatch: { input: "$_jobText", regex: "\\b(intern(ship)?|fellowship)\\b" } }, then: "internship" },
+                                                { case: { $and: [
+                                                    { $regexMatch: { input: "$_jobTypeText", regex: "fresher" } },
+                                                    { $regexMatch: { input: "$_jobTypeText", regex: "experienced" } },
+                                                ] }, then: "dual" },
+                                                { case: { $and: [
+                                                    { $ne: ["$_experienceMin", null] },
+                                                    { $gte: ["$_experienceMin", 2] },
+                                                ] }, then: "experienced" },
+                                                { case: { $and: [
+                                                    { $ne: ["$_experienceMax", null] },
+                                                    { $lte: ["$_experienceMax", 1] },
+                                                ] }, then: "fresher" },
+                                                { case: { $and: [
+                                                    { $ne: ["$_experienceMin", null] },
+                                                    { $lte: ["$_experienceMin", 1] },
+                                                    { $ne: ["$_experienceMax", null] },
+                                                    { $gte: ["$_experienceMax", 2] },
+                                                ] }, then: "dual" },
+                                                { case: { $regexMatch: { input: "$_jobText", regex: "\\b(senior|staff|principal|lead|manager|experienced|associate)\\b" } }, then: "experienced" },
+                                                { case: { $regexMatch: { input: "$_jobText", regex: "\\b(fresher|graduate|junior|entry[- ]level|trainee)\\b" } }, then: "fresher" },
+                                            ],
+                                            default: null,
+                                        },
+                                    },
+                                ],
+                            },
+                        },
+                    });
+                    const acceptedLevels = requestedLevel === "fresher" || requestedLevel === "experienced"
+                        ? [requestedLevel, "dual"]
+                        : [requestedLevel];
+                    stages.push({ $match: { _effectiveLevel: { $in: acceptedLevels } } });
+                }
+                const experienceRange = experienceRanges[experienceFilter];
+                if (experienceRange) {
+                    const [minimum, maximum] = experienceRange;
+                    stages.push({
+                        $match: {
+                            $or: [
+                                { _experienceMin: null },
+                                { $and: [{ _experienceMin: { $lte: maximum } }, { _experienceMax: { $gte: minimum } }] },
+                            ],
+                        },
+                    });
+                }
+                const salaryRange = salaryRanges[salaryFilter];
+                if (salaryRange) {
+                    const [minimum, maximum] = salaryRange;
+                    stages.push({
+                        $match: {
+                            $or: [
+                                { _salaryMin: null },
+                                { $and: [{ _salaryMin: { $lte: maximum } }, { _salaryMax: { $gte: minimum } }] },
+                            ],
+                        },
+                    });
+                }
+            }
+            stages.push({
+                $facet: {
+                    metadata: [{ $count: "total" }],
+                    jobs: [
+                        ...(requestedLevel ? [{ $set: { level: "$_effectiveLevel" } }] : []),
+                        {
+                            $project: {
+                                _id: 1, id: 1, slug: 1, title: 1, company: 1, location: 1, city: 1,
+                                workMode: 1, jobType: 1, experience: 1, salary: 1, salaryNote: 1,
+                                category: 1, summary: 1, description: 1, imageUrl: 1, postedAt: 1,
+                                createdAt: 1, level: 1,
+                            },
+                        },
+                        { $sort: sortBy },
+                        { $skip: pagination.skip },
+                        { $limit: pagination.limit },
+                    ],
+                },
+            });
+            const [result] = await Job.aggregate(stages);
+            const jobs = (result?.jobs || []).map((job) => withDerivedJobLevel(job));
+            const total = result?.metadata?.[0]?.total || 0;
             return res.status(200).json({
                 jobs,
-                total: matchingJobs.length,
+                total,
                 page: pagination.page,
-                pages: Math.ceil(matchingJobs.length / pagination.limit),
+                pages: Math.ceil(total / pagination.limit),
             });
         }
-        const [total, jobs] = await Promise.all([
-            Job.countDocuments(query),
-            Job.find(query).sort(sortBy).skip(pagination.skip).limit(pagination.limit),
-        ]);
-        return res.status(200).json({
-            jobs: serializeJobs(jobs),
-            total,
-            page: pagination.page,
-            pages: Math.ceil(total / pagination.limit),
-        });
     } catch (error) {
         console.error("Error fetching jobs:", error);
         res.status(500).json({ error: "Error fetching jobs" });
@@ -225,6 +486,9 @@ export const getRelatedJobs = async (req, res) => {
 
 export const getJobStats = async (_req, res) => {
     try {
+        if (jobStatsCache && Date.now() - jobStatsCacheAt < 30_000) {
+            return res.status(200).json(jobStatsCache);
+        }
         const active = {
             $or: [
                 { expiresAt: { $exists: false } },
@@ -233,19 +497,31 @@ export const getJobStats = async (_req, res) => {
             ],
         };
         const recentCutoff = new Date(Date.now() - 48 * 60 * 60 * 1000);
-        const [total, classifiedJobs, cities, companies, recent, latest] = await Promise.all([
+        const [total, explicitLevels, legacyJobs, cities, categories, companies, recentByLevel, recent, latest] = await Promise.all([
             Job.countDocuments(active),
-            Job.find(active)
+            Job.aggregate([
+                { $match: { ...active, level: { $exists: true, $nin: [null, ""] } } },
+                { $group: { _id: "$level", count: { $sum: 1 } } },
+            ]),
+            Job.find({
+                ...active,
+                $or: [{ level: { $exists: false } }, { level: null }, { level: "" }],
+            })
                 .select("level title jobType employment_type seniority experience experience_years_min experience_years_max createdAt")
                 .lean(),
-            Job.aggregate([{ $match: active }, { $group: { _id: "$city", count: { $sum: 1 } } }, { $sort: { count: -1 } }, { $limit: 12 }]),
+            Job.aggregate([{ $match: active }, { $group: { _id: "$city", count: { $sum: 1 } } }, { $sort: { count: -1 } }]),
+            Job.aggregate([{ $match: active }, { $group: { _id: "$category", count: { $sum: 1 } } }, { $sort: { count: -1 } }]),
             Job.distinct("company", active),
+            Job.aggregate([
+                { $match: { ...active, createdAt: { $gte: recentCutoff }, level: { $exists: true, $nin: [null, ""] } } },
+                { $group: { _id: "$level", count: { $sum: 1 } } },
+            ]),
             Job.countDocuments({ ...active, createdAt: { $gte: recentCutoff } }),
             Job.findOne(active).sort({ updatedAt: -1 }).select("updatedAt").lean(),
         ]);
-        const byLevel = {};
-        const addedLast48HoursByLevel = {};
-        for (const job of classifiedJobs) {
+        const byLevel = Object.fromEntries(explicitLevels.map(({ _id, count }) => [_id, count]));
+        const addedLast48HoursByLevel = Object.fromEntries(recentByLevel.map(({ _id, count }) => [_id, count]));
+        for (const job of legacyJobs) {
             const jobLevel = job.level || deriveJobLevel(job);
             if (!jobLevel) continue;
             byLevel[jobLevel] = (byLevel[jobLevel] || 0) + 1;
@@ -253,15 +529,18 @@ export const getJobStats = async (_req, res) => {
                 addedLast48HoursByLevel[jobLevel] = (addedLast48HoursByLevel[jobLevel] || 0) + 1;
             }
         }
-        return res.status(200).json({
+        jobStatsCache = {
             total,
             byLevel,
             addedLast48HoursByLevel,
             byCity: cities.map(({ _id, count }) => ({ city: _id || "Other", count })),
+            byCategory: categories.map(({ _id, count }) => ({ category: _id || "Other", count })),
             distinctCompanies: companies.length,
             addedLast48Hours: recent,
             lastUpdated: latest?.updatedAt || null,
-        });
+        };
+        jobStatsCacheAt = Date.now();
+        return res.status(200).json(jobStatsCache);
     } catch (error) {
         console.error("Error fetching job statistics:", error.message);
         return res.status(500).json({ error: "Error fetching job statistics" });

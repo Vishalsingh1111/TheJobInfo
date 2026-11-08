@@ -200,7 +200,7 @@ export function validateImportedJob(job, now = Date.now()) {
         ? value.length
         : String(value || "").split(/\n+/).map((part) => part.trim()).filter(Boolean).length;
     if (job.contentProvider !== "basic") {
-        if (words(job.summary) < 110 || words(job.summary) > 180) return "AI summary must be 110-180 words";
+        if (words(job.summary) < 55 || words(job.summary) > 80) return "AI summary must be 55-80 words";
         if (job.aiStatus !== "ok") return "AI generation did not succeed";
         if (!String(job.aiModelUsed || "").trim()) return "AI model is missing";
         if (String(job.aiError || "").trim()) return "AI generation recorded an error";

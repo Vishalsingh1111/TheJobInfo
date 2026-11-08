@@ -1,57 +1,39 @@
-export const SYSTEM_INSTRUCTION = `You are a careful career-content editor for TheJobInfo, an independent job information website in India. Your readers are freshers and professionals deciding whether to apply.
+export const SYSTEM_INSTRUCTION = `Create accurate, original job-listing content for TheJobInfo from the supplied data.
+Use only stated facts for job details; never invent eligibility, salary, benefits, dates, technologies, openings, or hiring rounds. Rewrite rather than copy source sentences. Include every supplied skill tag and every additional skill explicitly named in the source; do not infer tools or requirements. Leave unknown facts empty. Keep employer facts separate from clearly labelled general preparation guidance. Use concise, neutral Indian English. Do not promise outcomes or imply affiliation with the employer. Return only valid JSON matching the schema.`;
 
-You receive structured data about ONE job listing scraped from a company career page. Write helpful, original, plain-English content for that listing.
-
-STRICT RULES
-1. Use ONLY facts present in the provided data. Never invent salary, dates, batch year, degree, number of openings, selection rounds, benefits, tech stack or company claims.
-2. If a fact is missing, leave that field empty (empty array or null). Never write "not available", "not disclosed", "not specified" or similar filler.
-3. Do not copy sentences from the source description. Rewrite in your own words. Remove internal codes such as requisition or job IDs, recruiter names, and marketing slogans.
-4. Separate FACTS from GUIDANCE. Content about this job must come from the data. General preparation advice is allowed, but it must be clearly general (for example: "For backend roles like this, candidates usually revise..."), never presented as the employer's actual process, and never claim insider knowledge, interviews with staff, or guaranteed outcomes.
-5. Never promise a job, never ask the reader to pay anyone, and never imply that TheJobInfo is the employer or a recruiter.
-6. Neutral, professional tone. No hype, no emojis, no clickbait, no all-caps. Indian English spelling is fine. Short sentences.
-7. Output valid JSON only, exactly matching the schema. No markdown, no extra keys.
-`;
-
-export const USER_TEMPLATE = `JOB DATA
-Company: {{company}}
-Title: {{title}}
-Location: {{location}}
-Work mode: {{workMode}}
-Job level: {{level}}  (fresher, experienced or internship)
-Experience stated: {{experience}}
-Salary stated: {{salary}}
-Skills tags: {{skills}}
-Posted: {{postedAt}}
-Source description (may be long, noisy or partly marketing):
+export const USER_TEMPLATE = `JOB FACTS
+Company: {{company}} | Role: {{title}} | Location: {{location}} | Work mode: {{workMode}}
+Level: {{level}} | Experience: {{experience}} | Salary: {{salary}} | Posted: {{postedAt}}
+Explicit skills from job data (include every one): {{skills}}
+Full source description (use all relevant requirements; do not ignore later sections):
 """
 {{description}}
 """
 
-Return JSON with these keys:
+Return exactly these JSON keys. Keep every item specific to this role:
 {
-  "seoTitle": "max 60 characters, role + company + location",
-  "metaDescription": "max 155 characters, plain and factual",
-  "summary": "110-180 words. What the role is, the team or company context (only if stated), who it suits, and the practical details explicitly present in the listing. Do not copy the opening 200 characters of the source.",
-  "whatYouWillDo": ["4-8 short bullets rewritten from the description when it contains enough detail; otherwise an empty array."],
-  "skillsRequired": ["only skills explicitly present in the data; use an empty array when none are stated"],
-  "eligibility": { "education": "", "experience": "", "batch": "", "other": "" },
-  "selectionProcess": ["only if the data states rounds, otherwise empty array"],
-  "whoShouldApply": "2-3 sentences describing the kind of candidate this fits, derived from the role and requirements.",
-  "specialNote": "1-2 sentences of genuinely useful context from the data (for example hybrid policy, team focus, level of seniority). Empty string if there is nothing real to say.",
+  "seoTitle": "role, company and location; max 60 characters",
+  "metaDescription": "factual; max 155 characters",
+  "summary": "55-80 words: role, stated context, requirements and practical details",
+  "whatYouWillDo": ["3-6 concise duties rewritten from the source; [] only when no duties are stated"],
+  "skillsRequired": ["all explicit skill tags plus all additional skills explicitly required in the source; deduplicated"],
+  "eligibility": {"education":"","experience":"","batch":"","other":""},
+  "selectionProcess": ["stated hiring steps only; [] if absent"],
+  "whoShouldApply": "1-2 concise sentences derived from stated role requirements",
+  "benefits": ["stated benefits only; [] if absent"],
+  "applySteps": ["brief generic steps for using the supplied application link"],
   "prepGuide": {
-    "overview": "2-3 sentences on how to prepare for a role like this. Label as general guidance.",
-    "topicsToRevise": ["6-10 topics relevant to the skills and level"],
-    "commonQuestions": ["5-8 question types candidates commonly face for this kind of role, phrased as topics or sample questions"],
-    "projectIdeas": ["2-3 ideas, only for fresher or internship level, otherwise empty array"],
-    "commonMistakes": ["3-5 mistakes candidates commonly make for this kind of role"]
+    "overview": "briefly label as general preparation guidance",
+    "topicsToRevise": ["role-relevant topics; use explicit skills first"],
+    "commonQuestions": ["role-relevant practice question topics"],
+    "expectedRounds": ["source-confirmed rounds only; [] if absent"],
+    "projectIdeas": ["for fresher/internship only; otherwise []"],
+    "commonMistakes": ["role-relevant general advice"],
+    "plan30Days": ["short, practical general preparation steps"]
   },
-  "faqs": [
-    { "question": "Question text", "answer": "15-70 word answer grounded in the source facts. Do not pad an answer with missing-information disclaimers." }
-  ]
+  "faqs": [{"question":"...","answer":"15-70 words, answered only by source facts"}]
 }
-
-Return 4-6 FAQs, using only facts that can be answered from the data (role, company, location, work mode, stated experience, salary, skills, or application route). Never invent details or pad answers with filler.
-`;
+Return 4-6 distinct FAQs based only on facts provided. Do not add a special note or any extra keys. Do not pad with missing-information disclaimers.`;
 
 export function buildAiUserPrompt(facts = {}, validationError = "") {
   const content = { ...facts };
@@ -104,17 +86,20 @@ export const JOB_CONTENT_SCHEMA = {
     },
     selectionProcess: { type: "ARRAY", items: { type: "STRING" } },
     whoShouldApply: { type: "STRING" },
-    specialNote: { type: "STRING" },
+    benefits: { type: "ARRAY", items: { type: "STRING" } },
+    applySteps: { type: "ARRAY", items: { type: "STRING" } },
     prepGuide: {
       type: "OBJECT",
       properties: {
         overview: { type: "STRING" },
         topicsToRevise: { type: "ARRAY", items: { type: "STRING" } },
         commonQuestions: { type: "ARRAY", items: { type: "STRING" } },
+        expectedRounds: { type: "ARRAY", items: { type: "STRING" } },
         projectIdeas: { type: "ARRAY", items: { type: "STRING" } },
-        commonMistakes: { type: "ARRAY", items: { type: "STRING" } }
+        commonMistakes: { type: "ARRAY", items: { type: "STRING" } },
+        plan30Days: { type: "ARRAY", items: { type: "STRING" } }
       },
-      required: ["overview", "topicsToRevise", "commonQuestions", "projectIdeas", "commonMistakes"]
+      required: ["overview", "topicsToRevise", "commonQuestions", "expectedRounds", "projectIdeas", "commonMistakes", "plan30Days"]
     },
     faqs: {
       type: "ARRAY",
@@ -137,7 +122,8 @@ export const JOB_CONTENT_SCHEMA = {
     "eligibility",
     "selectionProcess",
     "whoShouldApply",
-    "specialNote",
+    "benefits",
+    "applySteps",
     "prepGuide",
     "faqs"
   ]

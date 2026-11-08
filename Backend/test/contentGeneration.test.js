@@ -8,6 +8,7 @@ import {
     generateJobContent,
     normalizeContent,
 } from "../Controller/Geminijob.service.js";
+import { buildAiUserPrompt } from "../aiPrompt.js";
 import Job from "../Modal/Job.modal.js";
 import { createCandidateSearchPlans, selectPreferredJobLevel, validateImportedJob } from "../Utils/jobMetadata.js";
 import { buildMessage, shouldPostToTelegram } from "../Controller/Telegram.service.js";
@@ -16,7 +17,7 @@ import { mapJob } from "../Controller/Freehiresync.service.js";
 const generatedContent = {
     seoTitle: "Software Engineer at Example in Bengaluru",
     metaDescription: "Software engineering role at Example, with work in application development and testing.",
-    summary: "This software engineering role focuses on developing and maintaining application features for the team described in the listing. The work includes translating product needs into reliable code, collaborating with colleagues, and improving existing systems. It may suit candidates whose experience matches the stated requirements and who can demonstrate the listed skills through practical examples. The source also describes responsibilities related to code quality, testing, and troubleshooting, giving applicants useful context about the day-to-day work. Candidates can compare the stated location, work arrangement, experience expectations, and required technologies with their own circumstances before deciding whether to apply. The listing names the employer and provides an application route, while details not included in the source should be confirmed directly through that route. Preparation suggestions below are general guidance and do not describe confirmed employer interview stages.",
+    summary: "This software engineering role involves building and maintaining application features, reviewing code, testing changes, and resolving defects with a team. The listing names Example and identifies Bengaluru with a hybrid work arrangement. JavaScript and React are listed skills, and the role requests two years of experience. It may suit candidates whose experience and skills match these stated requirements. Applicants can use the provided application link to review the role and submit their details.",
     whatYouWillDo: [
         "Develop application features based on the stated product requirements.",
         "Review existing code and contribute improvements to maintainability.",
@@ -84,7 +85,9 @@ test("popular-only mode falls back to non-popular companies before changing leve
 
 test("Telegram posts popular freshers, remote freshers, internships, or explicitly forced jobs", () => {
     assert.equal(shouldPostToTelegram({ company: "Google", level: "fresher" }), true);
+    assert.equal(shouldPostToTelegram({ company: "Google", level: "internship" }), true);
     assert.equal(shouldPostToTelegram({ company: "Google", level: "experienced" }), false);
+    assert.equal(shouldPostToTelegram({ company: "Unknown Startup", level: "internship" }), true);
     assert.equal(shouldPostToTelegram({ company: "Unknown Startup", level: "fresher" }), false);
     assert.equal(shouldPostToTelegram({ company: "Unknown Startup", level: "fresher", workMode: "Remote" }), true);
     assert.equal(shouldPostToTelegram({ company: "Unknown Startup", level: "fresher", location: "Work from home" }), true);
@@ -127,7 +130,7 @@ test("the prompt's generated fields map into persisted job fields", () => {
     assert.match(normalized.requiredSkills, /JavaScript/);
     assert.match(normalized.eligibility, /education: A bachelor's degree/);
     assert.match(normalized.applyIf, /This role may suit candidates/);
-    assert.equal(normalized.specialNote, generatedContent.specialNote);
+    assert.equal(normalized.specialNote, "");
     assert.equal(normalized.prepGuide.commonQuestions.length, 2);
     assert.equal(normalized.faqs.length, 4);
     assert.equal(normalized.applySteps.split("\n\n").length, 4);
@@ -155,7 +158,7 @@ test("the prompt's generated fields map into persisted job fields", () => {
     assert.match(savedShape.requiredSkills, /JavaScript/);
     assert.equal(savedShape.faqs.length, 4);
     assert.equal(savedShape.prepGuide.commonQuestions.length, 2);
-    assert.equal(savedShape.specialNote, generatedContent.specialNote);
+    assert.equal(savedShape.specialNote, "");
     assert.equal(savedShape.salary, "");
     assert.equal(savedShape.aiStatus, "ok");
     assert.equal(savedShape.aiModelUsed, "gemini-test");
@@ -168,7 +171,7 @@ test("the prompt's generated fields map into persisted job fields", () => {
         jobType: "Experienced",
         experience: "2 years",
         category: "Software Engineering",
-    }), /summary \(110-180 words\)/);
+    }), /summary \(55-80 words\)/);
     assert.throws(() => normalizeContent({ ...generatedContent, faqs: [] }, {
         company: "Example",
         role: "Software Engineer",
@@ -260,7 +263,7 @@ test("Gemini structured request includes system instructions and maps returned c
 
         assert.equal(content.aiStatus, "ok");
         assert.equal(content.contentProvider, "gemini");
-        assert.match(request.config.systemInstruction, /Use ONLY facts/);
+        assert.match(request.config.systemInstruction, /Use only stated facts/);
         assert.equal(request.config.responseMimeType, "application/json");
         assert.ok(request.config.responseSchema.properties.prepGuide);
         assert.equal(request.config.temperature, 0.3);
@@ -316,12 +319,12 @@ test("Groq is called only after Gemini failure and returns the same mapped conte
 
         assert.equal(content.aiStatus, "ok");
         assert.equal(content.contentProvider, "groq");
-        assert.equal(content.aiAttempts, 4);
-        assert.equal(geminiAttempts, 3);
+        assert.equal(content.aiAttempts, 2);
+        assert.equal(geminiAttempts, 1);
         assert.equal(content.responsibilities.split("\n\n").length, 4);
         assert.equal(groqRequest.response_format.type, "json_object");
         assert.equal(groqRequest.temperature, 0.3);
-        assert.equal(groqRequest.messages[1].content.includes("Source description"), true);
+        assert.equal(groqRequest.messages[1].content.includes("Full source description"), true);
     } finally {
         _setClientForTests(null);
         _setGroqClientForTests(null);
@@ -331,4 +334,34 @@ test("Groq is called only after Gemini failure and returns the same mapped conte
         if (previousGroqKey === undefined) delete process.env.GROQ_API_KEY;
         else process.env.GROQ_API_KEY = previousGroqKey;
     }
+});
+
+test("compact prompt preserves all source facts and generated sections without a special note", () => {
+    const prompt = buildAiUserPrompt({
+        title: "Software Engineer",
+        company: "Example",
+        skills: ["JavaScript", "React"],
+        description_text: "Requirements: JavaScript, React, and accessible UI testing.",
+    });
+    assert.match(prompt, /include every one/i);
+    assert.match(prompt, /JavaScript, React/);
+    assert.match(prompt, /accessible UI testing/);
+    assert.match(prompt, /"benefits"/);
+    assert.match(prompt, /"expectedRounds"/);
+    assert.match(prompt, /"plan30Days"/);
+    assert.doesNotMatch(prompt, /"specialNote"/);
+});
+
+test("explicit skills from job data are retained even if the model omits them", () => {
+    const normalized = normalizeContent(generatedContent, {
+        company: "Example",
+        role: "Software Engineer",
+        jobType: "Experienced",
+        experience: "2 years",
+        category: "Software Engineering",
+        skills: ["Node.js", "TypeScript"],
+    });
+    assert.match(normalized.requiredSkills, /Node\.js/);
+    assert.match(normalized.requiredSkills, /TypeScript/);
+    assert.equal(normalized.specialNote, "");
 });

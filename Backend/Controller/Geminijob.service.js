@@ -8,9 +8,9 @@ const MODEL = () => process.env.GEMINI_MODEL || "gemini-2.5-flash";
 export const JOB_TYPES = ["Freshers/ Experienced", "Freshers", "Experienced", "Internship", "Part-Time"];
 export const CATEGORIES = ["Software Engineering", "IT", "Analyst"];
 
-const MAX_DESCRIPTION_CHARS = 12000;
 const MAX_ATTEMPTS = 3;
 const GROQ_MODEL = () => process.env.GROQ_MODEL || "llama-3.3-70b-versatile";
+const AI_FAILURE_PAUSE_MS = 60 * 60 * 1000;
 
 // The client is created on first use (not at import time) so dotenv has already loaded your .env.
 let client = null;
@@ -37,7 +37,7 @@ export function _resetForTests() { geminiBlockedUntil = 0; groqBlockedUntil = 0;
 let geminiBlockedUntil = 0;
 let groqBlockedUntil = 0;
 function parseRetryMs(msg) {
-    const m = String(msg).match(/retry (?:in|after)\s*(?:(\d+)h)?\s*(?:(\d+)m)?\s*(?:(\d+(?:\.\d+)?)s)?/i);
+    const m = String(msg).match(/(?:retry|try again) (?:in|after)\s*(?:(\d+)h)?\s*(?:(\d+)m)?\s*(?:(\d+(?:\.\d+)?)s)?/i);
     if (!m || (!m[1] && !m[2] && !m[3])) return null;
     return ((+m[1] || 0) * 3600 + (+m[2] || 0) * 60 + (+m[3] || 0)) * 1000;
 }
@@ -46,9 +46,9 @@ const isRateLimit = (err) =>
 const isInvalidModelOutput = (err) =>
     err instanceof SyntaxError || /The AI (?:returned|response)|AI response is missing/i.test(String(err?.message));
 function shouldRetry(err, attempt) {
-    if (isInvalidModelOutput(err)) return attempt < 2;
+    if (isRateLimit(err)) return false;
     const status = err?.status ?? err?.code;
-    return attempt < MAX_ATTEMPTS && (isRateLimit(err) || !status || Number(status) >= 500);
+    return attempt < MAX_ATTEMPTS && (isInvalidModelOutput(err) || !status || Number(status) >= 500);
 }
 const blockFor = (err) =>
     Date.now() + Math.min(Math.max(parseRetryMs(err?.message) ?? (/per day|daily/i.test(String(err?.message)) ? 3600e3 : 60e3), 30e3), 24 * 3600e3);
@@ -58,8 +58,7 @@ const escapeRegex = (s) => String(s).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
 // ── Build the facts we send (only job data, no secrets) ──────────────────────
 function buildPrompt(facts, validationError = "") {
-    const desc = String(facts.description_text || "").slice(0, MAX_DESCRIPTION_CHARS);
-    return buildAiUserPrompt({ ...facts, description_text: desc }, validationError);
+    return buildAiUserPrompt(facts, validationError);
 }
 
 // ── Response cleaning helpers ────────────────────────────────────────────────
@@ -211,6 +210,17 @@ export function normalizeContent(raw, fb) {
     const rawSkills = raw.skillsRequired ?? raw.requiredSkills;
     const rawEligibility = raw.eligibility;
     const sourceDescription = String(fb.description || fb.description_text || "");
+    const skillItems = [
+        ...toArray(fb.skills),
+        ...toList(rawSkills).split(/\n+/).map((skill) => skill.trim()).filter(Boolean),
+    ];
+    const seenSkills = new Set();
+    const requiredSkills = skillItems.filter((skill) => {
+        const key = normalizeForSimilarity(skill);
+        if (!key || seenSkills.has(key)) return false;
+        seenSkills.add(key);
+        return true;
+    });
     const out = {
         seoTitle: cleanLine(raw.seoTitle || "").slice(0, 60),
         metaDescription: cleanLine(raw.metaDescription || "").slice(0, 155),
@@ -222,13 +232,13 @@ export function normalizeContent(raw, fb) {
         lastDate: !lastDate || MISSING_INFO.test(lastDate) ? "" : lastDate,
         summary: toParagraphs(raw.summary),
         prepGuide: toPrepGuide(raw.prepGuide),
-        specialNote: toParagraphs(raw.specialNote),
+        specialNote: "",
         salaryNote: toParagraphs(raw.salaryNote),
         aboutCompany: toParagraphs(raw.aboutCompany),
         description: toParagraphs(raw.description),
         responsibilities: toList(rawResponsibilities),
         eligibility: toEligibility(rawEligibility),
-        requiredSkills: toList(rawSkills),
+        requiredSkills: requiredSkills.join("\n\n"),
         applyIf: toList(raw.whoShouldApply ?? raw.applyIf),
         selectionProcess: toList(raw.selectionProcess),
         benefits: toList(raw.benefits),
@@ -249,8 +259,8 @@ export function normalizeContent(raw, fb) {
     const listItems = (value) => String(value || "").split(/\n+/).map((part) => part.trim()).filter(Boolean);
     const uniqueItems = (items) => new Set(items.map((item) => item.toLowerCase())).size === items.length;
     const hasPlaceholder = (value) => /\b(?:not available|not specified|not disclosed|to be updated|lorem(?: ipsum)?|n\/a)\b/i.test(String(value || ""));
-    if (wordCount(out.summary) < 110 || wordCount(out.summary) > 180) {
-        missing.push("summary (110-180 words)");
+    if (wordCount(out.summary) < 55 || wordCount(out.summary) > 80) {
+        missing.push("summary (55-80 words)");
     }
     if (summaryCopiesSource(out.summary, sourceDescription)) {
         missing.push("summary must not copy the opening of the source description");
@@ -430,8 +440,10 @@ export async function generateJobContent(facts, fallbacks) {
     let lastModelUsed = "";
     if (!process.env.GEMINI_API_KEY) {
         lastErr = new Error("GEMINI_API_KEY is missing");
+        console.warn("[ai] Gemini unavailable: GEMINI_API_KEY is missing");
     } else if (Date.now() < geminiBlockedUntil) {
         lastErr = new Error("Gemini is rate-limited");
+        console.warn(`[ai] Gemini is cooling down until ${new Date(geminiBlockedUntil).toISOString()}`);
     } else {
         for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
             try {
@@ -482,14 +494,26 @@ export async function generateJobContent(facts, fallbacks) {
                 await sleep(1000 * (2 ** (attempt - 1)));
             }
         }
+    } else if (!process.env.GROQ_API_KEY) {
+        console.warn("[ai] Groq fallback unavailable: GROQ_API_KEY is missing");
+    } else {
+        console.warn(`[ai] Groq fallback is cooling down until ${new Date(groqBlockedUntil).toISOString()}`);
     }
 
-    console.warn(`[ai] Gemini core generation failed; posting source-based details: ${lastErr.message}`);
+    console.warn(`[ai] all configured providers failed; source-only fallback will not be published: ${lastErr.message}`);
     const fallback = buildBasicContent(facts, fb);
     fallback.aiStatus = "failed";
     fallback.aiModelUsed = lastModelUsed;
     fallback.aiAttempts = totalAttempts;
     fallback.aiError = lastErr.message;
     fallback.aiGeneratedAt = new Date();
+    const defaultRetryAt = Date.now() + AI_FAILURE_PAUSE_MS;
+    const providerRetryTimes = [
+        process.env.GEMINI_API_KEY ? Math.max(defaultRetryAt, geminiBlockedUntil) : null,
+        process.env.GROQ_API_KEY ? Math.max(defaultRetryAt, groqBlockedUntil) : null,
+    ].filter(Number.isFinite);
+    fallback.aiRetryAfter = new Date(
+        providerRetryTimes.length ? Math.min(...providerRetryTimes) : defaultRetryAt
+    );
     return fallback;
 }

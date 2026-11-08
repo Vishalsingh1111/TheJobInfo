@@ -86,15 +86,31 @@ export function resolveJobType(e = {}) {
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const escapeRegex = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 let running = false;
+let aiPausedUntil = 0;
+let freehirePausedUntil = 0;
 
-// ── HTTP with small retry on 429 / 5xx ───────────────────────────────────────
+function getRetryAfterMs(value) {
+    const seconds = Number(value);
+    if (Number.isFinite(seconds) && seconds >= 0) return seconds * 1000;
+    const retryAt = Date.parse(value || "");
+    return Number.isFinite(retryAt) ? Math.max(0, retryAt - Date.now()) : null;
+}
+
+// ── Retry transient errors, but do not hold a scheduled run for a long 429 ──
 async function fetchPage(qs, attempt = 1) {
+    if (Date.now() < freehirePausedUntil) {
+        throw new Error(`Freehire API is rate-limited until ${new Date(freehirePausedUntil).toISOString()}`);
+    }
     const res = await fetch(`${BASE_URL}?${qs}`, {
         headers: { Accept: "application/json", "User-Agent": CONFIG.userAgent },
     });
-    if ((res.status === 429 || res.status >= 500) && attempt <= 3) {
-        const retryAfter = Number(res.headers.get("retry-after")) || 2 * attempt;
-        await sleep(retryAfter * 1000);
+    if (res.status === 429) {
+        const retryAfter = getRetryAfterMs(res.headers.get("retry-after")) ?? 60_000;
+        freehirePausedUntil = Date.now() + retryAfter;
+        throw new Error(`Freehire API rate-limited; pausing until ${new Date(freehirePausedUntil).toISOString()}`);
+    }
+    if (res.status >= 500 && attempt < 3) {
+        await sleep(1000 * (2 ** (attempt - 1)));
         return fetchPage(qs, attempt + 1);
     }
     if (!res.ok) throw new Error(`freehire responded ${res.status}`);
@@ -641,6 +657,11 @@ async function findCandidates({ seniority, popular, targetLevel }, need, seen) {
 }
 
 export async function syncFreehireJobs() {
+    const pausedUntil = Math.max(aiPausedUntil, freehirePausedUntil);
+    if (Date.now() < pausedUntil) {
+        console.log(`[freehire] sync paused until ${new Date(pausedUntil).toISOString()}`);
+        return { paused: true, pausedUntil: new Date(pausedUntil) };
+    }
     if (running) {
         console.log("[freehire] sync already running, skipping");
         return { skipped: true };
@@ -665,9 +686,11 @@ export async function syncFreehireJobs() {
         const seen = new Set();
         let scanned = 0;
         let aiSkipped = 0;
+        let pauseForAiFailure = false;
         const funnel = { fetched: 0, freshness: 0, popular: 0, duplicate: 0, quota: 0, aiSuccess: 0, published: 0, telegramSent: 0 };
         const rejections = new Map();
         for (const plan of plans) {
+            if (pauseForAiFailure) break;
             if (ready.length >= CONFIG.jobsPerRun) break;
             const r = await findCandidates(plan, CONFIG.jobsPerRun - ready.length + EXTRA_CANDIDATES, seen);
             scanned += r.scanned;
@@ -678,8 +701,13 @@ export async function syncFreehireJobs() {
                     if (plan.mixFallback) console.log(`[freehire] mix fallback: using ${plan.popular ? "popular" : "any-company"} ${plan.targetLevel} candidate`);
                     const content = await enrich(j);
                     if (content?.contentProvider === "basic") {
-                        rejections.set(j.public_slug, "AI fallback used raw source content");
-                        throw new Error("AI fallback used raw source content");
+                        const requestedPause = Date.parse(content.aiRetryAfter);
+                        aiPausedUntil = Number.isFinite(requestedPause) && requestedPause > Date.now()
+                            ? requestedPause
+                            : Date.now() + 60 * 60 * 1000;
+                        pauseForAiFailure = true;
+                        rejections.set(j.public_slug, content.aiError || "AI providers did not produce valid content");
+                        throw new Error(content.aiError || "AI providers did not produce valid content");
                     }
                     ready.push({ j, plan: plan.label, content });
                     funnel.aiSuccess += 1;
@@ -689,6 +717,10 @@ export async function syncFreehireJobs() {
                     rejections.set(j.public_slug, err.message || "AI generation failed");
                     failedAt.set(j.public_slug, Date.now());
                     console.error(`[freehire] skipped "${j.public_slug}": ${err.message}`);
+                    if (pauseForAiFailure) {
+                        console.warn(`[freehire] pausing further job generation until ${new Date(aiPausedUntil).toISOString()}`);
+                        break;
+                    }
                 }
             }
         }
@@ -757,7 +789,13 @@ export async function syncFreehireJobs() {
 
         const expired = await cleanup();
         console.log(`[freehire] checked ${scanned} job(s), added ${inserted}, skipped ${aiSkipped} (AI), removed ${expired} expired`);
-        return { scanned, inserted, aiSkipped, expired };
+        return {
+            scanned,
+            inserted,
+            aiSkipped,
+            expired,
+            ...(pauseForAiFailure ? { pausedUntil: new Date(aiPausedUntil) } : {}),
+        };
     } catch (err) {
         console.error("[freehire] sync failed:", err.message);
         return { error: err.message };

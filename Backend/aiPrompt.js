@@ -14,7 +14,7 @@ Return exactly these JSON keys. Keep every item specific to this role:
 {
   "seoTitle": "role, company and location; max 60 characters",
   "metaDescription": "factual; max 155 characters",
-  "summary": "55-80 words: role, stated context, requirements and practical details",
+  "summary": "25-120 words: role, stated context, requirements and practical details",
   "whatYouWillDo": ["3-6 concise duties rewritten from the source; [] only when no duties are stated"],
   "skillsRequired": ["all explicit skill tags plus all additional skills explicitly required in the source; deduplicated"],
   "eligibility": {"education":"","experience":"","batch":"","other":""},
@@ -24,16 +24,16 @@ Return exactly these JSON keys. Keep every item specific to this role:
   "applySteps": ["brief generic steps for using the supplied application link"],
   "prepGuide": {
     "overview": "briefly label as general preparation guidance",
-    "topicsToRevise": ["role-relevant topics; use explicit skills first"],
+    "topicsToRevise": ["at least 2 role-relevant topics; use explicit skills first"],
     "commonQuestions": ["role-relevant practice question topics"],
     "expectedRounds": ["source-confirmed rounds only; [] if absent"],
     "projectIdeas": ["for fresher/internship only; otherwise []"],
     "commonMistakes": ["role-relevant general advice"],
     "plan30Days": ["short, practical general preparation steps"]
   },
-  "faqs": [{"question":"...","answer":"15-70 words, answered only by source facts"}]
+  "faqs": [{"question":"...","answer":"concise and answered only by source facts"}]
 }
-Return 4-6 distinct FAQs based only on facts provided. Do not add a special note or any extra keys. Do not pad with missing-information disclaimers.`;
+Return up to 6 distinct FAQs based only on facts provided. Do not add a special note or any extra keys. Do not pad with missing-information disclaimers.`;
 
 export function buildAiUserPrompt(facts = {}, validationError = "") {
   const content = { ...facts };

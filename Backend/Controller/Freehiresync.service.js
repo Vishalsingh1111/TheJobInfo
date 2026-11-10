@@ -1,4 +1,5 @@
 import Job from "../Modal/Job.modal.js";
+import PendingJobImport from "../Modal/PendingJobImport.modal.js";
 import sanitizeHtml from "sanitize-html";
 import { generateJobContent } from "./Geminijob.service.js";
 import { isPopularCompany } from "./Popularcompanies.js";
@@ -86,7 +87,6 @@ export function resolveJobType(e = {}) {
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const escapeRegex = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 let running = false;
-let aiPausedUntil = 0;
 let freehirePausedUntil = 0;
 
 function getRetryAfterMs(value) {
@@ -580,6 +580,9 @@ const levelMatchesTarget = (job, targetLevel) => {
 async function findCandidates({ seniority, popular, targetLevel }, need, seen) {
     const items = [];
     let scanned = 0;
+    let freshness = 0;
+    let popularCount = 0;
+    let duplicates = 0;
     const days = popular ? CONFIG.popularPostedWithinDays : CONFIG.postedWithinDays;
     const size = popular ? CONFIG.popularPageSize : CONFIG.pageSize;
     const maxPages = popular ? CONFIG.popularMaxPages : CONFIG.maxPagesPerSearch;
@@ -606,6 +609,8 @@ async function findCandidates({ seniority, popular, targetLevel }, need, seen) {
         scanned += all.length;
         const usable = all.filter((job) => isUsable(job) && levelMatchesTarget(job, targetLevel));
         const rows = popular ? usable.filter((j) => isPopularCompany(j.company, j.company_slug)) : usable;
+        freshness += usable.length;
+        if (popular) popularCount += rows.length;
         const have = new Set(
             (await Job.find({ externalId: { $in: rows.map((j) => j.public_slug) } }).select("externalId").lean())
                 .map((d) => d.externalId)
@@ -623,10 +628,19 @@ async function findCandidates({ seniority, popular, targetLevel }, need, seen) {
                 $or: companyConditions,
             }).select("_id externalId dedupeKey company title city location applyLink").limit(500).lean()
             : [];
+        const queuedIds = new Set(
+            (await PendingJobImport.find({ externalId: { $in: rows.map((job) => job.public_slug) } })
+                .select("externalId").lean()).map((job) => job.externalId)
+        );
 
         for (const j of rows) {
             if (items.length >= need) break;
-            if (seen.has(j.public_slug) || have.has(j.public_slug)) continue;
+            if (seen.has(j.public_slug)) continue;
+            if (have.has(j.public_slug)) {
+                duplicates += 1;
+                continue;
+            }
+            if (queuedIds.has(j.public_slug)) continue;
             const location = formatLocation(j);
             const city = normalizeCity(location);
             const candidate = {
@@ -640,6 +654,7 @@ async function findCandidates({ seniority, popular, targetLevel }, need, seen) {
             };
             const similarJob = recentCompanyJobs.find((job) => areDuplicateJobListings(job, candidate));
             if (similarJob) {
+                duplicates += 1;
                 console.log(`[freehire] duplicate candidate skipped "${j.public_slug}" (matches ${similarJob._id})`);
                 continue;
             }
@@ -653,14 +668,13 @@ async function findCandidates({ seniority, popular, targetLevel }, need, seen) {
         if (all.length < size || (page + 1) * size >= total) break;
         await sleep(CONFIG.delayMs);
     }
-    return { items, scanned };
+    return { items, scanned, freshness, popular: popularCount, duplicates };
 }
 
 export async function syncFreehireJobs() {
-    const pausedUntil = Math.max(aiPausedUntil, freehirePausedUntil);
-    if (Date.now() < pausedUntil) {
-        console.log(`[freehire] sync paused until ${new Date(pausedUntil).toISOString()}`);
-        return { paused: true, pausedUntil: new Date(pausedUntil) };
+    if (Date.now() < freehirePausedUntil) {
+        console.log(`[freehire] sync paused until ${new Date(freehirePausedUntil).toISOString()}`);
+        return { paused: true, pausedUntil: new Date(freehirePausedUntil) };
     }
     if (running) {
         console.log("[freehire] sync already running, skipping");
@@ -680,47 +694,96 @@ export async function syncFreehireJobs() {
 
         console.log(`[freehire] looking for a ${kind} job (target fresher ratio ${Math.round(CONFIG.fresherShare * 100)}%)`);
 
-        // Search group by group. The next group is searched only if the current one gave no usable job.
-        // A job is saved only when generated content passes validation.
+        // Failed enrichment stays in a private retry queue; only validated content enters the public jobs collection.
         const ready = [];        // { j, plan, content }
         const seen = new Set();
         let scanned = 0;
         let aiSkipped = 0;
         let pauseForAiFailure = false;
+        let nextAiRetryAt = null;
         const funnel = { fetched: 0, freshness: 0, popular: 0, duplicate: 0, quota: 0, aiSuccess: 0, published: 0, telegramSent: 0 };
         const rejections = new Map();
+        const recordQuotaFailure = (error) => {
+            if (/\b429\b|quota|rate.?limit|RESOURCE_EXHAUSTED/i.test(String(error?.message))) funnel.quota += 1;
+        };
+        const pendingDue = await PendingJobImport.find({ retryAt: { $lte: new Date() } })
+            .sort({ retryAt: 1, createdAt: 1 })
+            .limit(CONFIG.jobsPerRun + EXTRA_CANDIDATES)
+            .lean();
+
+        const processCandidate = async (j, planLabel, generatedContent = null) => {
+            const pending = await PendingJobImport.findOneAndUpdate(
+                { externalId: j.public_slug },
+                {
+                    $set: { sourceData: j, retryAt: new Date(), lastError: "" },
+                    $inc: { attempts: 1 },
+                },
+                { upsert: true, new: true, setDefaultsOnInsert: true }
+            ).lean();
+            const content = generatedContent || pending.generatedContent || await enrich(j);
+            if (content?.contentProvider === "basic") {
+                const requestedPause = Date.parse(content.aiRetryAfter);
+                const retryAt = Number.isFinite(requestedPause) && requestedPause > Date.now()
+                    ? new Date(requestedPause)
+                    : new Date(Date.now() + 60 * 60 * 1000);
+                nextAiRetryAt = retryAt;
+                await PendingJobImport.updateOne(
+                    { externalId: j.public_slug },
+                    { $set: { retryAt, lastError: content.aiError || "AI providers did not produce valid content" }, $unset: { generatedContent: "" } }
+                );
+                pauseForAiFailure = true;
+                rejections.set(j.public_slug, content.aiError || "AI providers did not produce valid content");
+                throw new Error(content.aiError || "AI providers did not produce valid content");
+            }
+            await PendingJobImport.updateOne(
+                { externalId: j.public_slug },
+                { $set: { generatedContent: content, retryAt: new Date(), lastError: "" } }
+            );
+            ready.push({ j, plan: planLabel, content });
+            funnel.aiSuccess += 1;
+            failedAt.delete(j.public_slug);
+        };
+
+        for (const pending of pendingDue) {
+            if (ready.length >= CONFIG.jobsPerRun) break;
+            const j = pending.sourceData;
+            if (!j?.public_slug) {
+                await PendingJobImport.deleteOne({ _id: pending._id });
+                continue;
+            }
+            seen.add(j.public_slug);
+            try {
+                await processCandidate(j, "pending retry", pending.generatedContent);
+            } catch (err) {
+                aiSkipped += 1;
+                recordQuotaFailure(err);
+                failedAt.set(j.public_slug, Date.now());
+                console.error(`[freehire] pending enrichment failed "${j.public_slug}": ${err.message}`);
+                if (pauseForAiFailure) break;
+            }
+        }
+
         for (const plan of plans) {
             if (pauseForAiFailure) break;
             if (ready.length >= CONFIG.jobsPerRun) break;
             const r = await findCandidates(plan, CONFIG.jobsPerRun - ready.length + EXTRA_CANDIDATES, seen);
             scanned += r.scanned;
             funnel.fetched += r.scanned;
+            funnel.freshness += r.freshness;
+            funnel.popular += r.popular;
+            funnel.duplicate += r.duplicates;
             for (const j of r.items) {
                 if (ready.length >= CONFIG.jobsPerRun) break;
                 try {
                     if (plan.mixFallback) console.log(`[freehire] mix fallback: using ${plan.popular ? "popular" : "any-company"} ${plan.targetLevel} candidate`);
-                    const content = await enrich(j);
-                    if (content?.contentProvider === "basic") {
-                        const requestedPause = Date.parse(content.aiRetryAfter);
-                        aiPausedUntil = Number.isFinite(requestedPause) && requestedPause > Date.now()
-                            ? requestedPause
-                            : Date.now() + 60 * 60 * 1000;
-                        pauseForAiFailure = true;
-                        rejections.set(j.public_slug, content.aiError || "AI providers did not produce valid content");
-                        throw new Error(content.aiError || "AI providers did not produce valid content");
-                    }
-                    ready.push({ j, plan: plan.label, content });
-                    funnel.aiSuccess += 1;
-                    failedAt.delete(j.public_slug);
+                    await processCandidate(j, plan.label);
                 } catch (err) {
                     aiSkipped++;
+                    recordQuotaFailure(err);
                     rejections.set(j.public_slug, err.message || "AI generation failed");
                     failedAt.set(j.public_slug, Date.now());
                     console.error(`[freehire] skipped "${j.public_slug}": ${err.message}`);
-                    if (pauseForAiFailure) {
-                        console.warn(`[freehire] pausing further job generation until ${new Date(aiPausedUntil).toISOString()}`);
-                        break;
-                    }
+                    if (pauseForAiFailure) break;
                 }
             }
         }
@@ -729,9 +792,8 @@ export async function syncFreehireJobs() {
                 console.log(`[freehire-funnel] rejected ${slug}: ${reason}`);
             }
         }
-        console.log(`[freehire-funnel] fetched=${funnel.fetched} freshness=${funnel.freshness} popular=${funnel.popular} duplicate=${funnel.duplicate} quota=${funnel.quota} aiSuccess=${funnel.aiSuccess} published=${funnel.published} telegramSent=${funnel.telegramSent}`);
-
         let inserted = 0;
+        const completedPendingIds = [];
         if (ready.length) {
             // oldest of the batch gets the lower id, so the newest posting ends up with the highest id (top of your list)
             const firstId = await nextJobId();
@@ -747,17 +809,14 @@ export async function syncFreehireJobs() {
                 if (reason) {
                     console.log(`[freehire] skipped "${record.j.public_slug}": ${reason}`);
                     rejections.set(record.j.public_slug, reason);
-                    continue;
-                }
-                if (record.content?.contentProvider === "basic") {
-                    console.log(`[freehire] raw-content fallback rejected "${record.j.public_slug}"`);
-                    rejections.set(record.j.public_slug, "AI fallback used raw source content");
+                    completedPendingIds.push(record.j.public_slug);
                     continue;
                 }
                 const duplicate = await findDuplicate(doc);
                 if (duplicate) {
                     console.log(`[freehire] duplicate skipped "${record.j.public_slug}" (matches ${duplicate._id})`);
                     rejections.set(record.j.public_slug, `duplicate of ${duplicate._id}`);
+                    completedPendingIds.push(record.j.public_slug);
                     continue;
                 }
                 docs.push(doc);
@@ -768,24 +827,33 @@ export async function syncFreehireJobs() {
                 try {
                     const res = await Job.insertMany(docs, { ordered: false });
                     inserted = res.length;
-                    funnel.published = inserted;
-                    res.forEach((job) => {
+                    funnel.published += inserted;
+                    for (const job of res) {
                         if (!shouldPostToTelegram(job)) {
                             console.log(`[telegram] skipped: ${getTelegramSkipReason(job)}`);
-                            return;
+                            continue;
                         }
-                        funnel.telegramSent += 1;
-                        void postJobToTelegram(job).catch((error) =>
-                            console.error("[freehire] Telegram post failed:", error.message)
-                        );
-                    });
+                        try {
+                            const result = await postJobToTelegram(job);
+                            if (result?.sent) funnel.telegramSent += 1;
+                        } catch (error) {
+                            console.error("[freehire] Telegram post failed:", error.message);
+                        }
+                    }
+                    completedPendingIds.push(...res.map((job) => job.externalId));
                     docs.forEach((job) => console.log(`[freehire] saved "${job.title}" at ${job.company}`));
                 } catch (err) {
                     inserted = err.insertedDocs?.length ?? 0;
+                    funnel.published += inserted;
+                    completedPendingIds.push(...(err.insertedDocs || []).map((job) => job.externalId));
                     console.error("[freehire] insert had errors:", err.writeErrors?.length || err.message);
                 }
             }
         }
+        if (completedPendingIds.length) {
+            await PendingJobImport.deleteMany({ externalId: { $in: completedPendingIds } });
+        }
+        console.log(`[freehire-funnel] fetched=${funnel.fetched} freshness=${funnel.freshness} popular=${funnel.popular} duplicate=${funnel.duplicate} quota=${funnel.quota} aiSuccess=${funnel.aiSuccess} published=${funnel.published} telegramSent=${funnel.telegramSent}`);
 
         const expired = await cleanup();
         console.log(`[freehire] checked ${scanned} job(s), added ${inserted}, skipped ${aiSkipped} (AI), removed ${expired} expired`);
@@ -794,7 +862,7 @@ export async function syncFreehireJobs() {
             inserted,
             aiSkipped,
             expired,
-            ...(pauseForAiFailure ? { pausedUntil: new Date(aiPausedUntil) } : {}),
+            ...(pauseForAiFailure && nextAiRetryAt ? { pausedUntil: nextAiRetryAt } : {}),
         };
     } catch (err) {
         console.error("[freehire] sync failed:", err.message);

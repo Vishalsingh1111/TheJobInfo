@@ -200,11 +200,11 @@ export function validateImportedJob(job, now = Date.now()) {
         ? value.length
         : String(value || "").split(/\n+/).map((part) => part.trim()).filter(Boolean).length;
     if (job.contentProvider !== "basic") {
-        if (words(job.summary) < 55 || words(job.summary) > 80) return "AI summary must be 55-80 words";
+        if (words(job.summary) < 25 || words(job.summary) > 120) return "AI summary must be 25-120 words";
         if (job.aiStatus !== "ok") return "AI generation did not succeed";
         if (!String(job.aiModelUsed || "").trim()) return "AI model is missing";
         if (String(job.aiError || "").trim()) return "AI generation recorded an error";
-        if (!job.prepGuide || !String(job.prepGuide.overview || "").trim() || countItems(job.prepGuide.topicsToRevise) < 4) {
+        if (!job.prepGuide || !String(job.prepGuide.overview || "").trim() || countItems(job.prepGuide.topicsToRevise) < 2) {
             return "AI preparation guide is incomplete";
         }
         if (countItems(job.responsibilities) > 0 && countItems(job.responsibilities) < 3) {
@@ -213,9 +213,9 @@ export function validateImportedJob(job, now = Date.now()) {
     }
     if (/lorem ipsum|insert (?:text|description)|placeholder/i.test(job.description || "")) return "placeholder description";
     if (job.contentProvider !== "basic") {
-        if (!Array.isArray(job.faqs) || job.faqs.length < 4 || job.faqs.length > 6) return "FAQ list must contain 4-6 items";
-        if (job.faqs.some((faq) => !String(faq.question || "").trim() || words(faq.answer) < 15 || words(faq.answer) > 70)) {
-            return "FAQ answer must contain 15-70 words";
+        if (!Array.isArray(job.faqs) || job.faqs.length > 6) return "FAQ list must contain no more than 6 items";
+        if (job.faqs.some((faq) => !String(faq.question || "").trim() || !String(faq.answer || "").trim() || words(faq.answer) > 100)) {
+            return "FAQ questions and answers must be non-empty and concise";
         }
     }
     if (job.postedAt) {

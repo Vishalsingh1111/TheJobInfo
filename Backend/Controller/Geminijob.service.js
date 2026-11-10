@@ -8,19 +8,23 @@ const MODEL = () => process.env.GEMINI_MODEL || "gemini-2.5-flash";
 export const JOB_TYPES = ["Freshers/ Experienced", "Freshers", "Experienced", "Internship", "Part-Time"];
 export const CATEGORIES = ["Software Engineering", "IT", "Analyst"];
 
-const MAX_ATTEMPTS = 3;
+const MAX_TRANSIENT_ATTEMPTS = 2;
+const MAX_OUTPUT_REPAIRS = 1;
 const GROQ_MODEL = () => process.env.GROQ_MODEL || "llama-3.3-70b-versatile";
 const AI_FAILURE_PAUSE_MS = 60 * 60 * 1000;
 
-// The client is created on first use (not at import time) so dotenv has already loaded your .env.
-let client = null;
-function getClient() {
-    if (client) return client;
-    if (!process.env.GEMINI_API_KEY) throw new Error("GEMINI_API_KEY is missing in .env");
-    client = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-    return client;
+// Clients are created on first use so dotenv has already loaded the environment.
+const clients = new Map();
+let testClient = null;
+let testClientFactory = null;
+function getClient(apiKey) {
+    if (testClientFactory) return testClientFactory(apiKey);
+    if (testClient) return testClient;
+    if (!clients.has(apiKey)) clients.set(apiKey, new GoogleGenAI({ apiKey }));
+    return clients.get(apiKey);
 }
-export function _setClientForTests(fake) { client = fake; } // used only by tests
+export function _setClientForTests(fake) { testClient = fake; }
+export function _setGeminiClientFactoryForTests(factory) { testClientFactory = factory; }
 let groqClient = null;
 async function getGroqClient() {
     if (groqClient) return groqClient;
@@ -31,11 +35,22 @@ async function getGroqClient() {
 }
 export function _setGroqClientForTests(fake) { groqClient = fake; }
 export const _setGrokClientForTests = _setGroqClientForTests;
-export function _resetForTests() { geminiBlockedUntil = 0; groqBlockedUntil = 0; }
+export function _resetForTests() {
+    geminiBlockedUntil.clear();
+    groqBlockedUntil = 0;
+    clients.clear();
+}
 
-// When a provider says "limit reached", we stop calling it for a while and use the other one straight away.
-let geminiBlockedUntil = 0;
+// A quota cooldown belongs to a key, not to the whole Gemini provider.
+const geminiBlockedUntil = new Map();
 let groqBlockedUntil = 0;
+function getGeminiApiKeys() {
+    return [...new Set([
+        ...(process.env.GEMINI_API_KEYS || "").split(","),
+        process.env.GEMINI_API_KEY || "",
+        process.env.GEMINI_BACKUP_API_KEY || "",
+    ].map((key) => key.trim()).filter(Boolean))];
+}
 function parseRetryMs(msg) {
     const m = String(msg).match(/(?:retry|try again) (?:in|after)\s*(?:(\d+)h)?\s*(?:(\d+)m)?\s*(?:(\d+(?:\.\d+)?)s)?/i);
     if (!m || (!m[1] && !m[2] && !m[3])) return null;
@@ -44,11 +59,13 @@ function parseRetryMs(msg) {
 const isRateLimit = (err) =>
     err?.status === 429 || err?.code === 429 || /\b429\b|rate limit|quota|RESOURCE_EXHAUSTED/i.test(String(err?.message));
 const isInvalidModelOutput = (err) =>
-    err instanceof SyntaxError || /The AI (?:returned|response)|AI response is missing/i.test(String(err?.message));
+    err instanceof SyntaxError ||
+    /The AI (?:returned|response)|AI response is missing|Failed to generate JSON/i.test(String(err?.message));
 function shouldRetry(err, attempt) {
     if (isRateLimit(err)) return false;
     const status = err?.status ?? err?.code;
-    return attempt < MAX_ATTEMPTS && (isInvalidModelOutput(err) || !status || Number(status) >= 500);
+    return attempt < MAX_TRANSIENT_ATTEMPTS &&
+        (isInvalidModelOutput(err) || !status || Number(status) >= 500);
 }
 const blockFor = (err) =>
     Date.now() + Math.min(Math.max(parseRetryMs(err?.message) ?? (/per day|daily/i.test(String(err?.message)) ? 3600e3 : 60e3), 30e3), 24 * 3600e3);
@@ -64,11 +81,28 @@ function buildPrompt(facts, validationError = "") {
 // ── Response cleaning helpers ────────────────────────────────────────────────
 function extractJson(text) {
     if (!text) throw new Error("The AI returned an empty response");
-    let t = String(text).trim().replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/i, "");
+    const t = String(text).trim().replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/i, "");
     const start = t.indexOf("{");
-    const end = t.lastIndexOf("}");
-    if (start === -1 || end <= start) throw new Error("The AI response has no JSON object");
-    return JSON.parse(t.slice(start, end + 1));
+    if (start === -1) throw new Error("The AI response has no JSON object");
+    let depth = 0;
+    let inString = false;
+    let escaped = false;
+    for (let index = start; index < t.length; index += 1) {
+        const character = t[index];
+        if (inString) {
+            if (escaped) escaped = false;
+            else if (character === "\\") escaped = true;
+            else if (character === "\"") inString = false;
+            continue;
+        }
+        if (character === "\"") inString = true;
+        else if (character === "{") depth += 1;
+        else if (character === "}") {
+            depth -= 1;
+            if (depth === 0) return JSON.parse(t.slice(start, index + 1));
+        }
+    }
+    throw new Error("The AI response has an incomplete JSON object");
 }
 
 const stripTags = (s) => String(s).replace(/<[^>]*>/g, " ").replace(/[*_`#]{1,3}(?=\S)/g, "");
@@ -259,8 +293,8 @@ export function normalizeContent(raw, fb) {
     const listItems = (value) => String(value || "").split(/\n+/).map((part) => part.trim()).filter(Boolean);
     const uniqueItems = (items) => new Set(items.map((item) => item.toLowerCase())).size === items.length;
     const hasPlaceholder = (value) => /\b(?:not available|not specified|not disclosed|to be updated|lorem(?: ipsum)?|n\/a)\b/i.test(String(value || ""));
-    if (wordCount(out.summary) < 55 || wordCount(out.summary) > 80) {
-        missing.push("summary (55-80 words)");
+    if (wordCount(out.summary) < 25 || wordCount(out.summary) > 120) {
+        missing.push("summary (25-120 words)");
     }
     if (summaryCopiesSource(out.summary, sourceDescription)) {
         missing.push("summary must not copy the opening of the source description");
@@ -268,17 +302,24 @@ export function normalizeContent(raw, fb) {
     if (/\b(?:P-\s*\d{3,}|Req(?:uisition)?\s*(?:ID\b|#\s*[\w-]+|:\s*[\w-]+)|Req\s+\d{3,})/i.test(JSON.stringify(out))) {
         missing.push("internal requisition code");
     }
-    if (sourceDescription.trim().length >= 300 && listItems(out.responsibilities).length < 3) {
+    if (sourceDescription.trim().length >= 600 && listItems(out.responsibilities).length < 3) {
         missing.push("at least 3 responsibilities for a sufficiently detailed source");
     }
-    if (!out.prepGuide.overview || out.prepGuide.topicsToRevise.length < 4) {
-        missing.push("prep guide overview and at least 4 revision topics");
+    if (!out.prepGuide.overview) {
+        out.prepGuide.overview = `General preparation guidance for the ${fb.role || "listed"} role.`;
     }
-    if (out.faqs.length < 4 || out.faqs.length > 6) {
-        missing.push("4-6 FAQs");
+    if (out.prepGuide.topicsToRevise.length < 2) {
+        out.prepGuide.topicsToRevise = [
+            ...out.prepGuide.topicsToRevise,
+            ...toArray(fb.skills),
+            "Role-relevant problem solving",
+            "Explaining relevant project experience",
+        ].filter((topic, index, topics) => topics.indexOf(topic) === index).slice(0, 4);
     }
-    if (out.faqs.some((faq) => faq.question.length < 8 || wordCount(faq.answer) < 15 || wordCount(faq.answer) > 70)) {
-        missing.push("FAQ questions and 15-70 word answers");
+    if (!out.faqs.length) out.faqs = createFactBasedFaqs(fb);
+    if (out.faqs.length > 6) missing.push("no more than 6 FAQs");
+    if (out.faqs.some((faq) => faq.question.length < 5 || wordCount(faq.answer) > 100)) {
+        missing.push("valid FAQ questions and answers");
     }
     if (!uniqueItems(out.faqs.map((faq) => faq.question))) missing.push("duplicate FAQ questions");
     const arrays = [
@@ -372,9 +413,9 @@ function extractGeminiText(result) {
     return JSON.stringify(result);
 }
 
-async function askGemini(facts, validationError) {
+async function askGemini(facts, validationError, apiKey) {
     const prompt = buildPrompt(facts, validationError);
-    const geminiClient = getClient();
+    const geminiClient = getClient(apiKey);
 
     if (geminiClient?.models?.generateContent) {
         const response = await geminiClient.models.generateContent({
@@ -426,52 +467,74 @@ async function askGroqJobContent(facts, validationError = "") {
 export async function generateJobContent(facts, fallbacks) {
     const fb = {
         ...fallbacks,
+        title: facts.title,
         company: facts.company,
         role: facts.title,
         location: facts.location,
         salary: facts.salary_text,
         skills: facts.skills,
         description: facts.description_text,
+        applyLink: facts.applyLink,
     };
 
     let validationFeedback = "";
     let lastErr = new Error("Gemini did not return valid job content");
     let totalAttempts = 0;
     let lastModelUsed = "";
-    if (!process.env.GEMINI_API_KEY) {
-        lastErr = new Error("GEMINI_API_KEY is missing");
-        console.warn("[ai] Gemini unavailable: GEMINI_API_KEY is missing");
-    } else if (Date.now() < geminiBlockedUntil) {
-        lastErr = new Error("Gemini is rate-limited");
-        console.warn(`[ai] Gemini is cooling down until ${new Date(geminiBlockedUntil).toISOString()}`);
+    const geminiKeys = getGeminiApiKeys();
+    if (!geminiKeys.length) {
+        lastErr = new Error("No Gemini API key is configured");
+        console.warn("[ai] Gemini unavailable: configure GEMINI_API_KEY or GEMINI_API_KEYS");
     } else {
-        for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
-            try {
-                totalAttempts += 1;
-                lastModelUsed = MODEL();
-                const content = normalizeContent(extractJson(await askGemini(facts, validationFeedback)), fb);
-                content.contentProvider = "gemini";
-                content.aiStatus = "ok";
-                content.aiModelUsed = MODEL();
-                content.aiAttempts = totalAttempts;
-                content.aiGeneratedAt = new Date();
-                console.log(`[ai] core job content written by Gemini (${MODEL()})`);
-                return content;
-            } catch (err) {
-                lastErr = err;
-                validationFeedback = `Your previous JSON failed validation: ${err.message}. Return corrected strict JSON satisfying every required core field and minimum length.`;
-                console.warn(`[gemini] attempt ${attempt}/${MAX_ATTEMPTS} failed: ${err.message}`);
-                if (isRateLimit(err)) {
-                    geminiBlockedUntil = blockFor(err);
+        const activeKeys = geminiKeys.filter((key) => Date.now() >= (geminiBlockedUntil.get(key) || 0));
+        for (const [keyIndex, apiKey] of activeKeys.entries()) {
+            let validationRepairs = 0;
+            for (let attempt = 1; attempt <= MAX_TRANSIENT_ATTEMPTS; attempt += 1) {
+                try {
+                    totalAttempts += 1;
+                    lastModelUsed = MODEL();
+                    const content = normalizeContent(extractJson(await askGemini(facts, validationFeedback, apiKey)), fb);
+                    content.contentProvider = "gemini";
+                    content.aiStatus = "ok";
+                    content.aiModelUsed = MODEL();
+                    content.aiAttempts = totalAttempts;
+                    content.aiGeneratedAt = new Date();
+                    console.log(`[ai] core job content written by Gemini (${MODEL()})`);
+                    return content;
+                } catch (err) {
+                    lastErr = err;
+                    console.warn(`[gemini] key ${keyIndex + 1}/${activeKeys.length}, attempt ${attempt}/${MAX_TRANSIENT_ATTEMPTS} failed: ${err.message}`);
+                    if (isRateLimit(err)) {
+                        geminiBlockedUntil.set(apiKey, blockFor(err));
+                        break;
+                    }
+                    if (isInvalidModelOutput(err)) {
+                        if (validationRepairs >= MAX_OUTPUT_REPAIRS) break;
+                        validationRepairs += 1;
+                        validationFeedback = `Your previous JSON failed validation: ${err.message}. Return corrected JSON with the required fields.`;
+                        continue;
+                    }
+                    if (!shouldRetry(err, attempt)) break;
+                    if (attempt === MAX_TRANSIENT_ATTEMPTS) {
+                        geminiBlockedUntil.set(apiKey, Date.now() + 60_000);
+                        break;
+                    }
+                    await sleep(1000 * (2 ** (attempt - 1)));
                 }
-                if (!shouldRetry(err, attempt)) break;
-                await sleep(1000 * (2 ** (attempt - 1)));
             }
+            if (Date.now() < (geminiBlockedUntil.get(apiKey) || 0)) continue;
+            if (isInvalidModelOutput(lastErr)) break;
+        }
+        if (activeKeys.length === 0) {
+            lastErr = new Error("All Gemini API keys are cooling down");
+            const earliest = Math.min(...geminiKeys.map((key) => geminiBlockedUntil.get(key) || Date.now()));
+            console.warn(`[ai] all Gemini keys are cooling down until ${new Date(earliest).toISOString()}`);
         }
     }
     if (process.env.GROQ_API_KEY && Date.now() >= groqBlockedUntil) {
         let groqFeedback = "";
-        for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+        let groqRepairs = 0;
+        for (let attempt = 1; attempt <= MAX_TRANSIENT_ATTEMPTS; attempt += 1) {
             try {
                 totalAttempts += 1;
                 lastModelUsed = GROQ_MODEL();
@@ -485,12 +548,22 @@ export async function generateJobContent(facts, fallbacks) {
                 return content;
             } catch (err) {
                 lastErr = err;
-                groqFeedback = `Your previous JSON failed validation: ${err.message}. Return corrected strict JSON satisfying every required core field and minimum length.`;
-                console.warn(`[groq] attempt ${attempt}/${MAX_ATTEMPTS} failed: ${err.message}`);
+                console.warn(`[groq] attempt ${attempt}/${MAX_TRANSIENT_ATTEMPTS} failed: ${err.message}`);
                 if (isRateLimit(err)) {
                     groqBlockedUntil = blockFor(err);
+                    break;
+                }
+                if (isInvalidModelOutput(err)) {
+                    if (groqRepairs >= MAX_OUTPUT_REPAIRS) break;
+                    groqRepairs += 1;
+                    groqFeedback = `Your previous JSON failed validation: ${err.message}. Return corrected JSON with the required fields.`;
+                    continue;
                 }
                 if (!shouldRetry(err, attempt)) break;
+                if (attempt === MAX_TRANSIENT_ATTEMPTS) {
+                    groqBlockedUntil = Date.now() + 60_000;
+                    break;
+                }
                 await sleep(1000 * (2 ** (attempt - 1)));
             }
         }
@@ -509,7 +582,7 @@ export async function generateJobContent(facts, fallbacks) {
     fallback.aiGeneratedAt = new Date();
     const defaultRetryAt = Date.now() + AI_FAILURE_PAUSE_MS;
     const providerRetryTimes = [
-        process.env.GEMINI_API_KEY ? Math.max(defaultRetryAt, geminiBlockedUntil) : null,
+        ...geminiKeys.map((key) => Math.max(defaultRetryAt, geminiBlockedUntil.get(key) || 0)),
         process.env.GROQ_API_KEY ? Math.max(defaultRetryAt, groqBlockedUntil) : null,
     ].filter(Number.isFinite);
     fallback.aiRetryAfter = new Date(

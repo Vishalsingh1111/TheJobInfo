@@ -106,7 +106,11 @@ test("import quality gate rejects invalid apply links, old jobs, and placeholder
         level: "fresher",
     };
     assert.equal(validateImportedJob(base), null);
-    assert.equal(validateImportedJob({ ...base, faqs: [] }), "FAQ list must contain 4-6 items");
+    assert.equal(validateImportedJob({ ...base, faqs: [] }), null);
+    assert.equal(
+        validateImportedJob({ ...base, faqs: [{ question: "Who posted this role?", answer: "" }] }),
+        "FAQ questions and answers must be non-empty and concise"
+    );
     assert.equal(validateImportedJob({ ...base, applyLink: "javascript:alert(1)" }), "invalid apply link");
     assert.equal(validateImportedJob({ ...base, description: "placeholder content" }), "placeholder description");
     assert.equal(validateImportedJob({ ...base, postedAt: new Date(Date.now() - 49 * 60 * 60 * 1000) }), "posting older than 48 hours");

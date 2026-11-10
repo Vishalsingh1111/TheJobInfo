@@ -24,6 +24,8 @@ The server listens on port 4001 by default. Public job/blog reads and the health
 
 - Each app reads its own `.env`: `Backend/.env`, `Frontend/.env`, and `Admin/.env`.
 - AI provider keys, Telegram credentials, Cloudinary credentials, and `SYNC_SECRET` may remain blank until those optional integrations are configured. The values for these credentials must come from their providers.
+- The backend rotates across comma-separated `GEMINI_API_KEYS`, `GEMINI_API_KEY`, and `GEMINI_BACKUP_API_KEY` when a key is on quota cooldown. `GROQ_API_KEY` is used when Gemini keys are unavailable or fail.
+- Jobs whose AI enrichment fails are retained in a private MongoDB retry queue and retried on later syncs. They are not added to public listings until their generated content passes validation.
 - The backend importer accepts optional `FRESHER_RATIO` (default `0.9`) and `MIX_WINDOW` (default `50`) settings to control the fresher/experienced mix over recent imported jobs.
 - Never commit `.env` files, API keys, passwords, or JWT secrets.
 

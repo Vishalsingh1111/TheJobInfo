@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import {
     _setClientForTests,
+    _setGeminiClientFactoryForTests,
     _setGroqClientForTests,
     _resetForTests,
     createFactBasedFaqs,
@@ -171,14 +172,18 @@ test("the prompt's generated fields map into persisted job fields", () => {
         jobType: "Experienced",
         experience: "2 years",
         category: "Software Engineering",
-    }), /summary \(55-80 words\)/);
-    assert.throws(() => normalizeContent({ ...generatedContent, faqs: [] }, {
+    }), /summary \(25-120 words\)/);
+    const withFactFaqs = normalizeContent({ ...generatedContent, faqs: [] }, {
         company: "Example",
         role: "Software Engineer",
         jobType: "Experienced",
         experience: "2 years",
         category: "Software Engineering",
-    }), /4-6 FAQs/);
+        title: "Software Engineer",
+        location: "Bengaluru",
+        applyLink: "https://example.com/jobs/123",
+    });
+    assert.ok(withFactFaqs.faqs.length > 0);
 });
 
 test("source-based FAQs only include facts available on the posting", () => {
@@ -243,7 +248,7 @@ test("Gemini structured request includes system instructions and maps returned c
         models: {
             generateContent: async (options) => {
                 request = options;
-                return { text: JSON.stringify(generatedContent) };
+                return { text: `Here is the JSON:\n${JSON.stringify(generatedContent)}\nEnd of response.` };
             },
         },
     });
@@ -284,6 +289,7 @@ test("Groq is called only after Gemini failure and returns the same mapped conte
     process.env.GEMINI_API_KEY = "test-key";
     process.env.GROQ_API_KEY = "test-key";
     let groqRequest;
+    let groqAttempts = 0;
     let geminiAttempts = 0;
     _setClientForTests({
         models: {
@@ -298,6 +304,10 @@ test("Groq is called only after Gemini failure and returns the same mapped conte
             completions: {
                 create: async (options) => {
                     groqRequest = options;
+                    groqAttempts += 1;
+                    if (groqAttempts === 1) {
+                        throw Object.assign(new Error("400 Failed to generate JSON. Please adjust your prompt."), { status: 400 });
+                    }
                     return { choices: [{ message: { content: JSON.stringify(generatedContent) } }] };
                 },
             },
@@ -319,18 +329,73 @@ test("Groq is called only after Gemini failure and returns the same mapped conte
 
         assert.equal(content.aiStatus, "ok");
         assert.equal(content.contentProvider, "groq");
-        assert.equal(content.aiAttempts, 2);
+        assert.equal(content.aiAttempts, 3);
         assert.equal(geminiAttempts, 1);
+        assert.equal(groqAttempts, 2);
         assert.equal(content.responsibilities.split("\n\n").length, 4);
         assert.equal(groqRequest.response_format.type, "json_object");
         assert.equal(groqRequest.temperature, 0.3);
         assert.equal(groqRequest.messages[1].content.includes("Full source description"), true);
+        assert.equal(groqRequest.messages[1].content.includes("Validation feedback"), true);
     } finally {
         _setClientForTests(null);
         _setGroqClientForTests(null);
         _resetForTests();
         if (previousKey === undefined) delete process.env.GEMINI_API_KEY;
         else process.env.GEMINI_API_KEY = previousKey;
+        if (previousGroqKey === undefined) delete process.env.GROQ_API_KEY;
+        else process.env.GROQ_API_KEY = previousGroqKey;
+    }
+});
+
+test("Gemini quota cooldown rotates to the next configured key before Groq", async () => {
+    const previousKeys = process.env.GEMINI_API_KEYS;
+    const previousKey = process.env.GEMINI_API_KEY;
+    const previousBackupKey = process.env.GEMINI_BACKUP_API_KEY;
+    const previousGroqKey = process.env.GROQ_API_KEY;
+    delete process.env.GEMINI_API_KEYS;
+    process.env.GEMINI_API_KEY = "first-test-key";
+    process.env.GEMINI_BACKUP_API_KEY = "second-test-key";
+    delete process.env.GROQ_API_KEY;
+    const attemptedKeys = [];
+    _setGeminiClientFactoryForTests((apiKey) => ({
+        models: {
+            generateContent: async () => {
+                attemptedKeys.push(apiKey);
+                if (apiKey === "first-test-key") {
+                    throw Object.assign(new Error("quota exceeded; retry in 1h"), { status: 429 });
+                }
+                return { text: JSON.stringify(generatedContent) };
+            },
+        },
+    }));
+
+    try {
+        const content = await generateJobContent({
+            title: "Software Engineer",
+            company: "Example",
+            location: "Bengaluru",
+            description_text: "Develop application features, review code, test changes, and troubleshoot defects with the team. ".repeat(5),
+            skills: ["JavaScript", "React"],
+        }, {
+            jobType: "Experienced",
+            experience: "2 years",
+            category: "Software Engineering",
+        });
+
+        assert.deepEqual(attemptedKeys, ["first-test-key", "second-test-key"]);
+        assert.equal(content.contentProvider, "gemini");
+        assert.equal(content.aiStatus, "ok");
+        assert.equal(content.aiAttempts, 2);
+    } finally {
+        _setGeminiClientFactoryForTests(null);
+        _resetForTests();
+        if (previousKeys === undefined) delete process.env.GEMINI_API_KEYS;
+        else process.env.GEMINI_API_KEYS = previousKeys;
+        if (previousKey === undefined) delete process.env.GEMINI_API_KEY;
+        else process.env.GEMINI_API_KEY = previousKey;
+        if (previousBackupKey === undefined) delete process.env.GEMINI_BACKUP_API_KEY;
+        else process.env.GEMINI_BACKUP_API_KEY = previousBackupKey;
         if (previousGroqKey === undefined) delete process.env.GROQ_API_KEY;
         else process.env.GROQ_API_KEY = previousGroqKey;
     }
